@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import * as THREE from "three";
 
 /* ═══════════════════════════════════════════════════════════
-   MUHAMMAD AGA PUTRA — PORTFOLIO
-   Dark cyberpunk-teal · React JSX · Circular icon cursor
+   MUHAMMAD AGA PUTRA — PORTFOLIO v2
+   Dark cyberpunk-teal · Three.js Floating Code Cubes
+   Cubes fly in from sides on scroll · Circular icon cursor
 ═══════════════════════════════════════════════════════════ */
 
 const COLORS = {
@@ -75,259 +77,394 @@ const GH_REPOS = [
   { id: 9, name: "Apisikma123", description: "I am a programmer who wants to change the world — profile repo.", language: null, stargazers_count: 0, forks_count: 0, html_url: "https://github.com/Apisikma123/Apisikma123" },
 ];
 
+// Code snippets that appear on cube faces
+const CODE_SNIPPETS = [
+  "<?php", "=>", "{ }", "</div>", "@foreach", "npm i", "git push", "SELECT *", "Route::", "flutter", "extends", "return;", "import", "const", "async", "await", ".blade", "artisan", "class", "public", "private", "void", "$this", "::make()", "useState", "useRef",
+];
+
+/* ═══════════════════════════════════════════════════════════
+   THREE.JS SCENE — Floating Code Cubes
+   - Cubes are always present in hero background
+   - On scroll: new cubes fly in from left/right edges
+   - Each cube face shows code text drawn on canvas texture
+═══════════════════════════════════════════════════════════ */
+function ThreeScene({ scrollY }) {
+  const mountRef = useRef(null);
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const cameraRef = useRef(null);
+  const cubesRef = useRef([]);
+  const flyInCubesRef = useRef([]);
+  const rafRef = useRef(null);
+  const clockRef = useRef(new THREE.Clock());
+  const prevScrollRef = useRef(0);
+
+  // Create a canvas texture with code text
+  const makeCodeTexture = (text, bgColor, textColor) => {
+    const size = 128;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+
+    // Background
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, size, size);
+
+    // Border glow
+    ctx.strokeStyle = textColor;
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.5;
+    ctx.strokeRect(3, 3, size - 6, size - 6);
+    ctx.globalAlpha = 1;
+
+    // Code text
+    ctx.fillStyle = textColor;
+    ctx.font = "bold 18px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, size / 2, size / 2);
+
+    // Scanline effect
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    for (let y = 0; y < size; y += 4) {
+      ctx.fillRect(0, y, size, 2);
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    return tex;
+  };
+
+  // Create a single cube mesh
+  const createCube = (size, x, y, z, snippet, colorSet) => {
+    const geometry = new THREE.BoxGeometry(size, size, size);
+    const materials = colorSet.map((c, i) => {
+      const text = CODE_SNIPPETS[(CODE_SNIPPETS.indexOf(snippet) + i) % CODE_SNIPPETS.length];
+      const tex = makeCodeTexture(text, c.bg, c.text);
+      return new THREE.MeshStandardMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0.82,
+        roughness: 0.3,
+        metalness: 0.4,
+      });
+    });
+    const cube = new THREE.Mesh(geometry, materials);
+    cube.position.set(x, y, z);
+    return cube;
+  };
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const W = mount.clientWidth;
+    const H = mount.clientHeight;
+
+    // Scene
+    const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 200);
+    camera.position.set(0, 0, 12);
+    cameraRef.current = camera;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    mount.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // Lighting
+    const ambient = new THREE.AmbientLight(0x00d4aa, 0.6);
+    scene.add(ambient);
+    const dirLight = new THREE.DirectionalLight(0x00aaff, 1.2);
+    dirLight.position.set(5, 8, 5);
+    scene.add(dirLight);
+    const pointLight = new THREE.PointLight(0x00ff88, 0.8, 30);
+    pointLight.position.set(-5, -3, 3);
+    scene.add(pointLight);
+
+    // Color sets for cubes (bg, text per face)
+    const palettes = [
+      Array(6).fill({ bg: "#071318", text: "#00d4aa" }),
+      Array(6).fill({ bg: "#071318", text: "#00aaff" }),
+      Array(6).fill({ bg: "#071318", text: "#00ff88" }),
+      Array(6).fill({ bg: "#0d1f26", text: "#f05340" }),
+      Array(6).fill({ bg: "#0d1f26", text: "#f1e05a" }),
+    ];
+
+    // Ambient floating cubes (always visible in hero area)
+    const ambientCubeData = [
+      { size: 1.2, x: -7, y: 2.5, z: -4, snippet: "<?php", rotSpeed: { x: 0.003, y: 0.007 }, pal: 0 },
+      { size: 0.8, x: 6.5, y: -1, z: -3, snippet: "{ }", rotSpeed: { x: 0.005, y: 0.004 }, pal: 1 },
+      { size: 1.5, x: 4, y: 3, z: -6, snippet: "@foreach", rotSpeed: { x: 0.002, y: 0.006 }, pal: 2 },
+      { size: 0.6, x: -5, y: -2.5, z: -2, snippet: "async", rotSpeed: { x: 0.007, y: 0.003 }, pal: 3 },
+      { size: 1.0, x: 0, y: -3.5, z: -5, snippet: "git push", rotSpeed: { x: 0.004, y: 0.005 }, pal: 4 },
+      { size: 0.9, x: -3, y: 4, z: -7, snippet: "flutter", rotSpeed: { x: 0.006, y: 0.002 }, pal: 1 },
+      { size: 1.3, x: 7.5, y: 1.5, z: -5, snippet: "Route::", rotSpeed: { x: 0.003, y: 0.008 }, pal: 0 },
+      { size: 0.7, x: 2, y: 4.5, z: -3, snippet: "SELECT *", rotSpeed: { x: 0.008, y: 0.004 }, pal: 2 },
+    ];
+
+    ambientCubeData.forEach(d => {
+      const cube = createCube(d.size, d.x, d.y, d.z, d.snippet, palettes[d.pal]);
+      cube.userData = { rotSpeed: d.rotSpeed, floatOffset: Math.random() * Math.PI * 2, floatAmp: 0.15 + Math.random() * 0.2, baseY: d.y };
+      scene.add(cube);
+      cubesRef.current.push(cube);
+    });
+
+    // Animation loop
+    const animate = () => {
+      rafRef.current = requestAnimationFrame(animate);
+      const t = clockRef.current.getElapsedTime();
+
+      // Rotate and float ambient cubes
+      cubesRef.current.forEach(cube => {
+        const ud = cube.userData;
+        cube.rotation.x += ud.rotSpeed.x;
+        cube.rotation.y += ud.rotSpeed.y;
+        cube.position.y = ud.baseY + Math.sin(t * 0.7 + ud.floatOffset) * ud.floatAmp;
+      });
+
+      // Animate fly-in cubes
+      flyInCubesRef.current = flyInCubesRef.current.filter(fc => {
+        const ud = fc.userData;
+        // Lerp toward target
+        fc.position.x += (ud.targetX - fc.position.x) * 0.04;
+        fc.position.y += (ud.targetY - fc.position.y) * 0.04;
+        fc.position.z += (ud.targetZ - fc.position.z) * 0.04;
+        fc.rotation.x += ud.rotSpeed.x;
+        fc.rotation.y += ud.rotSpeed.y;
+
+        // Fade in
+        if (ud.opacity < 0.82) {
+          ud.opacity += 0.012;
+          fc.material.forEach(m => { m.opacity = Math.min(0.82, ud.opacity); });
+        }
+
+        // Float after landing
+        const distToTarget = Math.abs(fc.position.x - ud.targetX) + Math.abs(fc.position.y - ud.targetY);
+        if (distToTarget < 0.5) {
+          ud.baseY = ud.targetY;
+          fc.position.y = ud.baseY + Math.sin(t * 0.6 + ud.floatOffset) * 0.15;
+        }
+
+        return true;
+      });
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Resize handler
+    const onResize = () => {
+      if (!mount) return;
+      const w = mount.clientWidth;
+      const h = mount.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      cancelAnimationFrame(rafRef.current);
+      mount.removeChild(renderer.domElement);
+      renderer.dispose();
+      cubesRef.current = [];
+      flyInCubesRef.current = [];
+    };
+  }, []);
+
+  // Spawn fly-in cubes on scroll
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    const delta = scrollY - prevScrollRef.current;
+    prevScrollRef.current = scrollY;
+
+    // Only spawn when scrolling down significantly
+    if (delta < 30) return;
+
+    const palettes = [
+      Array(6).fill({ bg: "#071318", text: "#00d4aa" }),
+      Array(6).fill({ bg: "#071318", text: "#00aaff" }),
+      Array(6).fill({ bg: "#071318", text: "#00ff88" }),
+      Array(6).fill({ bg: "#0d1f26", text: "#f05340" }),
+      Array(6).fill({ bg: "#0d1f26", text: "#f1e05a" }),
+    ];
+
+    // Spawn 1-2 cubes from left or right
+    const count = Math.random() > 0.5 ? 2 : 1;
+    for (let i = 0; i < count; i++) {
+      const fromLeft = Math.random() > 0.5;
+      const startX = fromLeft ? -16 : 16;
+      const targetX = (fromLeft ? -1 : 1) * (2 + Math.random() * 6);
+      const targetY = (Math.random() - 0.5) * 5;
+      const targetZ = -3 - Math.random() * 4;
+      const size = 0.5 + Math.random() * 1.2;
+      const pal = Math.floor(Math.random() * palettes.length);
+      const snippet = CODE_SNIPPETS[Math.floor(Math.random() * CODE_SNIPPETS.length)];
+
+      const geometry = new THREE.BoxGeometry(size, size, size);
+      const materials = palettes[pal].map((c, fi) => {
+        const text = CODE_SNIPPETS[(CODE_SNIPPETS.indexOf(snippet) + fi) % CODE_SNIPPETS.length];
+        const canvas = document.createElement("canvas");
+        canvas.width = 128; canvas.height = 128;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = c.bg; ctx.fillRect(0, 0, 128, 128);
+        ctx.strokeStyle = c.text; ctx.lineWidth = 2; ctx.globalAlpha = 0.5;
+        ctx.strokeRect(3, 3, 122, 122); ctx.globalAlpha = 1;
+        ctx.fillStyle = c.text; ctx.font = "bold 18px monospace";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(text, 64, 64);
+        const tex = new THREE.CanvasTexture(canvas);
+        return new THREE.MeshStandardMaterial({ map: tex, transparent: true, opacity: 0, roughness: 0.3, metalness: 0.4 });
+      });
+
+      const cube = new THREE.Mesh(geometry, materials);
+      cube.position.set(startX, targetY + (Math.random() - 0.5) * 3, targetZ);
+      cube.userData = {
+        targetX, targetY, targetZ,
+        rotSpeed: { x: 0.003 + Math.random() * 0.008, y: 0.003 + Math.random() * 0.008 },
+        floatOffset: Math.random() * Math.PI * 2,
+        baseY: targetY,
+        opacity: 0,
+      };
+      scene.add(cube);
+      flyInCubesRef.current.push(cube);
+
+      // Auto-remove after 12 seconds to keep scene clean
+      setTimeout(() => {
+        scene.remove(cube);
+        flyInCubesRef.current = flyInCubesRef.current.filter(c => c !== cube);
+        geometry.dispose();
+        materials.forEach(m => m.dispose());
+      }, 12000);
+    }
+  }, [scrollY]);
+
+  return (
+    <div
+      ref={mountRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: 1,
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════
    CIRCULAR ICON CURSOR
-   - N icons orbit in a perfect circle around the cursor
-   - The whole ring follows mouse with lerp (smooth lag)
-   - When idle: wave/breathing animation via sin offset
-   - Each icon is an SVG coding symbol
 ═══════════════════════════════════════════════════════════ */
-
 const CURSOR_ICONS = [
-  // { } brace
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1" />
-      <path d="M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" />
-    </svg>
-  ),
-  // </> tag
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
-    </svg>
-  ),
-  // terminal prompt
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="4 17 10 11 4 5" />
-      <line x1="12" y1="19" x2="20" y2="19" />
-    </svg>
-  ),
-  // git branch
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="6" y1="3" x2="6" y2="15" />
-      <circle cx="18" cy="6" r="3" />
-      <circle cx="6" cy="18" r="3" />
-      <path d="M18 9a9 9 0 0 1-9 9" />
-    </svg>
-  ),
-  // semicolon / code
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17 11h-5c-1.7 0-3 1.3-3 3v.5" />
-      <circle cx="17" cy="8" r="1.5" fill={color} />
-      <circle cx="10" cy="17" r="1" fill={color} />
-      <path d="M10 18.5c-.5 1-1.5 1.5-2 2" />
-    </svg>
-  ),
-  // lambda / function
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 20l6-16 6 16" />
-      <path d="M8 14h8" />
-    </svg>
-  ),
-  // database
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="5" rx="9" ry="3" />
-      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-    </svg>
-  ),
-  // wifi/signal (api)
-  (size, color) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12.55a11 11 0 0 1 14.08 0" />
-      <path d="M1.42 9a16 16 0 0 1 21.16 0" />
-      <path d="M8.53 16.11a6 16 0 0 1 6.95 0" />
-      <circle cx="12" cy="20" r="1" fill={color} />
-    </svg>
-  ),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1" /><path d="M16 21h1a2 2 0 0 0 2-2v-5a2 2 0 0 1 2-2 2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="6" y1="3" x2="6" y2="15" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="M18 9a9 9 0 0 1-9 9" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 11h-5c-1.7 0-3 1.3-3 3v.5" /><circle cx="17" cy="8" r="1.5" fill={color} /><circle cx="10" cy="17" r="1" fill={color} /><path d="M10 18.5c-.5 1-1.5 1.5-2 2" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 20l6-16 6 16" /><path d="M8 14h8" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></svg>),
+  (size, color) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0" /><path d="M1.42 9a16 16 0 0 1 21.16 0" /><path d="M8.53 16.11a6 16 0 0 1 6.95 0" /><circle cx="12" cy="20" r="1" fill={color} /></svg>),
 ];
 
 const lerp = (a, b, t) => a + (b - a) * t;
+
+function RingGlow({ ringRef, radius }) {
+  const glowRef = useRef(null);
+  const rafRef = useRef(0);
+  useEffect(() => {
+    const tick = () => {
+      const el = glowRef.current;
+      if (el) { const r = ringRef.current; el.style.transform = `translate(${r.x}px, ${r.y}px) translate(-50%, -50%)`; }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [ringRef]);
+  const size = radius * 2 + 40;
+  return (
+    <div ref={glowRef} style={{ position: "fixed", top: 0, left: 0, width: size, height: size, borderRadius: "50%", border: "1px solid rgba(0,212,170,0.18)", background: "radial-gradient(circle, rgba(0,212,170,0.04) 0%, transparent 70%)", pointerEvents: "none", zIndex: 99997, willChange: "transform", transform: "translate(-300px, -300px) translate(-50%, -50%)" }} />
+  );
+}
 
 function CircularIconCursor({ count = 8, radius = 52, speed = 0.1 }) {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const mouseRef = useRef({ x: -300, y: -300 });
   const ringRef = useRef({ x: -300, y: -300 });
-  const idleTimeRef = useRef(0);
   const lastMoveRef = useRef(Date.now());
   const nodeRefs = useRef([]);
   const dotRef = useRef(null);
   const rafRef = useRef(0);
 
   useEffect(() => {
-    const isTouch =
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia("(pointer: coarse)").matches;
+    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
     setIsTouchDevice(isTouch);
   }, []);
 
   useEffect(() => {
     if (isTouchDevice) return;
-
     const onMouseMove = (e) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
       lastMoveRef.current = Date.now();
-      // Move hotspot dot instantly
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-      }
+      if (dotRef.current) dotRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
     };
     window.addEventListener("mousemove", onMouseMove);
-
     const tick = (timestamp) => {
       const ring = ringRef.current;
       const mouse = mouseRef.current;
-
-      // Lerp ring center toward mouse
       ring.x = lerp(ring.x, mouse.x, speed);
       ring.y = lerp(ring.y, mouse.y, speed);
-
-      // Idle wave: how long since last move (seconds)
       const idleSec = (Date.now() - lastMoveRef.current) / 1000;
       const isIdle = idleSec > 0.25;
-
       nodeRefs.current.forEach((el, i) => {
         if (!el) return;
-
         const baseAngle = (i / count) * Math.PI * 2;
-        // When idle: wave offset per icon (creates ripple/breathing)
-        const wave = isIdle
-          ? Math.sin(timestamp * 0.001 * 1.8 + i * ((Math.PI * 2) / count)) * 10
-          : 0;
-
-        // Spinning ring rotation: slow constant spin + idle wobble
+        const wave = isIdle ? Math.sin(timestamp * 0.001 * 1.8 + i * ((Math.PI * 2) / count)) * 10 : 0;
         const spin = timestamp * 0.0004;
         const angle = baseAngle + spin;
-
         const r = radius + wave;
         const x = ring.x + Math.cos(angle) * r;
         const y = ring.y + Math.sin(angle) * r;
-
-        // Counter-rotate icon so it always faces "outward"
         const iconRotate = (angle * 180) / Math.PI + 90;
-
-        // Pulse opacity on idle
         const baseOpacity = isIdle ? 0.55 + Math.sin(timestamp * 0.002 + i) * 0.3 : 0.7;
-
         el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${iconRotate}deg)`;
         el.style.opacity = String(Math.max(0.15, baseOpacity));
       });
-
       rafRef.current = requestAnimationFrame(tick);
     };
-
     rafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      cancelAnimationFrame(rafRef.current);
-    };
+    return () => { window.removeEventListener("mousemove", onMouseMove); cancelAnimationFrame(rafRef.current); };
   }, [isTouchDevice, count, radius, speed]);
 
   if (isTouchDevice) return null;
-
   const ICON_SIZE = 18;
   const ICON_COLOR = "#00d4aa";
-
   return (
     <>
       <style>{`* { cursor: none !important; }`}</style>
-
-      {/* Orbital ring glow — follows ring center with lerp */}
       <RingGlow ringRef={ringRef} radius={radius} />
-
-      {/* Coding icons orbiting in circle */}
       {Array.from({ length: count }, (_, i) => {
         const IconFn = CURSOR_ICONS[i % CURSOR_ICONS.length];
         return (
-          <div
-            key={i}
-            ref={(el) => { nodeRefs.current[i] = el; }}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              pointerEvents: "none",
-              zIndex: 99998,
-              willChange: "transform, opacity",
-              transform: "translate(-300px, -300px)",
-              opacity: 0,
-              filter: `drop-shadow(0 0 4px ${ICON_COLOR}88)`,
-              transition: "opacity 0.2s ease",
-            }}
-          >
+          <div key={i} ref={(el) => { nodeRefs.current[i] = el; }}
+            style={{ position: "fixed", top: 0, left: 0, pointerEvents: "none", zIndex: 99998, willChange: "transform, opacity", transform: "translate(-300px, -300px)", opacity: 0, filter: `drop-shadow(0 0 4px ${ICON_COLOR}88)`, transition: "opacity 0.2s ease" }}>
             {IconFn(ICON_SIZE, ICON_COLOR)}
           </div>
         );
       })}
-
-      {/* Cursor hotspot dot */}
-      <div
-        ref={dotRef}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          background: "#00d4aa",
-          pointerEvents: "none",
-          zIndex: 100000,
-          boxShadow: "0 0 8px rgba(0,212,170,1), 0 0 20px rgba(0,212,170,0.5)",
-          transform: "translate(-300px, -300px) translate(-50%, -50%)",
-          willChange: "transform",
-        }}
-      />
+      <div ref={dotRef} style={{ position: "fixed", top: 0, left: 0, width: 6, height: 6, borderRadius: "50%", background: "#00d4aa", pointerEvents: "none", zIndex: 100000, boxShadow: "0 0 8px rgba(0,212,170,1), 0 0 20px rgba(0,212,170,0.5)", transform: "translate(-300px, -300px) translate(-50%, -50%)", willChange: "transform" }} />
     </>
-  );
-}
-
-// Separate component so we can update the glow div via RAF without re-renders
-function RingGlow({ ringRef, radius }) {
-  const glowRef = useRef(null);
-  const rafRef = useRef(0);
-
-  useEffect(() => {
-    const tick = () => {
-      const el = glowRef.current;
-      if (el) {
-        const r = ringRef.current;
-        el.style.transform = `translate(${r.x}px, ${r.y}px) translate(-50%, -50%)`;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [ringRef]);
-
-  const size = radius * 2 + 40;
-  return (
-    <div
-      ref={glowRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        border: "1px solid rgba(0,212,170,0.18)",
-        background: "radial-gradient(circle, rgba(0,212,170,0.04) 0%, transparent 70%)",
-        pointerEvents: "none",
-        zIndex: 99997,
-        willChange: "transform",
-        transform: "translate(-300px, -300px) translate(-50%, -50%)",
-      }}
-    />
   );
 }
 
@@ -349,10 +486,11 @@ function GlobalStyles() {
     @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,212,170,.6); } 50% { box-shadow: 0 0 0 7px rgba(0,212,170,0); } }
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes orb1 { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,-40px) scale(1.1); } 66% { transform: translate(-30px,30px) scale(.95); } }
     @keyframes orb2 { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-50px,30px) scale(1.05); } 66% { transform: translate(40px,-50px) scale(.9); } }
     @keyframes orb3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,20px) scale(1.08); } }
+    @keyframes cubeFloatIn { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
 
     .premium-card { transition: all 0.4s cubic-bezier(.4,0,.2,1); position: relative; overflow: hidden; }
     .premium-card:hover { transform: translateY(-8px) scale(1.01); border-color: rgba(0,212,170,.4) !important; box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 20px rgba(0,212,170,.1); }
@@ -379,6 +517,13 @@ function GlobalStyles() {
     .section-fade { opacity: 0; transform: translateY(32px); transition: opacity .7s ease, transform .7s ease; }
     .section-fade.visible { opacity: 1; transform: translateY(0); }
     .skill-bar-inner { width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+
+    /* Repo card 3D tilt effect */
+    .repo-3d-card {
+      transition: transform .15s ease, border-color .25s ease, box-shadow .25s ease;
+      transform-style: preserve-3d;
+    }
+
     @media (max-width: 768px) {
       .hero-grid { flex-direction: column-reverse !important; text-align: center !important; }
       .hero-btns { justify-content: center !important; }
@@ -447,21 +592,21 @@ function SkillBar({ pct, color }) {
   }, [pct]);
   return (
     <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 99, height: 6, overflow: "hidden", marginTop: 12 }}>
-      <div ref={ref} className="skill-bar-inner" style={{ height: "100%", borderRadius: 99, background: `linear-gradient(90deg,${color},${color}aa)`, width: 0, transition: "width 1.2s cubic-bezier(.4,0,.2,1)" }} />
+      <div ref={ref} className="skill-bar-inner" style={{ height: "100%", borderRadius: 99, background: `linear-gradient(90deg,${color},${color}aa)`, width: 0 }} />
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BACKGROUND
+   BACKGROUND (subtle orbs — Three.js handles the cubes)
 ═══════════════════════════════════════════════════════════ */
 function Background() {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none", overflow: "hidden" }}>
-      <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(rgba(0,212,170,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,.03) 1px,transparent 1px)`, backgroundSize: "32px 32px" }} />
-      <div style={{ position: "absolute", top: "10%", left: "15%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,212,170,.07) 0%,transparent 70%)", animation: "orb1 14s ease-in-out infinite" }} />
-      <div style={{ position: "absolute", top: "55%", right: "8%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,170,255,.06) 0%,transparent 70%)", animation: "orb2 18s ease-in-out infinite" }} />
-      <div style={{ position: "absolute", bottom: "5%", left: "40%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,255,136,.05) 0%,transparent 70%)", animation: "orb3 12s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(rgba(0,212,170,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,.025) 1px,transparent 1px)`, backgroundSize: "32px 32px" }} />
+      <div style={{ position: "absolute", top: "10%", left: "15%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,212,170,.05) 0%,transparent 70%)", animation: "orb1 14s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", top: "55%", right: "8%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,170,255,.04) 0%,transparent 70%)", animation: "orb2 18s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", bottom: "5%", left: "40%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(0,255,136,.04) 0%,transparent 70%)", animation: "orb3 12s ease-in-out infinite" }} />
     </div>
   );
 }
@@ -481,7 +626,7 @@ function Navbar({ activeSection }) {
   const ids = ["about", "skills", "repos", "contact"];
   const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setOpen(false); };
   return (
-    <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: scrolled ? "rgba(3,11,14,.85)" : "transparent", backdropFilter: scrolled ? "blur(16px)" : "none", borderBottom: scrolled ? `1px solid ${COLORS.border}` : "none", transition: "all .35s ease" }}>
+    <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: scrolled ? "rgba(3,11,14,.88)" : "transparent", backdropFilter: scrolled ? "blur(20px)" : "none", borderBottom: scrolled ? `1px solid ${COLORS.border}` : "none", transition: "all .35s ease" }}>
       <Container>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
           <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: 1 }}>
@@ -546,16 +691,21 @@ function useTyping(texts) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   HERO
+   HERO — Three.js canvas fills entire hero background
 ═══════════════════════════════════════════════════════════ */
-function Hero() {
+function Hero({ scrollY }) {
   const typing = useTyping(TYPING_TEXTS);
   return (
-    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: 80 }}>
+    <section id="hero" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", paddingTop: 80, overflow: "hidden" }}>
+      {/* Three.js lives here as background */}
+      <ThreeScene scrollY={scrollY} />
+
+      {/* Subtle floating code text (on top of Three.js, below content) */}
       {FLOAT_ICONS.map((ic, i) => (
-        <div key={i} style={{ position: "absolute", left: ic.x, top: ic.y, color: `rgba(0,212,170,${0.12 + (i % 3) * 0.04})`, fontSize: i % 2 === 0 ? 18 : 14, fontFamily: "monospace", fontWeight: 700, userSelect: "none", animation: `float ${ic.dur}s ease-in-out ${ic.delay}s infinite`, zIndex: 1 }}>{ic.text}</div>
+        <div key={i} style={{ position: "absolute", left: ic.x, top: ic.y, color: `rgba(0,212,170,${0.07 + (i % 3) * 0.03})`, fontSize: i % 2 === 0 ? 18 : 14, fontFamily: "monospace", fontWeight: 700, userSelect: "none", animation: `float ${ic.dur}s ease-in-out ${ic.delay}s infinite`, zIndex: 2 }}>{ic.text}</div>
       ))}
-      <Container style={{ position: "relative", zIndex: 2, width: "100%" }}>
+
+      <Container style={{ position: "relative", zIndex: 3, width: "100%" }}>
         <div className="hero-grid" style={{ display: "flex", alignItems: "center", gap: 60, justifyContent: "space-between", flexWrap: "wrap" }}>
           <div style={{ flex: "1 1 500px", minWidth: 0 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,212,170,.08)", border: `1px solid rgba(0,212,170,.25)`, borderRadius: 99, padding: "6px 14px", marginBottom: 28, fontSize: 12, fontWeight: 500, color: COLORS.accent }}>
@@ -593,6 +743,12 @@ function Hero() {
           </div>
         </div>
       </Container>
+
+      {/* Scroll indicator */}
+      <div style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", zIndex: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, opacity: 0.5 }}>
+        <span style={{ fontSize: 11, color: COLORS.muted, letterSpacing: 2, textTransform: "uppercase" }}>Scroll</span>
+        <div style={{ width: 1, height: 40, background: `linear-gradient(${COLORS.accent},transparent)` }} />
+      </div>
     </section>
   );
 }
@@ -708,42 +864,112 @@ function Skills() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   REPOS
+   REPOS — with 3D tilt on hover + cube icon label
 ═══════════════════════════════════════════════════════════ */
+function RepoCard({ repo }) {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    card.style.transform = `perspective(600px) rotateY(${dx * 8}deg) rotateX(${-dy * 8}deg) translateY(-6px)`;
+    card.style.boxShadow = `${-dx * 8}px ${dy * 8}px 32px rgba(0,212,170,0.15), 0 0 20px rgba(0,212,170,0.08)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(600px) rotateY(0deg) rotateX(0deg) translateY(0px)";
+    card.style.boxShadow = "none";
+    card.style.borderColor = COLORS.border;
+  };
+
+  const handleMouseEnter = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.borderColor = "rgba(0,212,170,0.5)";
+  };
+
+  return (
+    <a
+      ref={cardRef}
+      href={repo.html_url}
+      target="_blank"
+      rel="noreferrer"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
+      style={{
+        background: COLORS.surface,
+        border: `1px solid ${COLORS.border}`,
+        borderRadius: 14,
+        padding: "20px 18px",
+        textDecoration: "none",
+        display: "block",
+        position: "relative",
+        overflow: "hidden",
+        transition: "border-color .25s ease",
+        transformStyle: "preserve-3d",
+      }}
+    >
+      {/* Top gradient accent */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg,${LANG_COLORS[repo.language] || COLORS.accent},${COLORS.accent2})`, opacity: 0.7 }} />
+
+      {/* Cube icon badge top-right */}
+      <div style={{ position: "absolute", top: 12, right: 12, width: 28, height: 28, opacity: 0.25 }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke={COLORS.accent} strokeWidth="1.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+        </svg>
+      </div>
+
+      <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.text, marginBottom: 8, display: "flex", alignItems: "center", gap: 8, paddingRight: 32 }}>
+        <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 14, height: 14, flexShrink: 0 }}><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z" /></svg>
+        {repo.name}
+      </div>
+      <p style={{ color: COLORS.muted, fontSize: 12, lineHeight: 1.6, marginBottom: 14, minHeight: 36 }}>{repo.description || "Tidak ada deskripsi."}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 12, color: COLORS.muted }}>
+        {repo.language && (
+          <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: LANG_COLORS[repo.language] || LANG_COLORS.default, display: "inline-block" }} />
+            {repo.language}
+          </span>
+        )}
+        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 12, height: 12 }}><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.873 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" /></svg>
+          {repo.stargazers_count}
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 12, height: 12 }}><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z" /></svg>
+          {repo.forks_count}
+        </span>
+      </div>
+    </a>
+  );
+}
+
 function Repos() {
   return (
     <FadeSection id="repos">
       <Container>
         <SectionHeading title="Proyek GitHub" sub="Open Source" />
-        <div style={{ marginTop: 48 }}>
+
+        {/* Mini cube decoration header */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 16, marginBottom: 8, opacity: 0.4 }}>
+          {["<?php", "{ }", "@blade", "flutter", "git"].map((s, i) => (
+            <div key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 6, padding: "3px 10px", fontSize: 11, fontFamily: "monospace", color: [COLORS.accent, COLORS.accent2, "#f05340", "#00B4AB", COLORS.accent3][i] }}>
+              {s}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 32 }}>
           <div className="repos-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 18 }}>
-            {GH_REPOS.map(r => (
-              <a key={r.id} href={r.html_url} target="_blank" rel="noreferrer" className="repo-card premium-card"
-                style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "20px 18px", textDecoration: "none", display: "block", position: "relative", overflow: "hidden" }}>
-                <div className="repo-accent" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg,${COLORS.accent},${COLORS.accent2})`, opacity: 0, transition: "opacity .25s" }} />
-                <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.text, marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
-                  <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 14, height: 14, flexShrink: 0 }}><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z" /></svg>
-                  {r.name}
-                </div>
-                <p style={{ color: COLORS.muted, fontSize: 12, lineHeight: 1.6, marginBottom: 14, minHeight: 36 }}>{r.description || "Tidak ada deskripsi."}</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 12, color: COLORS.muted }}>
-                  {r.language && (
-                    <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                      <span style={{ width: 10, height: 10, borderRadius: "50%", background: LANG_COLORS[r.language] || LANG_COLORS.default, display: "inline-block" }} />
-                      {r.language}
-                    </span>
-                  )}
-                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                    <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 12, height: 12 }}><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.873 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" /></svg>
-                    {r.stargazers_count}
-                  </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                    <svg viewBox="0 0 16 16" fill={COLORS.muted} style={{ width: 12, height: 12 }}><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z" /></svg>
-                    {r.forks_count}
-                  </span>
-                </div>
-              </a>
-            ))}
+            {GH_REPOS.map(r => <RepoCard key={r.id} repo={r} />)}
           </div>
           <div style={{ textAlign: "center", marginTop: 32 }}>
             <a href="https://github.com/Apisikma123" target="_blank" rel="noreferrer" className="btn-outline"
@@ -852,22 +1078,32 @@ function useActiveSection() {
 ═══════════════════════════════════════════════════════════ */
 export default function Portfolio() {
   const activeSection = useActiveSection();
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       <GlobalStyles />
       <Background />
-
-      {/* ✦ CIRCULAR ICON CURSOR — 8 coding icons orbit the mouse ✦ */}
-      <CircularIconCursor
-        count={8}
-        radius={52}
-        speed={0.1}
-      />
-
+      <CircularIconCursor count={8} radius={52} speed={0.1} />
       <div style={{ position: "relative", zIndex: 1 }}>
         <Navbar activeSection={activeSection} />
         <main>
-          <Hero />
+          <Hero scrollY={scrollY} />
           <About />
           <Skills />
           <Repos />
