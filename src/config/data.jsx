@@ -79,8 +79,8 @@ export const CONTACTS = [
   { label: "Email", value: "agaputra62@gmail.com", href: "https://mail.google.com/mail/?view=cm&fs=1&to=agaputra62@gmail.com", color: "#00d4aa" },
   { label: "WhatsApp", value: "085169084136", href: "https://wa.me/6285169084136", color: "#25D366" },
   { label: "GitHub", value: "Apisikma123", href: "https://github.com/Apisikma123", color: "#e2f0ef" },
-  { label: "Instagram", value: "Muhammad Aga Putra", href: "https://instagram.com/aga_putraa1", color: "#E1306C" },
-  { label: "Discord", value: "Muhammad Aga Putra", href: "https://discord.com/users/aga55555", color: "#5865F2" },
+  { label: "Instagram", value: "@aga_putraa1", href: "https://instagram.com/aga_putraa1", color: "#E1306C" },
+  { label: "Discord", value: "aga55555", href: "https://discord.com/users/aga55555", color: "#5865F2" },
   { label: "Lokasi", value: "Medan, Sumatera Utara", href: "https://maps.google.com/?q=Medan,+Sumatera+Utara", color: "#ff6b6b" },
 ];
 
