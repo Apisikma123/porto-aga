@@ -3,5 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://agaputra.dev/sitemap.xml
-Sitemap: https://apisikma123.github.io/porto-aga/sitemap.xml
+Sitemap: https://porto-aga.vercel.app/sitemap.xml
