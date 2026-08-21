@@ -219,13 +219,58 @@ const TRANSLATIONS = {
 };
 
 let currentLang = localStorage.getItem("aga_portfolio_lang") || "en";
+let currentTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
 
+// ─── Theme Mode Architecture (Dark / Celestial Light) ───
+export const setTheme = (theme, animate = true) => {
+  currentTheme = theme;
+  localStorage.setItem("aga_portfolio_theme", theme);
+  document.documentElement.setAttribute("data-theme", theme);
+
+  const themeIcon = document.getElementById("theme-icon");
+  if (themeIcon) {
+    if (animate) {
+      gsap.to(themeIcon, {
+        rotate: theme === "light" ? 180 : 0,
+        scale: 0.7,
+        duration: 0.22,
+        ease: "power2.in",
+        onComplete: () => {
+          themeIcon.textContent = theme === "light" ? "dark_mode" : "light_mode";
+          gsap.to(themeIcon, { scale: 1, duration: 0.25, ease: "back.out(2)" });
+        },
+      });
+    } else {
+      themeIcon.textContent = theme === "light" ? "dark_mode" : "light_mode";
+    }
+  }
+
+  // Smoothly morph Three.js 3D WebGL atmosphere
+  if (window.updateThreeTheme) {
+    window.updateThreeTheme(theme, animate);
+  }
+};
+
+export const toggleTheme = () => {
+  const nextTheme = currentTheme === "dark" ? "light" : "dark";
+  setTheme(nextTheme, true);
+};
+window.setTheme = setTheme;
+window.toggleTheme = toggleTheme;
+
+// Apply stored theme on initialization
+document.documentElement.setAttribute("data-theme", currentTheme);
+document.addEventListener("DOMContentLoaded", () => {
+  setTheme(currentTheme, false);
+});
+
+// ─── Animated Bilingual Transition Engine (GSAP Morph) ───
 export const setLanguage = (lang) => {
   if (!TRANSLATIONS[lang]) return;
   currentLang = lang;
   localStorage.setItem("aga_portfolio_lang", lang);
 
-  // Update Buttons Active State
+  // Update Buttons Active State with micro-animation
   const btnEn = document.getElementById("btn-lang-en");
   const btnId = document.getElementById("btn-lang-id");
   if (btnEn && btnId) {
@@ -238,16 +283,31 @@ export const setLanguage = (lang) => {
     }
   }
 
-  // Update All Text Elements with data-i18n
+  // Animated holographic text morph sequence
+  const i18nElements = document.querySelectorAll("[data-i18n]");
   const dict = TRANSLATIONS[lang];
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.getAttribute("data-i18n");
-    if (dict[key]) {
-      el.textContent = dict[key];
-    }
-  });
 
-  ScrollTrigger.refresh();
+  gsap.to(i18nElements, {
+    opacity: 0,
+    y: -4,
+    duration: 0.16,
+    stagger: 0.003,
+    ease: "power2.in",
+    onComplete: () => {
+      i18nElements.forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+      gsap.fromTo(
+        i18nElements,
+        { opacity: 0, y: 5 },
+        { opacity: 1, y: 0, duration: 0.28, stagger: 0.003, ease: "power2.out" }
+      );
+      ScrollTrigger.refresh();
+    },
+  });
 };
 window.setLanguage = setLanguage;
 
@@ -1188,6 +1248,138 @@ const initThreeEngine = () => {
   });
   const closeSparks = new THREE.Points(sparkGeom, sparkMat);
   scene.add(closeSparks);
+
+  // ─── Theme Mode 3D Metamorphosis Engine (Dark / Light Atmospheric Sync) ───
+  const updateThreeTheme = (theme, animate = true) => {
+    const isLight = theme === "light";
+    const targetFogColor = new THREE.Color(isLight ? 0xf4f6fa : 0x040509);
+    const targetAmbient = new THREE.Color(isLight ? 0xf8fafc : 0x181e32);
+    const targetAmbientIntensity = isLight ? 2.6 : 1.3;
+    const targetKeyLight = new THREE.Color(isLight ? 0xffffff : 0xfff8f0);
+    const targetKeyIntensity = isLight ? 3.8 : 3.2;
+    const targetCrimsonFill = new THREE.Color(isLight ? 0xdc143c : 0xff1828);
+    const targetFillIntensity = isLight ? 3.0 : 2.6;
+    const targetBackLight = new THREE.Color(isLight ? 0x94a3b8 : 0x3870ff);
+    const targetBackIntensity = isLight ? 1.8 : 2.0;
+    const targetShardColor = new THREE.Color(isLight ? 0xf1f5f9 : 0x121420);
+    const targetShardEmissive = new THREE.Color(isLight ? 0xffe4e8 : 0x30050c);
+    const targetPolyColor = new THREE.Color(isLight ? 0xf8fafc : 0x181822);
+    const targetRing1Color = new THREE.Color(isLight ? 0x94a3b8 : 0x2b2d38);
+
+    if (!animate) {
+      if (scene.fog) scene.fog.color.copy(targetFogColor);
+      ambientLight.color.copy(targetAmbient);
+      ambientLight.intensity = targetAmbientIntensity;
+      keyLight.color.copy(targetKeyLight);
+      keyLight.intensity = targetKeyIntensity;
+      crimsonFillLight.color.copy(targetCrimsonFill);
+      crimsonFillLight.intensity = targetFillIntensity;
+      crimsonBackLight.color.copy(targetBackLight);
+      crimsonBackLight.intensity = targetBackIntensity;
+      shardMat.color.copy(targetShardColor);
+      shardMat.emissive.copy(targetShardEmissive);
+      polyMat.color.copy(targetPolyColor);
+      ring1Mat.color.copy(targetRing1Color);
+      return;
+    }
+
+    if (scene.fog) {
+      gsap.to(scene.fog.color, {
+        r: targetFogColor.r,
+        g: targetFogColor.g,
+        b: targetFogColor.b,
+        duration: 0.85,
+        ease: "power2.inOut",
+      });
+    }
+
+    gsap.to(ambientLight.color, {
+      r: targetAmbient.r,
+      g: targetAmbient.g,
+      b: targetAmbient.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+    gsap.to(ambientLight, {
+      intensity: targetAmbientIntensity,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(keyLight.color, {
+      r: targetKeyLight.r,
+      g: targetKeyLight.g,
+      b: targetKeyLight.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+    gsap.to(keyLight, {
+      intensity: targetKeyIntensity,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(crimsonFillLight.color, {
+      r: targetCrimsonFill.r,
+      g: targetCrimsonFill.g,
+      b: targetCrimsonFill.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+    gsap.to(crimsonFillLight, {
+      intensity: targetFillIntensity,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(crimsonBackLight.color, {
+      r: targetBackLight.r,
+      g: targetBackLight.g,
+      b: targetBackLight.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+    gsap.to(crimsonBackLight, {
+      intensity: targetBackIntensity,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(shardMat.color, {
+      r: targetShardColor.r,
+      g: targetShardColor.g,
+      b: targetShardColor.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+    gsap.to(shardMat.emissive, {
+      r: targetShardEmissive.r,
+      g: targetShardEmissive.g,
+      b: targetShardEmissive.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(polyMat.color, {
+      r: targetPolyColor.r,
+      g: targetPolyColor.g,
+      b: targetPolyColor.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+
+    gsap.to(ring1Mat.color, {
+      r: targetRing1Color.r,
+      g: targetRing1Color.g,
+      b: targetRing1Color.b,
+      duration: 0.85,
+      ease: "power2.inOut",
+    });
+  };
+
+  window.updateThreeTheme = updateThreeTheme;
+  // Apply active theme immediately to WebGL scene
+  updateThreeTheme(currentTheme, false);
 
   // ═══════════════════════════════════════════════════════════
   // 4. DYNAMIC 3D CAMERA PATH & CINEMATIC TIMELINE (5 Seamless Phases)

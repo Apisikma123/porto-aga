@@ -294,8 +294,20 @@
         <button type="button" onclick="window.scrollToSection(5)" class="eyebrow text-zinc-400 hover:text-white transition-colors cursor-pointer" data-i18n="navFooter">Footer</button>
       </nav>
 
-      <!-- Right Actions: Language Switcher + Contact CTA -->
-      <div class="pointer-events-auto flex items-center gap-3">
+      <!-- Right Actions: Theme Toggle + Language Switcher + Contact CTA -->
+      <div class="pointer-events-auto flex items-center gap-2 sm:gap-3">
+        <!-- Theme Mode Toggle (Dark / Light) -->
+        <button
+          type="button"
+          id="theme-toggle-btn"
+          onclick="window.toggleTheme()"
+          class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer"
+          aria-label="Toggle Theme"
+          title="Toggle Light/Dark Theme"
+        >
+          <span id="theme-icon" class="material-symbols-outlined text-[1.05rem] sm:text-base">light_mode</span>
+        </button>
+
         <!-- Bilingual Toggle (EN | ID) -->
         <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg">
           <button type="button" id="btn-lang-en" class="lang-btn active cursor-pointer" onclick="window.setLanguage('en')">EN</button>

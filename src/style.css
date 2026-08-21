@@ -534,3 +534,201 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   CELESTIAL PRISTINE LIGHT THEME (html[data-theme="light"])
+   Smooth Morphing Architecture with GSAP WebGL Sync
+   ═══════════════════════════════════════════════════════════ */
+html {
+  transition: background-color 0.8s ease, color 0.5s ease;
+}
+
+html[data-theme="light"] {
+  background: 
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(220, 20, 60, 0.09), transparent 70%),
+    radial-gradient(ellipse 70% 60% at 85% 90%, rgba(59, 130, 246, 0.08), transparent 70%),
+    radial-gradient(circle at 15% 50%, rgba(220, 20, 60, 0.05), transparent 50%),
+    radial-gradient(130% 90% at 50% 10%, #ffffff 0%, #f4f6fa 55%, #e9edf5 100%) !important;
+  background-color: #f4f6fa !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] body {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .display-title {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .body-copy {
+  color: #475569 !important;
+}
+
+/* Light Cards & Glass Containers */
+html[data-theme="light"] .glass-card,
+html[data-theme="light"] .tesseract-card,
+html[data-theme="light"] .spatial-card,
+html[data-theme="light"] .activity-standalone-card,
+html[data-theme="light"] .carousel-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.07), 0 0 1px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .glass-card:hover,
+html[data-theme="light"] .tesseract-card:hover,
+html[data-theme="light"] .spatial-card:hover {
+  border-color: rgba(220, 20, 60, 0.5) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 25px 50px -10px rgba(220, 20, 60, 0.18), 0 0 1px rgba(220, 20, 60, 0.3) !important;
+}
+
+/* Light Navigation & Buttons */
+html[data-theme="light"] header nav {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06) !important;
+}
+
+html[data-theme="light"] header nav button {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] header nav button:hover {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] #theme-toggle-btn,
+html[data-theme="light"] .lang-btn:not(.active) {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] #theme-toggle-btn:hover,
+html[data-theme="light"] .lang-btn:not(.active):hover {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .btn-glass {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .btn-glass:hover {
+  border-color: rgba(220, 20, 60, 0.6) !important;
+  background: rgba(220, 20, 60, 0.06) !important;
+  color: #DC143C !important;
+}
+
+/* Light Sidebar Elements */
+html[data-theme="light"] .side-nav-item .side-nav-line {
+  background-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+html[data-theme="light"] .side-nav-item .side-nav-num {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="light"] .side-nav-item .side-nav-label {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .side-nav-item.active .side-nav-label {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+html[data-theme="light"] .side-nav-item.active .side-nav-line {
+  background-color: #DC143C !important;
+}
+
+html[data-theme="light"] .side-nav-item.active .side-nav-num {
+  color: #DC143C !important;
+}
+
+/* Light Status Badge & Floating Info */
+html[data-theme="light"] .bg-zinc-950\/80,
+html[data-theme="light"] .bg-zinc-950\/70,
+html[data-theme="light"] .bg-zinc-950\/85 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Light Text Mappings */
+html[data-theme="light"] .text-zinc-200,
+html[data-theme="light"] .text-zinc-300,
+html[data-theme="light"] .text-white {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .text-zinc-400,
+html[data-theme="light"] .text-zinc-500 {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .hero-name .hero-line:last-child {
+  background: linear-gradient(to right, #0f172a 0%, #334155 50%, #DC143C 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+html[data-theme="light"] .border-white\/10,
+html[data-theme="light"] .border-white\/12,
+html[data-theme="light"] .border-white\/15,
+html[data-theme="light"] .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .marquee-content {
+  -webkit-text-stroke: 1.5px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Light In-App Markdown Modal */
+html[data-theme="light"] .inapp-modal {
+  background: rgba(244, 246, 250, 0.85) !important;
+}
+
+html[data-theme="light"] .modal-dialog {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.15) !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .markdown-body {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .markdown-body h1,
+html[data-theme="light"] .markdown-body h2,
+html[data-theme="light"] .markdown-body h3,
+html[data-theme="light"] .markdown-body h4 {
+  color: #0f172a !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .markdown-body p,
+html[data-theme="light"] .markdown-body li {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .markdown-body pre {
+  background: #f1f5f9 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .markdown-body pre code {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .markdown-body code:not(pre code) {
+  background: rgba(220, 20, 60, 0.08) !important;
+  border-color: rgba(220, 20, 60, 0.2) !important;
+  color: #dc2626 !important;
+}
+
