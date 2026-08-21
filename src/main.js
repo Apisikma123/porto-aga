@@ -1970,17 +1970,28 @@ const initScrollRevealAnimations = () => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      const rotX = (-y / (rect.height / 2)) * 6;
-      const rotY = (x / (rect.width / 2)) * 6;
-      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+      const rotX = (-y / (rect.height / 2)) * 4.5;
+      const rotY = (x / (rect.width / 2)) * 4.5;
+
+      gsap.to(card, {
+        rotateX: rotX,
+        rotateY: rotY,
+        transformPerspective: 1000,
+        duration: 0.22,
+        ease: "power1.out",
+        overwrite: "auto",
+      });
     });
 
     card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)";
-      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)";
-      setTimeout(() => {
-        card.style.transition = "";
-      }, 350);
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        transformPerspective: 1000,
+        duration: 0.45,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
     });
   });
 };
