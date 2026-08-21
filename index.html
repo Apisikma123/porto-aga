@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
+          document.documentElement.setAttribute("data-theme", savedTheme);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- Google Search Console Site Verification -->
@@ -219,10 +227,10 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div
       id="web-preloader"
-      class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040509] text-white select-none pointer-events-auto"
+      class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040509] text-white select-none pointer-events-auto transition-colors duration-500"
     >
       <!-- Background Ambient Radial Space Glow -->
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.16)_0%,transparent_65%)] pointer-events-none"></div>
+      <div class="preloader-bg-glow absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.16)_0%,transparent_65%)] pointer-events-none"></div>
 
       <!-- Center Bespoke 3D Animated Tesseract Vector & Orbital Rings -->
       <div class="relative w-28 h-28 md:w-32 md:h-32 mb-7 flex items-center justify-center">
@@ -249,7 +257,7 @@
             </defs>
 
             <!-- Outer Isometric Cube -->
-            <g stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
+            <g class="preloader-outer-cube" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
               <polygon points="40,8 68,24 68,56 40,72 12,56 12,24" />
               <line x1="40" y1="40" x2="40" y2="72" stroke-opacity="0.6"/>
               <line x1="40" y1="40" x2="68" y2="24" stroke-opacity="0.6"/>
@@ -283,16 +291,16 @@
         <div class="font-mono text-[0.65rem] sm:text-[0.68rem] tracking-[0.32em] text-[#DC143C] uppercase mb-1.5 font-medium">
           01 // PORTFOLIO SHOWCASE
         </div>
-        <h2 class="display-title text-2xl sm:text-3xl text-white tracking-tight font-extrabold mb-1">
+        <h2 class="preloader-title display-title text-2xl sm:text-3xl text-white tracking-tight font-extrabold mb-1">
           Muhammad Aga Putra
         </h2>
-        <p class="font-mono text-[0.68rem] sm:text-[0.72rem] tracking-wider text-zinc-400 uppercase">
+        <p class="preloader-role font-mono text-[0.68rem] sm:text-[0.72rem] tracking-wider text-zinc-400 uppercase">
           Frontend Developer &amp; Software Engineer
         </p>
       </div>
 
       <!-- Laser Progress Bar Track -->
-      <div class="w-64 sm:w-80 md:w-96 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10 mb-3.5 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+      <div class="preloader-track w-64 sm:w-80 md:w-96 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10 mb-3.5 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
         <div
           id="preloader-bar"
           class="h-full bg-gradient-to-r from-[#DC143C] via-rose-500 to-red-400 rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(220,20,60,1)]"
@@ -305,7 +313,7 @@
         <span id="preloader-status" class="tracking-widest uppercase text-[0.65rem] text-zinc-400 truncate mr-3">
           PREPARING EXPERIENCE...
         </span>
-        <span id="preloader-percent" class="font-bold text-white tracking-wider text-xs sm:text-sm">
+        <span id="preloader-percent" class="preloader-percent font-bold text-white tracking-wider text-xs sm:text-sm">
           0%
         </span>
       </div>

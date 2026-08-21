@@ -556,6 +556,43 @@ html[data-theme="light"] body {
   color: #0f172a !important;
 }
 
+/* Light Mode Preloader Screen */
+html[data-theme="light"] #web-preloader {
+  background-color: #f4f6fa !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-bg-glow {
+  background: radial-gradient(circle at center, rgba(220, 20, 60, 0.1) 0%, transparent 65%) !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-outer-cube {
+  stroke: #1e293b !important;
+  stroke-opacity: 0.9 !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-title {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-role {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-track {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+html[data-theme="light"] #web-preloader #preloader-status {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] #web-preloader .preloader-percent {
+  color: #0f172a !important;
+}
+
 html[data-theme="light"] .display-title {
   color: #090a10 !important;
 }
