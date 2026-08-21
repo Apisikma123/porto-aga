@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth bg-[#090a10] text-zinc-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Katalog Proyek &amp; Repositori Open-Source — Muhammad Aga Putra</title>
+    <meta name="title" content="Katalog Proyek &amp; Repositori Open-Source — Muhammad Aga Putra" />
+    <meta
+      name="description"
+      content="Jelajahi 17+ proyek perangkat lunak, sistem enterprise Laravel, aplikasi Flutter, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123)."
+    />
+    <meta
+      name="keywords"
+      content="Proyek Muhammad Aga Putra, Repositori Apisikma123, Proyek Laravel Indonesia, Aplikasi Flutter, Portofolio Software Engineering, Open Source Projects, Web Developer Portfolio"
+    />
+    <meta name="author" content="Muhammad Aga Putra" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://agaputra.dev/projects.html" />
+
+    <!-- Open Graph & Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agaputra.dev/projects.html" />
+    <meta property="og:title" content="Katalog Proyek &amp; Repositori Open-Source — Muhammad Aga Putra" />
+    <meta
+      property="og:description"
+      content="Katalog lengkap 17+ repositori software engineering, sistem enterprise, dan karya open-source oleh Muhammad Aga Putra."
+    />
+    <meta property="og:image" content="https://agaputra.dev/projects/bkj.webp" />
+    <meta property="og:site_name" content="Muhammad Aga Putra Portfolio" />
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Katalog Proyek — Muhammad Aga Putra" />
+    <meta name="twitter:description" content="17+ Software Engineering Repositories by Muhammad Aga Putra (@Apisikma123)." />
+    <meta name="twitter:image" content="https://agaputra.dev/projects/bkj.webp" />
+    <meta name="twitter:creator" content="@Apisikma123" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+    />
+
+    <!-- Tailwind CSS Engine -->
+    <link rel="stylesheet" href="/src/style.css" />
+
+    <!-- Structured Data JSON-LD (CollectionPage & ItemList) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Katalog Proyek & Repositori — Muhammad Aga Putra",
+      "description": "Kumpulan repositori dan proyek software engineering oleh Muhammad Aga Putra.",
+      "url": "https://agaputra.dev/projects.html",
+      "creator": {
+        "@type": "Person",
+        "name": "Muhammad Aga Putra",
+        "url": "https://agaputra.dev/"
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-[#090a10] text-[#f4f4f5] font-sans antialiased selection:bg-[#DC143C]/40 selection:text-white min-h-screen flex flex-col justify-between">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 1. TOP HEADER & NAVIGATION                                -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-[#090a10]/80 backdrop-blur-xl px-6 md:px-12 py-4">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        
+        <!-- Left: Back to 3D Portfolio -->
+        <a
+          href="/"
+          class="flex items-center gap-2.5 text-zinc-400 hover:text-white transition-colors group font-mono text-xs uppercase tracking-wider"
+        >
+          <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+          <span id="label-back">Portofolio 3D</span>
+        </a>
+
+        <!-- Center: Branding -->
+        <div class="font-mono text-xs font-semibold text-white tracking-widest hidden sm:block">
+          AGA PUTRA <span class="text-[#DC143C]">/</span> REPOSITORY DIRECTORY
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Language Switcher -->
+          <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 p-1 shadow-lg font-mono text-xs">
+            <button type="button" id="btn-lang-en" class="lang-btn" onclick="switchLanguage('en')">EN</button>
+            <button type="button" id="btn-lang-id" class="lang-btn active" onclick="switchLanguage('id')">ID</button>
+          </div>
+
+          <!-- GitHub Profile -->
+          <a
+            href="https://github.com/Apisikma123"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-4 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.35)]"
+          >
+            <span>GitHub Profile</span>
+            <span class="material-symbols-outlined text-xs">arrow_outward</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 2. HERO & DIRECTORY SEARCH / FILTERS                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-12 py-12">
+      
+      <!-- Directory Header -->
+      <div class="border-b border-white/10 pb-10 mb-10">
+        <p class="eyebrow text-[#DC143C] mb-3" id="label-eyebrow">04 // KATALOG KARYA LENGKAP</p>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4" id="label-title">
+          Semua Karya &amp; Repositori.
+        </h1>
+        <p class="body-copy max-w-2xl text-base sm:text-lg mb-8" id="label-desc">
+          Eksplorasi seluruh proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123).
+        </p>
+
+        <!-- Search Bar + Category Filters -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-4 border-t border-white/5">
+          
+          <!-- Live Instant Search Bar -->
+          <div class="relative w-full md:w-96">
+            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-base">search</span>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Cari proyek atau teknologi (Flutter, Laravel, PWA...)"
+              oninput="handleSearch(this.value)"
+              class="w-full rounded-lg bg-white/[0.04] border border-white/10 focus:border-[#DC143C]/60 focus:bg-white/[0.08] focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 transition-all"
+            />
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 font-mono text-xs" id="category-filters">
+            <button type="button" class="filter-btn active cursor-pointer px-3.5 py-2 rounded-lg bg-white/10 text-white font-medium transition-colors" onclick="setCategory('all', this)">Semua (17)</button>
+            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Fullstack', this)">Fullstack</button>
+            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Mobile', this)">Mobile</button>
+            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Frontend', this)">Frontend / PWA</button>
+            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Tools', this)">Tools &amp; Java</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Results Count & Active Filter Indicator -->
+      <div class="flex items-center justify-between pb-6 font-mono text-xs text-zinc-400">
+        <div>
+          <span id="showing-count" class="text-zinc-200 font-semibold">17</span> <span id="label-projects-found">proyek ditemukan</span>
+        </div>
+        <span class="text-zinc-600 font-mono text-[0.68rem]">KLIK KARTU UNTUK LIHAT OVERVIEW LENGKAP</span>
+      </div>
+
+      <!-- Projects Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <!-- Dynamically rendered project cards -->
+      </div>
+
+      <!-- Empty Search State -->
+      <div id="empty-search" class="hidden py-24 text-center">
+        <span class="material-symbols-outlined text-4xl text-zinc-600 mb-2 block">search_off</span>
+        <h3 class="text-lg font-bold text-white mb-1">Tidak Ada Proyek yang Cocok</h3>
+        <p class="text-xs text-zinc-400">Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.</p>
+      </div>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 3. FOOTER                                                  -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <footer class="border-t border-white/10 py-8 px-6 md:px-12 bg-[#090a10] font-mono text-xs text-zinc-500">
+      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span class="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="/" class="hover:text-white transition-colors">Portofolio 3D</a>
+          <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Semua Karya</a>
+          <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 4. LOGIC SCRIPT                                            -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <script>
+      let currentLang = localStorage.getItem('porto_lang') || 'id';
+      let allProjects = [];
+      let activeCategory = 'all';
+      let searchQuery = '';
+
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      const I18N = {
+        id: {
+          back: "Portofolio 3D",
+          eyebrow: "04 // KATALOG KARYA LENGKAP",
+          title: "Semua Karya & Repositori.",
+          desc: "Eksplorasi seluruh proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123).",
+          placeholder: "Cari proyek atau teknologi (Flutter, Laravel, PWA...)",
+          found: "proyek ditemukan",
+          clickNotice: "KLIK KARTU UNTUK LIHAT OVERVIEW LENGKAP",
+          readReadme: "Overview Singkat",
+          viewGithub: "Source Code",
+          emptyTitle: "Tidak Ada Proyek yang Cocok",
+          emptyDesc: "Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.",
+          featuredTag: "Unggulan"
+        },
+        en: {
+          back: "3D Portfolio",
+          eyebrow: "04 // COMPLETE WORKS CATALOG",
+          title: "All Works & Repositories.",
+          desc: "Explore all software projects, web systems architecture, mobile applications, and open-source repositories by Muhammad Aga Putra (@Apisikma123).",
+          placeholder: "Search projects or technology (Flutter, Laravel, PWA...)",
+          found: "projects found",
+          clickNotice: "CLICK CARD FOR FULL OVERVIEW",
+          readReadme: "Quick Overview",
+          viewGithub: "Source Code",
+          emptyTitle: "No Matching Projects Found",
+          emptyDesc: "Try using different keywords or select the All category.",
+          featuredTag: "Featured"
+        }
+      };
+
+      function switchLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('porto_lang', lang);
+        
+        document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+        document.getElementById('btn-lang-id').classList.toggle('active', lang === 'id');
+
+        const dict = I18N[lang];
+        document.getElementById('label-back').textContent = dict.back;
+        document.getElementById('label-eyebrow').textContent = dict.eyebrow;
+        document.getElementById('label-title').textContent = dict.title;
+        document.getElementById('label-desc').textContent = dict.desc;
+        document.getElementById('search-input').placeholder = dict.placeholder;
+        document.getElementById('label-projects-found').textContent = dict.found;
+
+        renderProjects();
+      }
+
+      async function init() {
+        switchLanguage(currentLang);
+
+        try {
+          const res = await fetch('/all_projects.json');
+          if (!res.ok) throw new Error('Failed to load all_projects.json');
+          allProjects = await res.json();
+          renderProjects();
+        } catch (err) {
+          console.error(err);
+          document.getElementById('projects-grid').innerHTML = `
+            <div class="col-span-full py-16 text-center text-zinc-400">
+              <p>Gagal memuat katalog proyek. Silakan refresh halaman.</p>
+            </div>
+          `;
+        }
+      }
+
+      function setCategory(cat, btn) {
+        activeCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-white/10', 'text-white');
+          b.classList.add('bg-white/[0.03]', 'text-zinc-400');
+        });
+        btn.classList.add('bg-white/10', 'text-white');
+        btn.classList.remove('bg-white/[0.03]', 'text-zinc-400');
+        renderProjects();
+      }
+
+      function handleSearch(val) {
+        searchQuery = val.trim().toLowerCase();
+        renderProjects();
+      }
+
+      function renderProjects() {
+        const grid = document.getElementById('projects-grid');
+        const emptyState = document.getElementById('empty-search');
+        grid.innerHTML = '';
+
+        const filtered = allProjects.filter(p => {
+          // Category filter
+          if (activeCategory !== 'all') {
+            if (activeCategory === 'Tools') {
+              if (p.categoryTag !== 'Tools' && p.categoryTag !== 'Backend' && p.language !== 'Java') return false;
+            } else if (p.categoryTag !== activeCategory) {
+              return false;
+            }
+          }
+
+          // Search query filter
+          if (searchQuery) {
+            const matchName = p.displayName.toLowerCase().includes(searchQuery);
+            const matchId = p.id.toLowerCase().includes(searchQuery);
+            const matchDesc = (p.description || '').toLowerCase().includes(searchQuery);
+            const matchTags = (p.tags || []).some(t => t.toLowerCase().includes(searchQuery));
+            if (!matchName && !matchId && !matchDesc && !matchTags) return false;
+          }
+
+          return true;
+        });
+
+        document.getElementById('showing-count').textContent = filtered.length;
+
+        if (filtered.length === 0) {
+          emptyState.classList.remove('hidden');
+          return;
+        } else {
+          emptyState.classList.add('hidden');
+        }
+
+        const dict = I18N[currentLang];
+
+        filtered.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-[#DC143C]/50 transition-all duration-300 hover:-translate-y-1';
+          
+          const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
+
+          card.innerHTML = `
+            <div>
+              <!-- Image Banner or Header -->
+              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
+                <img
+                  src="${p.previewImage}"
+                  alt="${p.displayName}"
+                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
+                  class="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                
+                ${p.featured ? `
+                  <span class="absolute top-3 left-3 bg-[#DC143C] text-white font-mono text-[0.62rem] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded shadow-lg">
+                    ${dict.featuredTag}
+                  </span>
+                ` : ''}
+
+                <span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-zinc-300 font-mono text-[0.62rem] px-2 py-0.5 rounded border border-white/10">
+                  ${p.language}
+                </span>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-6">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="eyebrow text-[0.6rem] text-zinc-400">${p.category.toUpperCase()}</span>
+                  <span class="font-mono text-[0.65rem] text-zinc-500">@Apisikma123</span>
+                </div>
+
+                <h3 class="font-bold text-base text-white group-hover:text-[#DC143C] transition-colors mb-2 line-clamp-1">
+                  ${p.displayName}
+                </h3>
+
+                <p class="text-xs text-zinc-400 font-light leading-relaxed mb-4 line-clamp-3">
+                  ${desc}
+                </p>
+
+                <!-- Tags -->
+                <div class="flex gap-1.5 flex-wrap font-mono text-[0.65rem] text-zinc-400">
+                  ${(p.tags || [p.language]).slice(0, 3).map(t => `<span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">${t}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Bottom Actions -->
+            <div class="p-5 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-3">
+              <a
+                href="/project.html?id=${p.id}"
+                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2 px-3 text-center transition-all flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider"
+              >
+                <span>${dict.readReadme}</span>
+                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+              </a>
+
+              <a
+                href="${p.html_url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="rounded-md border border-white/10 hover:border-white/30 text-zinc-400 hover:text-white p-2 transition-colors flex items-center justify-center"
+                title="GitHub Repository"
+              >
+                <span class="material-symbols-outlined text-sm">code</span>
+              </a>
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', init);
+    </script>
+  </body>
+</html>

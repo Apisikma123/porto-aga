@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://agaputra.dev/sitemap.xml
+Sitemap: https://apisikma123.github.io/porto-aga/sitemap.xml

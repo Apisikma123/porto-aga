@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage / 3D Interactive Portfolio -->
+  <url>
+    <loc>https://agaputra.dev/</loc>
+    <lastmod>2026-08-21T21:00:00+07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agaputra.dev/?lang=id"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agaputra.dev/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agaputra.dev/"/>
+    <image:image>
+      <image:loc>https://agaputra.dev/projects/bkj.webp</image:loc>
+      <image:title>Muhammad Aga Putra Portfolio Showcase</image:title>
+      <image:caption>Frontend Software Engineer &amp; System Architect Portfolio by Muhammad Aga Putra</image:caption>
+    </image:image>
+  </url>
+
+  <!-- All Projects & Open Source Repositories -->
+  <url>
+    <loc>https://agaputra.dev/projects.html</loc>
+    <lastmod>2026-08-21T21:00:00+07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://agaputra.dev/projects.html?lang=id"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agaputra.dev/projects.html?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agaputra.dev/projects.html"/>
+  </url>
+
+  <!-- Project Detail Case Studies -->
+  <url>
+    <loc>https://agaputra.dev/project.html</loc>
+    <lastmod>2026-08-21T21:00:00+07:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Interactive Code Playground -->
+  <url>
+    <loc>https://agaputra.dev/code.html</loc>
+    <lastmod>2026-08-21T21:00:00+07:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

@@ -1,7 +1,25 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/postcss';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    cors: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4173,
+    cors: true,
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'),
+        projects: resolve(import.meta.dirname, 'projects.html'),
+        project: resolve(import.meta.dirname, 'project.html'),
+      },
+    },
+  },
+});
