@@ -215,52 +215,97 @@
   <body class="bg-transparent text-zinc-100 font-sans antialiased relative min-h-screen selection:bg-[#DC143C]/35 selection:text-white">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 0. LUXURY QUANTUM PRELOADER OVERLAY (Zero-Jank Pipeline)    -->
+    <!-- 0. LUXURY 3D TESSERACT PRELOADER OVERLAY                     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div
       id="web-preloader"
       class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040509] text-white select-none pointer-events-auto"
     >
       <!-- Background Ambient Radial Space Glow -->
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.18)_0%,transparent_65%)] pointer-events-none"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.16)_0%,transparent_65%)] pointer-events-none"></div>
 
-      <!-- Center Holographic Orb & Orbiting Rings -->
-      <div class="relative w-28 h-28 mb-8 flex items-center justify-center">
-        <div class="absolute inset-0 rounded-full border border-red-500/20 animate-ping opacity-30"></div>
-        <div class="absolute inset-1 rounded-full border border-dashed border-red-500/40 animate-spin" style="animation-duration: 9s;"></div>
-        <div class="absolute inset-3 rounded-full border-2 border-t-red-500 border-r-transparent border-b-white/20 border-l-transparent animate-spin" style="animation-duration: 2s;"></div>
-        
-        <!-- Core Glowing Glyph -->
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-red-600 via-rose-500 to-red-400 rotate-45 flex items-center justify-center shadow-[0_0_30px_rgba(220,20,60,0.85)] animate-pulse">
-          <div class="w-3.5 h-3.5 bg-white rounded-sm"></div>
+      <!-- Center Bespoke 3D Animated Tesseract Vector & Orbital Rings -->
+      <div class="relative w-28 h-28 md:w-32 md:h-32 mb-7 flex items-center justify-center">
+        <!-- Ambient Crimson Core Aura -->
+        <div class="absolute inset-2 rounded-full bg-[radial-gradient(circle,rgba(220,20,60,0.4)_0%,transparent_70%)] animate-pulse"></div>
+
+        <!-- Rotating Gyroscopic Halo Rings -->
+        <svg class="absolute inset-0 w-full h-full animate-spin pointer-events-none" style="animation-duration: 14s;" viewBox="0 0 120 120">
+          <ellipse cx="60" cy="60" rx="52" ry="22" fill="none" stroke="rgba(220,20,60,0.45)" stroke-width="1.2" stroke-dasharray="6 4" transform="rotate(-30 60 60)"/>
+          <ellipse cx="60" cy="60" rx="46" ry="18" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1" transform="rotate(45 60 60)"/>
+        </svg>
+
+        <!-- 3D Tesseract Isometric Hypercube Vector -->
+        <div class="relative w-18 h-18 md:w-20 md:h-20 flex items-center justify-center">
+          <svg class="w-full h-full overflow-visible" viewBox="0 0 80 80">
+            <defs>
+              <filter id="preloaderGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Outer Isometric Cube -->
+            <g stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
+              <polygon points="40,8 68,24 68,56 40,72 12,56 12,24" />
+              <line x1="40" y1="40" x2="40" y2="72" stroke-opacity="0.6"/>
+              <line x1="40" y1="40" x2="68" y2="24" stroke-opacity="0.6"/>
+              <line x1="40" y1="40" x2="12" y2="24" stroke-opacity="0.6"/>
+            </g>
+
+            <!-- Hyper-Dimensional Connector Rays -->
+            <g stroke="#FF3358" stroke-width="1.2" stroke-dasharray="2.5 1.5" opacity="0.85">
+              <line x1="40" y1="8" x2="40" y2="24"/>
+              <line x1="68" y1="24" x2="54" y2="32"/>
+              <line x1="68" y1="56" x2="54" y2="48"/>
+              <line x1="40" y1="72" x2="40" y2="56"/>
+              <line x1="12" y1="56" x2="26" y2="48"/>
+              <line x1="12" y1="24" x2="26" y2="32"/>
+            </g>
+
+            <!-- Inner Glowing Crimson Tesseract Core -->
+            <g filter="url(#preloaderGlow)">
+              <polygon points="40,24 54,32 40,40 26,32" fill="#DC143C" fill-opacity="0.45" stroke="#FF4D6D" stroke-width="1.6" stroke-linejoin="round"/>
+              <polygon points="26,32 40,40 40,56 26,48" fill="#800014" fill-opacity="0.65" stroke="#FF4D6D" stroke-width="1.6" stroke-linejoin="round"/>
+              <polygon points="54,32 40,40 40,56 54,48" fill="#50000c" fill-opacity="0.75" stroke="#FF4D6D" stroke-width="1.6" stroke-linejoin="round"/>
+              <!-- Central Spark -->
+              <circle cx="40" cy="40" r="2.2" fill="#ffffff"/>
+            </g>
+          </svg>
         </div>
       </div>
 
-      <!-- Preloader Title & Subsystem Header -->
+      <!-- Preloader Editorial Brand & Role Header -->
       <div class="text-center mb-6 z-10 px-4">
-        <div class="font-mono text-[0.68rem] tracking-[0.38em] text-red-400 uppercase mb-1.5 font-semibold">
-          APISIKMA // QUANTUM PIPELINE
+        <div class="font-mono text-[0.65rem] sm:text-[0.68rem] tracking-[0.32em] text-[#DC143C] uppercase mb-1.5 font-medium">
+          01 // PORTFOLIO SHOWCASE
         </div>
-        <div class="font-serif text-2xl md:text-3xl text-white tracking-wide font-normal">
+        <h2 class="display-title text-2xl sm:text-3xl text-white tracking-tight font-extrabold mb-1">
           Muhammad Aga Putra
-        </div>
+        </h2>
+        <p class="font-mono text-[0.68rem] sm:text-[0.72rem] tracking-wider text-zinc-400 uppercase">
+          Frontend Developer &amp; Software Engineer
+        </p>
       </div>
 
       <!-- Laser Progress Bar Track -->
-      <div class="w-64 md:w-84 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10 mb-4 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+      <div class="w-64 sm:w-80 md:w-96 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10 mb-3.5 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
         <div
           id="preloader-bar"
-          class="h-full bg-gradient-to-r from-red-600 via-rose-500 to-red-400 rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(220,20,60,1)]"
+          class="h-full bg-gradient-to-r from-[#DC143C] via-rose-500 to-red-400 rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(220,20,60,1)]"
           style="width: 0%;"
         ></div>
       </div>
 
       <!-- Status Diagnostic & Percentage Display -->
-      <div class="flex items-center justify-between w-64 md:w-84 font-mono text-xs z-10 text-zinc-400 px-1">
+      <div class="flex items-center justify-between w-64 sm:w-80 md:w-96 font-mono text-xs z-10 text-zinc-400 px-1">
         <span id="preloader-status" class="tracking-widest uppercase text-[0.65rem] text-zinc-400 truncate mr-3">
-          INITIALIZING WEBGL 3D PIPELINE...
+          PREPARING EXPERIENCE...
         </span>
-        <span id="preloader-percent" class="font-bold text-white tracking-wider text-sm">
+        <span id="preloader-percent" class="font-bold text-white tracking-wider text-xs sm:text-sm">
           0%
         </span>
       </div>

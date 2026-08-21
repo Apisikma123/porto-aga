@@ -825,7 +825,7 @@ const initThreeEngine = () => {
 
     if (barEl) barEl.style.width = "100%";
     if (percentEl) percentEl.textContent = "100%";
-    if (statusEl) statusEl.textContent = "QUANTUM PIPELINE READY";
+    if (statusEl) statusEl.textContent = "EXPERIENCE READY";
 
     if (preloaderEl) {
       gsap.to(preloaderEl, {
@@ -877,17 +877,17 @@ const initThreeEngine = () => {
       if (barEl) barEl.style.width = `${pct}%`;
       if (percentEl) percentEl.textContent = `${pct}%`;
       if (statusEl) {
-        if (pct < 35) {
-          statusEl.textContent = "INITIALIZING 3D WEBGL ENGINE...";
-        } else if (pct < 75) {
-          statusEl.textContent = "DECODING DRACO MESHES & PBR...";
+        if (pct < 40) {
+          statusEl.textContent = "PREPARING EXPERIENCE...";
+        } else if (pct < 80) {
+          statusEl.textContent = "INITIALIZING 3D ENVIRONMENT...";
         } else {
-          statusEl.textContent = "COMPILING QUANTUM SHADERS...";
+          statusEl.textContent = "POLISHING SHOWCASE...";
         }
       }
     },
     (url) => {
-      console.warn("Loading error on:", url);
+      console.warn("Loading notice on:", url);
     }
   );
 
