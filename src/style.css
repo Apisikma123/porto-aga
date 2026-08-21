@@ -671,10 +671,27 @@ html[data-theme="light"] .text-zinc-500 {
   color: #64748b !important;
 }
 
+html[data-theme="light"] .hero-line:first-child,
+html[data-theme="light"] .display-title {
+  color: #090a10 !important;
+}
+
+/* Light Theme High-Contrast Gradients for Titles */
+html[data-theme="light"] .hero-gradient-text,
 html[data-theme="light"] .hero-name .hero-line:last-child {
-  background: linear-gradient(to right, #0f172a 0%, #334155 50%, #DC143C 100%) !important;
+  background: linear-gradient(to right, #090a10 0%, #1e293b 40%, #DC143C 100%) !important;
   -webkit-background-clip: text !important;
+  background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+html[data-theme="light"] .contact-gradient-text {
+  background: linear-gradient(to right, #DC143C 0%, #991b1b 45%, #090a10 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
 }
 
 html[data-theme="light"] .border-white\/10,
