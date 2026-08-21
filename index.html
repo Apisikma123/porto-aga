@@ -211,6 +211,58 @@
   <body class="bg-transparent text-zinc-100 font-sans antialiased relative min-h-screen selection:bg-[#DC143C]/35 selection:text-white">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 0. LUXURY QUANTUM PRELOADER OVERLAY (Zero-Jank Pipeline)    -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div
+      id="web-preloader"
+      class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040509] text-white select-none pointer-events-auto"
+    >
+      <!-- Background Ambient Radial Space Glow -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.18)_0%,transparent_65%)] pointer-events-none"></div>
+
+      <!-- Center Holographic Orb & Orbiting Rings -->
+      <div class="relative w-28 h-28 mb-8 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-full border border-red-500/20 animate-ping opacity-30"></div>
+        <div class="absolute inset-1 rounded-full border border-dashed border-red-500/40 animate-spin" style="animation-duration: 9s;"></div>
+        <div class="absolute inset-3 rounded-full border-2 border-t-red-500 border-r-transparent border-b-white/20 border-l-transparent animate-spin" style="animation-duration: 2s;"></div>
+        
+        <!-- Core Glowing Glyph -->
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-red-600 via-rose-500 to-red-400 rotate-45 flex items-center justify-center shadow-[0_0_30px_rgba(220,20,60,0.85)] animate-pulse">
+          <div class="w-3.5 h-3.5 bg-white rounded-sm"></div>
+        </div>
+      </div>
+
+      <!-- Preloader Title & Subsystem Header -->
+      <div class="text-center mb-6 z-10 px-4">
+        <div class="font-mono text-[0.68rem] tracking-[0.38em] text-red-400 uppercase mb-1.5 font-semibold">
+          APISIKMA // QUANTUM PIPELINE
+        </div>
+        <div class="font-serif text-2xl md:text-3xl text-white tracking-wide font-normal">
+          Muhammad Aga Putra
+        </div>
+      </div>
+
+      <!-- Laser Progress Bar Track -->
+      <div class="w-64 md:w-84 h-1.5 bg-white/10 rounded-full overflow-hidden relative z-10 mb-4 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+        <div
+          id="preloader-bar"
+          class="h-full bg-gradient-to-r from-red-600 via-rose-500 to-red-400 rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(220,20,60,1)]"
+          style="width: 0%;"
+        ></div>
+      </div>
+
+      <!-- Status Diagnostic & Percentage Display -->
+      <div class="flex items-center justify-between w-64 md:w-84 font-mono text-xs z-10 text-zinc-400 px-1">
+        <span id="preloader-status" class="tracking-widest uppercase text-[0.65rem] text-zinc-400 truncate mr-3">
+          INITIALIZING WEBGL 3D PIPELINE...
+        </span>
+        <span id="preloader-percent" class="font-bold text-white tracking-wider text-sm">
+          0%
+        </span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. FIXED 3D MULTI-OBJECT CANVAS (100% Bright, Crisp & Free)-->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none"></canvas>

@@ -744,8 +744,100 @@ const initThreeEngine = () => {
   orbitalRing2.rotation.y = Math.PI * 0.25;
   lightRaysGroup.add(orbitalRing2);
 
-  // Dynamic Texture Loading (TextureLoader - WebP Optimized)
-  const textureLoader = new THREE.TextureLoader();
+  // ─── Zero-Jank WebGL Asset & Shader Preloading Pipeline ───
+  let preloaderFinished = false;
+  const finishPreloader = () => {
+    if (preloaderFinished) return;
+    preloaderFinished = true;
+
+    // 1. Pre-warm & Compile WebGL Shaders into GPU Memory (Eliminates 1st frame stutter!)
+    try {
+      renderer.compile(scene, camera);
+      renderer.render(scene, camera);
+    } catch (e) {
+      console.warn("Shader pre-warm notice:", e);
+    }
+
+    const preloaderEl = document.getElementById("web-preloader");
+    const barEl = document.getElementById("preloader-bar");
+    const percentEl = document.getElementById("preloader-percent");
+    const statusEl = document.getElementById("preloader-status");
+
+    if (barEl) barEl.style.width = "100%";
+    if (percentEl) percentEl.textContent = "100%";
+    if (statusEl) statusEl.textContent = "QUANTUM PIPELINE READY";
+
+    if (preloaderEl) {
+      gsap.to(preloaderEl, {
+        opacity: 0,
+        scale: 1.04,
+        duration: 0.8,
+        ease: "power2.inOut",
+        delay: 0.25,
+        onComplete: () => {
+          preloaderEl.style.display = "none";
+          // Smoothly trigger hero entrance animation
+          gsap.fromTo(
+            "#start .eyebrow",
+            { y: -20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }
+          );
+          gsap.fromTo(
+            "#start .display-title .hero-line",
+            { y: 30, rotateX: -12, opacity: 0 },
+            { y: 0, rotateX: 0, opacity: 1, stagger: 0.12, duration: 0.95, ease: "power3.out", delay: 0.1 }
+          );
+          gsap.fromTo(
+            "#start .body-copy, #start .hero-actions",
+            { x: -25, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: "power3.out", delay: 0.25 }
+          );
+        },
+      });
+    }
+  };
+
+  const loadingManager = new THREE.LoadingManager(
+    () => {
+      // Three.js assets (GLTF + textures + DRACO) ready!
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          finishPreloader();
+        });
+      } else {
+        finishPreloader();
+      }
+    },
+    (url, itemsLoaded, itemsTotal) => {
+      const pct = Math.min(Math.round((itemsLoaded / itemsTotal) * 100), 96);
+      const barEl = document.getElementById("preloader-bar");
+      const percentEl = document.getElementById("preloader-percent");
+      const statusEl = document.getElementById("preloader-status");
+
+      if (barEl) barEl.style.width = `${pct}%`;
+      if (percentEl) percentEl.textContent = `${pct}%`;
+      if (statusEl) {
+        if (pct < 35) {
+          statusEl.textContent = "INITIALIZING 3D WEBGL ENGINE...";
+        } else if (pct < 75) {
+          statusEl.textContent = "DECODING DRACO MESHES & PBR...";
+        } else {
+          statusEl.textContent = "COMPILING QUANTUM SHADERS...";
+        }
+      }
+    },
+    (url) => {
+      console.warn("Loading error on:", url);
+    }
+  );
+
+  // Safety fallback (guarantees preloader never hangs if CDN is slow)
+  setTimeout(() => {
+    finishPreloader();
+  }, 3200);
+
+  // Dynamic Texture Loading (TextureLoader - WebP Optimized with LoadingManager)
+  const textureLoader = new THREE.TextureLoader(loadingManager);
 
   const colorMap = textureLoader.load("/textures/box001.webp");
   colorMap.colorSpace = THREE.SRGBColorSpace;
@@ -757,10 +849,10 @@ const initThreeEngine = () => {
 
   // Load /tesseract.glb with DRACOLoader & Dynamic Material Assignment
   let mixer = null;
-  const dracoLoader = new DRACOLoader();
+  const dracoLoader = new DRACOLoader(loadingManager);
   dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
 
-  const loader = new GLTFLoader();
+  const loader = new GLTFLoader(loadingManager);
   loader.setDRACOLoader(dracoLoader);
 
   loader.load(
@@ -1554,23 +1646,6 @@ const initThreeEngine = () => {
 // 5. DIRECTIONAL SCENE REVEALS (Distinct Multi-Vector Dynamic Entrances)
 // ═══════════════════════════════════════════════════════════
 const initScrollRevealAnimations = () => {
-  // ─── Scene 01 (Start): Deep Z-Space 3D Unfold & Spring Bounce ───
-  gsap.fromTo(
-    "#start .eyebrow",
-    { y: -20, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", delay: 0.15 }
-  );
-  gsap.fromTo(
-    "#start .display-title .hero-line",
-    { y: 35, rotateX: -15, opacity: 0 },
-    { y: 0, rotateX: 0, opacity: 1, stagger: 0.14, duration: 1.05, ease: "power3.out", delay: 0.2 }
-  );
-  gsap.fromTo(
-    "#start .body-copy, #start .hero-actions",
-    { x: -30, opacity: 0 },
-    { x: 0, opacity: 1, duration: 1.0, stagger: 0.12, ease: "power3.out", delay: 0.4 }
-  );
-
   // ─── Scene 02 (About): Left Wing 3D Tilt Sweep + Staggered Isometric Cards ───
   ScrollTrigger.create({
     trigger: "#about",
