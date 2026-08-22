@@ -389,26 +389,14 @@ const updateActiveSidebar = (index) => {
   });
 };
 
-// Horizontal Projects Carousel Controls
+// ═══════════════════════════════════════════════════════════
+// HORIZONTAL PROJECTS CAROUSEL CONTROLLER
+// ═══════════════════════════════════════════════════════════
 let currentProjectSlide = 0;
 const TOTAL_PROJECT_SLIDES = 5;
 
-window.slideProjectsCarousel = (direction) => {
-  const nextSlide = Math.max(0, Math.min(TOTAL_PROJECT_SLIDES - 1, currentProjectSlide + direction));
-  window.goToProjectSlide(nextSlide);
-};
-
-window.goToProjectSlide = (index) => {
+const updateCarouselUI = (index) => {
   currentProjectSlide = index;
-  const track = document.getElementById("projects-carousel-track");
-  const cards = track ? track.querySelectorAll(".carousel-card") : [];
-  if (track && cards[index]) {
-    const targetCard = cards[index];
-    track.scrollTo({
-      left: targetCard.offsetLeft - track.offsetLeft,
-      behavior: "smooth",
-    });
-  }
 
   const counterEl = document.getElementById("carousel-counter");
   if (counterEl) {
@@ -418,10 +406,108 @@ window.goToProjectSlide = (index) => {
   const dots = document.querySelectorAll("#carousel-dots-container .carousel-dot");
   dots.forEach((dot, idx) => {
     if (idx === index) {
-      dot.className = "carousel-dot w-7 h-1.5 rounded-full bg-[#DC143C] transition-all cursor-pointer";
+      dot.className = "carousel-dot w-7 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 cursor-pointer shadow-[0_0_10px_rgba(220,20,60,0.5)]";
     } else {
-      dot.className = "carousel-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer";
+      dot.className = "carousel-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300 cursor-pointer";
     }
+  });
+};
+
+window.slideProjectsCarousel = (direction) => {
+  const nextSlide = Math.max(0, Math.min(TOTAL_PROJECT_SLIDES - 1, currentProjectSlide + direction));
+  window.goToProjectSlide(nextSlide);
+};
+
+window.goToProjectSlide = (index) => {
+  const track = document.getElementById("projects-carousel-track");
+  const cards = track ? track.querySelectorAll(".carousel-card") : [];
+  if (track && cards[index]) {
+    const targetCard = cards[index];
+    track.scrollTo({
+      left: targetCard.offsetLeft - track.offsetLeft,
+      behavior: "smooth",
+    });
+  }
+  updateCarouselUI(index);
+};
+
+const initProjectsCarousel = () => {
+  const track = document.getElementById("projects-carousel-track");
+  if (!track) return;
+
+  // Real-time synchronization when user scrolls, swipes, or drags the track
+  let isTicking = false;
+
+  const calculateActiveSlide = () => {
+    const cards = track.querySelectorAll(".carousel-card");
+    if (!cards.length) return;
+
+    const trackRect = track.getBoundingClientRect();
+    const trackCenter = trackRect.left + trackRect.width / 2;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, idx) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const dist = Math.abs(cardCenter - trackCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = idx;
+      }
+    });
+
+    if (closestIndex !== currentProjectSlide) {
+      updateCarouselUI(closestIndex);
+    }
+    isTicking = false;
+  };
+
+  track.addEventListener(
+    "scroll",
+    () => {
+      if (!isTicking) {
+        requestAnimationFrame(calculateActiveSlide);
+        isTicking = true;
+      }
+    },
+    { passive: true }
+  );
+
+  // Mouse Drag / Swipe to Scroll on Desktop
+  let isDown = false;
+  let startX = 0;
+  let scrollLeftStart = 0;
+
+  track.addEventListener("mousedown", (e) => {
+    if (e.button !== 0 || e.target.closest("button, a")) return;
+    isDown = true;
+    track.style.cursor = "grabbing";
+    track.style.userSelect = "none";
+    track.style.scrollSnapType = "none";
+    startX = e.pageX - track.offsetLeft;
+    scrollLeftStart = track.scrollLeft;
+  });
+
+  const onDragEnd = () => {
+    if (!isDown) return;
+    isDown = false;
+    track.style.cursor = "";
+    track.style.userSelect = "";
+    track.style.scrollSnapType = "x mandatory";
+    calculateActiveSlide();
+  };
+
+  window.addEventListener("mouseup", onDragEnd);
+  track.addEventListener("mouseleave", onDragEnd);
+
+  track.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    track.scrollLeft = scrollLeftStart - walk;
   });
 };
 
@@ -2897,6 +2983,7 @@ const boot = () => {
   setLanguage(currentLang);
   initThreeEngine();
   initNavigationAndKeyboard();
+  initProjectsCarousel();
   initScrollRevealAnimations();
   initActivityHeatmap();
   initGitHubRepos();
