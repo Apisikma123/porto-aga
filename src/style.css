@@ -43,6 +43,24 @@
     min-height: 100vh;
   }
 
+  /* Hardware Accelerated 3D Canvas Container */
+  #webgl-container {
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
+  /* Zero-Jank Hardware Accelerated Glass Cards */
+  .spatial-card,
+  .glass-card,
+  .activity-standalone-card,
+  .carousel-card,
+  .tesseract-card {
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
   ::selection {
     background-color: rgba(220, 20, 60, 0.4);
     color: #ffffff;

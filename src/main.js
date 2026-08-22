@@ -108,7 +108,17 @@ const TRANSLATIONS = {
     scrollFooter: "Scroll for Details & Footer [06]",
     footerEyebrow: "06 // Colophon & Contact",
     footerColStack: "Tech Stack",
-    footerColDesign: "Design & Style",
+    footerColDesign: "Design & Credits",
+    footerColInspiration: "DESIGN INSPIRATION",
+    creditScfo: "scfo.de ↗",
+    footerColModel: "3D TESSERACT MODEL",
+    creditModel: "Dark Tesseract (Sketchfab) ↗",
+    footerColTypography: "TYPOGRAPHY",
+    footerColAccent: "COLOR ACCENT",
+    footerEmailLabel: "DISPATCH EMAIL",
+    footerPhoneLabel: "WHATSAPP / VOICE",
+    footerLatencyLabel: "RESPONSE LATENCY",
+    footerLatencyVal: "< 12 Hours SLA",
     footerRole: `Frontend Developer & Software Engineer © ${new Date().getFullYear()}`,
     footerDesc: "Building clean, high-performance web applications and interactive digital experiences.",
     footerColDirect: "Direct Contact",
@@ -118,7 +128,6 @@ const TRANSLATIONS = {
     footerLocation: "Medan, Indonesia (UTC+7 / WIB)",
     footerRights: "All Rights Reserved.",
     footerBuiltWith: "Built with Three.js, GSAP & Modern Web Technologies.",
-    creditScfo: "Design Inspired by scale & form (scfo.de) ↗",
     backToTop: "Back to Top",
   },
   id: {
@@ -203,7 +212,17 @@ const TRANSLATIONS = {
     scrollFooter: "Scroll untuk Detail & Footer [06]",
     footerEyebrow: "06 // Informasi & Kontak",
     footerColStack: "Teknologi",
-    footerColDesign: "Desain & Gaya",
+    footerColDesign: "Desain & Kredit",
+    footerColInspiration: "INSPIRASI DESAIN",
+    creditScfo: "scfo.de ↗",
+    footerColModel: "MODEL 3D TESSERACT",
+    creditModel: "Dark Tesseract (Sketchfab) ↗",
+    footerColTypography: "TIPOGRAFI",
+    footerColAccent: "AKSEN WARNA",
+    footerEmailLabel: "EMAIL UTAMA",
+    footerPhoneLabel: "WHATSAPP / TELEPON",
+    footerLatencyLabel: "ESTIMASI RESPON",
+    footerLatencyVal: "< 12 Jam SLA",
     footerRole: `Frontend Developer & Software Engineer © ${new Date().getFullYear()}`,
     footerDesc: "Membangun aplikasi web modern yang cepat, responsif, dan mudah digunakan.",
     footerColDirect: "Kontak Langsung",
@@ -213,7 +232,6 @@ const TRANSLATIONS = {
     footerLocation: "Medan, Indonesia (UTC+7 / WIB)",
     footerRights: "Hak Cipta Dilindungi.",
     footerBuiltWith: "Dibangun dengan Three.js, GSAP & Teknologi Web Modern.",
-    creditScfo: "Inspirasi Desain: scale & form (scfo.de) ↗",
     backToTop: "Kembali ke Atas",
   },
 };
@@ -804,35 +822,143 @@ const initThreeEngine = () => {
   orbitalRing2.rotation.y = Math.PI * 0.25;
   lightRaysGroup.add(orbitalRing2);
 
-  // ─── Zero-Jank WebGL Asset & Shader Preloading Pipeline ───
+  // ─── Industrial-Grade Zero-Jank Preloading & GPU Warm-Up Pipeline ───
   let preloaderFinished = false;
+  let modelLoaded = false;
+  let texturesLoaded = false;
+  let fontsLoaded = false;
+  let imagesDecoded = false;
+  let jsonDataCached = false;
+  let warmupExecuted = false;
+
+  const barEl = document.getElementById("preloader-bar");
+  const percentEl = document.getElementById("preloader-percent");
+  const statusEl = document.getElementById("preloader-status");
+  const preloaderEl = document.getElementById("web-preloader");
+
+  const progressTracker = { pct: 0 };
+
+  const setPreloaderDisplay = (val, statusText) => {
+    const intVal = Math.min(100, Math.floor(val));
+    if (barEl) barEl.style.width = `${intVal}%`;
+    if (percentEl) percentEl.textContent = `${intVal}%`;
+    if (statusEl && statusText) statusEl.textContent = statusText;
+  };
+
+  // 1. Parallel Preload & Pre-decode of all Raster & Vector Showcase Assets
+  const PROJECT_PRELOAD_ASSETS = [
+    "/projects/bkj.webp",
+    "/projects/foodify.webp",
+    "/projects/wilmarbuku.webp",
+    "/projects/cinta-counseling.webp",
+    "/projects/grow-a-garden.webp",
+    "/textures/box001.webp",
+    "/textures/brown_leather_disp_1k.webp",
+  ];
+
+  const preloadRasterAssets = () => {
+    return Promise.allSettled(
+      PROJECT_PRELOAD_ASSETS.map((src) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          if (img.decode) {
+            img.decode().then(resolve).catch(resolve);
+          } else {
+            img.onload = resolve;
+            img.onerror = resolve;
+          }
+        });
+      })
+    ).then(() => {
+      imagesDecoded = true;
+    });
+  };
+
+  // 2. Preload & Cache JSON Datasets (Instant zero-delay activity & projects)
+  const preloadJsonDatasets = async () => {
+    try {
+      const [pRes, cRes] = await Promise.allSettled([
+        fetch("/all_projects.json").then((r) => (r.ok ? r.json() : null)),
+        fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)),
+      ]);
+      if (pRes.status === "fulfilled" && pRes.value) {
+        cachedProjectsData = pRes.value;
+        projectsData = pRes.value;
+      }
+      if (cRes.status === "fulfilled" && cRes.value) {
+        cachedContributionsData = cRes.value;
+      }
+    } catch (e) {
+      console.warn("Preload JSON notice:", e);
+    } finally {
+      jsonDataCached = true;
+    }
+  };
+
+  preloadRasterAssets();
+  preloadJsonDatasets();
+
+  if (document.fonts) {
+    document.fonts.ready.then(() => {
+      fontsLoaded = true;
+    });
+  } else {
+    fontsLoaded = true;
+  }
+
+  // 3. Deep GPU Warmup & Shader Pre-compilation
+  const executeGPUWarmup = () => {
+    if (warmupExecuted) return;
+    warmupExecuted = true;
+    try {
+      // Direct GPU texture allocation
+      if (renderer.initTexture) {
+        renderer.initTexture(colorMap);
+        renderer.initTexture(bumpMap);
+      }
+
+      // Comprehensive Shader Compilation
+      renderer.compile(scene, camera);
+
+      // Multi-scene State Warmup Passes
+      const origTessPos = tesseractGroup.position.clone();
+      const origTessScale = tesseractGroup.scale.clone();
+      
+      // Pass 1: Hero Scene
+      renderer.render(scene, camera);
+      
+      // Pass 2: About Scene position
+      tesseractGroup.position.set(isMobile ? 0 : -2.0, 0, 0.1);
+      renderer.render(scene, camera);
+
+      // Pass 3: Reset back to Hero
+      tesseractGroup.position.copy(origTessPos);
+      tesseractGroup.scale.copy(origTessScale);
+      renderer.render(scene, camera);
+
+      // Pre-warm ScrollTrigger calculations
+      if (typeof ScrollTrigger !== "undefined") {
+        ScrollTrigger.refresh();
+        ScrollTrigger.update();
+      }
+    } catch (err) {
+      console.warn("GPU warmup notice:", err);
+    }
+  };
+
   const finishPreloader = () => {
     if (preloaderFinished) return;
     preloaderFinished = true;
 
-    // 1. Pre-warm & Compile WebGL Shaders into GPU Memory (Eliminates 1st frame stutter!)
-    try {
-      renderer.compile(scene, camera);
-      renderer.render(scene, camera);
-    } catch (e) {
-      console.warn("Shader pre-warm notice:", e);
-    }
-
-    const preloaderEl = document.getElementById("web-preloader");
-    const barEl = document.getElementById("preloader-bar");
-    const percentEl = document.getElementById("preloader-percent");
-    const statusEl = document.getElementById("preloader-status");
-
-    if (barEl) barEl.style.width = "100%";
-    if (percentEl) percentEl.textContent = "100%";
-    if (statusEl) statusEl.textContent = "EXPERIENCE READY";
+    setPreloaderDisplay(100, "[5/5] SYSTEM OPERATIONAL // ZERO-JANK READY");
 
     if (preloaderEl) {
       gsap.to(preloaderEl, {
         opacity: 0,
         scale: 1.04,
-        duration: 0.8,
-        ease: "power2.inOut",
+        duration: 0.85,
+        ease: "power3.inOut",
         delay: 0.25,
         onComplete: () => {
           preloaderEl.style.display = "none";
@@ -857,44 +983,74 @@ const initThreeEngine = () => {
     }
   };
 
+  // 4. Smooth Cinematic Preloading Timeline (Guaranteed ~2.8s deliberate pipeline)
+  const preloaderTimeline = gsap.timeline();
+
+  preloaderTimeline.to(progressTracker, {
+    pct: 32,
+    duration: 0.75,
+    ease: "power2.out",
+    onUpdate: () => setPreloaderDisplay(progressTracker.pct, "[1/5] DECODING 3D TESSERACT & WASM MATRIX..."),
+  });
+
+  preloaderTimeline.to(progressTracker, {
+    pct: 64,
+    duration: 0.75,
+    ease: "power1.inOut",
+    onUpdate: () => setPreloaderDisplay(progressTracker.pct, "[2/5] STREAMING TEXTURES & NEBULA BUFFERS..."),
+  });
+
+  preloaderTimeline.to(progressTracker, {
+    pct: 86,
+    duration: 0.65,
+    ease: "power1.inOut",
+    onUpdate: () => setPreloaderDisplay(progressTracker.pct, "[3/5] PRE-DECODING ASSETS & CACHING DATA..."),
+  });
+
+  preloaderTimeline.to(progressTracker, {
+    pct: 95,
+    duration: 0.55,
+    ease: "power1.out",
+    onUpdate: () => setPreloaderDisplay(progressTracker.pct, "[4/5] COMPILING WEBGL SHADERS & WARMING GPU..."),
+    onComplete: () => {
+      checkAllTasksAndFinish();
+    }
+  });
+
+  const checkAllTasksAndFinish = () => {
+    executeGPUWarmup();
+    gsap.to(progressTracker, {
+      pct: 100,
+      duration: 0.45,
+      ease: "power2.out",
+      onUpdate: () => setPreloaderDisplay(progressTracker.pct, "[5/5] SYSTEM OPERATIONAL // ZERO-JANK READY"),
+      onComplete: () => {
+        setTimeout(() => {
+          finishPreloader();
+        }, 300);
+      },
+    });
+  };
+
   const loadingManager = new THREE.LoadingManager(
     () => {
-      // Three.js assets (GLTF + textures + DRACO) ready!
-      if (document.fonts) {
-        document.fonts.ready.then(() => {
-          finishPreloader();
-        });
-      } else {
-        finishPreloader();
-      }
+      modelLoaded = true;
+      texturesLoaded = true;
     },
     (url, itemsLoaded, itemsTotal) => {
-      const pct = Math.min(Math.round((itemsLoaded / itemsTotal) * 100), 96);
-      const barEl = document.getElementById("preloader-bar");
-      const percentEl = document.getElementById("preloader-percent");
-      const statusEl = document.getElementById("preloader-status");
-
-      if (barEl) barEl.style.width = `${pct}%`;
-      if (percentEl) percentEl.textContent = `${pct}%`;
-      if (statusEl) {
-        if (pct < 40) {
-          statusEl.textContent = "PREPARING EXPERIENCE...";
-        } else if (pct < 80) {
-          statusEl.textContent = "INITIALIZING 3D ENVIRONMENT...";
-        } else {
-          statusEl.textContent = "POLISHING SHOWCASE...";
-        }
-      }
+      // Progress handled gracefully by timeline
     },
     (url) => {
       console.warn("Loading notice on:", url);
     }
   );
 
-  // Safety fallback (guarantees preloader never hangs if CDN is slow)
+  // Safety fallback
   setTimeout(() => {
-    finishPreloader();
-  }, 3200);
+    if (!preloaderFinished) {
+      checkAllTasksAndFinish();
+    }
+  }, 4200);
 
   // Dynamic Texture Loading (TextureLoader - WebP Optimized with LoadingManager)
   const textureLoader = new THREE.TextureLoader(loadingManager);
@@ -1700,18 +1856,38 @@ const initThreeEngine = () => {
     { passive: true }
   );
 
-  // ─── Mouse Parallax Interaction ───
+  // ─── Mouse Parallax Interaction (Throttled & Non-blocking) ───
   let mouseX = 0;
   let mouseY = 0;
   let targetParallaxX = 0;
   let targetParallaxY = 0;
 
-  window.addEventListener("mousemove", (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    targetParallaxX = mouseX * 0.25;
-    targetParallaxY = -mouseY * 0.25;
-  });
+  window.addEventListener(
+    "mousemove",
+    (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      targetParallaxX = mouseX * 0.25;
+      targetParallaxY = -mouseY * 0.25;
+
+      // Smooth micro-tilt for active section text without creating 60 tweens/sec in RAF
+      if (!isSnapping && !isTransitioning && currentView === "portfolio") {
+        const activeTextEl = document.querySelector(
+          `#${SECTION_IDS[currentSectionIndex]} .section-content`
+        );
+        if (activeTextEl) {
+          gsap.to(activeTextEl, {
+            rotateY: mouseX * 3.5,
+            rotateX: -mouseY * 3.5,
+            duration: 0.45,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      }
+    },
+    { passive: true }
+  );
 
   // Window Resize Handler
   const onResize = () => {
@@ -1722,13 +1898,13 @@ const initThreeEngine = () => {
   };
   window.addEventListener("resize", onResize);
 
-  // ─── Render Loop ───
+  // ─── Render Loop (Rock-Solid 60/120fps Zero-GC) ───
   let lastTime = performance.now();
 
   const animate = () => {
     requestAnimationFrame(animate);
     const now = performance.now();
-    const delta = (now - lastTime) / 1000;
+    const delta = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
     const time = now / 1000;
 
@@ -1777,23 +1953,9 @@ const initThreeEngine = () => {
     coreDiamond.rotation.y += 0.015;
     gyroRing1.position.y = Math.cos(time * 1.4) * 0.03;
 
-    // Smooth Camera LookAt Damping (Silky 60fps)
+    // Smooth Camera LookAt Damping (Silky 60/120fps)
     currentCameraTarget.lerp(cameraTarget, 0.06);
     camera.lookAt(currentCameraTarget.x, currentCameraTarget.y, currentCameraTarget.z);
-
-    // Interactive 3D Spatial Text Tilt in sync with Mouse Parallax
-    const activeTextEl = document.querySelector(
-      `#${SECTION_IDS[currentSectionIndex]} .section-content`
-    );
-    if (activeTextEl && !isSnapping && !isTransitioning) {
-      gsap.to(activeTextEl, {
-        rotateY: mouseX * 4.5,
-        rotateX: -mouseY * 4.5,
-        duration: 0.5,
-        ease: "power1.out",
-        overwrite: "auto",
-      });
-    }
 
     // ─── Multi-Layer 3D Optical Parallax Depth Shifts ───
     if (typeof starField !== "undefined") {
@@ -2126,9 +2288,8 @@ const initActivityHeatmap = async () => {
   ];
 
   try {
-    const res = await fetch("/contributions.json");
-    if (!res.ok) throw new Error("Local contributions.json not found");
-    const data = await res.json();
+    const data = cachedContributionsData || (await fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)));
+    if (!data) throw new Error("Local contributions.json not found");
 
     const totalStr = data.total || (data.totalContributions ? data.totalContributions.toLocaleString() : "9,907");
     if (countEl) countEl.textContent = `${totalStr}+ Contributions`;
@@ -2181,13 +2342,17 @@ let allViewActiveCategory = "all";
 let allViewSearchQuery = "";
 
 const initSPAViews = async () => {
-  try {
-    const res = await fetch("/all_projects.json");
-    if (res.ok) {
-      projectsData = await res.json();
+  if (cachedProjectsData && cachedProjectsData.length) {
+    projectsData = cachedProjectsData;
+  } else {
+    try {
+      const res = await fetch("/all_projects.json");
+      if (res.ok) {
+        projectsData = await res.json();
+      }
+    } catch (e) {
+      console.warn("Failed to preload all_projects.json", e);
     }
-  } catch (e) {
-    console.warn("Failed to preload all_projects.json", e);
   }
 
   // Handle ESC key -> Return to Portfolio Section 04

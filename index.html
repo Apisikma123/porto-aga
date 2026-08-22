@@ -93,9 +93,17 @@
       rel="stylesheet"
     />
 
-    <!-- Favicon -->
+    <!-- Standard & Google SEO Compliant Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#040509" />
 
     <!-- Marked.js & Highlight.js for In-App README Rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -1132,32 +1140,32 @@
               <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-zinc-500 block mb-1 sm:mb-2" data-i18n="footerColDirect">Direct Contact</span>
               
               <div class="space-y-0.5 sm:space-y-1">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">DISPATCH EMAIL</span>
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerEmailLabel">DISPATCH EMAIL</span>
                 <a
                   href="https://mail.google.com/mail/?view=cm&fs=1&to=agaputra62@gmail.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="editorial-link text-zinc-200 hover:text-white block font-medium truncate"
+                  class="editorial-link text-zinc-200 hover:text-white block font-medium truncate transition-colors"
                 >
                   agaputra62@gmail.com
                 </a>
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">WHATSAPP / VOICE</span>
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerPhoneLabel">WHATSAPP / VOICE</span>
                 <a
                   href="https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20untuk%20diskusi%20proyek"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="editorial-link text-zinc-200 hover:text-emerald-400 block font-medium truncate"
+                  class="editorial-link text-zinc-200 hover:text-emerald-400 block font-medium truncate transition-colors"
                 >
                   +62 851-6908-4136
                 </a>
               </div>
 
-              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1 hidden sm:block">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">RESPONSE LATENCY</span>
-                <span class="text-zinc-400 block">&lt; 12 Hours SLA</span>
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerLatencyLabel">RESPONSE LATENCY</span>
+                <span class="text-zinc-400 block" data-i18n="footerLatencyVal">&lt; 12 Hours SLA</span>
               </div>
             </div>
 
@@ -1175,37 +1183,52 @@
                 <span class="text-zinc-300 block truncate">GSAP 3.12</span>
               </div>
 
-              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1 hidden sm:block">
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
                 <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">DECODER</span>
-                <span class="text-zinc-300 block">Draco WASM</span>
+                <span class="text-zinc-300 block truncate">Draco WASM</span>
               </div>
             </div>
 
-            <!-- Col 3: Design Language & Typography -->
+            <!-- Col 3: Design Language & Credits -->
             <div class="space-y-2 sm:space-y-3 font-mono text-[0.68rem] sm:text-xs">
-              <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-zinc-500 block mb-1 sm:mb-2" data-i18n="footerColDesign">Design &amp; Style</span>
+              <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-zinc-500 block mb-1 sm:mb-2" data-i18n="footerColDesign">Design &amp; Credits</span>
               
               <div class="space-y-0.5 sm:space-y-1">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">TYPOGRAPHY</span>
-                <span class="text-zinc-300 block truncate">Poppins · JetBrains</span>
-              </div>
-
-              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">COLOR ACCENT</span>
-                <span class="text-zinc-300 block truncate">Crimson #DC143C</span>
-              </div>
-
-              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1 hidden sm:block">
-                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block">INSPIRATION</span>
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerColInspiration">DESIGN INSPIRATION</span>
                 <a
                   href="https://scfo.de/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="editorial-link text-[#DC143C] hover:text-white block truncate"
+                  class="editorial-link text-[#DC143C] hover:text-white block truncate transition-colors font-medium"
                   data-i18n="creditScfo"
+                  title="scale & form (scfo.de)"
                 >
                   scfo.de ↗
                 </a>
+              </div>
+
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerColModel">3D TESSERACT MODEL</span>
+                <a
+                  href="https://skfb.ly/oU9t8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="editorial-link text-[#DC143C] hover:text-white block truncate transition-colors font-medium"
+                  data-i18n="creditModel"
+                  title="Dark Tesseract by Chaitanya Krishnan on Sketchfab"
+                >
+                  Dark Tesseract (Sketchfab) ↗
+                </a>
+              </div>
+
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerColTypography">TYPOGRAPHY</span>
+                <span class="text-zinc-300 block truncate">Poppins · JetBrains</span>
+              </div>
+
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-500 text-[0.55rem] sm:text-[0.62rem] block" data-i18n="footerColAccent">COLOR ACCENT</span>
+                <span class="text-zinc-300 block truncate">Crimson #DC143C</span>
               </div>
             </div>
 

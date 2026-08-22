@@ -91,15 +91,23 @@ npm run build
 
 ---
 
+## 🎨 Credits & Acknowledgments
+
+- **3D Tesseract Model**: ["Dark Tesseract"](https://skfb.ly/oU9t8) by [Chaitanya Krishnan](https://sketchfab.com/chaitanyak) on Sketchfab (Licensed under [Free Standard](https://sketchfab.com/licenses)).
+- **Design Inspiration**: Editorial minimalism and interactive aesthetic inspired by [scale & form (scfo.de)](https://scfo.de/).
+
+---
+
 ## 👨‍💻 Author & Contact
 
 **Muhammad Aga Putra**  
 - **GitHub**: [@Apisikma123](https://github.com/Apisikma123)
 - **LinkedIn**: [muhammad-aga-putra](https://linkedin.com/in/muhammad-aga-putra)
-- **Email**: [agaputra.dev@gmail.com](mailto:agaputra.dev@gmail.com)
+- **Email**: [agaputra62@gmail.com](mailto:agaputra62@gmail.com)
 - **Location**: Medan, North Sumatra, Indonesia
 
 ---
 
 ## 📄 License
 This project is open-source and available under the [MIT License](LICENSE).
+

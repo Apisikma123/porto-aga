@@ -2,5 +2,15 @@
 User-agent: *
 Allow: /
 
+# Googlebot & Google Image / Favicon Crawler Explicit Permissions
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 # Sitemaps
 Sitemap: https://porto-aga.vercel.app/sitemap.xml
