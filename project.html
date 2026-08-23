@@ -1,7 +1,15 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth bg-[#090a10] text-zinc-100">
+<html lang="id" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
+          document.documentElement.setAttribute("data-theme", savedTheme);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- Primary SEO Meta Tags -->
@@ -190,7 +198,7 @@
       }
     </style>
   </head>
-  <body class="bg-[#090a10] text-[#f4f4f5] font-sans antialiased selection:bg-[#DC143C]/40 selection:text-white min-h-screen flex flex-col justify-between">
+  <body class="font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between">
     
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. TOP HEADER & NAVIGATION                                -->
@@ -218,6 +226,18 @@
 
         <!-- Right: Actions -->
         <div class="flex items-center gap-3">
+          <!-- Theme Mode Toggle -->
+          <button
+            id="theme-toggle-btn"
+            type="button"
+            onclick="toggleTheme()"
+            class="flex items-center justify-center w-8 h-8 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer"
+            aria-label="Toggle Theme"
+            title="Toggle Light/Dark Theme"
+          >
+            <span id="theme-icon" class="material-symbols-outlined text-base">light_mode</span>
+          </button>
+
           <!-- Language Toggle -->
           <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 p-1 shadow-lg font-mono text-xs">
             <button type="button" id="btn-lang-en" class="lang-btn" onclick="switchLanguage('en')">EN</button>
@@ -583,21 +603,37 @@
         });
         document.getElementById('side-updated').textContent = formattedDate;
 
-        document.getElementById('clone-btn-text').textContent = `git clone ${proj.html_url}.git`;
-
         // Render Markdown with Marked.js & Highlight.js
-        marked.setOptions({
-          highlight: function(code, lang) {
-            const language = highlight.getLanguage(lang) ? lang : 'plaintext';
-            return highlight.highlight(code, { language }).value;
-          },
-          gfm: true,
-          breaks: true
-        });
+        if (window.marked) {
+          try {
+            marked.setOptions({
+              highlight: function(code, lang) {
+                if (window.hljs && lang && window.hljs.getLanguage(lang)) {
+                  try {
+                    return window.hljs.highlight(code, { language: lang }).value;
+                  } catch (e) {}
+                }
+                if (window.hljs) {
+                  try {
+                    return window.hljs.highlightAuto(code).value;
+                  } catch (e) {}
+                }
+                return code;
+              },
+              gfm: true,
+              breaks: true
+            });
 
-        const rawMarkdown = proj.readme || '# ' + proj.displayName;
-        const html = marked.parse(rawMarkdown);
-        document.getElementById('markdown-output').innerHTML = html;
+            const rawMarkdown = proj.readme || ('# ' + proj.displayName + '\n\n' + (proj.description || ''));
+            const html = marked.parse(rawMarkdown);
+            document.getElementById('markdown-output').innerHTML = html;
+          } catch (mErr) {
+            console.warn('Marked parse fallback:', mErr);
+            document.getElementById('markdown-output').innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
+          }
+        } else {
+          document.getElementById('markdown-output').innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
+        }
 
         // Add copy button to pre blocks
         document.querySelectorAll('#markdown-output pre').forEach((preBlock) => {
@@ -648,6 +684,19 @@
           textEl.textContent = orig;
         }, 2000);
       }
+
+      function updateThemeIcon(theme) {
+        const icon = document.getElementById('theme-icon');
+        if (icon) icon.textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
+      }
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('aga_portfolio_theme', next);
+        updateThemeIcon(next);
+      }
+      updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
       document.addEventListener('DOMContentLoaded', init);
     </script>

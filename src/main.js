@@ -21,6 +21,9 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Observer);
 const SECTION_IDS = ["start", "about", "activity", "projects", "contact", "footer"];
 let currentSectionIndex = 0;
 let isSnapping = false;
+let cachedProjectsData = null;
+let cachedContributionsData = null;
+let projectsData = [];
 
 // ═══════════════════════════════════════════════════════════
 // 1. BILINGUAL LANGUAGE ENGINE (ENGLISH & INDONESIA)
@@ -267,6 +270,11 @@ export const setTheme = (theme, animate = true) => {
   if (window.updateThreeTheme) {
     window.updateThreeTheme(theme, animate);
   }
+
+  // Synchronize GitHub Heatmap palette
+  if (window.renderActivityHeatmap) {
+    window.renderActivityHeatmap();
+  }
 };
 
 export const toggleTheme = () => {
@@ -335,8 +343,8 @@ window.setLanguage = setLanguage;
 let currentView = "portfolio";
 let isTransitioning = false;
 let lastTransitionTime = 0;
-const COOLDOWN_MS = 1100;
-const WHEEL_THRESHOLD = 22;
+const COOLDOWN_MS = 850;
+const WHEEL_THRESHOLD = 18;
 
 export const scrollToSection = (index, immediate = false) => {
   if (currentView !== "portfolio") {
@@ -362,16 +370,14 @@ export const scrollToSection = (index, immediate = false) => {
     return;
   }
 
-  // Smooth, relaxed, cinematic gliding transition (1.25s duration)
+  // Smooth, stately, and cinematic glide (1.1s duration with smooth power2.inOut curve)
   gsap.to(window, {
-    duration: 1.25,
+    duration: 1.10,
     scrollTo: { y: targetEl, autoKill: false },
     ease: "power2.inOut",
     onComplete: () => {
-      setTimeout(() => {
-        isTransitioning = false;
-        isSnapping = false;
-      }, 150);
+      isTransitioning = false;
+      isSnapping = false;
     },
   });
 };
@@ -439,24 +445,9 @@ const initProjectsCarousel = () => {
   let isTicking = false;
 
   const calculateActiveSlide = () => {
-    const cards = track.querySelectorAll(".carousel-card");
-    if (!cards.length) return;
-
-    const trackRect = track.getBoundingClientRect();
-    const trackCenter = trackRect.left + trackRect.width / 2;
-
-    let closestIndex = 0;
-    let minDistance = Infinity;
-
-    cards.forEach((card, idx) => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const dist = Math.abs(cardCenter - trackCenter);
-      if (dist < minDistance) {
-        minDistance = dist;
-        closestIndex = idx;
-      }
-    });
+    const cardEl = track.querySelector(".carousel-card");
+    const cardWidth = cardEl ? cardEl.offsetWidth + 20 : (window.innerWidth < 768 ? 280 : 380);
+    const closestIndex = Math.max(0, Math.min(TOTAL_PROJECT_SLIDES - 1, Math.round(track.scrollLeft / cardWidth)));
 
     if (closestIndex !== currentProjectSlide) {
       updateCarouselUI(closestIndex);
@@ -741,9 +732,10 @@ const initThreeEngine = () => {
     alpha: true,
     antialias: true,
     powerPreference: "high-performance",
+    precision: isMobile ? "mediump" : "highp",
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 1.75));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -938,6 +930,18 @@ const initThreeEngine = () => {
     "/projects/wilmarbuku.webp",
     "/projects/cinta-counseling.webp",
     "/projects/grow-a-garden.webp",
+    "/projects/presensi-gps.webp",
+    "/projects/inventaris-wilmar.webp",
+    "/projects/my-wo-planner.webp",
+    "/projects/porto-aga.webp",
+    "/projects/kereta-tapir.webp",
+    "/projects/web-laporan-bk.webp",
+    "/projects/mobile-dasar.webp",
+    "/projects/Apisikma123.webp",
+    "/projects/presensi.webp",
+    "/projects/fee-school-checker.webp",
+    "/projects/belajar-java.webp",
+    "/projects/login.webp",
     "/textures/box001.webp",
     "/textures/brown_leather_disp_1k.webp",
   ];
@@ -998,30 +1002,34 @@ const initThreeEngine = () => {
     if (warmupExecuted) return;
     warmupExecuted = true;
     try {
-      // Direct GPU texture allocation
-      if (renderer.initTexture) {
-        renderer.initTexture(colorMap);
-        renderer.initTexture(bumpMap);
+      // Direct GPU texture allocation if images are ready
+      if (renderer && renderer.initTexture) {
+        if (colorMap && colorMap.image) renderer.initTexture(colorMap);
+        if (bumpMap && bumpMap.image) renderer.initTexture(bumpMap);
       }
 
       // Comprehensive Shader Compilation
-      renderer.compile(scene, camera);
+      if (renderer && scene && camera) {
+        renderer.compile(scene, camera);
+      }
 
       // Multi-scene State Warmup Passes
-      const origTessPos = tesseractGroup.position.clone();
-      const origTessScale = tesseractGroup.scale.clone();
-      
-      // Pass 1: Hero Scene
-      renderer.render(scene, camera);
-      
-      // Pass 2: About Scene position
-      tesseractGroup.position.set(isMobile ? 0 : -2.0, 0, 0.1);
-      renderer.render(scene, camera);
+      if (tesseractGroup) {
+        const origTessPos = tesseractGroup.position.clone();
+        const origTessScale = tesseractGroup.scale.clone();
+        
+        // Pass 1: Hero Scene
+        renderer.render(scene, camera);
+        
+        // Pass 2: About Scene position
+        tesseractGroup.position.set(isMobile ? 0 : -2.0, 0, 0.1);
+        renderer.render(scene, camera);
 
-      // Pass 3: Reset back to Hero
-      tesseractGroup.position.copy(origTessPos);
-      tesseractGroup.scale.copy(origTessScale);
-      renderer.render(scene, camera);
+        // Pass 3: Reset back to Hero
+        tesseractGroup.position.copy(origTessPos);
+        tesseractGroup.scale.copy(origTessScale);
+        renderer.render(scene, camera);
+      }
 
       // Pre-warm ScrollTrigger calculations
       if (typeof ScrollTrigger !== "undefined") {
@@ -1040,14 +1048,16 @@ const initThreeEngine = () => {
     setPreloaderDisplay(100, "[5/5] SYSTEM OPERATIONAL // ZERO-JANK READY");
 
     if (preloaderEl) {
+      preloaderEl.style.pointerEvents = "none";
       gsap.to(preloaderEl, {
         opacity: 0,
         scale: 1.04,
-        duration: 0.85,
+        duration: 0.75,
         ease: "power3.inOut",
-        delay: 0.25,
+        delay: 0.15,
         onComplete: () => {
           preloaderEl.style.display = "none";
+          preloaderEl.remove();
           // Smoothly trigger hero entrance animation
           gsap.fromTo(
             "#start .eyebrow",
@@ -1494,18 +1504,18 @@ const initThreeEngine = () => {
   // ─── Theme Mode 3D Metamorphosis Engine (Dark / Light Atmospheric Sync) ───
   const updateThreeTheme = (theme, animate = true) => {
     const isLight = theme === "light";
-    const targetFogColor = new THREE.Color(isLight ? 0xf4f6fa : 0x040509);
-    const targetAmbient = new THREE.Color(isLight ? 0xf8fafc : 0x181e32);
-    const targetAmbientIntensity = isLight ? 2.6 : 1.3;
+    const targetFogColor = new THREE.Color(isLight ? 0xe2e8f2 : 0x040509);
+    const targetAmbient = new THREE.Color(isLight ? 0xeef2f8 : 0x181e32);
+    const targetAmbientIntensity = isLight ? 2.8 : 1.3;
     const targetKeyLight = new THREE.Color(isLight ? 0xffffff : 0xfff8f0);
     const targetKeyIntensity = isLight ? 3.8 : 3.2;
     const targetCrimsonFill = new THREE.Color(isLight ? 0xdc143c : 0xff1828);
     const targetFillIntensity = isLight ? 3.0 : 2.6;
     const targetBackLight = new THREE.Color(isLight ? 0x94a3b8 : 0x3870ff);
     const targetBackIntensity = isLight ? 1.8 : 2.0;
-    const targetShardColor = new THREE.Color(isLight ? 0xf1f5f9 : 0x121420);
+    const targetShardColor = new THREE.Color(isLight ? 0xe2e8f0 : 0x121420);
     const targetShardEmissive = new THREE.Color(isLight ? 0xffe4e8 : 0x30050c);
-    const targetPolyColor = new THREE.Color(isLight ? 0xf8fafc : 0x181822);
+    const targetPolyColor = new THREE.Color(isLight ? 0xe8ecf2 : 0x181822);
     const targetRing1Color = new THREE.Color(isLight ? 0x94a3b8 : 0x2b2d38);
 
     if (!animate) {
@@ -1631,7 +1641,7 @@ const initThreeEngine = () => {
       trigger: "main",
       start: "top top",
       end: "bottom bottom",
-      scrub: 0.15,
+      scrub: 0.4,
     },
   });
 
@@ -1942,45 +1952,26 @@ const initThreeEngine = () => {
     { passive: true }
   );
 
-  // ─── Mouse Parallax Interaction (Throttled & Non-blocking) ───
+  // ─── Mouse Parallax Interaction (Throttled & Lightweight) ───
   let mouseX = 0;
   let mouseY = 0;
-  let targetParallaxX = 0;
-  let targetParallaxY = 0;
 
   window.addEventListener(
     "mousemove",
     (e) => {
       mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-      targetParallaxX = mouseX * 0.25;
-      targetParallaxY = -mouseY * 0.25;
-
-      // Smooth micro-tilt for active section text without creating 60 tweens/sec in RAF
-      if (!isSnapping && !isTransitioning && currentView === "portfolio") {
-        const activeTextEl = document.querySelector(
-          `#${SECTION_IDS[currentSectionIndex]} .section-content`
-        );
-        if (activeTextEl) {
-          gsap.to(activeTextEl, {
-            rotateY: mouseX * 3.5,
-            rotateX: -mouseY * 3.5,
-            duration: 0.45,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
-        }
-      }
     },
     { passive: true }
   );
 
   // Window Resize Handler
   const onResize = () => {
+    const isMob = window.innerWidth < 1024;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMob ? 1.5 : 1.75));
   };
   window.addEventListener("resize", onResize);
 
@@ -2104,41 +2095,25 @@ const initScrollRevealAnimations = () => {
     },
   });
 
-  // ─── Scene 03 (Activity): Central Aperture Zoom & Heatmap Wave ───
+  // ─── Scene 03 (Activity): Instant Hardware-Accelerated Smooth Reveal ───
   ScrollTrigger.create({
     trigger: "#activity",
     start: "top 80%",
     onEnter: () => {
       gsap.fromTo(
         "#activity header",
-        { y: -30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.95, ease: "power3.out" }
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out" }
       );
       gsap.fromTo(
         "#activity .activity-standalone-card",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.0,
-          ease: "power2.out",
-          delay: 0.15,
-          onComplete: () => {
-            const cells = document.querySelectorAll("#heatmap-cells > div");
-            if (cells.length > 0) {
-              gsap.fromTo(
-                cells,
-                { scale: 0.6, opacity: 0.4 },
-                { scale: 1, opacity: 1, duration: 0.4, stagger: 0.0015, ease: "power1.out" }
-              );
-            }
-          },
-        }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out", delay: 0.1 }
       );
     },
   });
 
-  // ─── Scene 04 (Projects Carousel): Silky 60fps Reveal (Zero Jitter / Zero Pop) ───
+  // ─── Scene 04 (Projects Carousel): Silky 60fps Reveal ───
   ScrollTrigger.create({
     trigger: "#projects",
     start: "top 80%",
@@ -2146,17 +2121,16 @@ const initScrollRevealAnimations = () => {
       gsap.fromTo(
         "#projects header",
         { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, ease: "power2.out" }
+        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out" }
       );
-      const carouselCards = document.querySelectorAll("#projects .carousel-card");
       gsap.fromTo(
-        carouselCards,
-        { y: 30, opacity: 0 },
+        "#projects .carousel-card",
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.08,
+          duration: 0.70,
+          stagger: 0.05,
           ease: "power2.out",
         }
       );
@@ -2199,7 +2173,7 @@ const initScrollRevealAnimations = () => {
     },
   });
 
-  // Interactive 3D Card Hover Tilt (Applied to ALL cards EXCEPT the README.md reader article)
+  // Interactive 3D Card Hover Tilt (Pure CSS GPU Transform for Zero GC Stutter)
   const cards = document.querySelectorAll(
     ".spatial-card, .glass-card, .activity-standalone-card, .carousel-card, .tesseract-card"
   );
@@ -2214,67 +2188,54 @@ const initScrollRevealAnimations = () => {
     }
 
     card.addEventListener("mousemove", (e) => {
-      if (isSnapping || isTransitioning) return; // Never run tilt during page auto-scroll!
+      if (isSnapping || isTransitioning) return;
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      const rotX = (-y / (rect.height / 2)) * 4.5;
-      const rotY = (x / (rect.width / 2)) * 4.5;
-
-      gsap.to(card, {
-        rotateX: rotX,
-        rotateY: rotY,
-        transformPerspective: 1000,
-        duration: 0.22,
-        ease: "power1.out",
-        overwrite: "auto",
-      });
+      const rotX = (-y / (rect.height / 2)) * 3.5;
+      const rotY = (x / (rect.width / 2)) * 3.5;
+      card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
     });
 
     card.addEventListener("mouseleave", () => {
-      gsap.to(card, {
-        rotateX: 0,
-        rotateY: 0,
-        transformPerspective: 1000,
-        duration: 0.45,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
+      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+      card.style.transition = "transform 0.35s ease-out";
+      setTimeout(() => {
+        card.style.transition = "";
+      }, 350);
     });
   });
 };
 
 // ═══════════════════════════════════════════════════════════
-// 6. DYNAMIC LIVE GITHUB REPOSITORIES FETCH
+// 6. DYNAMIC LIVE GITHUB REPOSITORIES FETCH (With Zero-Fail Fallback)
 // ═══════════════════════════════════════════════════════════
 const initGitHubRepos = async () => {
   const container = document.getElementById("github-repos");
   if (!container) return;
 
-  try {
-    const res = await fetch("https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=6");
-    if (!res.ok) throw new Error("Network response was not ok");
-    const repos = await res.json();
+  const LANG_COLORS = {
+    JavaScript: "#f1e05a",
+    TypeScript: "#3178c6",
+    PHP: "#4F5D95",
+    Dart: "#00B4AB",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    Blade: "#f05340",
+    Vue: "#41b883",
+    Java: "#b07219",
+    Python: "#3572A5",
+  };
 
+  const renderRepoCards = (repos) => {
     container.innerHTML = "";
-
-    const LANG_COLORS = {
-      JavaScript: "#f1e05a",
-      TypeScript: "#3178c6",
-      PHP: "#4F5D95",
-      Dart: "#00B4AB",
-      HTML: "#e34c26",
-      CSS: "#563d7c",
-      Blade: "#f05340",
-      Vue: "#41b883",
-      Java: "#b07219",
-      Python: "#3572A5",
-    };
-
     repos.slice(0, 6).forEach((repo) => {
+      const repoId = repo.id || repo.name;
       const lang = repo.language || "Code";
       const color = LANG_COLORS[lang] || "#DC143C";
-      const desc = repo.description || "Public open-source repository by Muhammad Aga Putra.";
+      const desc = (currentLang === "en" && repo.descriptionEn)
+        ? repo.descriptionEn
+        : (repo.description || "Public open-source repository by Muhammad Aga Putra.");
 
       const card = document.createElement("div");
       card.className =
@@ -2283,7 +2244,7 @@ const initGitHubRepos = async () => {
         <div class="mb-3">
           <div class="flex justify-between items-center mb-1">
             <span class="font-mono text-xs font-semibold text-white group-hover:text-[#DC143C] transition-colors truncate">
-              ${repo.name}
+              ${repo.displayName || repo.name}
             </span>
             <span class="flex items-center gap-1 font-mono text-[0.65rem] text-zinc-400">
               <span class="material-symbols-outlined text-xs text-yellow-500">star</span>
@@ -2302,14 +2263,14 @@ const initGitHubRepos = async () => {
           <div class="flex items-center gap-3">
             <button
               type="button"
-              onclick="window.switchView('project', '${repo.name}')"
+              onclick="window.switchView('project', '${repoId}')"
               class="text-[#DC143C] hover:text-white transition-colors flex items-center gap-1 font-semibold cursor-pointer"
             >
               <span>${currentLang === "en" ? "Quick Overview" : "Overview Singkat"}</span>
               <span class="material-symbols-outlined text-xs">arrow_forward</span>
             </button>
             <a
-              href="${repo.html_url}"
+              href="${repo.html_url || 'https://github.com/Apisikma123/' + repoId}"
               target="_blank"
               rel="noopener noreferrer"
               class="text-zinc-400 hover:text-white transition-colors flex items-center gap-0.5"
@@ -2338,16 +2299,40 @@ const initGitHubRepos = async () => {
         },
       }
     );
+  };
+
+  // 1. Immediately render from projectsData (Instant zero-delay)
+  if (projectsData && projectsData.length) {
+    renderRepoCards(projectsData);
+  } else {
+    try {
+      const pRes = await fetch("/all_projects.json");
+      if (pRes.ok) {
+        projectsData = await pRes.json();
+        cachedProjectsData = projectsData;
+        renderRepoCards(projectsData);
+      }
+    } catch (e) {}
+  }
+
+  // 2. Silently attempt live GitHub API telemetry to update star counts in background
+  try {
+    const res = await fetch("https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=6");
+    if (res.ok) {
+      const liveRepos = await res.json();
+      if (Array.isArray(liveRepos) && liveRepos.length && projectsData && projectsData.length) {
+        liveRepos.forEach((lr) => {
+          const matched = projectsData.find((p) => p.id.toLowerCase() === lr.name.toLowerCase());
+          if (matched) {
+            matched.stargazers_count = lr.stargazers_count;
+            matched.updated_at = lr.updated_at;
+          }
+        });
+        renderRepoCards(projectsData);
+      }
+    }
   } catch (err) {
-    console.error("GitHub API error:", err);
-    container.innerHTML = `
-      <div class="repo-loader">
-        <span class="material-symbols-outlined text-zinc-600 text-3xl">cloud_off</span>
-        <span class="font-mono text-xs text-zinc-400">Failed to load live GitHub repositories.</span>
-        <a class="font-mono text-xs text-[#DC143C] hover:text-white underline" href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer">
-          View all on GitHub ↗
-        </a>
-      </div>`;
+    console.debug("GitHub telemetry notice:", err);
   }
 };
 
@@ -2365,13 +2350,22 @@ const initActivityHeatmap = async () => {
     yearRangeEl.textContent = `${currentY - 1} – ${currentY}`;
   }
 
-  const COLOR_LEVELS = [
-    "#181920", // level 0 (dark matte obsidian)
-    "#4a141e", // level 1 (subtle ruby)
-    "#7c182a", // level 2 (deep crimson)
-    "#b81432", // level 3 (vibrant crimson)
-    "#ff2b54", // level 4 (radiant neon crimson)
-  ];
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  const COLOR_LEVELS = isLight
+    ? [
+        "#cbd5e1", // level 0 (light clean slate tile - never black in light mode!)
+        "#fecdd3", // level 1 (soft rose)
+        "#fb7185", // level 2 (coral crimson)
+        "#e11d48", // level 3 (vibrant crimson)
+        "#be123c", // level 4 (deep crimson)
+      ]
+    : [
+        "#181920", // level 0 (dark matte obsidian)
+        "#4a141e", // level 1 (subtle ruby)
+        "#7c182a", // level 2 (deep crimson)
+        "#b81432", // level 3 (vibrant crimson)
+        "#ff2b54", // level 4 (radiant neon crimson)
+      ];
 
   try {
     const data = cachedContributionsData || (await fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)));
@@ -2390,8 +2384,10 @@ const initActivityHeatmap = async () => {
       const bg = COLOR_LEVELS[lvl] || COLOR_LEVELS[0];
       cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer relative group/cell";
       cell.style.backgroundColor = bg;
-      if (lvl === 4) {
+      if (lvl === 4 && !isLight) {
         cell.style.boxShadow = "0 0 8px rgba(255, 43, 84, 0.75)";
+      } else if (lvl >= 3 && isLight) {
+        cell.style.boxShadow = "0 0 4px rgba(225, 29, 72, 0.35)";
       }
       cell.setAttribute("title", d.tooltip || `${d.date}: ${d.count} contributions`);
       container.appendChild(cell);
@@ -2419,10 +2415,11 @@ const initActivityHeatmap = async () => {
   }
 };
 
+window.renderActivityHeatmap = initActivityHeatmap;
+
 // ═══════════════════════════════════════════════════════════
 // 8. SEAMLESS SPA VIEW SWITCHER (Layout, Sidebar & 3D BG are 100% Intact)
 // ═══════════════════════════════════════════════════════════
-let projectsData = [];
 let currentDetailProject = null;
 let allViewActiveCategory = "all";
 let allViewSearchQuery = "";
@@ -2465,12 +2462,23 @@ const initSPAViews = async () => {
   handleHashRoute();
 };
 
-window.switchView = (viewName, param, updateHash = true) => {
+window.switchView = async (viewName, param, updateHash = true) => {
   const portfolioEl = document.getElementById("portfolio-view");
   const projectDetailEl = document.getElementById("project-detail-view");
   const allProjectsEl = document.getElementById("all-projects-view");
 
   if (!portfolioEl || !projectDetailEl || !allProjectsEl) return;
+
+  // Ensure projectsData is ready
+  if ((!projectsData || !projectsData.length) && (viewName === "project" || viewName === "all-projects")) {
+    try {
+      const pRes = await fetch("/all_projects.json");
+      if (pRes.ok) {
+        projectsData = await pRes.json();
+        cachedProjectsData = projectsData;
+      }
+    } catch (e) {}
+  }
 
   currentView = viewName;
   if (window.update3DSceneForView) {
@@ -2502,7 +2510,11 @@ window.switchView = (viewName, param, updateHash = true) => {
     updateActiveSidebar(3);
 
     const projectId = param || "foodify";
-    const proj = projectsData.find((p) => p.id.toLowerCase() === projectId.toLowerCase()) || {
+    const proj = projectsData.find(
+      (p) =>
+        p.id.toLowerCase() === projectId.toLowerCase() ||
+        (p.name && p.name.toLowerCase() === projectId.toLowerCase())
+    ) || {
       id: projectId,
       displayName: projectId.toUpperCase(),
       category: "Software Engineering",
@@ -2648,17 +2660,12 @@ window.switchView = (viewName, param, updateHash = true) => {
       `;
     };
 
-    // Populate Banner Image & Badge (Adaptive Vertical Phone for Mobile, Landscape for Web, High-Tech Placeholder for Code-only repos)
+    // Populate Banner Image & Badge
     const bannerContainer = document.getElementById("detail-view-banner-container");
     const normId = proj.id.toLowerCase();
     const hasKnownImg =
       KNOWN_PROJECT_IMAGES[normId] ||
-      (proj.previewImage && KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').toLowerCase()]);
-
-    const isMobileApp =
-      normId === "foodify" ||
-      (proj.category && proj.category.toLowerCase().includes("mobile")) ||
-      (proj.tags && proj.tags.some((t) => t.toLowerCase().includes("flutter") || t.toLowerCase().includes("mobile")));
+      (proj.previewImage && KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
 
     if (bannerContainer) {
       if (normId === "foodify") {
@@ -2751,23 +2758,36 @@ window.switchView = (viewName, param, updateHash = true) => {
       });
     }
 
-    // Render Markdown
+    // Render Markdown safely
     const markdownEl = document.getElementById("detail-view-markdown");
     if (markdownEl) {
       if (window.marked) {
-        window.marked.setOptions({
-          highlight: function (code, lang) {
-            if (window.hljs && window.hljs.getLanguage(lang)) {
-              return window.hljs.highlight(code, { language: lang }).value;
-            }
-            return code;
-          },
-          gfm: true,
-          breaks: true,
-        });
-        markdownEl.innerHTML = window.marked.parse(proj.readme || "# " + proj.displayName);
+        try {
+          window.marked.setOptions({
+            highlight: function (code, lang) {
+              if (window.hljs && lang && window.hljs.getLanguage(lang)) {
+                try {
+                  return window.hljs.highlight(code, { language: lang }).value;
+                } catch (e) {}
+              }
+              if (window.hljs) {
+                try {
+                  return window.hljs.highlightAuto(code).value;
+                } catch (e) {}
+              }
+              return code;
+            },
+            gfm: true,
+            breaks: true,
+          });
+          const rawMd = proj.readme || ('# ' + proj.displayName + '\n\n' + (proj.description || ''));
+          markdownEl.innerHTML = window.marked.parse(rawMd);
+        } catch (mErr) {
+          console.warn("Detail view markdown error:", mErr);
+          markdownEl.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
+        }
       } else {
-        markdownEl.textContent = proj.readme || "";
+        markdownEl.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
       }
     }
 
