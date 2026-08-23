@@ -132,6 +132,7 @@ const TRANSLATIONS = {
     footerRights: "All Rights Reserved.",
     footerBuiltWith: "Built with Three.js, GSAP & Modern Web Technologies.",
     backToTop: "Back to Top",
+    waUrl: "https://wa.me/6285169084136?text=Hello%20Aga,%20I%20am%20interested%20in%20discussing%20a%20project%20collaboration.",
   },
   id: {
     navStart: "Mulai",
@@ -236,6 +237,7 @@ const TRANSLATIONS = {
     footerRights: "Hak Cipta Dilindungi.",
     footerBuiltWith: "Dibangun dengan Three.js, GSAP & Teknologi Web Modern.",
     backToTop: "Kembali ke Atas",
+    waUrl: "https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20untuk%20diskusi%20proyek.",
   },
 };
 
@@ -307,6 +309,16 @@ export const setLanguage = (lang) => {
       btnId.classList.add("active");
       btnEn.classList.remove("active");
     }
+  }
+
+  // Dynamic WhatsApp Message Sync based on language
+  const contactWaBtn = document.getElementById("contact-whatsapp-btn");
+  const footerWaLink = document.getElementById("footer-whatsapp-link");
+  if (contactWaBtn && dict.waUrl) {
+    contactWaBtn.href = dict.waUrl;
+  }
+  if (footerWaLink && dict.waUrl) {
+    footerWaLink.href = dict.waUrl;
   }
 
   // Animated holographic text morph sequence

@@ -415,17 +415,28 @@
 
             <!-- Direct Contact CTA -->
             <div class="glass-card rounded-xl p-6 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
-              <h4 class="font-sans font-bold text-sm text-white">Tertarik Kolaborasi?</h4>
-              <p class="font-sans text-xs text-zinc-400 leading-relaxed font-light">
+              <h4 id="label-interested" class="font-sans font-bold text-sm text-white">Tertarik Kolaborasi?</h4>
+              <p id="label-interested-desc" class="font-sans text-xs text-zinc-400 leading-relaxed font-light">
                 Diskusikan implementasi sistem, pengembangan web kustom, atau peran rekayasa software.
               </p>
               <a
+                id="label-contact-btn"
                 href="https://mail.google.com/mail/?view=cm&fs=1&to=agaputra62@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn-crimson rounded-lg py-2.5 px-4 w-full block font-mono text-[0.68rem] uppercase tracking-wider font-semibold"
               >
                 Hubungi Saya
+              </a>
+              <a
+                id="project-whatsapp-btn"
+                href="https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20untuk%20diskusi%20proyek"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-glass rounded-lg py-2.5 px-4 w-full flex items-center justify-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-wider font-semibold text-zinc-200 hover:text-white"
+              >
+                <span class="material-symbols-outlined text-sm">chat</span>
+                <span>WhatsApp Chat ↗</span>
               </a>
             </div>
 
@@ -518,6 +529,9 @@
         const dict = I18N[lang];
         document.getElementById('label-back').textContent = dict.back;
         document.getElementById('label-all-projects').textContent = dict.allProjects;
+        document.getElementById('label-interested').textContent = dict.interested;
+        document.getElementById('label-interested-desc').textContent = dict.interestedDesc;
+        document.getElementById('label-contact-btn').textContent = dict.contactMe;
 
         if (currentProject) {
           renderProjectDetails(currentProject);
@@ -602,6 +616,15 @@
           day: 'numeric'
         });
         document.getElementById('side-updated').textContent = formattedDate;
+
+        // WhatsApp Project Inquiry Link
+        const waBtn = document.getElementById('project-whatsapp-btn');
+        if (waBtn) {
+          const waText = currentLang === 'en'
+            ? `Hello Aga, I am interested in discussing your project "${proj.displayName}" or software collaboration.`
+            : `Halo Aga, saya tertarik untuk diskusi proyek "${proj.displayName}" atau kolaborasi software.`;
+          waBtn.href = `https://wa.me/6285169084136?text=${encodeURIComponent(waText)}`;
+        }
 
         // Render Markdown with Marked.js & Highlight.js
         if (window.marked) {
