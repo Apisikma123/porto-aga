@@ -295,6 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ─── Animated Bilingual Transition Engine (GSAP Morph) ───
 export const setLanguage = (lang) => {
   if (!TRANSLATIONS[lang]) return;
+  const dict = TRANSLATIONS[lang];
   currentLang = lang;
   localStorage.setItem("aga_portfolio_lang", lang);
 
@@ -323,7 +324,6 @@ export const setLanguage = (lang) => {
 
   // Animated holographic text morph sequence
   const i18nElements = document.querySelectorAll("[data-i18n]");
-  const dict = TRANSLATIONS[lang];
 
   gsap.to(i18nElements, {
     opacity: 0,
