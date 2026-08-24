@@ -825,7 +825,7 @@
             <a href="/projects.html" class="hover:text-white transition-colors">Semua Karya</a>
             <a href="/jasa-pembuatan-website.html" class="hover:text-white transition-colors">Layanan Website</a>
             <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
-            <a href="https://wa.me/6285169084136" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-white transition-colors">WhatsApp ↗</a>
+            <a href="#" onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya tertarik konsultasi.'); return false;" class="text-green-400 hover:text-white transition-colors cursor-pointer">WhatsApp ↗</a>
           </div>
         </div>
 
@@ -843,6 +843,13 @@
       import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
       import { gsap } from "gsap";
       import { PRICING_CONFIG, PRICING_WA_NUMBER, formatPriceRp, formatPriceRpFull, calculatePricingEstimate, buildWhatsAppMessage } from '/src/pricing-config.js';
+
+      window.openProtectedWhatsApp = (event, text = "") => {
+        if (event && event.preventDefault) event.preventDefault();
+        const num = typeof atob === "function" ? atob("NjI4NTE2OTA4NDEzNg==") : PRICING_WA_NUMBER;
+        const url = `https://wa.me/${num}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+      };
 
       // ─── COMPLETE HOMEPAGE 3D SCENE & ANIMATIONS SETUP ───
       function initExactHomepage3D() {

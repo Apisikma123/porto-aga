@@ -2,7 +2,9 @@
 // CENTRALIZED WEBSITE PRICING CONFIGURATION & LOGIC
 // ═══════════════════════════════════════════════════════════
 
-export const PRICING_WA_NUMBER = "6285169084136";
+// Base64 obfuscated WhatsApp number to shield against automated web scrapers
+const _WA_ENC = "NjI4NTE2OTA4NDEzNg==";
+export const PRICING_WA_NUMBER = typeof atob === "function" ? atob(_WA_ENC) : "6285169084136";
 
 export const PRICING_CONFIG = {
   websiteTypes: [

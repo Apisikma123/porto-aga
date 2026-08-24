@@ -430,10 +430,8 @@
               </a>
               <a
                 id="project-whatsapp-btn"
-                href="https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20untuk%20diskusi%20proyek"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-glass rounded-lg py-2.5 px-4 w-full flex items-center justify-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-wider font-semibold text-zinc-200 hover:text-white"
+                href="#"
+                class="btn-glass rounded-lg py-2.5 px-4 w-full flex items-center justify-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-wider font-semibold text-zinc-200 hover:text-white cursor-pointer"
               >
                 <span class="material-symbols-outlined text-sm">chat</span>
                 <span>WhatsApp Chat ↗</span>
@@ -617,13 +615,16 @@
         });
         document.getElementById('side-updated').textContent = formattedDate;
 
-        // WhatsApp Project Inquiry Link
+        // WhatsApp Project Inquiry Link (Protected Anti-Bot)
         const waBtn = document.getElementById('project-whatsapp-btn');
         if (waBtn) {
           const waText = currentLang === 'en'
             ? `Hello Aga, I am interested in discussing your project "${proj.displayName}" or software collaboration.`
             : `Halo Aga, saya tertarik untuk diskusi proyek "${proj.displayName}" atau kolaborasi software.`;
-          waBtn.href = `https://wa.me/6285169084136?text=${encodeURIComponent(waText)}`;
+          const num = typeof atob === 'function' ? atob('NjI4NTE2OTA4NDEzNg==') : '6285169084136';
+          waBtn.href = `https://wa.me/${num}?text=${encodeURIComponent(waText)}`;
+          waBtn.target = '_blank';
+          waBtn.rel = 'noopener noreferrer';
         }
 
         // Render Markdown with Marked.js & Highlight.js

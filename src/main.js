@@ -26,6 +26,29 @@ let cachedContributionsData = null;
 let projectsData = [];
 
 // ═══════════════════════════════════════════════════════════
+// BOT SHIELD & WHATSAPP OBFUSCATOR (Anti-Scraper Base64 Decoder)
+// ═══════════════════════════════════════════════════════════
+const _WA_ENC = "NjI4NTE2OTA4NDEzNg==";
+export const getProtectedWhatsAppNumber = () => {
+  try {
+    return typeof atob === "function" ? atob(_WA_ENC) : "6285169084136";
+  } catch (e) {
+    return "6285169084136";
+  }
+};
+
+export const getProtectedWhatsAppUrl = (text = "") => {
+  const num = getProtectedWhatsAppNumber();
+  return `https://wa.me/${num}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+};
+
+window.openProtectedWhatsApp = (event, text = "") => {
+  if (event && event.preventDefault) event.preventDefault();
+  const url = getProtectedWhatsAppUrl(text);
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+
+// ═══════════════════════════════════════════════════════════
 // 1. BILINGUAL LANGUAGE ENGINE (ENGLISH & INDONESIA)
 // ═══════════════════════════════════════════════════════════
 const TRANSLATIONS = {
@@ -138,7 +161,7 @@ const TRANSLATIONS = {
     footerRights: "All Rights Reserved.",
     footerBuiltWith: "Built with Three.js, GSAP & Modern Web Technologies.",
     backToTop: "Back to Top",
-    waUrl: "https://wa.me/6285169084136?text=Hello%20Aga,%20I%20am%20interested%20in%20discussing%20a%20project%20collaboration.",
+    waUrl: getProtectedWhatsAppUrl("Hello Aga, I am interested in discussing a project collaboration."),
   },
   id: {
     navStart: "Mulai",
@@ -249,7 +272,7 @@ const TRANSLATIONS = {
     footerRights: "Hak Cipta Dilindungi.",
     footerBuiltWith: "Dibangun dengan Three.js, GSAP & Teknologi Web Modern.",
     backToTop: "Kembali ke Atas",
-    waUrl: "https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20untuk%20diskusi%20proyek.",
+    waUrl: getProtectedWhatsAppUrl("Halo Aga, saya tertarik untuk diskusi proyek."),
   },
 };
 
@@ -3211,7 +3234,7 @@ window.copyCurrentProjectClone = () => {
 // ═══════════════════════════════════════════════════════════
 // 9. CENTRALIZED WEBSITE PRICING CONFIGURATOR ENGINE
 // ═══════════════════════════════════════════════════════════
-const PRICING_WA_NUMBER = "6285169084136";
+const PRICING_WA_NUMBER = getProtectedWhatsAppNumber();
 
 const PRICING_CONFIG = {
   websiteTypes: [

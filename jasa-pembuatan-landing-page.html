@@ -180,10 +180,9 @@
             <span class="material-symbols-outlined text-sm">arrow_forward</span>
           </a>
           <a
-            href="https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20membuat%20Landing%20Page."
-            target="_blank"
-            rel="noopener noreferrer"
-            class="rounded-xl border border-white/15 bg-white/[0.04] text-zinc-200 hover:text-white px-5 py-3.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2"
+            href="#"
+            onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya tertarik membuat Landing Page.'); return false;"
+            class="rounded-xl border border-white/15 bg-white/[0.04] text-zinc-200 hover:text-white px-5 py-3.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer"
           >
             <span>Chat WhatsApp</span>
           </a>
@@ -289,6 +288,14 @@
         Muhammad Aga Putra © <span id="footer-year">2026</span> • Jasa Pembuatan Website Murah &amp; Cepat
       </div>
     </footer>
-    <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
+    <script>
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+      window.openProtectedWhatsApp = (event, text = '') => {
+        if (event && event.preventDefault) event.preventDefault();
+        const num = typeof atob === 'function' ? atob('NjI4NTE2OTA4NDEzNg==') : '';
+        const url = 'https://wa.me/' + num + (text ? '?text=' + encodeURIComponent(text) : '');
+        window.open(url, '_blank', 'noopener,noreferrer');
+      };
+    </script>
   </body>
 </html>
