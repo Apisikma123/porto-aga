@@ -1376,23 +1376,27 @@ html[data-theme="light"] #pricing-carousel-counter {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: transparent;
-  color: #a1a1aa;
+  padding: 0.625rem 1.15rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d4d4d8;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  user-select: none;
 }
 
 .pricing-btn-back:hover {
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(220, 20, 60, 0.5);
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.15);
+  transform: translateX(-2px);
 }
 
 /* ═══════════════════════════════════════════════════════════
