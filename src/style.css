@@ -189,7 +189,6 @@
   .spatial-card {
     transform-style: preserve-3d;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
@@ -197,24 +196,42 @@
   /* Luxury High-Contrast Glassmorphism Cards */
   .glass-card,
   .tesseract-card,
-  .carousel-card {
+  .carousel-card,
+  .repo-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(16, 17, 24, 0.8);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    transform: translateZ(0);
+    transform-style: preserve-3d;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
 
   .glass-card:hover,
   .tesseract-card:hover,
-  .carousel-card:hover {
+  .carousel-card:hover,
+  .repo-card:hover {
     border-color: rgba(220, 20, 60, 0.65);
     background: rgba(22, 20, 30, 0.9);
     box-shadow: 0 20px 60px -10px rgba(220, 20, 60, 0.3), inset 0 0 20px -5px rgba(220, 20, 60, 0.15);
+  }
+
+  @media (pointer: fine) {
+    .spatial-card,
+    .glass-card,
+    .carousel-card,
+    .tesseract-card,
+    .repo-card,
+    .activity-standalone-card {
+      will-change: transform;
+    }
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Activity Standalone Card Styling */
@@ -985,5 +1002,831 @@ html[data-theme="light"] .markdown-body blockquote {
   background: rgba(220, 20, 60, 0.06) !important;
   color: #1e293b !important;
   border-left-color: #DC143C !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME: SECTION 05 MARKETING FUNNEL & CONVERSION BOX
+   ═══════════════════════════════════════════════════════════ */
+
+/* Section 05 Category Entry Cards in Light Mode */
+html[data-theme="light"] #pricing a[href*="pricing.html?type="] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] #pricing a[href*="pricing.html?type="]:hover {
+  background-color: #ffffff !important;
+  border-color: rgba(220, 20, 60, 0.6) !important;
+  box-shadow: 0 12px 30px rgba(220, 20, 60, 0.15) !important;
+}
+
+html[data-theme="light"] #pricing a[href*="pricing.html?type="] h3 {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #pricing a[href*="pricing.html?type="] p {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] #pricing a[href*="pricing.html?type="] .font-black {
+  color: #090a10 !important;
+}
+
+/* Conversion Action Box & Gradient Banner in Light Mode */
+html[data-theme="light"] [class*="from-zinc-950"],
+html[data-theme="light"] [class*="to-zinc-950"],
+html[data-theme="light"] #pricing .rounded-2xl.border[class*="bg-gradient-to-r"] {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(220, 20, 60, 0.06) 50%, rgba(255, 255, 255, 0.95) 100%) !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] #pricing .rounded-2xl.border[class*="bg-gradient-to-r"] h4,
+html[data-theme="light"] #pricing .rounded-2xl.border[class*="bg-gradient-to-r"] h4 span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #pricing .rounded-2xl.border[class*="bg-gradient-to-r"] p {
+  color: #334155 !important;
+}
+
+/* WhatsApp CTA Button in Section 05 Conversion Box Only */
+html[data-theme="light"] #pricing a[href*="wa.me"] {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] #pricing a[href*="wa.me"]:hover {
+  background-color: #ffffff !important;
+  border-color: #22c55e !important;
+  color: #15803d !important;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2) !important;
+}
+
+html[data-theme="light"] #pricing a[href*="wa.me"] span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #pricing a[href*="wa.me"]:hover span {
+  color: #15803d !important;
+}
+
+/* Footer and Editorial Direct Links (Clean Transparent Inline Text) */
+html[data-theme="light"] .editorial-link,
+html[data-theme="light"] #footer-whatsapp-link,
+html[data-theme="light"] footer a {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] #footer-whatsapp-link {
+  color: #15803d !important;
+}
+
+html[data-theme="light"] #footer-whatsapp-link:hover {
+  color: #16a34a !important;
+}
+
+html[data-theme="light"] .carousel-card,
+html[data-theme="light"] .pricing-carousel-card,
+html[data-theme="light"] .repo-card,
+html[data-theme="light"] .spatial-card,
+html[data-theme="light"] .tesseract-card {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .pricing-carousel-card h3 {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-carousel-card p {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .pricing-carousel-card .font-black {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-carousel-card .w-10.h-10 {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Card Top Mockup & Terminal Preview Container in Light Mode */
+html[data-theme="light"] .carousel-card [class*="bg-gradient-to-br from-[#121422]"],
+html[data-theme="light"] .carousel-card [class*="bg-gradient-to-b from-[#141724]"],
+html[data-theme="light"] .carousel-card [class*="bg-gradient-to-b from-[#141726]"],
+html[data-theme="light"] .repo-card [class*="bg-gradient-to-br from-[#121422]"],
+html[data-theme="light"] [class*="from-[#121422]"],
+html[data-theme="light"] [class*="from-[#141724]"],
+html[data-theme="light"] [class*="from-[#141726]"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Grid pattern overlay inside card top previews in Light Mode */
+html[data-theme="light"] [class*="from-[#121422]"] > div[class*="bg-[linear-gradient"],
+html[data-theme="light"] [class*="from-[#141724]"] > div[class*="bg-[linear-gradient"],
+html[data-theme="light"] [class*="from-[#141726]"] > div[class*="bg-[linear-gradient"] {
+  background-image: linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px) !important;
+}
+
+/* Text and Elements inside Terminal / Repo Card Top Previews in Light Mode */
+html[data-theme="light"] [class*="from-[#121422]"] .text-white,
+html[data-theme="light"] [class*="from-[#141724]"] .text-white,
+html[data-theme="light"] [class*="from-[#141726]"] .text-white {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] [class*="from-[#121422]"] .text-zinc-400,
+html[data-theme="light"] [class*="from-[#121422]"] .text-zinc-500,
+html[data-theme="light"] [class*="from-[#141724]"] .text-zinc-400,
+html[data-theme="light"] [class*="from-[#141724]"] .text-zinc-500,
+html[data-theme="light"] [class*="from-[#141726]"] .text-zinc-400,
+html[data-theme="light"] [class*="from-[#141726]"] .text-zinc-500 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] [class*="from-[#121422]"] .text-emerald-400,
+html[data-theme="light"] [class*="from-[#141724]"] .text-emerald-400,
+html[data-theme="light"] [class*="from-[#141726]"] .text-emerald-400 {
+  color: #059669 !important;
+}
+
+/* Icon and badge containers inside top previews */
+html[data-theme="light"] [class*="from-[#121422]"] .bg-white\/\[0\.04\],
+html[data-theme="light"] [class*="from-[#141724]"] .bg-white\/\[0\.04\],
+html[data-theme="light"] [class*="from-[#141726]"] .bg-white\/\[0\.04\],
+html[data-theme="light"] [class*="from-[#121422]"] .bg-white\/5,
+html[data-theme="light"] [class*="from-[#141724]"] .bg-white\/5 {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Floating overlay badges on cards (e.g., Flutter Mobile badge) */
+html[data-theme="light"] .carousel-card .bg-black\/80,
+html[data-theme="light"] .carousel-card .bg-black {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] .carousel-card .bg-black\/80 span,
+html[data-theme="light"] .carousel-card .bg-black span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .carousel-card .border-t,
+html[data-theme="light"] .carousel-card .border-b,
+html[data-theme="light"] .repo-card .border-t,
+html[data-theme="light"] .repo-card .border-b {
+  border-color: rgba(15, 23, 42, 0.10) !important;
+}
+
+/* Quick Overview Button & Repository link inside cards */
+html[data-theme="light"] .carousel-card button,
+html[data-theme="light"] .repo-card button {
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] .carousel-card a,
+html[data-theme="light"] .repo-card a {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .carousel-card a:hover,
+html[data-theme="light"] .repo-card a:hover {
+  color: #090a10 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CAROUSEL DOTS & NAVIGATION CONTROLS (LIGHT THEME)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Inactive Dots in Light Mode (High Contrast Slate) */
+html[data-theme="light"] .carousel-dot:not(.w-7),
+html[data-theme="light"] .pricing-dot:not(.w-7),
+html[data-theme="light"] .carousel-dot.w-2,
+html[data-theme="light"] .pricing-dot.w-2 {
+  background-color: #94a3b8 !important;
+  opacity: 0.85 !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+html[data-theme="light"] .carousel-dot:not(.w-7):hover,
+html[data-theme="light"] .pricing-dot:not(.w-7):hover,
+html[data-theme="light"] .carousel-dot.w-2:hover,
+html[data-theme="light"] .pricing-dot.w-2:hover {
+  background-color: #475569 !important;
+  opacity: 1 !important;
+}
+
+/* Active Dots in Light Mode (Vibrant Crimson) */
+html[data-theme="light"] .carousel-dot.w-7,
+html[data-theme="light"] .pricing-dot.w-7 {
+  background-color: #DC143C !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5) !important;
+}
+
+/* Carousel Control Buttons & Counters in Light Mode */
+html[data-theme="light"] #carousel-prev-btn,
+html[data-theme="light"] #carousel-next-btn,
+html[data-theme="light"] #pricing-carousel-prev-btn,
+html[data-theme="light"] #pricing-carousel-next-btn {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #carousel-prev-btn:hover,
+html[data-theme="light"] #carousel-next-btn:hover,
+html[data-theme="light"] #pricing-carousel-prev-btn:hover,
+html[data-theme="light"] #pricing-carousel-next-btn:hover {
+  color: #090a10 !important;
+  background-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] #carousel-counter,
+html[data-theme="light"] #pricing-carousel-counter {
+  color: #090a10 !important;
+  font-weight: 700 !important;
+}
+
+/* Website Type Selection Card */
+.pricing-type-card {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.pricing-type-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pricing-type-card.selected {
+  border-color: rgba(220, 20, 60, 0.5);
+  background: rgba(220, 20, 60, 0.06);
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.1);
+}
+
+/* Option Card (Pages, Design) */
+.pricing-option-card {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.pricing-option-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pricing-option-card.selected {
+  border-color: rgba(220, 20, 60, 0.45);
+  background: rgba(220, 20, 60, 0.06);
+}
+
+/* Addon Chip */
+.pricing-addon-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pricing-addon-chip:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pricing-addon-chip.selected {
+  border-color: rgba(220, 20, 60, 0.45);
+  background: rgba(220, 20, 60, 0.08);
+}
+
+/* Navigation Buttons */
+.pricing-btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e4e4e7;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pricing-btn-next:hover:not(:disabled) {
+  border-color: rgba(220, 20, 60, 0.5);
+  background: rgba(220, 20, 60, 0.1);
+  color: #ffffff;
+}
+
+.pricing-btn-next:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pricing-btn-next.pricing-btn-wa {
+  background: #DC143C;
+  border-color: #DC143C;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.35);
+}
+
+.pricing-btn-next.pricing-btn-wa:hover {
+  background: #b01030;
+  box-shadow: 0 0 25px rgba(220, 20, 60, 0.5);
+}
+
+.pricing-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: #a1a1aa;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pricing-btn-back:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL LIGHT THEME SYSTEM OVERRIDES (Zero White Text On Light Mode)
+   ═══════════════════════════════════════════════════════════ */
+
+html[data-theme="light"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Global Light Headings, Paragraphs and Spans */
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6 {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] p {
+  color: #334155 !important;
+}
+
+/* Universal text classes in Light Mode */
+html[data-theme="light"] .text-white:not(.btn-crimson):not(.lang-btn.active):not([class*="bg-[#DC143C]"]):not([class*="bg-red-"]):not([class*="bg-green-"]):not(#wa-dispatch-btn):not(#wa-dispatch-btn *) {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .text-zinc-100,
+html[data-theme="light"] .text-zinc-200,
+html[data-theme="light"] .text-zinc-300 {
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .text-zinc-400,
+html[data-theme="light"] .text-zinc-500 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .text-zinc-600 {
+  color: #64748b !important;
+}
+
+/* Gradients in Light Mode */
+html[data-theme="light"] .from-white {
+  --tw-gradient-from: #090a10 !important;
+}
+html[data-theme="light"] .via-red-200,
+html[data-theme="light"] .via-red-300 {
+  --tw-gradient-stops: var(--tw-gradient-from), #be123c, var(--tw-gradient-to) !important;
+}
+html[data-theme="light"] .to-white {
+  --tw-gradient-to: #090a10 !important;
+}
+
+/* Global Container Backgrounds in Light Mode */
+html[data-theme="light"] .bg-zinc-950,
+html[data-theme="light"] .bg-zinc-950\/70,
+html[data-theme="light"] .bg-zinc-950\/80,
+html[data-theme="light"] .bg-zinc-950\/85,
+html[data-theme="light"] .bg-zinc-950\/90,
+html[data-theme="light"] .bg-zinc-900,
+html[data-theme="light"] .bg-\[\#090a10\],
+html[data-theme="light"] .bg-\[\#040509\],
+html[data-theme="light"] .bg-black\/60 {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06) !important;
+}
+
+html[data-theme="light"] .bg-white\/\[0\.02\],
+html[data-theme="light"] .bg-white\/\[0\.03\],
+html[data-theme="light"] .bg-white\/\[0\.04\],
+html[data-theme="light"] .bg-white\/\[0\.05\],
+html[data-theme="light"] .bg-white\/5,
+html[data-theme="light"] .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+  border-color: rgba(15, 23, 42, 0.10) !important;
+}
+
+/* Border overrides in Light Mode */
+html[data-theme="light"] .border-white\/5,
+html[data-theme="light"] .border-white\/10,
+html[data-theme="light"] .border-white\/12,
+html[data-theme="light"] .border-white\/15,
+html[data-theme="light"] .border-white\/20,
+html[data-theme="light"] .border-white\/30 {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] .divide-white\/5 > * + *,
+html[data-theme="light"] .divide-white\/10 > * + * {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Pricing Configurator Elements in Light Mode */
+html[data-theme="light"] .pricing-type-card {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  background: rgba(255, 255, 255, 0.90) !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] .pricing-type-card:hover {
+  border-color: rgba(220, 20, 60, 0.5) !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.12) !important;
+}
+
+html[data-theme="light"] .pricing-type-card.selected {
+  border-color: #DC143C !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.18) !important;
+}
+
+html[data-theme="light"] .pricing-option-card {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-option-card:hover {
+  border-color: rgba(220, 20, 60, 0.5) !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="light"] .pricing-option-card.selected {
+  border-color: #DC143C !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(220, 20, 60, 0.12) !important;
+}
+
+html[data-theme="light"] .pricing-addon-chip {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] .pricing-addon-chip:hover {
+  border-color: rgba(220, 20, 60, 0.5) !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="light"] .pricing-addon-chip.selected {
+  border-color: #DC143C !important;
+  background: rgba(220, 20, 60, 0.08) !important;
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] .pricing-btn-next {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  background: rgba(15, 23, 42, 0.06) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-btn-next:hover:not(:disabled) {
+  border-color: rgba(220, 20, 60, 0.6) !important;
+  background: rgba(220, 20, 60, 0.10) !important;
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] .pricing-btn-back {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .pricing-btn-back:hover {
+  border-color: rgba(15, 23, 42, 0.25) !important;
+  color: #090a10 !important;
+}
+
+/* Forms & Textareas in Light Mode */
+html[data-theme="light"] input,
+html[data-theme="light"] textarea {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.20) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] textarea:focus {
+  border-color: #DC143C !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15) !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* WhatsApp Message Preview Box in Light Mode */
+html[data-theme="light"] pre#wa-preview-text {
+  color: #090a10 !important;
+  background: #f8fafc !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+/* FAQ Accordion Details in Light Mode */
+html[data-theme="light"] details {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] details summary {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] details summary span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] details p {
+  color: #334155 !important;
+}
+
+/* Footer in Light Mode */
+html[data-theme="light"] footer {
+  background-color: #e2e8f2 !important;
+  border-top-color: rgba(15, 23, 42, 0.14) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] footer a {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] footer a:hover {
+  color: #090a10 !important;
+}
+
+/* Step Tabs Pills in Light Mode */
+html[data-theme="light"] button[id^="step-tab-"] {
+  border-color: rgba(15, 23, 42, 0.10) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] button[id^="step-tab-"]:hover {
+  color: #090a10 !important;
+  border-color: rgba(15, 23, 42, 0.20) !important;
+}
+
+html[data-theme="light"] button[id^="step-tab-"][class*="text-[#DC143C]"],
+html[data-theme="light"] button[id^="step-tab-"][class*="border-[#DC143C]"] {
+  background-color: rgba(220, 20, 60, 0.10) !important;
+  border-color: #DC143C !important;
+  color: #DC143C !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME: STEP 6 ESTIMATE BANNER & PRICING WIDGETS
+   ═══════════════════════════════════════════════════════════ */
+
+/* Step 6 Total Card Banner */
+html[data-theme="light"] #step-6 .rounded-2xl.border,
+html[data-theme="light"] [class*="from-[#DC143C]/20 via-zinc-950"],
+html[data-theme="light"] [class*="via-zinc-950 to-zinc-950"] {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.08) 0%, #ffffff 50%, #f8fafc 100%) !important;
+  border-color: rgba(220, 20, 60, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(220, 20, 60, 0.12) !important;
+}
+
+html[data-theme="light"] #summary-total-price {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #step-6 .text-zinc-400,
+html[data-theme="light"] #step-6 .text-zinc-300 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] #step-6 span[class*="bg-emerald-500"] {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #059669 !important;
+}
+
+/* Real-Time Live Estimate Top Bar & Sidebar Price */
+html[data-theme="light"] #top-package-price {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #DC143C !important;
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] #top-package-name {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #sidebar-bill-price {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] aside .rounded-xl.border[class*="bg-[#DC143C]/10"] {
+  background-color: rgba(220, 20, 60, 0.08) !important;
+  border-color: rgba(220, 20, 60, 0.25) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SPA OVERLAYS: PROJECT DETAIL & ALL PROJECTS GALLERY
+   ═══════════════════════════════════════════════════════════ */
+
+#project-detail-view,
+#all-projects-view {
+  background-color: rgba(4, 5, 9, 0.96) !important;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="light"] #project-detail-view,
+html[data-theme="light"] #all-projects-view {
+  background-color: rgba(238, 242, 248, 0.97) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #detail-view-title {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #detail-view-desc {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #detail-view-lang {
+  background-color: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #detail-view-tags span {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
+html[data-theme="light"] #detail-view-markdown {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #detail-view-markdown h1,
+html[data-theme="light"] #detail-view-markdown h2,
+html[data-theme="light"] #detail-view-markdown h3,
+html[data-theme="light"] #detail-view-markdown h4 {
+  color: #090a10 !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] #detail-view-markdown p,
+html[data-theme="light"] #detail-view-markdown li {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #detail-view-markdown pre {
+  background-color: #f1f5f9 !important;
+  border: 1px solid rgba(15, 23, 42, 0.14) !important;
+}
+
+html[data-theme="light"] #detail-view-markdown pre code {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #detail-view-markdown code:not(pre code) {
+  background-color: rgba(220, 20, 60, 0.08) !important;
+  border-color: rgba(220, 20, 60, 0.2) !important;
+  color: #b91c1c !important;
+}
+
+/* All Projects Gallery View (View 3) */
+html[data-theme="light"] #all-projects-view {
+  background-color: transparent !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #all-projects-view h1,
+html[data-theme="light"] #all-projects-view h2,
+html[data-theme="light"] #all-projects-view h3 {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #all-projects-view p {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .all-projects-filter-btn {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .all-projects-filter-btn:hover {
+  color: #090a10 !important;
+  border-color: rgba(15, 23, 42, 0.25) !important;
+}
+
+html[data-theme="light"] .all-projects-filter-btn.active {
+  background-color: #DC143C !important;
+  border-color: #DC143C !important;
+  color: #ffffff !important;
+}
+
+/* Search Input on Gallery */
+html[data-theme="light"] #projects-search-input {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #projects-search-input:focus {
+  border-color: #DC143C !important;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15) !important;
+}
+
+/* Micro-pills and tech stack badges across homepage */
+html[data-theme="light"] .font-mono.text-zinc-400,
+html[data-theme="light"] .font-mono.text-zinc-500 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] span.tabular-nums {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] span.tabular-nums.text-zinc-500,
+html[data-theme="light"] span.tabular-nums.text-zinc-600 {
+  color: #64748b !important;
 }
 

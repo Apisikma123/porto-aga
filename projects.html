@@ -135,12 +135,21 @@
             <button type="button" id="btn-lang-id" class="lang-btn active" onclick="switchLanguage('id')">ID</button>
           </div>
 
+          <!-- Pricing Configurator Link -->
+          <a
+            href="/pricing.html"
+            class="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+          >
+            <span class="material-symbols-outlined text-xs">calculate</span>
+            <span id="label-pricing-btn">Estimasi Harga</span>
+          </a>
+
           <!-- GitHub Profile -->
           <a
             href="https://github.com/Apisikma123"
             target="_blank"
             rel="noopener noreferrer"
-            class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-4 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.35)]"
+            class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-4 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden md:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.35)]"
           >
             <span>GitHub Profile</span>
             <span class="material-symbols-outlined text-xs">arrow_outward</span>
@@ -225,6 +234,7 @@
         <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
           <a href="/" class="hover:text-white transition-colors">Portofolio 3D</a>
           <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Semua Karya</a>
+          <a href="/pricing.html" class="hover:text-white transition-colors">Estimasi Harga</a>
           <a href="https://skfb.ly/oU9t8" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Dark Tesseract by Chaitanya Krishnan on Sketchfab">3D Model Credit ↗</a>
           <a href="https://scfo.de/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Design Inspired by scale & form">scfo.de ↗</a>
           <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
@@ -371,7 +381,7 @@
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
 
           card.innerHTML = `
-            <div>
+            <div onclick="window.location.href='/project.html?id=${p.id}'" class="cursor-pointer">
               <!-- Image Banner or Header -->
               <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
                 <img
@@ -420,7 +430,7 @@
             <div class="p-5 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-3">
               <a
                 href="/project.html?id=${p.id}"
-                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2 px-3 text-center transition-all flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider"
+                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2.5 px-3 text-center transition-all flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider touch-manipulation active:scale-95"
               >
                 <span>${dict.readReadme}</span>
                 <span class="material-symbols-outlined text-xs">arrow_forward</span>
@@ -430,7 +440,7 @@
                 href="${p.html_url}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="rounded-md border border-white/10 hover:border-white/30 text-zinc-400 hover:text-white p-2 transition-colors flex items-center justify-center"
+                class="rounded-md border border-white/10 hover:border-white/30 text-zinc-400 hover:text-white p-2.5 transition-colors flex items-center justify-center touch-manipulation"
                 title="GitHub Repository"
               >
                 <span class="material-symbols-outlined text-sm">code</span>
