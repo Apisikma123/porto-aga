@@ -1122,19 +1122,19 @@
       <!-- ─── SECTION 05: MARKETING PRICING FUNNEL ─── -->
       <section
         id="pricing"
-        class="relative flex flex-col justify-center min-h-[100svh] px-4 sm:px-6 md:px-10 pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 max-w-6xl mx-auto"
+        class="relative flex flex-col justify-center min-h-[100svh] px-4 sm:px-6 md:px-10 pt-16 sm:pt-20 pb-6 sm:pb-8 max-w-6xl mx-auto"
       >
         <div class="section-content spatial-text-3d w-full my-auto" data-reveal>
           
-          <!-- Section Header & Marketing Headline -->
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 mb-4 border-b border-white/10">
+          <!-- Section Header & Marketing Headline (Compact) -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2.5 mb-2.5 border-b border-white/10">
             <div>
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#DC143C]/40 bg-[#DC143C]/10 text-[#DC143C] font-mono text-[0.62rem] sm:text-xs uppercase tracking-wider font-semibold mb-2 shadow-[0_0_15px_rgba(220,20,60,0.2)]">
-                <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-                <span>05 // HITUNG HARGA WEBSITE</span>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-[#DC143C]/40 bg-[#DC143C]/10 text-[#DC143C] font-mono text-[0.58rem] sm:text-[0.65rem] uppercase tracking-wider font-semibold mb-1 shadow-[0_0_12px_rgba(220,20,60,0.18)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+                <span>05 // ESTIMASI BIAYA WEBSITE</span>
               </div>
-              <h2 class="display-title text-2xl sm:text-3xl md:text-5xl text-white tracking-tight leading-tight">
-                Mau Bikin Website? <br class="hidden sm:inline" />
+              <h2 class="display-title text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white tracking-tight leading-tight">
+                Mau Bikin Website?
                 <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-[#DC143C] via-red-300 to-white">
                   Hitung Dulu Harganya.
                 </span>
@@ -1142,33 +1142,33 @@
             </div>
             
             <!-- Controls & Direct Access -->
-            <div class="flex items-center gap-3 self-start md:self-auto flex-wrap">
+            <div class="flex items-center gap-2.5 self-start md:self-auto shrink-0">
               <!-- Carousel Navigation Buttons -->
-              <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-lg p-1">
+              <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg p-0.5">
                 <button
                   type="button"
                   id="pricing-carousel-prev-btn"
                   onclick="window.slidePricingCarousel(-1)"
                   aria-label="Kategori Sebelumnya"
-                  class="w-8 h-8 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-7 h-7 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
                 >
-                  <span class="material-symbols-outlined text-base">chevron_left</span>
+                  <span class="material-symbols-outlined text-sm">chevron_left</span>
                 </button>
-                <span id="pricing-carousel-counter" class="font-mono text-xs text-zinc-400 px-2 select-none tabular-nums font-semibold">1 / 8</span>
+                <span id="pricing-carousel-counter" class="font-mono text-[0.68rem] text-zinc-400 px-1.5 select-none tabular-nums font-semibold">1 / 8</span>
                 <button
                   type="button"
                   id="pricing-carousel-next-btn"
                   onclick="window.slidePricingCarousel(1)"
                   aria-label="Kategori Berikutnya"
-                  class="w-8 h-8 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-7 h-7 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
                 >
-                  <span class="material-symbols-outlined text-base">chevron_right</span>
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
                 </button>
               </div>
 
               <a
                 href="/pricing.html"
-                class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-4 py-2 flex items-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation shadow-[0_0_15px_rgba(220,20,60,0.35)]"
+                class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-3.5 py-1.5 flex items-center gap-1.5 transition-all font-mono text-[0.65rem] sm:text-xs uppercase tracking-wider group cursor-pointer touch-manipulation shadow-[0_0_12px_rgba(220,20,60,0.35)]"
               >
                 <span class="material-symbols-outlined text-sm">calculate</span>
                 <span>Kalkulator Lengkap</span>
@@ -1177,34 +1177,34 @@
             </div>
           </div>
 
-          <!-- Marketing Category Carousel Track (8 Website Types) -->
+          <!-- Marketing Category Carousel Track (8 Website Types - Ultra Sleek) -->
           <div
             id="pricing-carousel-track"
-            class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pt-4 pb-3 px-0.5 select-none mb-3"
+            class="flex gap-3.5 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pt-1 pb-2 px-0.5 select-none mb-1.5"
           >
             <!-- 1. Landing Page -->
             <a
               href="/pricing.html?type=landing-page"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">rocket_launch</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">1 Halaman</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">1 Halaman</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Landing Page</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Promosi produk, event, campaign iklan &amp; direct sales WhatsApp.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Landing Page</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Iklan campaign &amp; direct WA.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp499.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp499.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1212,26 +1212,26 @@
             <!-- 2. Portfolio -->
             <a
               href="/pricing.html?type=portfolio"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">palette</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">palette</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">Personal Brand</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Personal</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Portfolio</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Showcase karya freelancer, developer, fotografer &amp; designer profesional.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Portfolio</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Showcase karya &amp; freelancer.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp599.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp599.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1239,31 +1239,29 @@
             <!-- 3. Company Profile -->
             <a
               href="/pricing.html?type=company-profile"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-[#DC143C]/50 bg-zinc-950/85 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C] hover:bg-[#DC143C]/15 hover:shadow-[0_12px_35px_rgba(220,20,60,0.35)] hover:-translate-y-1 flex flex-col justify-between ring-1 ring-[#DC143C]/30 cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-[#DC143C]/50 bg-zinc-950/85 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C] hover:bg-[#DC143C]/15 hover:shadow-[0_8px_25px_rgba(220,20,60,0.3)] hover:-translate-y-0.5 flex flex-col justify-between ring-1 ring-[#DC143C]/30 cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">domain</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">domain</span>
                   </div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="px-2.5 py-0.5 rounded-full bg-[#DC143C] text-white font-mono text-[0.55rem] font-bold uppercase tracking-wider shadow-sm">
-                      POPULER
-                    </span>
-                    <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">Multi-Halaman</span>
+                  <div class="flex items-center gap-1">
+                    <span class="px-1.5 py-0.2 rounded bg-[#DC143C] text-white font-mono text-[0.5rem] font-bold uppercase">POPULER</span>
+                    <span class="font-mono text-[0.55rem] uppercase px-1.5 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Bisnis</span>
                   </div>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Company Profile</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Profil resmi UMKM, corporate, jasa profesional &amp; instansi resmi.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Company Profile</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Profil resmi UMKM &amp; corporate.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp999.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp999.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1271,26 +1269,26 @@
             <!-- 4. Toko Online -->
             <a
               href="/pricing.html?type=online-store"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">storefront</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">storefront</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">E-Commerce</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Toko</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Toko Online</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Katalog produk, keranjang belanja, checkout WA &amp; payment gateway 24 jam.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Toko Online</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Katalog produk &amp; checkout WA.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp3.490.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp3.490.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1298,26 +1296,26 @@
             <!-- 5. Booking / Reservasi -->
             <a
               href="/pricing.html?type=booking"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">calendar_month</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">calendar_month</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">Reservasi</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Reservasi</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Website Booking</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Jadwal booking online klinik, salon, barbershop, rental &amp; jasa terintegrasi.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Website Booking</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Jadwal booking online klinik/jasa.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp2.990.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp2.990.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1325,26 +1323,26 @@
             <!-- 6. Absensi & HR -->
             <a
               href="/pricing.html?type=attendance"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">fingerprint</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">fingerprint</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">HR Tool</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">HR Tool</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Sistem Absensi</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Presensi GPS &amp; selfie, rekap cuti, shift &amp; export data Excel.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Sistem Absensi</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">Presensi GPS &amp; rekap cuti.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp3.990.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp3.990.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1352,26 +1350,26 @@
             <!-- 7. Sistem Informasi -->
             <a
               href="/pricing.html?type=information-system"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">database</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">database</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">Internal App</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Internal</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Sistem Informasi</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">Pengolahan data internal, CRUD terpadu, inventori &amp; laporan manajemen.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Sistem Informasi</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">CRUD terpadu &amp; manajemen data.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp5.490.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp5.490.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
@@ -1379,88 +1377,92 @@
             <!-- 8. Custom Web App -->
             <a
               href="/pricing.html?type=custom-web-app"
-              class="pricing-carousel-card w-[275px] sm:w-[295px] md:w-[310px] shrink-0 snap-start group relative rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_12px_35px_rgba(220,20,60,0.25)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              class="pricing-carousel-card w-[230px] sm:w-[250px] md:w-[265px] shrink-0 snap-start group relative rounded-xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl p-3.5 transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 hover:shadow-[0_8px_25px_rgba(220,20,60,0.25)] hover:-translate-y-0.5 flex flex-col justify-between cursor-pointer"
             >
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-symbols-outlined text-2xl">code_blocks</span>
+                <div class="flex items-center justify-between mb-2">
+                  <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] group-hover:scale-110 transition-transform shadow-inner">
+                    <span class="material-symbols-outlined text-lg">code_blocks</span>
                   </div>
-                  <span class="font-mono text-[0.6rem] uppercase px-2.5 py-1 rounded-full bg-white/5 text-zinc-300 border border-white/10">Fullstack</span>
+                  <span class="font-mono text-[0.55rem] uppercase px-2 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10">Fullstack</span>
                 </div>
-                <h3 class="text-base font-bold text-white mb-1.5 group-hover:text-white transition-colors">Custom Web App</h3>
-                <p class="text-[0.72rem] text-zinc-400 mb-4 leading-relaxed line-clamp-2">SaaS, platform custom, API integrasi &amp; arsitektur unik berskala tinggi.</p>
+                <h3 class="text-sm font-bold text-white mb-0.5 group-hover:text-white transition-colors">Custom Web App</h3>
+                <p class="text-[0.68rem] text-zinc-400 mb-2 leading-tight line-clamp-1">SaaS &amp; API terintegrasi.</p>
               </div>
-              <div class="flex items-end justify-between pt-3 border-t border-white/5">
+              <div class="flex items-end justify-between pt-2 border-t border-white/5 font-mono">
                 <div>
-                  <span class="text-[0.58rem] font-mono text-zinc-500 uppercase block">Mulai dari</span>
-                  <span class="font-mono text-base font-black text-white group-hover:text-[#DC143C] transition-colors">Rp7.490.000</span>
+                  <span class="text-[0.52rem] text-zinc-500 uppercase block">Mulai dari</span>
+                  <span class="text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp7.490.000</span>
                 </div>
-                <span class="text-xs font-mono text-[#DC143C] flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform">
+                <span class="text-[0.65rem] text-[#DC143C] flex items-center gap-0.5 font-semibold group-hover:translate-x-0.5 transition-transform">
                   <span>Hitung</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
                 </span>
               </div>
             </a>
           </div>
 
-          <!-- Carousel Quick Dots & Swipe Indicator -->
-          <div class="flex items-center justify-between pt-1 mb-6">
+          <!-- Carousel Quick Dots & Swipe Indicator (Compact) -->
+          <div class="flex items-center justify-between pt-0.5 mb-2.5">
             <div class="flex items-center gap-1.5" id="pricing-carousel-dots">
-              <button type="button" onclick="window.goToPricingSlide(0)" class="pricing-dot w-7 h-1.5 rounded-full bg-[#DC143C] transition-all cursor-pointer" aria-label="Landing Page"></button>
-              <button type="button" onclick="window.goToPricingSlide(1)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Portfolio"></button>
-              <button type="button" onclick="window.goToPricingSlide(2)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Company Profile"></button>
-              <button type="button" onclick="window.goToPricingSlide(3)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Toko Online"></button>
-              <button type="button" onclick="window.goToPricingSlide(4)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Booking"></button>
-              <button type="button" onclick="window.goToPricingSlide(5)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Absensi"></button>
-              <button type="button" onclick="window.goToPricingSlide(6)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Sistem Informasi"></button>
-              <button type="button" onclick="window.goToPricingSlide(7)" class="pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Custom App"></button>
+              <button type="button" onclick="window.goToPricingSlide(0)" class="pricing-dot w-6 h-1 rounded-full bg-[#DC143C] transition-all cursor-pointer" aria-label="Landing Page"></button>
+              <button type="button" onclick="window.goToPricingSlide(1)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Portfolio"></button>
+              <button type="button" onclick="window.goToPricingSlide(2)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Company Profile"></button>
+              <button type="button" onclick="window.goToPricingSlide(3)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Toko Online"></button>
+              <button type="button" onclick="window.goToPricingSlide(4)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Booking"></button>
+              <button type="button" onclick="window.goToPricingSlide(5)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Absensi"></button>
+              <button type="button" onclick="window.goToPricingSlide(6)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Sistem Informasi"></button>
+              <button type="button" onclick="window.goToPricingSlide(7)" class="pricing-dot w-1.5 h-1 rounded-full bg-white/20 hover:bg-white/40 transition-all cursor-pointer" aria-label="Custom App"></button>
             </div>
 
-            <div class="font-mono text-[0.68rem] text-zinc-500 flex items-center gap-2">
+            <div class="font-mono text-[0.62rem] text-zinc-500 flex items-center gap-1.5">
               <span class="material-symbols-outlined text-xs text-[#DC143C]">swipe</span>
-              <span>Geser / Drag untuk melihat semua kategori</span>
+              <span>Geser untuk kategori lainnya</span>
             </div>
           </div>
 
-          <!-- Conversion Action Box & Direct CTA Buttons -->
-          <div class="rounded-2xl border border-white/15 bg-gradient-to-r from-zinc-950/90 via-[#DC143C]/10 to-zinc-950/90 backdrop-blur-2xl p-5 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.7)]">
-            <div class="text-left">
-              <h4 class="text-base sm:text-lg font-bold text-white mb-1 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#DC143C]">calculate</span>
-                <span>Ingin Tahu Estimasi Spesifik Kebutuhanmu?</span>
-              </h4>
-              <p class="text-xs text-zinc-400 font-light max-w-xl leading-relaxed">
-                Gunakan Kalkulator Biaya Interaktif untuk memilih jumlah halaman, tingkat desain, dan fitur tambahan. Dapatkan estimasi akurat dan kirim brief instan ke WhatsApp.
-              </p>
+          <!-- Ultra Compact Sleek Conversion Bar -->
+          <div class="rounded-xl border border-white/12 bg-gradient-to-r from-zinc-950/90 via-[#DC143C]/10 to-zinc-950/90 backdrop-blur-xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_12px_30px_rgba(0,0,0,0.5)]">
+            <div class="text-left flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] shrink-0">
+                <span class="material-symbols-outlined text-base">tune</span>
+              </div>
+              <div>
+                <p class="text-xs sm:text-sm font-bold text-white leading-snug">
+                  Punya Kebutuhan Spesifik?
+                </p>
+                <p class="text-[0.65rem] sm:text-[0.7rem] text-zinc-400 font-light">
+                  Sesuaikan fitur, level desain &amp; estimasi instan di kalkulator.
+                </p>
+              </div>
             </div>
             
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
+            <div class="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
               <a
                 href="/pricing.html"
-                class="rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(220,20,60,0.5)] hover:shadow-[0_0_35px_rgba(220,20,60,0.7)] active:scale-[0.98] cursor-pointer"
+                class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-3.5 py-2 font-mono text-[0.65rem] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.4)] active:scale-[0.98] cursor-pointer"
               >
-                <span>Hitung Harga Website</span>
-                <span class="material-symbols-outlined text-base">arrow_forward</span>
+                <span>Buka Kalkulator</span>
+                <span class="material-symbols-outlined text-xs">arrow_forward</span>
               </a>
 
               <a
                 href="https://wa.me/6285169084136?text=Halo%20Aga,%20saya%20tertarik%20konsultasi%20pembuatan%20website."
                 target="_blank"
                 rel="noopener noreferrer"
-                class="rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.1] text-zinc-200 hover:text-white px-5 py-3.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                class="rounded-lg border border-white/15 bg-white/[0.04] hover:bg-white/[0.1] text-zinc-200 hover:text-white px-3 py-2 font-mono text-[0.65rem] sm:text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                <span>Konsultasi WhatsApp</span>
+                <svg class="w-3.5 h-3.5 text-green-400" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>WhatsApp</span>
               </a>
             </div>
           </div>
 
           <!-- Pulsing Hint to Section 06 Contact -->
-          <div class="mt-8 flex items-center justify-center gap-3 text-zinc-500 font-mono text-[0.68rem] tracking-widest uppercase">
-            <span class="inline-block h-6 w-px animate-pulse bg-[#DC143C]"></span>
+          <div class="mt-3 flex items-center justify-center gap-2 text-zinc-500 font-mono text-[0.62rem] tracking-widest uppercase">
+            <span class="inline-block h-4 w-px animate-pulse bg-[#DC143C]"></span>
             <button type="button" onclick="window.scrollToSection(5)" class="hover:text-white transition-colors cursor-pointer">
-              Scroll / Klik untuk Kontak [06]
+              Scroll / Kontak [06]
             </button>
           </div>
         </div>
