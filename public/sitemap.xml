@@ -19,12 +19,20 @@
     </image:image>
   </url>
 
-  <!-- Interactive Website Pricing Configurator -->
+  <!-- Jasa Pembuatan Website Murah & Kalkulator Online (Top Priority) -->
   <url>
     <loc>https://porto-aga.vercel.app/pricing.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
+    <lastmod>2026-08-25T17:35:00+07:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://porto-aga.vercel.app/pricing.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://porto-aga.vercel.app/pricing.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://porto-aga.vercel.app/pricing.html"/>
+    <image:image>
+      <image:loc>https://porto-aga.vercel.app/preview-hero.jpg</image:loc>
+      <image:title>Jasa Pembuatan Website Murah &amp; Cepat Mulai Rp499Rb Langsung Jadi — Aga Putra Web Studio</image:title>
+      <image:caption>Kalkulator Biaya Pembuatan Website Online Transparan oleh Muhammad Aga Putra</image:caption>
+    </image:image>
   </url>
 
   <!-- All Projects & Open Source Repositories -->
