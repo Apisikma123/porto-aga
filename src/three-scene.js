@@ -243,7 +243,7 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // ─── 4. MATERIAL DESIGN SMOKE PARTICLE SYSTEM ───
+  // ─── 4. PURE WHITE AEROSPACE SMOKE VAPOR SYSTEM ───
   const smokeContainer = document.getElementById("preloader-smoke-container");
   let smokeActive = true;
   let smokeInterval = null;
@@ -252,33 +252,25 @@ export const initThreeEngine = () => {
     if (!smokeContainer || !smokeActive) return;
 
     const puff = document.createElement("div");
-    const size = isLaunch ? 24 + Math.random() * 20 : 12 + Math.random() * 10;
-    
-    // Palette: Material Design Crimson (#DC143C), Flame (#FF0044), Plasma Gold (#FFA000), Soft Zinc (#E4E4E7)
-    const colorRoll = Math.random();
-    let bg = "rgba(244, 244, 245, 0.22)";
-    if (colorRoll < 0.35) {
-      bg = "rgba(220, 20, 60, 0.4)";
-    } else if (colorRoll < 0.65) {
-      bg = "rgba(255, 0, 68, 0.35)";
-    } else if (colorRoll < 0.85) {
-      bg = "rgba(255, 160, 0, 0.35)";
-    }
+    const size = isLaunch ? 28 + Math.random() * 22 : 14 + Math.random() * 12;
 
-    puff.className = "absolute rounded-full pointer-events-none blur-[2px] transform-gpu";
+    puff.className = "absolute rounded-full pointer-events-none blur-[4px] transform-gpu";
     puff.style.width = `${size}px`;
     puff.style.height = `${size}px`;
-    puff.style.background = bg;
+    // Pure White Aerospace Vapor with soft radial dissipation
+    puff.style.background = isLaunch
+      ? "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0) 100%)"
+      : "radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0) 100%)";
     puff.style.left = "50%";
-    puff.style.top = "62%";
-    puff.style.transform = "translate(-50%, -50%) scale(0.6)";
+    puff.style.top = "60%";
+    puff.style.transform = "translate(-50%, -50%) scale(0.5)";
 
     smokeContainer.appendChild(puff);
 
-    const driftX = (Math.random() - 0.5) * (isLaunch ? 50 : 24);
-    const driftY = isLaunch ? 60 + Math.random() * 50 : 28 + Math.random() * 25;
-    const endScale = isLaunch ? 2.8 + Math.random() * 1.2 : 1.6 + Math.random() * 0.6;
-    const duration = isLaunch ? 0.75 + Math.random() * 0.35 : 1.1 + Math.random() * 0.4;
+    const driftX = (Math.random() - 0.5) * (isLaunch ? 45 : 20);
+    const driftY = isLaunch ? 65 + Math.random() * 45 : 32 + Math.random() * 24;
+    const endScale = isLaunch ? 3.2 + Math.random() * 1.2 : 2.2 + Math.random() * 0.6;
+    const duration = isLaunch ? 0.85 + Math.random() * 0.3 : 1.4 + Math.random() * 0.4;
 
     gsap.to(puff, {
       x: driftX,
@@ -286,27 +278,27 @@ export const initThreeEngine = () => {
       scale: endScale,
       opacity: 0,
       duration: duration,
-      ease: "power2.out",
+      ease: "sine.out",
       onComplete: () => {
         puff.remove();
       }
     });
   };
 
-  // 1. FASE IDLE (0% - 89%): Continuous smoke emission
+  // 1. FASE IDLE (0% - 89%): Continuous silky white smoke emission
   smokeInterval = setInterval(() => {
     if (smokeActive) {
       spawnSmokePuff(false);
     }
-  }, 110);
+  }, 95);
 
-  // 1. FASE IDLE (0% - 89%): Natural floating hover and gentle subtle tilt
+  // 1. FASE IDLE (0% - 89%): Luxurious, ultra-smooth buoyant hover
   let floatTween = null;
   if (rocketCenter) {
     floatTween = gsap.to(rocketCenter, {
-      y: -7,
-      rotation: 1.2,
-      duration: 1.6,
+      y: -6,
+      rotation: 0.8,
+      duration: 2.2,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
@@ -323,21 +315,21 @@ export const initThreeEngine = () => {
 
     if (floatTween) floatTween.kill();
 
-    // Spawn dense burst of launch smoke plumes
-    for (let i = 0; i < 8; i++) {
-      setTimeout(() => spawnSmokePuff(true), i * 40);
+    // Spawn dense burst of white launch smoke plumes
+    for (let i = 0; i < 9; i++) {
+      setTimeout(() => spawnSmokePuff(true), i * 35);
     }
 
     const blastTl = gsap.timeline();
 
-    // Rocket launches straight up with high acceleration
+    // Rocket launches straight up with smooth inertia acceleration
     if (rocketCenter) {
       blastTl.to(rocketCenter, {
         y: "-150vh",
         rotation: 0,
-        scale: 0.9,
-        duration: 1.25,
-        ease: "power3.in"
+        scale: 0.88,
+        duration: 1.35,
+        ease: "power2.in"
       }, 0);
     }
 
