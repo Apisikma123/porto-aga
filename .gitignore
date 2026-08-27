@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary audit and test outputs
+lighthouse-*.json
+report-*.json
+*.webp
+*.jpg
+!public/**/*.jpg
+!public/**/*.webp
+scripts/
+

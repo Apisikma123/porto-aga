@@ -1,6 +1,5 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/postcss';
 
 export default defineConfig({
   server: {
@@ -14,6 +13,9 @@ export default defineConfig({
     cors: true,
   },
   build: {
+    target: 'esnext',
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
@@ -29,6 +31,16 @@ export default defineConfig({
         jasaAbsensi: resolve(import.meta.dirname, 'jasa-pembuatan-website-absensi.html'),
         jasaWebApp: resolve(import.meta.dirname, 'jasa-pembuatan-web-app.html'),
         jasaWebAppCustom: resolve(import.meta.dirname, 'jasa-pembuatan-web-app-custom.html'),
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/three')) {
+            return 'vendor-three';
+          }
+          if (id.includes('node_modules/gsap')) {
+            return 'vendor-gsap';
+          }
+        },
       },
     },
   },

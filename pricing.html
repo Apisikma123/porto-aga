@@ -77,17 +77,21 @@
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#040509" />
 
-    <!-- Google Fonts & Material Symbols -->
+    <!-- Google Fonts & Material Symbols (Non-blocking async load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
-    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+      />
+    </noscript>
 
     <!-- Tailwind CSS Engine -->
     <link rel="stylesheet" href="/src/style.css" />
@@ -271,10 +275,145 @@
           ]
         }
       ]
-    }
+    <!-- Cookie & LocalStorage State Synchronizer (Zero-Flash Theme & Language Bootstrapper) -->
+    <script>
+      (function() {
+        function getCookie(name) {
+          var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+          return v ? decodeURIComponent(v[2]) : null;
+        }
+        var theme = getCookie('aga_theme') || localStorage.getItem('aga_portfolio_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        var lang = getCookie('aga_lang') || localStorage.getItem('porto_lang') || 'id';
+        document.documentElement.setAttribute('lang', lang);
+      })();
     </script>
   </head>
-  <body class="font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative bg-[#040509]">
+  <body class="bg-transparent text-zinc-100 font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 0. CLIENT-FRIENDLY STUDIO LOADING EXPERIENCE               -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div
+      id="web-preloader"
+      class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto transition-all"
+    >
+      <!-- Top Brand Header -->
+      <div class="flex items-center justify-between font-mono text-[0.62rem] sm:text-xs text-zinc-500 uppercase tracking-widest border-b border-white/10 pb-4">
+        <div class="flex items-center gap-2.5 text-zinc-300 font-semibold tracking-wider">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#DC143C]"></span>
+          </span>
+          <span class="tracking-[0.2em]">AGA STUDIO</span>
+          <span class="text-[#DC143C] hidden sm:inline">/</span>
+          <span class="text-zinc-400 font-normal hidden sm:inline">LAYANAN &amp; KALKULATOR</span>
+        </div>
+        <div class="hidden sm:flex items-center gap-4 text-zinc-400 font-mono text-[0.6rem] sm:text-xs">
+          <span>TRANSPARAN &amp; CEPAT</span>
+        </div>
+      </div>
+
+      <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
+      <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
+        
+        <!-- Large Aerospace Center Rocket (Synchronized Composite) -->
+        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none">
+          
+          <!-- 1. Rocket Body SVG (Facing Upwards) -->
+          <svg
+            class="relative z-10 w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36 text-white drop-shadow-[0_0_20px_rgba(220,20,60,0.5)]"
+            viewBox="0 0 100 110"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- Engine Nozzle Base -->
+            <path d="M42 90H58L55 98H45L42 90Z" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+            <path d="M30 86H38L36 92H32L30 86Z" fill="#09090b"/>
+            <path d="M62 86H70L68 92H64L62 86Z" fill="#09090b"/>
+
+            <!-- Left & Right Crimson Aero-Fins -->
+            <path d="M32 64L17 84C16 85.5 17 88 19 88H34L36 74L32 64Z" fill="#DC143C" stroke="#ff5262" stroke-width="1"/>
+            <path d="M68 64L83 84C84 85.5 83 88 81 88H66L64 74L68 64Z" fill="#DC143C" stroke="#ff5262" stroke-width="1"/>
+
+            <!-- Main Streamlined Fuselage -->
+            <path d="M50 8C50 8 32 26 32 64C32 76 35 90 38 90H62C65 90 68 76 68 64C68 26 50 8 50 8Z" fill="#FFFFFF"/>
+
+            <!-- Center Crimson Nosecone -->
+            <path d="M50 8C50 8 42 20 42 34H58C58 20 50 8 50 8Z" fill="#DC143C"/>
+            <path d="M49 34H51V84H49V34Z" fill="#e4e1e8" opacity="0.6"/>
+
+            <!-- High-Precision Cyber Cockpit Porthole -->
+            <circle cx="50" cy="50" r="9" fill="#131318" stroke="#DC143C" stroke-width="2"/>
+            <circle cx="50" cy="50" r="6" fill="#1f1f24"/>
+            <circle cx="48" cy="48" r="2" fill="#FFFFFF" opacity="0.9"/>
+
+            <!-- Panel Lines -->
+            <line x1="36" y1="68" x2="64" y2="78" stroke="#d4d4d8" stroke-width="1"/>
+            <line x1="38" y1="80" x2="62" y2="80" stroke="#d4d4d8" stroke-width="1"/>
+          </svg>
+
+          <!-- 2. Exhaust Flame Jet (Positioned underneath rocket nozzles, pointing DOWN) -->
+          <div id="rocket-flame-container" class="relative -mt-3.5 z-0 flex flex-col items-center origin-top pointer-events-none">
+            <svg class="w-10 h-16 sm:w-12 sm:h-20 md:w-14 md:h-24 overflow-visible" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="flameOuterGradPricingNew" x1="20" y1="0" x2="20" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FF0044" stop-opacity="0.95"/>
+                  <stop offset="45%" stop-color="#DC143C" stop-opacity="0.65"/>
+                  <stop offset="100%" stop-color="#FF0044" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="flameMidGradPricingNew" x1="20" y1="0" x2="20" y2="60" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FF9900" stop-opacity="1"/>
+                  <stop offset="60%" stop-color="#FF4400" stop-opacity="0.75"/>
+                  <stop offset="100%" stop-color="#FF8800" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="flameCoreGradPricingNew" x1="20" y1="0" x2="20" y2="35" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+                  <stop offset="65%" stop-color="#FFF2A0" stop-opacity="0.85"/>
+                  <stop offset="100%" stop-color="#FF9900" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Outer Flame Plume -->
+              <path d="M12 0C12 0 4 35 20 80C36 35 28 0 28 0H12Z" fill="url(#flameOuterGradPricingNew)"/>
+              <!-- Mid Flame Layer -->
+              <path d="M14 0C14 0 8 28 20 60C32 28 26 0 26 0H14Z" fill="url(#flameMidGradPricingNew)"/>
+              <!-- Inner Superheated White Core -->
+              <path d="M17 0C17 0 13 18 20 35C27 18 23 0 23 0H17Z" fill="url(#flameCoreGradPricingNew)"/>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Monospace Counter & Status -->
+        <div id="preloader-text-group" class="flex flex-col items-center">
+          <div class="flex items-baseline justify-center gap-2 font-mono leading-none mb-2">
+            <span id="preloader-percent" class="text-6xl sm:text-7xl md:text-8xl font-black text-white tracking-tight tabular-nums">00</span>
+            <span class="text-2xl sm:text-3xl text-[#DC143C] font-semibold">%</span>
+          </div>
+
+          <div class="font-sans text-xs sm:text-sm text-zinc-300 font-medium tracking-wide flex items-center justify-center gap-2.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+            <span id="preloader-status">Menyiapkan paket website &amp; kalkulator harga...</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Progress Track -->
+      <div class="space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
+        <div class="w-full h-1 bg-white/10 relative overflow-hidden rounded-full preloader-track">
+          <div
+            id="preloader-bar"
+            class="absolute inset-y-0 left-0 bg-[#DC143C] shadow-[0_0_12px_#DC143C] rounded-full transition-all duration-150 ease-out"
+            style="width: 0%;"
+          ></div>
+        </div>
+        <div class="flex justify-between items-center text-[0.68rem] sm:text-xs text-zinc-500 font-mono">
+          <span>8 Paket Pilihan &amp; Konsultasi Gratis</span>
+          <span class="text-zinc-400 font-semibold tracking-wider">PIPELINE LOAD</span>
+        </div>
+      </div>
+    </div>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. FIXED 3D MULTI-OBJECT THREE.JS CANVAS                   -->
@@ -397,82 +536,254 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 4. MAIN CONFIGURATOR CONTAINER                             -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 py-20 sm:py-24">
+    <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-16 sm:pt-20 pb-12">
       
       <!-- Top Navigation & Breadcrumb Back Button -->
-      <div class="flex items-center justify-between gap-3 mb-6">
+      <div class="flex items-center justify-between gap-2 mb-4 sm:mb-6">
         <a
           href="/"
-          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-white/12 bg-zinc-950/80 hover:bg-zinc-900 text-zinc-300 hover:text-white transition-all font-mono text-xs cursor-pointer group shadow-md"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded border border-white/10 bg-[#1b1b20] hover:bg-[#2a292f] text-zinc-300 hover:text-white transition-all font-mono text-[0.72rem] sm:text-xs cursor-pointer group shadow-sm"
         >
-          <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform text-[#DC143C]">arrow_back</span>
-          <span>← Kembali ke Portofolio Personal 3D</span>
+          <span class="material-symbols-outlined text-sm text-[#FF0044] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+          <span class="hidden sm:inline">Portofolio 3D</span>
+          <span class="sm:hidden">Portofolio</span>
         </a>
-        <a
-          href="/#contact"
-          class="inline-flex items-center gap-1 text-[0.7rem] font-mono text-zinc-400 hover:text-white transition-colors"
-        >
-          <span>Butuh Bantuan? Hubungi Saya</span>
-          <span class="material-symbols-outlined text-xs">arrow_forward</span>
-        </a>
+        <span class="inline-flex items-center gap-1.5 text-[0.7rem] sm:text-xs font-mono text-zinc-400 bg-white/5 border border-white/10 px-3 py-1 rounded">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FF0044]"></span>
+          <span>Open for Commissions</span>
+        </span>
       </div>
 
       <!-- Page Hero Header -->
-      <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#DC143C]/40 bg-[#DC143C]/10 text-[#DC143C] font-mono text-xs uppercase tracking-wider font-semibold mb-2.5 shadow-[0_0_20px_rgba(220,20,60,0.25)]">
-          <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-          <span id="label-hero-eyebrow">AGA WEB STUDIO // INTERACTIVE COST CONFIGURATOR</span>
+      <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14 px-1">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#FF0044]/30 bg-[#FF0044]/10 text-[#FF0044] font-mono text-[0.65rem] sm:text-xs uppercase tracking-widest font-semibold mb-3 sm:mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#FF0044] shrink-0"></span>
+          <span>STUDIO COMMISSIONS // SPECIFICATION MATRIX</span>
         </div>
-        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-2.5">
-          Hitung Estimasi Biaya <br />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#DC143C] via-red-300 to-white">
-            Website Profesionalmu.
+        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight sm:leading-[1.15] mb-3 sm:mb-4 font-['Plus_Jakarta_Sans',sans-serif]">
+          Bespoke Web Development <br class="hidden sm:inline" />
+          <span class="text-[#FF0044]">
+            &amp; Digital Architecture.
           </span>
         </h1>
-        <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed max-w-xl mx-auto" id="label-hero-desc">
-          Pilih jenis website, fitur, dan tingkat desain sesuai kebutuhan bisnis. Dapatkan rincian estimasi transparan yang siap dikonsultasikan via WhatsApp.
+        <p class="text-xs sm:text-sm md:text-base text-zinc-300 font-light leading-relaxed max-w-2xl mx-auto mb-6">
+          Aplikasi web performa tinggi, landing page terarah, dan visual 3D modern. Dikerjakan langsung dengan arsitektur bersih tanpa perantara.
         </p>
+
+        <!-- Trust Badges Bar (No Emojis) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 font-mono text-[0.65rem] sm:text-xs text-zinc-400">
+          <span class="flex items-center gap-1.5 px-3 py-1 rounded bg-[#1b1b20] border border-white/10 text-zinc-300">Turnaround: 1–5 Days</span>
+          <span class="flex items-center gap-1.5 px-3 py-1 rounded bg-[#1b1b20] border border-white/10 text-zinc-300">Lighthouse: 100 Score</span>
+          <span class="flex items-center gap-1.5 px-3 py-1 rounded bg-[#1b1b20] border border-white/10 text-zinc-300">100% Code Handover</span>
+          <span class="flex items-center gap-1.5 px-3 py-1 rounded bg-[#1b1b20] border border-white/10 text-zinc-300">Direct Engineering</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- SECTION: 3 CORE COMMISSION TIERS                            -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <div class="mb-14 sm:mb-20">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6 px-1">
+          <div>
+            <span class="font-mono text-[0.65rem] sm:text-xs text-[#FF0044] uppercase tracking-widest font-bold block mb-1">COMMISSION TIERS</span>
+            <h2 class="text-lg sm:text-2xl font-black text-white font-['Plus_Jakarta_Sans',sans-serif]">Tiga Skala Pengerjaan</h2>
+          </div>
+          <p class="text-xs text-zinc-400 font-mono">Pilih paket langsung atau sesuaikan di kalkulator.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
+          
+          <!-- Tier 1: Single-Page Editorial -->
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-200">
+            <div>
+              <div class="flex justify-between items-start mb-4">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 01</span>
+                <span class="text-xs font-mono text-zinc-300">1–2 Hari</span>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Single-Page / Landing Page</h3>
+              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed">Untuk kampanye produk, promo, personal bio, atau landing page terarah.</p>
+              
+              <div class="font-mono mb-6">
+                <span class="text-[0.68rem] text-zinc-500 line-through block">Rp 750.000</span>
+                <div class="text-2xl sm:text-3xl font-black text-white">Rp 499.000</div>
+                <span class="text-[0.62rem] text-zinc-400">Fixed rate • Source code included</span>
+              </div>
+
+              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono">
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 1 Halaman Responsif Mobile &amp; Desktop</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Direct WhatsApp Lead Action</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Sub-Detik (&lt; 0.8s) TTFB</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Free Cloud &amp; SSL Deployment</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Full GitHub Repo Handover</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <a
+                href="#"
+                onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin commission Paket Single-Page Landing Page (Rp499.000). Apakah slot pengerjaan minggu ini tersedia?'); return false;"
+                class="w-full rounded bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>Pesan Tier 01</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+              <button
+                type="button"
+                onclick="state.websiteType='landing-page'; state.designLevel='clean'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                class="w-full text-center text-[0.68rem] font-mono text-zinc-400 hover:text-white py-1 transition-colors cursor-pointer"
+              >
+                Kalkulator Custom ↓
+              </button>
+            </div>
+          </div>
+
+          <!-- Tier 2: Business Platform (FEATURED / MOST POPULAR) -->
+          <div class="rounded-lg border-2 border-[#FF0044] bg-[#1f1f24] p-6 flex flex-col justify-between shadow-[0_0_30px_rgba(255,0,68,0.15)] relative">
+            <!-- Best Value Pill -->
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded bg-[#FF0044] text-white text-[0.62rem] font-mono font-bold uppercase tracking-wider">
+              <span>RECOMMENDED</span>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-start mb-4 mt-1">
+                <span class="px-2 py-0.5 rounded bg-[#FF0044]/20 text-[0.65rem] font-mono uppercase tracking-wider text-[#FF0044] font-bold">Tier 02</span>
+                <span class="text-xs font-mono text-zinc-300">3–5 Hari</span>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Company Profile &amp; Bisnis</h3>
+              <p class="text-xs text-zinc-300 font-light mb-4 leading-relaxed">Fondasi kredibilitas korporat, UMKM berkembang, dan firma profesional.</p>
+              
+              <div class="font-mono mb-6">
+                <span class="text-[0.68rem] text-zinc-400 line-through block">Rp 2.250.000</span>
+                <div class="text-2xl sm:text-3xl font-black text-white">Rp 1.499.000</div>
+                <span class="text-[0.62rem] text-zinc-400">Termasuk Domain .com + Email Bisnis</span>
+              </div>
+
+              <ul class="space-y-2 text-xs text-zinc-200 mb-6 border-t border-white/10 pt-4 font-mono">
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> Hingga 5 Halaman Terstruktur</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> <strong>Gratis Domain .com (1 Tahun)</strong></li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> <strong>Setup Email Bisnis (info@domain.com)</strong></li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> Technical On-Page SEO Schema</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> GSAP Micro-Interactions</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> 30-Day Code Warranty</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <a
+                href="#"
+                onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin memesan Paket Business Platform Company Profile (Rp1.499.000). Mari kita diskusikan spesifikasi proyek saya.'); return false;"
+                class="w-full rounded bg-[#FF0044] hover:bg-[#d60039] text-white font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,0,68,0.35)] cursor-pointer"
+              >
+                <span>Pesan Tier 02</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+              <button
+                type="button"
+                onclick="state.websiteType='company-profile'; state.designLevel='clean'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                class="w-full text-center text-[0.68rem] font-mono text-zinc-300 hover:text-white py-1 transition-colors cursor-pointer"
+              >
+                Kalkulator Custom ↓
+              </button>
+            </div>
+          </div>
+
+          <!-- Tier 3: Custom App & WebGL -->
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-200">
+            <div>
+              <div class="flex justify-between items-start mb-4">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 03</span>
+                <span class="text-xs font-mono text-zinc-300">7–14 Hari</span>
+              </div>
+              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Web App &amp; WebGL Platform</h3>
+              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed">Arsitektur aplikasi: Toko Online Midtrans, Booking, SaaS Dashboard, atau 3D WebGL.</p>
+              
+              <div class="font-mono mb-6">
+                <span class="text-[0.68rem] text-zinc-500 block">Mulai dari</span>
+                <div class="text-2xl sm:text-3xl font-black text-white">Rp 3.499.000</div>
+                <span class="text-[0.62rem] text-zinc-400">Custom Database + API + Dashboard</span>
+              </div>
+
+              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono">
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Database Real-time &amp; Auth</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Payment Gateway (QRIS, VA, Card)</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Admin CMS / Dashboard Panel</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 3D WebGL / Shader Scene</li>
+                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 3-Month Maintenance Warranty</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <a
+                href="#"
+                onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin konsultasi kebutuhan Web App / E-Commerce custom untuk proyek saya.'); return false;"
+                class="w-full rounded bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>Inisiasi Custom</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+              <button
+                type="button"
+                onclick="state.websiteType='web-app'; state.designLevel='custom-3d'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                class="w-full text-center text-[0.68rem] font-mono text-zinc-400 hover:text-white py-1 transition-colors cursor-pointer"
+              >
+                Kalkulator Custom ↓
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Anchor for smooth scrolling to configurator -->
+      <div id="configurator-anchor" class="pt-4 mb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-px bg-white/10 flex-1"></div>
+          <span class="font-mono text-xs text-zinc-400 uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-white/10 font-bold">
+            ATAU RANCANG SPESIFIKASI SENDIRI
+          </span>
+          <div class="h-px bg-white/10 flex-1"></div>
+        </div>
       </div>
 
       <!-- Top Real-Time Live Estimate Bar (Fully Responsive & Anti-Wrap) -->
-      <div class="rounded-2xl border border-[#DC143C]/40 bg-zinc-950/90 backdrop-blur-2xl p-4 sm:p-5 mb-6 shadow-[0_10px_35px_rgba(220,20,60,0.2)]">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-2xl p-3.5 sm:p-5 mb-5 sm:mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <!-- Package Title & Live Pulse -->
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/50 flex items-center justify-center text-[#DC143C] shrink-0 shadow-inner">
-              <span class="material-symbols-outlined text-2xl">calculate</span>
+          <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/50 flex items-center justify-center text-[#DC143C] shrink-0 shadow-inner">
+              <span class="material-symbols-outlined text-xl sm:text-2xl">calculate</span>
             </div>
-            <div class="min-w-0">
+            <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5 mb-0.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-                <span class="text-[0.65rem] text-zinc-400 font-mono uppercase tracking-wider font-semibold">Estimasi Real-Time</span>
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                <span class="text-[0.6rem] sm:text-[0.65rem] text-zinc-400 font-mono uppercase tracking-wider font-semibold">Estimasi Real-Time</span>
               </div>
-              <h3 id="top-package-name" class="text-sm sm:text-base font-bold text-white truncate">Landing Page</h3>
+              <h3 id="top-package-name" class="text-xs sm:text-base font-bold text-white truncate">Landing Page</h3>
             </div>
           </div>
 
           <!-- Price & Action Button (Never Breaks / Shrinks Gracefully) -->
-          <div class="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pt-3 sm:pt-0 border-t border-white/5 sm:border-t-0">
+          <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-4 pt-2.5 sm:pt-0 border-t border-white/5 sm:border-t-0">
             <div class="text-left sm:text-right min-w-0">
-              <span class="text-[0.58rem] sm:text-[0.62rem] font-mono text-zinc-400 uppercase tracking-wider block">Total Estimasi Awal</span>
-              <div id="top-package-price" class="font-mono text-base sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-[#DC143C] whitespace-nowrap tracking-tight">
+              <span class="text-[0.55rem] sm:text-[0.62rem] font-mono text-zinc-400 uppercase tracking-wider block">Total Estimasi Awal</span>
+              <div id="top-package-price" class="font-mono text-base sm:text-2xl md:text-3xl font-black text-white whitespace-nowrap tracking-tight">
                 Rp499.000
               </div>
             </div>
             <button
               type="button"
               onclick="goToStep(6)"
-              class="shrink-0 rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white px-4 sm:px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-[0_0_20px_rgba(220,20,60,0.4)] cursor-pointer touch-manipulation active:scale-[0.97]"
+              class="shrink-0 rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-[0.7rem] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1 shadow-[0_0_20px_rgba(220,20,60,0.4)] cursor-pointer touch-manipulation active:scale-[0.97]"
             >
               <span>Lihat Rincian</span>
-              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              <span class="material-symbols-outlined text-xs sm:text-sm">arrow_forward</span>
             </button>
           </div>
         </div>
       </div>
 
       <!-- Step Navigation Tabs (7 Steps) -->
-      <div class="mb-6 rounded-2xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-3 sm:p-4 shadow-lg">
+      <div class="mb-5 sm:mb-6 rounded-2xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-3 sm:p-4 shadow-lg">
         <div class="flex items-center justify-between gap-3 mb-2.5 px-1 font-mono text-xs">
           <div class="flex items-center gap-2 text-zinc-300 shrink-0 whitespace-nowrap">
             <span class="text-zinc-500">Langkah:</span>
@@ -485,27 +796,27 @@
           <div id="progress-bar" class="h-full bg-gradient-to-r from-[#DC143C] to-red-400 rounded-full transition-all duration-500 ease-out" style="width: 14.28%"></div>
         </div>
 
-        <!-- Clickable Step Pills -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-1.5 font-mono text-[0.62rem] sm:text-xs">
-          <button type="button" onclick="goToStep(1)" id="step-tab-1" class="py-2 px-2.5 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all shadow-[0_0_15px_rgba(220,20,60,0.3)] cursor-pointer truncate">
+        <!-- Clickable Step Pills (Scrollable on Mobile, Grid on Tablet/Desktop) -->
+        <div class="flex sm:grid sm:grid-cols-4 lg:grid-cols-7 gap-1.5 font-mono text-[0.62rem] sm:text-xs overflow-x-auto pb-1 no-scrollbar -mx-1 px-1">
+          <button type="button" onclick="goToStep(1)" id="step-tab-1" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all shadow-[0_0_15px_rgba(220,20,60,0.3)] cursor-pointer whitespace-nowrap sm:truncate">
             01 Jenis
           </button>
-          <button type="button" onclick="goToStep(2)" id="step-tab-2" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(2)" id="step-tab-2" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             02 Scope
           </button>
-          <button type="button" onclick="goToStep(3)" id="step-tab-3" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(3)" id="step-tab-3" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             03 Desain
           </button>
-          <button type="button" onclick="goToStep(4)" id="step-tab-4" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(4)" id="step-tab-4" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             04 Add-ons
           </button>
-          <button type="button" onclick="goToStep(5)" id="step-tab-5" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(5)" id="step-tab-5" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             05 Detail
           </button>
-          <button type="button" onclick="goToStep(6)" id="step-tab-6" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(6)" id="step-tab-6" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             06 Estimasi
           </button>
-          <button type="button" onclick="goToStep(7)" id="step-tab-7" class="py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer truncate">
+          <button type="button" onclick="goToStep(7)" id="step-tab-7" class="shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.02] text-zinc-400 hover:text-white text-center transition-all cursor-pointer whitespace-nowrap sm:truncate">
             07 WhatsApp
           </button>
         </div>
@@ -846,73 +1157,118 @@
             </div>
 
           </div>
-        </aside>
-
       </div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- SECTION: ENGINEERING STANDARDS & STUDIO PHILOSOPHY         -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <section class="mt-20 sm:mt-24 pt-12 border-t border-white/10">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="font-mono text-xs text-[#FF0044] uppercase tracking-widest font-bold block mb-1">ENGINEERING STANDARDS</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
+            Prinsip Rekayasa &amp; <span class="text-[#FF0044]">Jaminan Kualitas</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+              100
+            </div>
+            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Performa Sub-Detik</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+              Skor Core Web Vitals 100 dengan waktu muat di bawah 0.8 detik. Fondasi teknis optimal untuk retensi dan SEO.
+            </p>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Metrik: TTFB &lt; 200ms</span>
+          </div>
+
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+              <span class="material-symbols-outlined text-lg">terminal</span>
+            </div>
+            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Direct Engineering</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+              Kolaborasi langsung dengan engineer yang menulis kode Anda. Diskusi teknis presisi tanpa perantara non-teknis.
+            </p>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Komunikasi: Direct Developer Line</span>
+          </div>
+
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+              <span class="material-symbols-outlined text-lg">layers</span>
+            </div>
+            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Bespoke Architecture</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+              Desain visual berkelas, tipografi presisi, dan animasi mikro responsif yang meningkatkan kredibilitas brand Anda.
+            </p>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Standar: Cyber-Professional Spec</span>
+          </div>
+
+          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+              <span class="material-symbols-outlined text-lg">code</span>
+            </div>
+            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">100% Hak Milik Kode</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+              Source code, aset, dan repositori Git diserahkan utuh. Bebas di-deploy ke provider mana pun tanpa lock-in.
+            </p>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Status: Zero Vendor Lock-in</span>
+          </div>
+
+        </div>
+      </section>
 
       <!-- ═══════════════════════════════════════════════════════════ -->
       <!-- PANDUAN HARGA WEBSITE & FAQ SECTION                        -->
       <!-- ═══════════════════════════════════════════════════════════ -->
       <section class="mt-16 sm:mt-24 pt-12 border-t border-white/10">
         <div class="text-center max-w-2xl mx-auto mb-10">
-          <p class="eyebrow text-[#DC143C] mb-2">PANDUAN &amp; FREQUENTLY ASKED QUESTIONS</p>
-          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            Semua yang Perlu Kamu Ketahui Tentang <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#DC143C] via-red-300 to-white">
-              Biaya &amp; Proses Pembuatan Website
-            </span>
+          <span class="font-mono text-xs text-[#FF0044] uppercase tracking-widest font-bold block mb-1">FREQUENTLY ASKED QUESTIONS</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
+            Panduan &amp; <span class="text-[#FF0044]">Pertanyaan Umum</span>
           </h2>
         </div>
 
-        <div class="max-w-4xl mx-auto space-y-3.5">
+        <div class="max-w-4xl mx-auto space-y-3">
           
-          <details class="group rounded-xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-4 transition-all open:border-[#DC143C]/40">
+          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Berapa harga pembuatan website untuk UMKM &amp; Bisnis Baru?</span>
+              <span>Bagaimana skema pembayaran dan proses pengerjaan?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
             <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
-              Biaya pembuatan website untuk UMKM dimulai dari <strong>Rp499.000</strong> untuk Landing Page produk/jasa 1 halaman dan <strong>Rp999.000</strong> untuk Company Profile lengkap. Paket ini sudah 100% responsif di smartphone dan komputer, dilengkapi tombol CTA WhatsApp langsung, dan gratis setup hosting.
+              Skema pembayaran menggunakan sistem <strong>50% Down Payment (DP)</strong> di awal untuk inisiasi sprint, dan <strong>50% pelunasan</strong> setelah website selesai di-review, diverifikasi, dan siap go-live. Penyerahan source code dan akses admin diberikan penuh setelah pelunasan.
             </p>
           </details>
 
-          <details class="group rounded-xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-4 transition-all open:border-[#DC143C]/40">
+          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Apa perbedaan Landing Page vs Website Company Profile?</span>
+              <span>Berapa lama estimasi pengerjaan setiap proyek?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
             <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
-              <strong>Landing Page</strong> difokuskan pada 1 halaman terarah untuk konversi penjualan cepat (misalnya untuk iklan Instagram/Google Ads). Sedangkan <strong>Company Profile</strong> memiliki banyak halaman (Home, Tentang Kami, Layanan, Tim, Galeri, Kontak) untuk membangun kredibilitas korporat jangka panjang.
+              Landing Page single-page umumnya selesai dalam <strong>1–2 hari kerja</strong>. Company Profile multi-halaman selesai dalam <strong>3–5 hari kerja</strong>. Aplikasi web kustom, sistem booking, atau integrasi database membutuhkan <strong>7–14 hari kerja</strong> tergantung kesiapan materi.
             </p>
           </details>
 
-          <details class="group rounded-xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-4 transition-all open:border-[#DC143C]/40">
+          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Berapa lama proses pengerjaan website?</span>
+              <span>Apakah domain dan hosting ditanggung oleh klien?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
             <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
-              Landing Page umumnya selesai dalam <strong>2–4 hari kerja</strong>. Company Profile selesai dalam <strong>5–8 hari kerja</strong>. Sistem yang lebih kompleks seperti Toko Online, Booking, Absensi, atau Custom Web App membutuhkan waktu <strong>2–4 minggu</strong> tergantung kesiapan materi dan kompleksitas fitur.
+              Untuk Paket <strong>Business Platform (Tier 02)</strong>, domain .com 1 tahun sudah termasuk gratis. Untuk deployment, kami menggunakan infrastruktur cloud modern (Vercel/Cloudflare) yang gratis, aman dengan SSL otomatis, dan berkecepatan global.
             </p>
           </details>
 
-          <details class="group rounded-xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-4 transition-all open:border-[#DC143C]/40">
+          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Apa bedanya Domain dan Hosting?</span>
+              <span>Apakah saya mendapatkan akses penuh ke source code?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
             <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
-              <strong>Domain</strong> adalah nama alamat website Anda di internet (contoh: <code>namabisnis.com</code>). <strong>Hosting</strong> adalah tempat penyimpanan file, kode, dan database website agar dapat diakses online 24 jam. Biaya domain &amp; hosting dibayar per tahun langsung ke provider, dan kami bantu konfigurasi gratis.
-            </p>
-          </details>
-
-          <details class="group rounded-xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-4 transition-all open:border-[#DC143C]/40">
-            <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Apakah website saya bisa muncul di Google (SEO)?</span>
-              <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
-            </summary>
-            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
-              Ya, seluruh website dibangun dengan kode standar ramah SEO, meta tags Open Graph, struktur heading H1-H3 yang benar, sitemap XML otomatis, serta kecepatan loading optimal agar Google mudah mengindeks bisnis Anda.
+              Ya, 100% source code, aset desain, dan konfigurasi repositori GitHub akan diserahkan kepada Anda. Tidak ada biaya sewa tersembunyi atau keterikatan vendor.
             </p>
           </details>
 
@@ -971,13 +1327,9 @@
     <!-- 5. 100% IDENTICAL HOMEPAGE 3D SCENE & ANIMATION ENGINE     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <script type="module">
-      import * as THREE from "three";
-      import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-      import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-      import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-      import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
       import { gsap } from "gsap";
       import { PRICING_CONFIG, PRICING_WA_NUMBER, formatPriceRp, formatPriceRpFull, calculatePricingEstimate, buildWhatsAppMessage } from '/src/pricing-config.js';
+      import { initThreeEngine } from '/src/three-scene.js';
 
       window.openProtectedWhatsApp = (event, text = "") => {
         if (event && event.preventDefault) event.preventDefault();
@@ -985,618 +1337,6 @@
         const url = `https://wa.me/${num}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
         window.open(url, "_blank", "noopener,noreferrer");
       };
-
-      // ─── COMPLETE HOMEPAGE 3D SCENE & ANIMATIONS SETUP ───
-      function initExactHomepage3D() {
-        const canvas = document.getElementById("bg");
-        if (!canvas) return;
-
-        const isMobile = window.innerWidth < 1024;
-
-        // 1. Scene, Camera & Renderer
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x040509, 0.018);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 0, 7.5);
-        const cameraTarget = new THREE.Vector3(0, 0, 0);
-        const currentCameraTarget = new THREE.Vector3(0, 0, 0);
-
-        const isPhone = window.innerWidth < 768;
-        const renderer = new THREE.WebGLRenderer({
-          canvas,
-          alpha: true,
-          antialias: !isPhone,
-          powerPreference: "high-performance",
-          precision: isPhone ? "mediump" : "highp"
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : (isMobile ? 1.5 : 1.75)));
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.30;
-
-        // PBR Environment Reflections
-        const pmremGenerator = new THREE.PMREMGenerator(renderer);
-        pmremGenerator.compileEquirectangularShader();
-        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
-        pmremGenerator.dispose();
-
-        // 2. Studio Lighting Rig (100% Identical to Homepage main.js)
-        const ambientLight = new THREE.AmbientLight(0x181e32, 1.3);
-        scene.add(ambientLight);
-
-        const keyLight = new THREE.DirectionalLight(0xfff8f0, 3.2);
-        keyLight.position.set(-8, 10, 10);
-        scene.add(keyLight);
-
-        const crimsonFillLight = new THREE.DirectionalLight(0xff1828, 2.6);
-        crimsonFillLight.position.set(8, -4, 6);
-        scene.add(crimsonFillLight);
-
-        const crimsonBackLight = new THREE.DirectionalLight(0x3870ff, 2.0);
-        crimsonBackLight.position.set(-4, -8, -8);
-        scene.add(crimsonBackLight);
-
-        const crimsonPointAccent = new THREE.PointLight(0xff2838, 2.5, 16, 1.2);
-        crimsonPointAccent.position.set(2, 3, 3);
-        scene.add(crimsonPointAccent);
-
-        // 3. OBJECT 1: MASTER 4D TESSERACT (Hero Artifact)
-        const tesseractGroup = new THREE.Group();
-        tesseractGroup.position.set(isMobile ? 0 : 2.0, isMobile ? 1.1 : 0, isMobile ? -0.8 : 0.1);
-        scene.add(tesseractGroup);
-
-        const modelWrapper = new THREE.Group();
-        modelWrapper.rotation.set(0.45, 0.65, 0.15);
-        tesseractGroup.add(modelWrapper);
-
-        const redCoreLight = new THREE.PointLight(0xff2210, 3.6, 14, 1.2);
-        redCoreLight.position.set(0, 0, 0);
-        modelWrapper.add(redCoreLight);
-
-        // God Rays Texture Generator
-        const createGodRaysTexture = () => {
-          const canvasEl = document.createElement("canvas");
-          canvasEl.width = 1024;
-          canvasEl.height = 1024;
-          const ctx = canvasEl.getContext("2d");
-          const cx = 512;
-          const cy = 512;
-
-          const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 512);
-          coreGrad.addColorStop(0, "rgba(255, 60, 40, 0.85)");
-          coreGrad.addColorStop(0.15, "rgba(255, 30, 20, 0.55)");
-          coreGrad.addColorStop(0.4, "rgba(230, 20, 10, 0.22)");
-          coreGrad.addColorStop(0.7, "rgba(180, 0, 0, 0.08)");
-          coreGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
-          ctx.fillStyle = coreGrad;
-          ctx.fillRect(0, 0, 1024, 1024);
-
-          const numRays = 24;
-          for (let i = 0; i < numRays; i++) {
-            const angle = (i / numRays) * Math.PI * 2;
-            const rayWidth = (i % 3 === 0 ? 0.08 : i % 2 === 0 ? 0.045 : 0.025) * Math.PI;
-            const rayLength = 480 + ((i * 37) % 30);
-
-            ctx.save();
-            ctx.translate(cx, cy);
-            ctx.rotate(angle);
-
-            const rayGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, rayLength);
-            rayGrad.addColorStop(0, "rgba(255, 70, 50, 0.8)");
-            rayGrad.addColorStop(0.2, "rgba(255, 35, 20, 0.45)");
-            rayGrad.addColorStop(0.6, "rgba(220, 20, 10, 0.12)");
-            rayGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
-
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.arc(0, 0, rayLength, -rayWidth / 2, rayWidth / 2);
-            ctx.closePath();
-            ctx.fillStyle = rayGrad;
-            ctx.fill();
-            ctx.restore();
-          }
-
-          const tex = new THREE.CanvasTexture(canvasEl);
-          tex.generateMipmaps = true;
-          tex.minFilter = THREE.LinearMipmapLinearFilter;
-          return tex;
-        };
-
-        const godRaysTexture = createGodRaysTexture();
-        const lightRaysGroup = new THREE.Group();
-        tesseractGroup.add(lightRaysGroup);
-
-        const rayMatFront = new THREE.MeshBasicMaterial({
-          map: godRaysTexture,
-          transparent: true,
-          opacity: 0.35,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          side: THREE.DoubleSide
-        });
-
-        const rayMatCross = new THREE.MeshBasicMaterial({
-          map: godRaysTexture,
-          transparent: true,
-          opacity: 0.22,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          side: THREE.DoubleSide
-        });
-
-        const planeGeom = new THREE.PlaneGeometry(isMobile ? 1.8 : 3.2, isMobile ? 1.8 : 3.2);
-        const plane1 = new THREE.Mesh(planeGeom, rayMatFront);
-        lightRaysGroup.add(plane1);
-
-        const plane2 = new THREE.Mesh(planeGeom, rayMatCross);
-        plane2.rotation.x = Math.PI * 0.25;
-        plane2.rotation.y = Math.PI * 0.35;
-        lightRaysGroup.add(plane2);
-
-        const plane3 = new THREE.Mesh(planeGeom, rayMatCross);
-        plane3.rotation.x = -Math.PI * 0.3;
-        plane3.rotation.y = -Math.PI * 0.25;
-        lightRaysGroup.add(plane3);
-
-        // Orbital Rings
-        const ringGeom = new THREE.TorusGeometry(isMobile ? 0.95 : 1.65, isMobile ? 0.010 : 0.015, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({
-          color: 0xff2010,
-          transparent: true,
-          opacity: 0.65,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false
-        });
-        const orbitalRing = new THREE.Mesh(ringGeom, ringMat);
-        orbitalRing.rotation.x = Math.PI * 0.4;
-        lightRaysGroup.add(orbitalRing);
-
-        const orbitalRing2Geom = new THREE.TorusGeometry(isMobile ? 0.75 : 1.30, isMobile ? 0.008 : 0.012, 16, 90);
-        const orbitalRing2Mat = new THREE.MeshBasicMaterial({
-          color: 0xdc143c,
-          transparent: true,
-          opacity: 0.55,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false
-        });
-        const orbitalRing2 = new THREE.Mesh(orbitalRing2Geom, orbitalRing2Mat);
-        orbitalRing2.rotation.x = -Math.PI * 0.3;
-        orbitalRing2.rotation.y = Math.PI * 0.25;
-        lightRaysGroup.add(orbitalRing2);
-
-        // Textures Loader & GLTF
-        const textureLoader = new THREE.TextureLoader();
-        const colorMap = textureLoader.load("/textures/box001.webp");
-        colorMap.colorSpace = THREE.SRGBColorSpace;
-        colorMap.flipY = false;
-
-        const bumpMap = textureLoader.load("/textures/brown_leather_disp_1k.webp");
-        bumpMap.colorSpace = THREE.NoColorSpace;
-        bumpMap.flipY = false;
-
-        let mixer = null;
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
-
-        const gltfLoader = new GLTFLoader();
-        gltfLoader.setDRACOLoader(dracoLoader);
-
-        gltfLoader.load(
-          "/tesseract.glb",
-          (gltf) => {
-            const model = gltf.scene;
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            model.position.sub(center);
-
-            const scale = isMobile ? 0.38 : 0.72;
-            model.scale.set(scale, scale, scale);
-
-            gltf.scene.traverse((child) => {
-              if (child.isMesh) {
-                if (child.geometry) {
-                  try {
-                    const creaseAngle = THREE.MathUtils.degToRad(35);
-                    child.geometry = toCreasedNormals(child.geometry, creaseAngle);
-                  } catch (err) {}
-                }
-
-                if (child.material) {
-                  const materials = Array.isArray(child.material) ? child.material : [child.material];
-                  materials.forEach((mat) => {
-                    if (
-                      mat.name === "box_out" ||
-                      (child.material && child.material.name === "box_out") ||
-                      child.name.toLowerCase().includes("box_out")
-                    ) {
-                      if (mat.color) mat.color.setHex(0xffffff);
-                      mat.map = colorMap;
-                      mat.bumpMap = bumpMap;
-                      mat.bumpScale = 0.05;
-                      mat.needsUpdate = true;
-                    } else if (
-                      mat.name === "box_in" ||
-                      (child.material && child.material.name === "box_in") ||
-                      child.name.toLowerCase().includes("box_in")
-                    ) {
-                      if (mat.color) mat.color.setHex(0xff0028);
-                      mat.emissive = new THREE.Color(0x3a0006);
-                      mat.emissiveIntensity = 0.6;
-                      mat.needsUpdate = true;
-                    }
-                  });
-                }
-              }
-            });
-
-            if (gltf.animations && gltf.animations.length > 0) {
-              mixer = new THREE.AnimationMixer(model);
-              gltf.animations.forEach((clip) => {
-                const action = mixer.clipAction(clip);
-                action.setLoop(THREE.LoopRepeat, Infinity);
-                action.timeScale = 0.85;
-                action.play();
-              });
-            }
-
-            modelWrapper.add(model);
-          }
-        );
-
-        // 4. OBJECT 2: OBSIDIAN-CRIMSON POLYHEDRAL CRYSTAL
-        const polyhedronGroup = new THREE.Group();
-        polyhedronGroup.position.set(isMobile ? -1.2 : -2.5, isMobile ? -1.0 : -1.2, -1.8);
-        polyhedronGroup.scale.set(isMobile ? 0.24 : 0.45, isMobile ? 0.24 : 0.45, isMobile ? 0.24 : 0.45);
-        scene.add(polyhedronGroup);
-
-        const polyGeom = new THREE.IcosahedronGeometry(0.85, 0);
-        const polyMat = new THREE.MeshPhysicalMaterial({
-          color: 0x181822,
-          metalness: 0.88,
-          roughness: 0.12,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.1,
-          flatShading: true,
-        });
-        const polyMesh = new THREE.Mesh(polyGeom, polyMat);
-        polyhedronGroup.add(polyMesh);
-
-        const wireGeom = new THREE.IcosahedronGeometry(0.88, 0);
-        const wireMat = new THREE.MeshBasicMaterial({
-          color: 0xdc143c,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.3,
-        });
-        const wireMesh = new THREE.Mesh(wireGeom, wireMat);
-        polyhedronGroup.add(wireMesh);
-
-        const polyLight = new THREE.PointLight(0xdc143c, 1.4, 5, 1.4);
-        polyhedronGroup.add(polyLight);
-
-        // 5. OBJECT 3: CELESTIAL GYROSCOPIC QUANTUM RINGS
-        const gyroRingsGroup = new THREE.Group();
-        gyroRingsGroup.position.set(isMobile ? 1.2 : 2.4, isMobile ? 1.2 : 1.6, -2.2);
-        gyroRingsGroup.scale.set(isMobile ? 0.22 : 0.36, isMobile ? 0.22 : 0.36, isMobile ? 0.22 : 0.36);
-        scene.add(gyroRingsGroup);
-
-        const ring1Geom = new THREE.TorusGeometry(0.85, 0.012, 16, 80);
-        const ring1Mat = new THREE.MeshStandardMaterial({
-          color: 0x2b2d38,
-          metalness: 0.95,
-          roughness: 0.2,
-        });
-        const gyroRing1 = new THREE.Mesh(ring1Geom, ring1Mat);
-        gyroRingsGroup.add(gyroRing1);
-
-        const ring2Geom = new THREE.TorusGeometry(0.62, 0.01, 16, 70);
-        const ring2Mat = new THREE.MeshBasicMaterial({
-          color: 0xdc143c,
-          transparent: true,
-          opacity: 0.6,
-        });
-        const gyroRing2 = new THREE.Mesh(ring2Geom, ring2Mat);
-        gyroRingsGroup.add(gyroRing2);
-
-        const ring3Geom = new THREE.TorusGeometry(0.42, 0.008, 16, 60);
-        const ring3Mat = new THREE.MeshBasicMaterial({
-          color: 0xff3b19,
-          transparent: true,
-          opacity: 0.7,
-          wireframe: true,
-        });
-        const gyroRing3 = new THREE.Mesh(ring3Geom, ring3Mat);
-        gyroRingsGroup.add(gyroRing3);
-
-        const coreDiamondGeom = new THREE.OctahedronGeometry(0.22, 0);
-        const coreDiamondMat = new THREE.MeshPhysicalMaterial({
-          color: 0xff0028,
-          emissive: 0x4a0008,
-          metalness: 0.4,
-          roughness: 0.1,
-          transmission: 0.5,
-          flatShading: true,
-        });
-        const coreDiamond = new THREE.Mesh(coreDiamondGeom, coreDiamondMat);
-        gyroRingsGroup.add(coreDiamond);
-
-        // 6. OBJECT 4: FLOATING COSMIC CRYSTAL SHARDS
-        const cosmicShardsGroup = new THREE.Group();
-        scene.add(cosmicShardsGroup);
-
-        const shardGeoms = [
-          new THREE.OctahedronGeometry(0.20, 0),
-          new THREE.TetrahedronGeometry(0.24, 0),
-          new THREE.IcosahedronGeometry(0.18, 0),
-          new THREE.DodecahedronGeometry(0.16, 0),
-        ];
-
-        const shardMat = new THREE.MeshPhysicalMaterial({
-          color: 0x121420,
-          emissive: 0x30050c,
-          metalness: 0.92,
-          roughness: 0.15,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.1,
-          flatShading: true,
-        });
-
-        const shardWireMat = new THREE.MeshBasicMaterial({
-          color: 0xdc143c,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.45,
-        });
-
-        const cosmicShards = [];
-        const shardCount = isMobile ? 12 : 28;
-
-        for (let i = 0; i < shardCount; i++) {
-          const shardGroup = new THREE.Group();
-          const geom = shardGeoms[i % shardGeoms.length];
-          const solid = new THREE.Mesh(geom, shardMat);
-          const wire = new THREE.Mesh(geom, shardWireMat);
-          wire.scale.set(1.04, 1.04, 1.04);
-          shardGroup.add(solid);
-          shardGroup.add(wire);
-
-          const spreadX = (Math.random() - 0.5) * (isMobile ? 12 : 24);
-          const spreadY = (Math.random() - 0.5) * (isMobile ? 14 : 20);
-          const spreadZ = -14 + Math.random() * 18;
-          const s = 0.5 + Math.random() * 0.9;
-          shardGroup.position.set(spreadX, spreadY, spreadZ);
-          shardGroup.scale.set(s, s, s);
-
-          shardGroup.userData = {
-            rotSpeedX: (Math.random() - 0.5) * 0.02,
-            rotSpeedY: (Math.random() - 0.5) * 0.025,
-            rotSpeedZ: (Math.random() - 0.5) * 0.015,
-            bobSpeed: 1.0 + Math.random() * 2.0,
-            bobOffset: Math.random() * Math.PI * 2,
-            initialY: spreadY,
-          };
-
-          cosmicShardsGroup.add(shardGroup);
-          cosmicShards.push(shardGroup);
-        }
-
-        // 7. Multi-Layer Cosmic Starfield
-        const createCosmicStarTexture = () => {
-          const starCanvas = document.createElement("canvas");
-          starCanvas.width = 64;
-          starCanvas.height = 64;
-          const sCtx = starCanvas.getContext("2d");
-          const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-          sGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
-          sGrad.addColorStop(0.2, "rgba(255, 250, 240, 0.85)");
-          sGrad.addColorStop(0.5, "rgba(240, 80, 80, 0.35)");
-          sGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-          sCtx.fillStyle = sGrad;
-          sCtx.fillRect(0, 0, 64, 64);
-          const starTex = new THREE.CanvasTexture(starCanvas);
-          starTex.generateMipmaps = true;
-          return starTex;
-        };
-        const cosmicStarTex = createCosmicStarTexture();
-
-        // Layer 1: 1,600 Stars
-        const starCount = 1600;
-        const starGeom = new THREE.BufferGeometry();
-        const starPos = new Float32Array(starCount * 3);
-        const starColors = new Float32Array(starCount * 3);
-
-        const starSpectrum = [
-          new THREE.Color(0xffffff),
-          new THREE.Color(0xdceaff),
-          new THREE.Color(0xffedd8),
-          new THREE.Color(0xff3b3b),
-          new THREE.Color(0x7fb5ff),
-        ];
-
-        for (let i = 0; i < starCount; i++) {
-          const i3 = i * 3;
-          const radius = 18 + Math.random() * 45;
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.acos(Math.random() * 2 - 1);
-
-          starPos[i3] = radius * Math.sin(phi) * Math.cos(theta);
-          starPos[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-          starPos[i3 + 2] = radius * Math.cos(phi);
-
-          const c = starSpectrum[Math.floor(Math.random() * starSpectrum.length)];
-          starColors[i3] = c.r;
-          starColors[i3 + 1] = c.g;
-          starColors[i3 + 2] = c.b;
-        }
-
-        starGeom.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-        starGeom.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
-
-        const starMat = new THREE.PointsMaterial({
-          size: isMobile ? 0.12 : 0.16,
-          map: cosmicStarTex,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.85,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        });
-        const starField = new THREE.Points(starGeom, starMat);
-        scene.add(starField);
-
-        // Layer 2: Stardust Particles
-        const particleCount = isMobile ? 120 : 220;
-        const particleGeom = new THREE.BufferGeometry();
-        const particlePos = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount * 3; i += 3) {
-          particlePos[i] = (Math.random() - 0.5) * 26;
-          particlePos[i + 1] = (Math.random() - 0.5) * 22;
-          particlePos[i + 2] = (Math.random() - 0.5) * 18;
-        }
-        particleGeom.setAttribute("position", new THREE.BufferAttribute(particlePos, 3));
-        const particleMat = new THREE.PointsMaterial({
-          color: 0xff3b20,
-          size: isMobile ? 0.05 : 0.07,
-          map: cosmicStarTex,
-          transparent: true,
-          opacity: 0.65,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        });
-        const particles = new THREE.Points(particleGeom, particleMat);
-        scene.add(particles);
-
-        // Layer 3: Foreground Close Sparks
-        const sparkCount = 35;
-        const sparkGeom = new THREE.BufferGeometry();
-        const sparkPos = new Float32Array(sparkCount * 3);
-        for (let i = 0; i < sparkCount * 3; i += 3) {
-          sparkPos[i] = (Math.random() - 0.5) * 10;
-          sparkPos[i + 1] = (Math.random() - 0.5) * 8;
-          sparkPos[i + 2] = 2.0 + Math.random() * 4.0;
-        }
-        sparkGeom.setAttribute("position", new THREE.BufferAttribute(sparkPos, 3));
-        const sparkMat = new THREE.PointsMaterial({
-          color: 0xff4d30,
-          size: 0.08,
-          map: cosmicStarTex,
-          transparent: true,
-          opacity: 0.8,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        });
-        const closeSparks = new THREE.Points(sparkGeom, sparkMat);
-        scene.add(closeSparks);
-
-        // Mouse Parallax & Inertia
-        let mouseX = 0;
-        let mouseY = 0;
-        let scrollVelocity = 0;
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener(
-          "scroll",
-          () => {
-            const currentScrollY = window.scrollY;
-            const deltaY = currentScrollY - lastScrollY;
-            lastScrollY = currentScrollY;
-            scrollVelocity += deltaY * 0.00035;
-          },
-          { passive: true }
-        );
-
-        window.addEventListener(
-          "mousemove",
-          (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-          },
-          { passive: true }
-        );
-
-        window.addEventListener("resize", () => {
-          const isMob = window.innerWidth < 1024;
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMob ? 1.5 : 1.75));
-        });
-
-        // Exact Main Animation Loop
-        let lastTime = performance.now();
-
-        const animate = () => {
-          requestAnimationFrame(animate);
-          const now = performance.now();
-          const delta = Math.min((now - lastTime) / 1000, 0.05);
-          lastTime = now;
-          const time = now / 1000;
-
-          if (mixer) mixer.update(delta);
-
-          scrollVelocity *= 0.92;
-
-          modelWrapper.rotation.y += 0.004;
-          modelWrapper.rotation.x += 0.002;
-          modelWrapper.rotation.z = mouseX * 0.08;
-          modelWrapper.position.y = Math.sin(time * 1.8) * 0.035;
-
-          const rayRotationSpeed = 0.0018 + scrollVelocity;
-          lightRaysGroup.rotation.z += rayRotationSpeed;
-          lightRaysGroup.rotation.y += rayRotationSpeed * 0.65;
-          lightRaysGroup.rotation.x = Math.sin(time * 0.5) * 0.15;
-          orbitalRing.rotation.z -= rayRotationSpeed * 1.5;
-          orbitalRing2.rotation.z += rayRotationSpeed * 1.2;
-          orbitalRing2.rotation.x += 0.003;
-
-          const pulse = Math.sin(time * 3.0) * 0.5 + 0.5;
-          redCoreLight.intensity = 2.5 + pulse * 2.5;
-          rayMatFront.opacity = 0.65 + pulse * 0.2;
-          rayMatCross.opacity = 0.45 + pulse * 0.15;
-
-          polyMesh.rotation.y += 0.007 + scrollVelocity * 0.5;
-          polyMesh.rotation.x += 0.005;
-          wireMesh.rotation.y -= 0.004;
-          polyMesh.position.y = Math.sin(time * 1.6) * 0.03;
-
-          gyroRing1.rotation.x += 0.008 + scrollVelocity * 0.8;
-          gyroRing2.rotation.y -= 0.012 + scrollVelocity * 0.6;
-          gyroRing3.rotation.z += 0.018;
-          coreDiamond.rotation.y += 0.015;
-          gyroRing1.position.y = Math.cos(time * 1.4) * 0.03;
-
-          starField.rotation.y = time * 0.003 + scrollVelocity * 0.15;
-          starField.rotation.x = time * 0.001;
-          starField.position.x = mouseX * -0.4;
-          starField.position.y = -mouseY * -0.3;
-
-          particles.rotation.y = time * 0.015 + scrollVelocity * 0.3;
-          particles.rotation.x = Math.sin(time * 0.4) * 0.02;
-          particles.position.x = mouseX * 0.6;
-          particles.position.y = -mouseY * 0.45;
-
-          closeSparks.rotation.y = -time * 0.025;
-          closeSparks.position.x = mouseX * 1.4;
-          closeSparks.position.y = -mouseY * 1.1;
-
-          cosmicShardsGroup.position.x = mouseX * 0.35;
-          cosmicShardsGroup.position.y = -mouseY * 0.25;
-          cosmicShardsGroup.rotation.y = time * 0.006 + scrollVelocity * 0.2;
-
-          cosmicShards.forEach((shard) => {
-            shard.rotation.x += shard.userData.rotSpeedX;
-            shard.rotation.y += shard.userData.rotSpeedY;
-            shard.rotation.z += shard.userData.rotSpeedZ;
-            shard.position.y = shard.userData.initialY + Math.sin(time * shard.userData.bobSpeed + shard.userData.bobOffset) * 0.25;
-          });
-
-          renderer.render(scene, camera);
-        };
-
-        animate();
-      }
 
       // ─── CONFIGURATOR STATE MANAGEMENT ───
       const state = {
@@ -1647,11 +1387,12 @@
           const tab = document.getElementById(`step-tab-${i}`);
           if (tab) {
             if (i === step) {
-              tab.className = "py-2 px-2.5 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all shadow-[0_0_15px_rgba(220,20,60,0.3)] cursor-pointer truncate";
+              tab.className = "shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all shadow-[0_0_15px_rgba(220,20,60,0.3)] cursor-pointer whitespace-nowrap sm:truncate";
+              try { tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e) {}
             } else if (i < step) {
-              tab.className = "py-2 px-2.5 rounded-lg border border-white/10 bg-white/[0.04] text-zinc-200 text-center transition-all hover:text-white cursor-pointer truncate";
+              tab.className = "shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/10 bg-white/[0.04] text-zinc-200 text-center transition-all hover:text-white cursor-pointer whitespace-nowrap sm:truncate";
             } else {
-              tab.className = "py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.01] text-zinc-500 text-center transition-all hover:text-zinc-300 cursor-pointer truncate";
+              tab.className = "shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/5 bg-white/[0.01] text-zinc-500 text-center transition-all hover:text-zinc-300 cursor-pointer whitespace-nowrap sm:truncate";
             }
           }
         }
@@ -2007,19 +1748,35 @@
         }
       }
 
-      // ─── THEME & I18N ───
+      // ─── COOKIE & THEME / I18N SYNC ───
+      function setCookie(name, val, days = 365) {
+        const d = new Date();
+        d.setTime(d.getTime() + days * 86400000);
+        document.cookie = `${name}=${encodeURIComponent(val)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+      }
+      function getCookie(name) {
+        const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return v ? decodeURIComponent(v[2]) : null;
+      }
+
       window.toggleTheme = function() {
         const c = document.documentElement.getAttribute('data-theme') || 'dark';
         const n = c === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', n);
-        localStorage.setItem('aga_portfolio_theme', n);
+        try { localStorage.setItem('aga_portfolio_theme', n); } catch(e) {}
+        setCookie('aga_theme', n, 365);
         const icon = document.getElementById('theme-icon');
         if (icon) icon.textContent = n === 'light' ? 'dark_mode' : 'light_mode';
       };
 
       window.switchLanguage = function(lang) {
         currentLang = lang;
-        localStorage.setItem('porto_lang', lang);
+        try {
+          localStorage.setItem('porto_lang', lang);
+          localStorage.setItem('aga_portfolio_lang', lang);
+        } catch(e) {}
+        setCookie('aga_lang', lang, 365);
+        document.documentElement.setAttribute('lang', lang);
         document.getElementById('btn-lang-en')?.classList.toggle('active', lang === 'en');
         document.getElementById('btn-lang-id')?.classList.toggle('active', lang === 'id');
         renderWebsiteTypes();
@@ -2055,22 +1812,162 @@
         });
       };
 
-      // ─── SAFE BOOT ENGINE ───
+      // ─── STUDIO LOADING PIPELINE CONTROLLER ───
+      const finishStudioPreloader = () => {
+        const preloaderEl = document.getElementById("web-preloader");
+        const barEl = document.getElementById("preloader-bar");
+        const percentEl = document.getElementById("preloader-percent");
+        const statusEl = document.getElementById("preloader-status");
+        const rocketCenter = document.getElementById("preloader-rocket-center");
+        const rocketFlame = document.getElementById("rocket-flame-container");
+        const textGroup = document.getElementById("preloader-text-group");
+
+        if (!preloaderEl) return;
+
+        const isEn = currentLang === "en";
+        const STAGES = isEn ? [
+          { pct: 35, text: "Preparing website packages & options..." },
+          { pct: 70, text: "Configuring live pricing matrix..." },
+          { pct: 92, text: "Polishing interactive calculator..." },
+          { pct: 100, text: "Ignition ready! Launching studio..." }
+        ] : [
+          { pct: 35, text: "Menyiapkan paket website & opsi..." },
+          { pct: 70, text: "Memuat matriks harga transparan..." },
+          { pct: 92, text: "Menyempurnakan kalkulator interaktif..." },
+          { pct: 100, text: "Siap meluncur! Membuka studio..." }
+        ];
+
+        // Idle hover oscillation for center rocket
+        let floatTween = null;
+        if (rocketCenter) {
+          floatTween = gsap.to(rocketCenter, {
+            y: -8,
+            duration: 1.6,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+          });
+        }
+
+        const progressTracker = { val: 0 };
+
+        const updateDisplay = (val, text) => {
+          const intVal = Math.min(100, Math.floor(val));
+          if (barEl) barEl.style.width = `${intVal}%`;
+          if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
+          if (statusEl && text) statusEl.textContent = text;
+          if (rocketFlame) {
+            const sy = 0.75 + (intVal / 100) * 0.45;
+            const sx = 0.85 + (intVal / 100) * 0.25;
+            gsap.to(rocketFlame, {
+              scaleY: sy,
+              scaleX: sx,
+              transformOrigin: "top center",
+              duration: 0.2,
+              overwrite: "auto"
+            });
+          }
+        };
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            if (floatTween) floatTween.kill();
+            const blastTl = gsap.timeline();
+
+            // 1. Superheated flame burst behind the rocket
+            if (rocketFlame) {
+              blastTl.to(rocketFlame, {
+                scaleY: 2.5,
+                scaleX: 1.35,
+                opacity: 1,
+                transformOrigin: "top center",
+                duration: 0.55,
+                ease: "power2.out",
+              });
+            }
+
+            // 2. Center rocket lift-off with smooth inertia acceleration
+            if (rocketCenter) {
+              blastTl.to(
+                rocketCenter,
+                {
+                  y: "-130vh",
+                  scale: 0.8,
+                  duration: 1.45,
+                  ease: "power2.in",
+                },
+                "<0.15"
+              );
+            }
+
+            // 3. Percentage and texts fade down smoothly
+            if (textGroup) {
+              blastTl.to(
+                textGroup,
+                {
+                  opacity: 0,
+                  y: 20,
+                  duration: 0.45,
+                  ease: "power2.in",
+                },
+                "<"
+              );
+            }
+
+            // 4. Black veil dissolves with pure silk elegance
+            gsap.to(preloaderEl, {
+              opacity: 0,
+              delay: 0.6,
+              duration: 0.95,
+              ease: "power2.inOut",
+              onComplete: () => {
+                preloaderEl.style.display = "none";
+                preloaderEl.remove();
+              }
+            });
+          }
+        });
+
+        tl.to(progressTracker, {
+          val: STAGES[0].pct,
+          duration: 0.85,
+          ease: "power2.out",
+          onUpdate: () => updateDisplay(progressTracker.val, STAGES[0].text)
+        })
+        .to(progressTracker, {
+          val: STAGES[1].pct,
+          duration: 0.85,
+          ease: "power1.inOut",
+          onUpdate: () => updateDisplay(progressTracker.val, STAGES[1].text)
+        })
+        .to(progressTracker, {
+          val: STAGES[2].pct,
+          duration: 0.75,
+          ease: "power1.inOut",
+          onUpdate: () => updateDisplay(progressTracker.val, STAGES[2].text)
+        })
+        .to(progressTracker, {
+          val: 100,
+          duration: 0.65,
+          ease: "power2.out",
+          onUpdate: () => updateDisplay(100, STAGES[3].text)
+        });
+      };
+
+      // ─── SAFE BOOT ENGINE (Instant UI Hydration + Non-blocking 3D Engine) ───
       const bootPricingApp = () => {
         const footerYear = document.getElementById('footer-year');
         if (footerYear) footerYear.textContent = new Date().getFullYear();
         parseSmartDefaultUrl();
         renderWebsiteTypes();
         goToStep(1);
-        initExactHomepage3D();
         initPageTransitionLinks();
-
-        // Staggered luxury element entrance animation
-        gsap.fromTo(
-          "header nav, main > div, #side-nav",
-          { opacity: 0, y: 35, scale: 0.97 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.65, stagger: 0.08, ease: "power3.out", clearProps: "transform,scale" }
-        );
+        try {
+          initThreeEngine();
+        } catch (e) {
+          console.warn("Three.js engine init error:", e);
+        }
+        finishStudioPreloader();
       };
 
       if (document.readyState === "loading") {

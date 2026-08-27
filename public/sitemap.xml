@@ -13,9 +13,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://porto-aga.vercel.app/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://porto-aga.vercel.app/"/>
     <image:image>
-      <image:loc>https://porto-aga.vercel.app/preview-hero.png</image:loc>
-      <image:title>Muhammad Aga Putra — Software Engineer &amp; Web Architect</image:title>
-      <image:caption>Official 3D Portfolio Showcase by Muhammad Aga Putra</image:caption>
+      <image:loc>https://porto-aga.vercel.app/preview-hero.jpg</image:loc>
+      <image:title>Muhammad Aga Putra — Software Engineer &amp; Frontend Developer Portfolio</image:title>
+      <image:caption>Official 3D WebGL Portfolio Showcase by Muhammad Aga Putra</image:caption>
     </image:image>
   </url>
 

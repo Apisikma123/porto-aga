@@ -62,17 +62,41 @@
     <meta name="msapplication-TileColor" content="#040509" />
     <meta name="theme-color" content="#040509" />
 
-    <!-- Google Fonts & Material Symbols -->
+    <!-- Google Fonts & Material Symbols (Non-blocking async load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
+    />
+    <link
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
     />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+      />
+    </noscript>
 
     <!-- Tailwind CSS Engine -->
     <link rel="stylesheet" href="/src/style.css" />
@@ -138,10 +162,13 @@
           <!-- Pricing Configurator Link -->
           <a
             href="/pricing.html"
+            target="_blank"
+            rel="noopener noreferrer"
             class="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+            title="Buka Kalkulator Web 3D di Tab Baru"
           >
             <span class="material-symbols-outlined text-xs">calculate</span>
-            <span id="label-pricing-btn">Estimasi Harga</span>
+            <span id="label-pricing-btn">Estimasi Harga ↗</span>
           </a>
 
           <!-- GitHub Profile -->
@@ -234,7 +261,7 @@
         <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
           <a href="/" class="hover:text-white transition-colors">Portofolio 3D</a>
           <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Semua Karya</a>
-          <a href="/pricing.html" class="hover:text-white transition-colors">Estimasi Harga</a>
+          <a href="/pricing.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Estimasi Harga ↗</a>
           <a href="https://skfb.ly/oU9t8" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Dark Tesseract by Chaitanya Krishnan on Sketchfab">3D Model Credit ↗</a>
           <a href="https://scfo.de/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Design Inspired by scale & form">scfo.de ↗</a>
           <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
@@ -305,18 +332,100 @@
       async function init() {
         switchLanguage(currentLang);
 
+        // 1. Instant render from local cache or static json (0ms delay)
         try {
-          const res = await fetch('/all_projects.json');
-          if (!res.ok) throw new Error('Failed to load all_projects.json');
-          allProjects = await res.json();
-          renderProjects();
+          const cached = localStorage.getItem('cached_github_projects_v2');
+          if (cached) {
+            allProjects = JSON.parse(cached);
+            renderProjects();
+          }
+        } catch (e) {}
+
+        if (!allProjects || !allProjects.length) {
+          try {
+            const res = await fetch('/all_projects.json');
+            if (res.ok) {
+              allProjects = await res.json();
+              renderProjects();
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        // 2. Real-time Live GitHub API Telemetry & Auto-Sync
+        try {
+          const res = await fetch('https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=100');
+          if (res.ok) {
+            const liveRepos = await res.json();
+            if (Array.isArray(liveRepos) && liveRepos.length) {
+              if (!allProjects) allProjects = [];
+
+              liveRepos.forEach(lr => {
+                if (!lr.name) return;
+                const matched = allProjects.find(p => (p.id || p.name || '').toLowerCase() === lr.name.toLowerCase());
+                if (matched) {
+                  matched.stargazers_count = lr.stargazers_count;
+                  matched.forks_count = lr.forks_count;
+                  matched.updated_at = lr.updated_at;
+                  matched.html_url = lr.html_url;
+                  if (lr.description) {
+                    matched.description = lr.description;
+                    matched.descriptionEn = lr.description;
+                  }
+                  if (lr.language) matched.language = lr.language;
+                  if (Array.isArray(lr.topics) && lr.topics.length) {
+                    matched.tags = Array.from(new Set([...(matched.tags || []), ...lr.topics]));
+                  }
+                } else {
+                  // Auto-append newly created repository from GitHub
+                  const cleanName = lr.name
+                    .replace(/[-_]/g, ' ')
+                    .split(' ')
+                    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join(' ');
+                  allProjects.push({
+                    id: lr.name,
+                    displayName: cleanName,
+                    category: lr.language === 'Dart' ? 'mobile' : (['PHP', 'TypeScript', 'JavaScript', 'Python'].includes(lr.language) ? 'fullstack' : 'frontend'),
+                    categoryTag: lr.language === 'Dart' ? 'Mobile' : (['PHP', 'TypeScript', 'JavaScript', 'Python'].includes(lr.language) ? 'Fullstack' : 'Frontend'),
+                    description: lr.description || `Public GitHub repository ${cleanName} by Muhammad Aga Putra.`,
+                    descriptionEn: lr.description || `Public GitHub repository ${cleanName} by Muhammad Aga Putra.`,
+                    language: lr.language || 'Code',
+                    tags: [lr.language, ...(lr.topics || [])].filter(Boolean),
+                    previewImage: `/projects/${lr.name}.webp`,
+                    featured: false,
+                    stargazers_count: lr.stargazers_count || 0,
+                    forks_count: lr.forks_count || 0,
+                    updated_at: lr.updated_at,
+                    html_url: lr.html_url,
+                    hasLiveRepo: true
+                  });
+                }
+              });
+
+              // Re-sort
+              allProjects.sort((a, b) => {
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+              });
+
+              try {
+                localStorage.setItem('cached_github_projects_v2', JSON.stringify(allProjects));
+              } catch (e) {}
+
+              // Update All Projects label count in filter
+              const allFilterBtn = document.querySelector('.filter-btn');
+              if (allFilterBtn && activeCategory === 'all') {
+                allFilterBtn.textContent = `${currentLang === 'en' ? 'All' : 'Semua'} (${allProjects.length})`;
+              }
+
+              renderProjects();
+            }
+          }
         } catch (err) {
-          console.error(err);
-          document.getElementById('projects-grid').innerHTML = `
-            <div class="col-span-full py-16 text-center text-zinc-400">
-              <p>Gagal memuat katalog proyek. Silakan refresh halaman.</p>
-            </div>
-          `;
+          console.debug('GitHub API auto-sync Notice:', err);
         }
       }
 

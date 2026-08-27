@@ -163,12 +163,12 @@
       <!-- Hero Section -->
       <section id="hero" class="min-h-screen flex items-center px-6 md:px-16 max-w-7xl mx-auto py-32 bg-transparent">
         <div class="max-w-2xl">
-          <div class="mb-6 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-md border border-white/10 bg-zinc-950/80 backdrop-blur-sm">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <div class="mb-6 inline-flex items-center gap-2.5 px-3 py-1.5 rounded border border-white/10 bg-[#131318] backdrop-blur-sm">
+            <span class="relative flex h-1.5 w-1.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#DC143C]"></span>
             </span>
-            <span class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-zinc-300 font-medium">Open to Work / Freelance</span>
+            <span class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-zinc-300 font-medium">AVAILABLE // SELECT COMMISSIONS</span>
           </div>
 
           <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white font-normal leading-[1.05] tracking-tight mb-6">
@@ -284,7 +284,7 @@
 
     <!-- Footer -->
     <footer class="border-t border-white/5 py-12 px-6 md:px-16 max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-xs text-zinc-500">
-      <div>© 2026 Muhammad Aga Putra. All rights reserved.</div>
+      <div>© <span id="footer-year">2026</span> Muhammad Aga Putra. All rights reserved.</div>
       <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
         <a href="/" class="hover:text-white transition-colors">Home 3D</a>
         <a href="https://skfb.ly/oU9t8" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Dark Tesseract by Chaitanya Krishnan on Sketchfab">3D Model ↗</a>
@@ -464,6 +464,9 @@
             }
           })
           .catch(() => {});
+
+        const fy = document.getElementById('footer-year');
+        if (fy) fy.textContent = new Date().getFullYear();
       })();
     </script>
   </body>
