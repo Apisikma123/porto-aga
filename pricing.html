@@ -318,8 +318,8 @@
       <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
         <!-- Grand Aerospace Lottie Rocket Centerpiece -->
-        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-2 sm:mb-4 pointer-events-none">
-          <div id="lottie-rocket-container" class="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center drop-shadow-[0_0_30px_rgba(220,20,60,0.45)]"></div>
+        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-2 sm:mb-4 pointer-events-none overflow-visible">
+          <div id="lottie-rocket-container" class="w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 flex items-center justify-center overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.45)]"></div>
         </div>
 
         <!-- Monospace Counter & Status -->
@@ -1776,16 +1776,27 @@
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
 
-        // Initialize High-End Lottie Rocket Animation (Crimson & Cyber theme)
+        // Initialize High-End Lottie Rocket Animation (Frame-Synchronized to Progress Bar)
         let lottieAnim = null;
         if (lottieContainer) {
           try {
             lottieAnim = lottie.loadAnimation({
               container: lottieContainer,
               renderer: "svg",
-              loop: true,
-              autoplay: true,
-              path: "/rocket.json"
+              loop: false,
+              autoplay: false,
+              path: "/rocket.json",
+              rendererSettings: {
+                preserveAspectRatio: "xMidYMid meet",
+                progressiveLoad: false,
+                hideOnTransparent: false
+              }
+            });
+            lottieAnim.addEventListener("DOMLoaded", () => {
+              const svg = lottieContainer.querySelector("svg");
+              if (svg) {
+                svg.style.overflow = "visible";
+              }
             });
           } catch (err) {
             console.warn("Lottie loading notice:", err);
@@ -1811,8 +1822,9 @@
           if (barEl) barEl.style.width = `${intVal}%`;
           if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
           if (statusEl && text) statusEl.textContent = text;
-          if (lottieAnim) {
-            lottieAnim.setSpeed(1 + (intVal / 100) * 0.75);
+          if (lottieAnim && lottieAnim.totalFrames) {
+            const targetFrame = (intVal / 100) * (lottieAnim.totalFrames - 1);
+            lottieAnim.goToAndStop(targetFrame, true);
           }
         };
 

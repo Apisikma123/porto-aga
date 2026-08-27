@@ -245,16 +245,27 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // Initialize High-End Lottie Rocket Animation (Crimson & Cyber theme)
+  // Initialize High-End Lottie Rocket Animation (Frame-Synchronized to Progress Bar)
   let lottieAnim = null;
   if (lottieContainer) {
     try {
       lottieAnim = lottie.loadAnimation({
         container: lottieContainer,
         renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: "/rocket.json"
+        loop: false,
+        autoplay: false,
+        path: "/rocket.json",
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid meet",
+          progressiveLoad: false,
+          hideOnTransparent: false
+        }
+      });
+      lottieAnim.addEventListener("DOMLoaded", () => {
+        const svg = lottieContainer.querySelector("svg");
+        if (svg) {
+          svg.style.overflow = "visible";
+        }
       });
     } catch (err) {
       console.warn("Lottie loading notice:", err);
@@ -280,8 +291,9 @@ export const initThreeEngine = () => {
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
-    if (lottieAnim) {
-      lottieAnim.setSpeed(1 + (intVal / 100) * 0.65);
+    if (lottieAnim && lottieAnim.totalFrames) {
+      const targetFrame = (intVal / 100) * (lottieAnim.totalFrames - 1);
+      lottieAnim.goToAndStop(targetFrame, true);
     }
   };
 
