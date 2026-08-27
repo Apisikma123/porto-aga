@@ -314,14 +314,14 @@
         </div>
       </div>
 
+      <!-- High-Performance 60fps Pure White Smoke Particle Canvas -->
+      <canvas id="preloader-smoke-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
       <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
       <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
-        <!-- Dynamic Smoke Particle Emitter Container (Fixed origin behind rocket) -->
-        <div id="preloader-smoke-container" class="absolute pointer-events-none overflow-visible w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 top-4 flex items-center justify-center z-0"></div>
-
         <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
-        <div id="preloader-rocket-center" class="relative z-10 flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none overflow-visible">
+        <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none overflow-visible">
           <svg
             class="relative z-10 w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.5)]"
             viewBox="0 0 140 200"
@@ -392,48 +392,10 @@
                 <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
                 <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
               </linearGradient>
-
-              <!-- Volumetric Pure White Smoke Gradients -->
-              <radialGradient id="smokeWhiteCorePricing" cx="50%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
-                <stop offset="50%" stop-color="#F8FAFC" stop-opacity="0.75"/>
-                <stop offset="85%" stop-color="#E2E8F0" stop-opacity="0.35"/>
-                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-              </radialGradient>
-              <radialGradient id="smokeWhitePlume1Pricing" cx="35%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
-                <stop offset="60%" stop-color="#F1F5F9" stop-opacity="0.55"/>
-                <stop offset="100%" stop-color="#E2E8F0" stop-opacity="0"/>
-              </radialGradient>
-              <radialGradient id="smokeWhitePlume2Pricing" cx="65%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
-                <stop offset="60%" stop-color="#F1F5F9" stop-opacity="0.55"/>
-                <stop offset="100%" stop-color="#E2E8F0" stop-opacity="0"/>
-              </radialGradient>
             </defs>
 
-            <!-- 1. VOLUMETRIC PURE WHITE SMOKE EXHAUST TRAIL (Always follows the rocket) -->
-            <g id="apple-rocket-smoke-trail" class="rocket-smoke-trail-anim pointer-events-none">
-              <!-- Upper dense exhaust stream -->
-              <ellipse cx="70" cy="180" rx="18" ry="24" fill="url(#smokeWhiteCorePricing)"/>
-              <circle cx="50" cy="205" r="18" fill="url(#smokeWhitePlume1Pricing)"/>
-              <circle cx="90" cy="205" r="18" fill="url(#smokeWhitePlume2Pricing)"/>
-              
-              <!-- Mid expanding plume -->
-              <circle cx="40" cy="240" r="22" fill="url(#smokeWhitePlume1Pricing)"/>
-              <circle cx="100" cy="240" r="22" fill="url(#smokeWhitePlume2Pricing)"/>
-              <ellipse cx="70" cy="250" rx="26" ry="30" fill="url(#smokeWhiteCorePricing)"/>
-              
-              <!-- Lower trailing cloud puffs -->
-              <circle cx="28" cy="285" r="22" fill="url(#smokeWhitePlume1Pricing)"/>
-              <circle cx="112" cy="285" r="22" fill="url(#smokeWhitePlume2Pricing)"/>
-              <circle cx="70" cy="305" r="32" fill="url(#smokeWhiteCorePricing)"/>
-              <circle cx="45" cy="350" r="26" fill="url(#smokeWhitePlume1Pricing)"/>
-              <circle cx="95" cy="350" r="26" fill="url(#smokeWhitePlume2Pricing)"/>
-            </g>
-
-            <!-- 2. JET FLAME EXHAUST — Pure space thruster plasma -->
-            <g class="rocket-flame-flicker">
+            <!-- 1. JET FLAME EXHAUST — Pure space thruster plasma -->
+            <g id="apple-rocket-flame" class="rocket-flame-flicker">
               <!-- Outer Crimson/Orange Plasma Plume -->
               <path d="M56 118C56 118 46 150 70 195C94 150 84 118 84 118H56Z" fill="url(#appleFlameOuterPricing)"/>
               <!-- Mid Golden Core -->
@@ -1939,8 +1901,81 @@
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
 
-        // ─── 4. PURE WHITE ATTACHED SMOKE TRAIL & ZERO-G DRIFT ENGINE ───
+        // ─── 4. HIGH-PERFORMANCE 60FPS PURE WHITE VAPOR CANVAS ENGINE ───
+        const smokeCanvas = document.getElementById("preloader-smoke-canvas");
+        let smokeCtx = null;
+        let smokeParticles = [];
+        let smokeAnimId = null;
         let launchTriggered = false;
+        const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
+
+        if (smokeCanvas) {
+          smokeCtx = smokeCanvas.getContext("2d");
+          const resizeCanvas = () => {
+            smokeCanvas.width = window.innerWidth;
+            smokeCanvas.height = window.innerHeight;
+          };
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
+        }
+
+        let frameCount = 0;
+        const renderSmokeCanvas = () => {
+          if (!smokeCtx || !smokeCanvas) return;
+          smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+
+          frameCount++;
+
+          if (flameNozzle) {
+            const rect = flameNozzle.getBoundingClientRect();
+            const nozzleX = rect.left + rect.width / 2;
+            const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
+
+            const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
+            for (let i = 0; i < spawnCount; i++) {
+              smokeParticles.push({
+                x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
+                y: nozzleY + (Math.random() - 0.5) * 4,
+                vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
+                vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
+                radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
+                growth: launchTriggered ? 0.75 : 0.35,
+                maxRadius: launchTriggered ? 65 : 30,
+                alpha: launchTriggered ? 0.65 : 0.4,
+                decay: launchTriggered ? 0.022 : 0.012
+              });
+            }
+          }
+
+          for (let i = smokeParticles.length - 1; i >= 0; i--) {
+            const p = smokeParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.radius < p.maxRadius) {
+              p.radius += p.growth;
+            }
+            p.alpha -= p.decay;
+
+            if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
+              smokeParticles.splice(i, 1);
+              continue;
+            }
+
+            const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+            grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+            grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+            smokeCtx.fillStyle = grad;
+            smokeCtx.beginPath();
+            smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            smokeCtx.fill();
+          }
+
+          smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+        };
+
+        smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
         // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float (GPU accelerated)
         let floatTween = null;
@@ -1956,7 +1991,7 @@
           });
         }
 
-        // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Attached Smoke Trail
+        // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Real Vapor Smoke Trail
         const triggerLaunch = () => {
           if (launchTriggered) return;
           launchTriggered = true;
@@ -1974,7 +2009,7 @@
               ease: "power1.out"
             }, 0);
 
-            // Rocket + pure white attached smoke trail shoot up together continuously
+            // Rocket shoots up leaving authentic vapor stream behind
             blastTl.to(rocketCenter, {
               y: "-160vh",
               scale: 0.88,
@@ -2000,6 +2035,7 @@
               duration: 0.85,
               ease: "power2.inOut",
               onComplete: () => {
+                if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
                 preloaderEl.style.display = "none";
                 preloaderEl.remove();
               }

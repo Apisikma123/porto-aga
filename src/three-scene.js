@@ -243,8 +243,84 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // ─── 4. PURE WHITE ATTACHED SMOKE TRAIL & ZERO-G DRIFT ENGINE ───
+  // ─── 4. HIGH-PERFORMANCE 60FPS PURE WHITE VAPOR CANVAS ENGINE ───
+  const smokeCanvas = document.getElementById("preloader-smoke-canvas");
+  let smokeCtx = null;
+  let smokeParticles = [];
+  let smokeAnimId = null;
   let launchTriggered = false;
+  const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
+
+  if (smokeCanvas) {
+    smokeCtx = smokeCanvas.getContext("2d");
+    const resizeCanvas = () => {
+      smokeCanvas.width = window.innerWidth;
+      smokeCanvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+  }
+
+  let frameCount = 0;
+  const renderSmokeCanvas = () => {
+    if (!smokeCtx || !smokeCanvas) return;
+    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+
+    frameCount++;
+
+    // Track live nozzle position across screen
+    if (flameNozzle) {
+      const rect = flameNozzle.getBoundingClientRect();
+      const nozzleX = rect.left + rect.width / 2;
+      const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
+
+      // Continuous natural smoke emission
+      const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
+      for (let i = 0; i < spawnCount; i++) {
+        smokeParticles.push({
+          x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
+          y: nozzleY + (Math.random() - 0.5) * 4,
+          vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
+          vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
+          radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
+          growth: launchTriggered ? 0.75 : 0.35,
+          maxRadius: launchTriggered ? 65 : 30,
+          alpha: launchTriggered ? 0.65 : 0.4,
+          decay: launchTriggered ? 0.022 : 0.012
+        });
+      }
+    }
+
+    // Render soft airy vapor clouds
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+      const p = smokeParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.radius < p.maxRadius) {
+        p.radius += p.growth;
+      }
+      p.alpha -= p.decay;
+
+      if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
+        smokeParticles.splice(i, 1);
+        continue;
+      }
+
+      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+      grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+      smokeCtx.fillStyle = grad;
+      smokeCtx.beginPath();
+      smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      smokeCtx.fill();
+    }
+
+    smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+  };
+
+  smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
   // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float (GPU accelerated)
   let floatTween = null;
@@ -260,7 +336,7 @@ export const initThreeEngine = () => {
     });
   }
 
-  // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Attached Smoke Trail
+  // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Real Vapor Smoke Trail
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
@@ -278,7 +354,7 @@ export const initThreeEngine = () => {
         ease: "power1.out"
       }, 0);
 
-      // Rocket + pure white attached smoke trail shoot up together continuously
+      // Rocket shoots up leaving authentic vapor stream behind
       blastTl.to(rocketCenter, {
         y: "-160vh",
         scale: 0.88,
@@ -305,6 +381,7 @@ export const initThreeEngine = () => {
         duration: 0.85,
         ease: "power2.inOut",
         onComplete: () => {
+          if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
           preloaderEl.style.display = "none";
           preloaderEl.remove();
         }
