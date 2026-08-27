@@ -10,28 +10,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { Observer } from "gsap/Observer";
-import { marked } from "marked";
-import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css";
-
-// Configure marked globally with highlight.js syntax highlighting
-marked.setOptions({
-  gfm: true,
-  breaks: true,
-  highlight: function (code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(code, { language: lang }).value;
-      } catch (e) {}
-    }
-    try {
-      return hljs.highlightAuto(code).value;
-    } catch (e) {}
-    return code;
-  },
-});
-window.marked = marked;
-window.hljs = hljs;
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Observer);
 
@@ -1634,17 +1612,37 @@ window.switchView = async (viewName, param, updateHash = true) => {
     // Render Markdown with Live GitHub API auto-fetcher
     const markdownEl = document.getElementById("detail-view-markdown");
     if (markdownEl) {
-      const renderMdString = (mdText) => {
+      const renderMdString = async (mdText) => {
         try {
-          const parsedHtml = marked.parse(mdText || "");
+          let markedInstance = window.marked;
+          let hljsInstance = window.hljs;
+          if (!markedInstance) {
+            const markedMod = await import("marked");
+            markedInstance = markedMod.marked;
+            window.marked = markedInstance;
+          }
+          if (!hljsInstance) {
+            try {
+              const [hljsMod] = await Promise.all([
+                import("highlight.js"),
+                import("highlight.js/styles/atom-one-dark.css")
+              ]);
+              hljsInstance = hljsMod.default;
+              window.hljs = hljsInstance;
+            } catch (e) {}
+          }
+
+          const parsedHtml = markedInstance ? markedInstance.parse(mdText || "") : (mdText || "");
           markdownEl.innerHTML = parsedHtml;
 
           // Syntax highlight code blocks
-          markdownEl.querySelectorAll("pre code").forEach((block) => {
-            try {
-              hljs.highlightElement(block);
-            } catch (e) {}
-          });
+          if (hljsInstance) {
+            markdownEl.querySelectorAll("pre code").forEach((block) => {
+              try {
+                hljsInstance.highlightElement(block);
+              } catch (e) {}
+            });
+          }
 
           // Add copy button to pre blocks
           markdownEl.querySelectorAll("pre").forEach((preBlock) => {
@@ -2969,7 +2967,6 @@ const boot = () => {
     el.textContent = currentYear;
   });
   setLanguage(currentLang);
-  initThreeEngine();
   initNavigationAndKeyboard();
   initProjectsCarousel();
   initPricingMarketingCarousel();
@@ -2981,6 +2978,13 @@ const boot = () => {
   initSPAViews();
   initPageTransitionLinks();
   ScrollTrigger.refresh();
+
+  // Initialize Three.js 3D viewport non-blockingly (TBT = 0ms)
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    requestIdleCallback(() => initThreeEngine(), { timeout: 1000 });
+  } else {
+    setTimeout(initThreeEngine, 40);
+  }
 };
 
 if (document.readyState === "loading") {
