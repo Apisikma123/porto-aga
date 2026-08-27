@@ -317,9 +317,133 @@
       <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
       <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
-        <!-- Grand Aerospace Lottie Rocket Centerpiece -->
-        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-2 sm:mb-4 pointer-events-none overflow-visible">
-          <div id="lottie-rocket-container" class="w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 flex items-center justify-center overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.45)]"></div>
+        <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
+        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none overflow-visible">
+          <svg
+            class="w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.5)]"
+            viewBox="0 0 140 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <!-- Nosecone 3D Glossy Crimson -->
+              <linearGradient id="noseconeGradPricing" x1="50" y1="10" x2="85" y2="45" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF2E5D"/>
+                <stop offset="40%" stop-color="#DC143C"/>
+                <stop offset="100%" stop-color="#8B001F"/>
+              </linearGradient>
+
+              <!-- Fuselage 3D Cylindrical White -->
+              <linearGradient id="fuselageGradPricing" x1="45" y1="40" x2="95" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="35%" stop-color="#F8FAFC"/>
+                <stop offset="80%" stop-color="#E2E8F0"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+
+              <!-- Left Fin 3D Crimson -->
+              <linearGradient id="leftFinGradPricing" x1="20" y1="75" x2="45" y2="105" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF2E5D"/>
+                <stop offset="60%" stop-color="#DC143C"/>
+                <stop offset="100%" stop-color="#700018"/>
+              </linearGradient>
+
+              <!-- Right Fin 3D Crimson (Shadow Side) -->
+              <linearGradient id="rightFinGradPricing" x1="95" y1="75" x2="120" y2="105" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#DC143C"/>
+                <stop offset="60%" stop-color="#990022"/>
+                <stop offset="100%" stop-color="#550010"/>
+              </linearGradient>
+
+              <!-- Center Fin Gloss -->
+              <linearGradient id="centerFinGradPricing" x1="70" y1="75" x2="70" y2="115" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF3366"/>
+                <stop offset="100%" stop-color="#A00020"/>
+              </linearGradient>
+
+              <!-- Engine Nozzle Titanium -->
+              <linearGradient id="nozzleGradPricing" x1="55" y1="108" x2="85" y2="118" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#475569"/>
+                <stop offset="40%" stop-color="#334155"/>
+                <stop offset="100%" stop-color="#0F172A"/>
+              </linearGradient>
+
+              <!-- Jet Flame Outer Crimson/Orange -->
+              <linearGradient id="appleFlameOuterPricing" x1="70" y1="118" x2="70" y2="195" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF0044" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#FF5500" stop-opacity="0.85"/>
+                <stop offset="85%" stop-color="#FF9900" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#FF0044" stop-opacity="0"/>
+              </linearGradient>
+
+              <!-- Jet Flame Mid Gold Core -->
+              <linearGradient id="appleFlameMidPricing" x1="70" y1="118" x2="70" y2="175" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFCC00" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#FF8800" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#FF4400" stop-opacity="0"/>
+              </linearGradient>
+
+              <!-- Jet Flame Superheated White Core -->
+              <linearGradient id="appleFlameCorePricing" x1="70" y1="118" x2="70" y2="148" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+                <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- 1. JET FLAME EXHAUST (Anchored at nozzle base x=70 y=118) -->
+            <g id="apple-rocket-flame" style="transform-origin: 70px 118px;">
+              <!-- Outer Crimson/Orange Plasma Plume -->
+              <path d="M56 118C56 118 46 150 70 195C94 150 84 118 84 118H56Z" fill="url(#appleFlameOuterPricing)"/>
+              <!-- Mid Golden Core -->
+              <path d="M60 118C60 118 52 144 70 175C88 144 80 118 80 118H60Z" fill="url(#appleFlameMidPricing)"/>
+              <!-- Superheated White Plasma Needle -->
+              <path d="M64 118C64 118 58 134 70 148C82 134 76 118 76 118H64Z" fill="url(#appleFlameCorePricing)"/>
+              <!-- Thruster Shock Diamond Rings -->
+              <ellipse cx="70" cy="132" rx="7" ry="2.2" fill="#FFFFFF" opacity="0.75"/>
+              <ellipse cx="70" cy="148" rx="5" ry="1.6" fill="#FFEAA7" opacity="0.6"/>
+            </g>
+
+            <!-- 2. ROCKET BODY (Apple 3D Aesthetic in Crimson & White) -->
+            <g id="apple-rocket-body">
+              <!-- Left Swept Fin -->
+              <path d="M48 82L22 108C20 110.5 21.5 114 25 114H49L52 96L48 82Z" fill="url(#leftFinGradPricing)"/>
+              <path d="M48 82L23 107C23.5 106 25 105 27 105L49 84L48 82Z" fill="#FFFFFF" opacity="0.4"/>
+
+              <!-- Right Swept Fin (Shadowed) -->
+              <path d="M92 82L118 108C120 110.5 118.5 114 115 114H91L88 96L92 82Z" fill="url(#rightFinGradPricing)"/>
+
+              <!-- Engine Titanium Bell Nozzle -->
+              <path d="M57 110H83L80 120H60L57 110Z" fill="url(#nozzleGradPricing)"/>
+              <ellipse cx="70" cy="120" rx="10" ry="2" fill="#09090b"/>
+
+              <!-- Main White Fuselage Body -->
+              <path d="M70 12C70 12 46 36 46 80C46 96 50 112 54 112H86C90 112 94 96 94 80C94 36 70 12 70 12Z" fill="url(#fuselageGradPricing)"/>
+
+              <!-- Fuselage Left Specular Highlight Curve -->
+              <path d="M70 14C70 14 50 36 50 78C50 92 53 106 55 108C53 104 51 90 51 78C51 38 69 16 70 14Z" fill="#FFFFFF" opacity="0.75"/>
+
+              <!-- Glossy Crimson Nosecone -->
+              <path d="M70 12C70 12 59 28 58 44H82C81 28 70 12 70 12Z" fill="url(#noseconeGradPricing)"/>
+              <path d="M70 14C67 20 62 30 61 42H64C65 30 69 20 70 14Z" fill="#FFFFFF" opacity="0.6"/>
+
+              <!-- Center Fin (Front Spine) -->
+              <path d="M68 76H72V112H68V76Z" fill="url(#centerFinGradPricing)"/>
+              <path d="M68 76H70V112H68V76Z" fill="#FFFFFF" opacity="0.3"/>
+
+              <!-- Cockpit Porthole Outer Chrome/Crimson Bevel Ring -->
+              <circle cx="70" cy="62" r="12" fill="#0F172A"/>
+              <circle cx="70" cy="62" r="11" fill="url(#noseconeGradPricing)"/>
+              <circle cx="70" cy="62" r="9" fill="#09090B"/>
+
+              <!-- Porthole Dark Blue/Obsidian Glass Sphere -->
+              <circle cx="70" cy="62" r="8" fill="#131318"/>
+
+              <!-- Glass Specular Glare (Apple Glass Effect) -->
+              <ellipse cx="67" cy="58" rx="4" ry="2.2" transform="rotate(-30 67 58)" fill="#FFFFFF" opacity="0.8"/>
+              <circle cx="73" cy="66" r="1.2" fill="#FFFFFF" opacity="0.45"/>
+            </g>
+          </svg>
         </div>
 
         <!-- Monospace Counter & Status -->
@@ -1266,7 +1390,6 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <script type="module">
       import { gsap } from "gsap";
-      import lottie from "lottie-web/build/player/lottie_light.js";
       import { PRICING_CONFIG, PRICING_WA_NUMBER, formatPriceRp, formatPriceRpFull, calculatePricingEstimate, buildWhatsAppMessage } from '/src/pricing-config.js';
       import { initThreeEngine } from '/src/three-scene.js';
 
@@ -1758,7 +1881,7 @@
         const percentEl = document.getElementById("preloader-percent");
         const statusEl = document.getElementById("preloader-status");
         const rocketCenter = document.getElementById("preloader-rocket-center");
-        const lottieContainer = document.getElementById("lottie-rocket-container");
+        const rocketFlame = document.getElementById("apple-rocket-flame");
         const textGroup = document.getElementById("preloader-text-group");
 
         if (!preloaderEl) return;
@@ -1775,33 +1898,6 @@
           { pct: 92, text: "Menyempurnakan kalkulator interaktif..." },
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
-
-        // Initialize High-End Lottie Rocket Animation (Frame-Synchronized to Progress Bar)
-        let lottieAnim = null;
-        if (lottieContainer) {
-          try {
-            lottieAnim = lottie.loadAnimation({
-              container: lottieContainer,
-              renderer: "svg",
-              loop: false,
-              autoplay: false,
-              path: "/rocket.json",
-              rendererSettings: {
-                preserveAspectRatio: "xMidYMid meet",
-                progressiveLoad: false,
-                hideOnTransparent: false
-              }
-            });
-            lottieAnim.addEventListener("DOMLoaded", () => {
-              const svg = lottieContainer.querySelector("svg");
-              if (svg) {
-                svg.style.overflow = "visible";
-              }
-            });
-          } catch (err) {
-            console.warn("Lottie loading notice:", err);
-          }
-        }
 
         // Idle hover oscillation for center rocket
         let floatTween = null;
@@ -1822,9 +1918,16 @@
           if (barEl) barEl.style.width = `${intVal}%`;
           if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
           if (statusEl && text) statusEl.textContent = text;
-          if (lottieAnim && lottieAnim.totalFrames) {
-            const targetFrame = (intVal / 100) * (lottieAnim.totalFrames - 1);
-            lottieAnim.goToAndStop(targetFrame, true);
+          if (rocketFlame) {
+            const sy = 0.85 + (intVal / 100) * 0.45;
+            const sx = 0.90 + (intVal / 100) * 0.20;
+            gsap.to(rocketFlame, {
+              scaleY: sy,
+              scaleX: sx,
+              transformOrigin: "70px 118px",
+              duration: 0.2,
+              overwrite: "auto"
+            });
           }
         };
 
@@ -1833,48 +1936,54 @@
             if (floatTween) floatTween.kill();
             const blastTl = gsap.timeline();
 
-            // 1. Center rocket lift-off with smooth inertia acceleration
+            // 1. Superheated flame burst at nozzle base
+            if (rocketFlame) {
+              blastTl.to(rocketFlame, {
+                scaleY: 2.2,
+                scaleX: 1.35,
+                opacity: 1,
+                transformOrigin: "70px 118px",
+                duration: 0.4,
+                ease: "power2.out",
+              });
+            }
+
+            // 2. Center rocket lift-off with smooth inertia acceleration
             if (rocketCenter) {
               blastTl.to(
                 rocketCenter,
                 {
-                  y: "-130vh",
-                  scale: 0.82,
-                  duration: 1.6,
-                  ease: "power2.in",
+                  y: "-140vh",
+                  scale: 0.85,
+                  duration: 1.5,
+                  ease: "power3.in",
                 },
-                0
+                "<0.1"
               );
             }
 
-            // 2. Percentage and texts fade down smoothly
+            // 3. Percentage and texts fade down smoothly
             if (textGroup) {
               blastTl.to(
                 textGroup,
                 {
                   opacity: 0,
                   y: 20,
-                  duration: 0.5,
+                  duration: 0.45,
                   ease: "power2.in",
                 },
-                0
+                "<"
               );
             }
 
-            // 3. Black veil dissolves with pure silk elegance
+            // 4. Black veil dissolves with pure silk elegance
             gsap.to(preloaderEl, {
               opacity: 0,
-              delay: 0.7,
-              duration: 1.0,
+              delay: 0.65,
+              duration: 0.95,
               ease: "power2.inOut",
               onComplete: () => {
                 preloaderEl.style.display = "none";
-                if (lottieAnim) {
-                  try {
-                    lottieAnim.destroy();
-                  } catch (e) {}
-                  lottieAnim = null;
-                }
                 preloaderEl.remove();
               }
             });

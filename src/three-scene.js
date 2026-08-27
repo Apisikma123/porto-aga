@@ -9,7 +9,6 @@ import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.j
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import lottie from "lottie-web/build/player/lottie_light.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -228,7 +227,7 @@ export const initThreeEngine = () => {
   const percentEl = document.getElementById("preloader-percent");
   const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
-  const lottieContainer = document.getElementById("lottie-rocket-container");
+  const rocketFlame = document.getElementById("apple-rocket-flame");
   const textGroup = document.getElementById("preloader-text-group");
 
   const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
@@ -244,33 +243,6 @@ export const initThreeEngine = () => {
     { pct: 92, text: "Menyempurnakan geometri interaktif..." },
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
-
-  // Initialize High-End Lottie Rocket Animation (Frame-Synchronized to Progress Bar)
-  let lottieAnim = null;
-  if (lottieContainer) {
-    try {
-      lottieAnim = lottie.loadAnimation({
-        container: lottieContainer,
-        renderer: "svg",
-        loop: false,
-        autoplay: false,
-        path: "/rocket.json",
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid meet",
-          progressiveLoad: false,
-          hideOnTransparent: false
-        }
-      });
-      lottieAnim.addEventListener("DOMLoaded", () => {
-        const svg = lottieContainer.querySelector("svg");
-        if (svg) {
-          svg.style.overflow = "visible";
-        }
-      });
-    } catch (err) {
-      console.warn("Lottie loading notice:", err);
-    }
-  }
 
   // Idle hover oscillation for center rocket
   let floatTween = null;
@@ -291,9 +263,16 @@ export const initThreeEngine = () => {
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
-    if (lottieAnim && lottieAnim.totalFrames) {
-      const targetFrame = (intVal / 100) * (lottieAnim.totalFrames - 1);
-      lottieAnim.goToAndStop(targetFrame, true);
+    if (rocketFlame) {
+      const sy = 0.85 + (intVal / 100) * 0.45;
+      const sx = 0.90 + (intVal / 100) * 0.20;
+      gsap.to(rocketFlame, {
+        scaleY: sy,
+        scaleX: sx,
+        transformOrigin: "70px 118px",
+        duration: 0.2,
+        overwrite: "auto"
+      });
     }
   };
 
@@ -304,50 +283,56 @@ export const initThreeEngine = () => {
     if (floatTween) floatTween.kill();
     const blastTl = gsap.timeline();
 
-    // 1. Center rocket lift-off with smooth inertia acceleration
+    // 1. Superheated flame burst at nozzle base
+    if (rocketFlame) {
+      blastTl.to(rocketFlame, {
+        scaleY: 2.2,
+        scaleX: 1.35,
+        opacity: 1,
+        transformOrigin: "70px 118px",
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    }
+
+    // 2. Rocket lift-off with smooth inertia acceleration
     if (rocketCenter) {
       blastTl.to(
         rocketCenter,
         {
-          y: "-130vh",
-          scale: 0.82,
-          duration: 1.6,
-          ease: "power2.in",
+          y: "-140vh",
+          scale: 0.85,
+          duration: 1.5,
+          ease: "power3.in",
         },
-        0
+        "<0.1"
       );
     }
 
-    // 2. Percentage and texts fade down smoothly
+    // 3. Percentage and texts fade down smoothly
     if (textGroup) {
       blastTl.to(
         textGroup,
         {
           opacity: 0,
           y: 20,
-          duration: 0.5,
+          duration: 0.45,
           ease: "power2.in",
         },
-        0
+        "<"
       );
     }
 
-    // 3. Black veil dissolves with pure silk elegance
+    // 4. Black veil dissolves with pure silk elegance
     if (preloaderEl) {
       preloaderEl.style.pointerEvents = "none";
       gsap.to(preloaderEl, {
         opacity: 0,
-        delay: 0.7,
-        duration: 1.0,
+        delay: 0.65,
+        duration: 0.95,
         ease: "power2.inOut",
         onComplete: () => {
           preloaderEl.style.display = "none";
-          if (lottieAnim) {
-            try {
-              lottieAnim.destroy();
-            } catch (e) {}
-            lottieAnim = null;
-          }
           preloaderEl.remove();
         },
       });
