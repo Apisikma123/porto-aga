@@ -10,7 +10,6 @@ import { gsap } from "gsap";
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
 let currentSectionIndex = 0;
-let isSnapping = false;
 let cachedProjectsData = null;
 let cachedContributionsData = null;
 let projectsData = [];
@@ -635,10 +634,10 @@ window.setLanguage = setLanguage;
 // 2. LOCKED FULL-PAGE AUTO-SNAP ENGINE & NAVIGATION CONTROLS
 // ═══════════════════════════════════════════════════════════
 let currentView = "portfolio";
-let isTransitioning = false;
-let lastTransitionTime = 0;
-const COOLDOWN_MS = 850;
-const WHEEL_THRESHOLD = 18;
+let isSnapping = false;
+let snapTimer = null;
+let lastSnapTime = 0;
+const SNAP_COOLDOWN = 600;
 
 export const scrollToSection = (index, immediate = false) => {
   if (currentView !== "portfolio") {
@@ -650,10 +649,18 @@ export const scrollToSection = (index, immediate = false) => {
   const targetEl = document.getElementById(SECTION_IDS[index]);
   if (!targetEl) return;
 
+  isSnapping = true;
+  lastSnapTime = Date.now();
   updateActiveSidebar(index);
+
+  clearTimeout(snapTimer);
+  snapTimer = setTimeout(() => {
+    isSnapping = false;
+  }, 700);
 
   if (immediate) {
     window.scrollTo({ top: targetEl.offsetTop, behavior: "auto" });
+    isSnapping = false;
   } else {
     targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -916,6 +923,111 @@ const initNavigationAndKeyboard = () => {
       if (el) sectionObserver.observe(el);
     });
   }
+
+  // ─── 1. Locked Mouse Wheel & Trackpad Snap (Scene-by-Scene) ───
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (currentView !== "portfolio") return;
+
+      const target = e.target;
+      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-carousel-track, .overflow-x-auto");
+      if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        return;
+      }
+
+      const isModal = target && target.closest("#modal-container, .modal-scroll");
+      if (isModal) return;
+
+      // Lock free scrolling
+      e.preventDefault();
+
+      const now = Date.now();
+      if (isSnapping || now - lastSnapTime < SNAP_COOLDOWN) {
+        return;
+      }
+
+      if (Math.abs(e.deltaY) < 14) return;
+
+      if (e.deltaY > 0) {
+        if (currentSectionIndex < SECTION_IDS.length - 1) {
+          scrollToSection(currentSectionIndex + 1);
+        }
+      } else {
+        if (currentSectionIndex > 0) {
+          scrollToSection(currentSectionIndex - 1);
+        }
+      }
+    },
+    { passive: false }
+  );
+
+  // ─── 2. Mobile Touch Swipe Snap (Scene-by-Scene) ───
+  let touchStartY = 0;
+  let touchStartX = 0;
+  let touchStartTime = 0;
+
+  window.addEventListener(
+    "touchstart",
+    (e) => {
+      if (currentView !== "portfolio") return;
+      if (e.touches.length > 0) {
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+      }
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "touchmove",
+    (e) => {
+      if (currentView !== "portfolio") return;
+      if (e.touches.length > 0) {
+        const diffY = touchStartY - e.touches[0].clientY;
+        const diffX = touchStartX - e.touches[0].clientX;
+
+        const target = e.target;
+        const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-carousel-track, .overflow-x-auto");
+        if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
+          return;
+        }
+
+        if (target && target.closest("#modal-container, .modal-scroll")) return;
+
+        // Prevent free scrolling on vertical swipe
+        if (Math.abs(diffY) > 8 && Math.abs(diffY) > Math.abs(diffX)) {
+          if (e.cancelable) e.preventDefault();
+        }
+      }
+    },
+    { passive: false }
+  );
+
+  window.addEventListener(
+    "touchend",
+    (e) => {
+      if (currentView !== "portfolio") return;
+      const now = Date.now();
+      if (isSnapping || now - lastSnapTime < SNAP_COOLDOWN) return;
+
+      if (e.changedTouches.length > 0) {
+        const diffY = touchStartY - e.changedTouches[0].clientY;
+        const diffX = touchStartX - e.changedTouches[0].clientX;
+        const elapsed = now - touchStartTime;
+
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30 && elapsed < 800) {
+          if (diffY > 0 && currentSectionIndex < SECTION_IDS.length - 1) {
+            scrollToSection(currentSectionIndex + 1);
+          } else if (diffY < 0 && currentSectionIndex > 0) {
+            scrollToSection(currentSectionIndex - 1);
+          }
+        }
+      }
+    },
+    { passive: true }
+  );
 
   // Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
   window.addEventListener("keydown", (e) => {
