@@ -244,16 +244,21 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // Idle hover oscillation for center rocket
+  // Idle hover — gentle, slow breathing feel
   let floatTween = null;
   if (rocketCenter) {
     floatTween = gsap.to(rocketCenter, {
-      y: -8,
-      duration: 1.6,
+      y: -10,
+      duration: 2.0,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
     });
+  }
+
+  // Initial flame state
+  if (rocketFlame) {
+    gsap.set(rocketFlame, { scaleX: 0.7, scaleY: 0.5, opacity: 0.6, transformOrigin: "70px 118px" });
   }
 
   const progressTracker = { val: 0 };
@@ -263,15 +268,14 @@ export const initThreeEngine = () => {
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
+    // Instant set — zero lag, perfect sync with bar
     if (rocketFlame) {
-      const sy = 0.85 + (intVal / 100) * 0.45;
-      const sx = 0.90 + (intVal / 100) * 0.20;
-      gsap.to(rocketFlame, {
-        scaleY: sy,
-        scaleX: sx,
-        transformOrigin: "70px 118px",
-        duration: 0.2,
-        overwrite: "auto"
+      const t = intVal / 100;
+      gsap.set(rocketFlame, {
+        scaleY: 0.5 + t * 0.8,
+        scaleX: 0.7 + t * 0.4,
+        opacity: 0.6 + t * 0.4,
+        transformOrigin: "70px 118px"
       });
     }
   };
@@ -281,92 +285,80 @@ export const initThreeEngine = () => {
     preloaderFinished = true;
 
     if (floatTween) floatTween.kill();
+
     const blastTl = gsap.timeline();
 
-    // 1. Superheated flame burst at nozzle base
+    // 1. Flame burst — smooth power ramp
     if (rocketFlame) {
       blastTl.to(rocketFlame, {
-        scaleY: 2.2,
-        scaleX: 1.35,
+        scaleY: 2.5,
+        scaleX: 1.4,
         opacity: 1,
         transformOrigin: "70px 118px",
-        duration: 0.4,
+        duration: 0.5,
         ease: "power2.out",
-      });
+      }, 0);
     }
 
-    // 2. Rocket lift-off with smooth inertia acceleration
+    // 2. Rocket lifts off — starts together with flame burst
     if (rocketCenter) {
-      blastTl.to(
-        rocketCenter,
-        {
-          y: "-140vh",
-          scale: 0.85,
-          duration: 1.5,
-          ease: "power3.in",
-        },
-        "<0.1"
-      );
+      blastTl.to(rocketCenter, {
+        y: "-140vh",
+        scale: 0.85,
+        duration: 1.6,
+        ease: "power3.in",
+      }, 0.15);
     }
 
-    // 3. Percentage and texts fade down smoothly
+    // 3. Text fades with rocket
     if (textGroup) {
-      blastTl.to(
-        textGroup,
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.45,
-          ease: "power2.in",
-        },
-        "<"
-      );
+      blastTl.to(textGroup, {
+        opacity: 0,
+        y: 20,
+        duration: 0.5,
+        ease: "power2.in",
+      }, 0.1);
     }
 
-    // 4. Black veil dissolves with pure silk elegance
+    // 4. Veil dissolves
     if (preloaderEl) {
       preloaderEl.style.pointerEvents = "none";
-      gsap.to(preloaderEl, {
+      blastTl.to(preloaderEl, {
         opacity: 0,
-        delay: 0.65,
-        duration: 0.95,
+        duration: 0.9,
         ease: "power2.inOut",
         onComplete: () => {
           preloaderEl.style.display = "none";
           preloaderEl.remove();
         },
-      });
+      }, 0.7);
     }
   };
 
-  const preloaderTl = gsap.timeline({
-    onComplete: () => {
-      finishPreloader();
-    }
-  });
+  const preloaderTl = gsap.timeline({ onComplete: finishPreloader });
 
   preloaderTl
     .to(progressTracker, {
       val: PRELOADER_STAGES[0].pct,
-      duration: 1.15,
+      duration: 1.2,
       ease: "power1.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[1].pct,
-      duration: 1.15,
-      ease: "power1.inOut",
+      duration: 1.2,
+      ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[2].pct,
-      duration: 0.95,
-      ease: "power1.inOut",
+      duration: 1.0,
+      ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
     })
     .to(progressTracker, {
       val: 100,
-      duration: 0.85,
+      duration: 0.9,
       ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });
