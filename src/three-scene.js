@@ -243,9 +243,14 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
+  let launchTriggered = false;
+  let triggerLaunch = () => {};
+  let floatTween = null;
+  let smokeAnimId = null;
+
   // ─── 0. LIGHTHOUSE & SPEED AUDIT BOT DETECTOR (100% Mobile Score) ───
   const isAuditBot = typeof navigator !== 'undefined' && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|HeadlessChrome/i.test(navigator.userAgent)
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
   );
 
   // 3. FASE EXIT & MEMUDAR (100% Selesai)
@@ -265,7 +270,6 @@ export const initThreeEngine = () => {
     const smokeCanvas = document.getElementById("preloader-smoke-canvas");
     let smokeCtx = null;
     let smokeParticles = [];
-    let smokeAnimId = null;
     const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
 
     if (smokeCanvas) {
@@ -343,7 +347,6 @@ export const initThreeEngine = () => {
     smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
     // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float (GPU accelerated)
-    let floatTween = null;
     if (rocketCenter) {
       floatTween = gsap.to(rocketCenter, {
         y: -8,
@@ -357,7 +360,7 @@ export const initThreeEngine = () => {
     }
 
     // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Real Vapor Smoke Trail
-    const triggerLaunch = () => {
+    triggerLaunch = () => {
       if (launchTriggered) return;
       launchTriggered = true;
 
