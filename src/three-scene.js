@@ -9,6 +9,7 @@ import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.j
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import lottie from "lottie-web/build/player/lottie_light.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -227,7 +228,7 @@ export const initThreeEngine = () => {
   const percentEl = document.getElementById("preloader-percent");
   const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
-  const rocketFlame = document.getElementById("rocket-flame-container");
+  const lottieContainer = document.getElementById("lottie-rocket-container");
   const textGroup = document.getElementById("preloader-text-group");
 
   const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
@@ -243,6 +244,22 @@ export const initThreeEngine = () => {
     { pct: 92, text: "Menyempurnakan geometri interaktif..." },
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
+
+  // Initialize High-End Lottie Rocket Animation (Crimson & Cyber theme)
+  let lottieAnim = null;
+  if (lottieContainer) {
+    try {
+      lottieAnim = lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "/rocket.json"
+      });
+    } catch (err) {
+      console.warn("Lottie loading notice:", err);
+    }
+  }
 
   // Idle hover oscillation for center rocket
   let floatTween = null;
@@ -263,16 +280,8 @@ export const initThreeEngine = () => {
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
-    if (rocketFlame) {
-      const sy = 0.75 + (intVal / 100) * 0.45;
-      const sx = 0.85 + (intVal / 100) * 0.25;
-      gsap.to(rocketFlame, {
-        scaleY: sy,
-        scaleX: sx,
-        transformOrigin: "top center",
-        duration: 0.2,
-        overwrite: "auto"
-      });
+    if (lottieAnim) {
+      lottieAnim.setSpeed(1 + (intVal / 100) * 0.75);
     }
   };
 
@@ -313,33 +322,21 @@ export const initThreeEngine = () => {
         if (floatTween) floatTween.kill();
         const blastTl = gsap.timeline();
 
-        // 1. Superheated flame burst behind the rocket
-        if (rocketFlame) {
-          blastTl.to(rocketFlame, {
-            scaleY: 2.5,
-            scaleX: 1.35,
-            opacity: 1,
-            transformOrigin: "top center",
-            duration: 0.55,
-            ease: "power2.out",
-          });
-        }
-
-        // 2. Rocket lift-off with smooth inertia acceleration
+        // 1. Center rocket lift-off with smooth inertia acceleration
         if (rocketCenter) {
           blastTl.to(
             rocketCenter,
             {
               y: "-130vh",
-              scale: 0.8,
+              scale: 0.82,
               duration: 1.45,
               ease: "power2.in",
             },
-            "<0.15"
+            0
           );
         }
 
-        // 3. Percentage and texts fade down smoothly
+        // 2. Percentage and texts fade down smoothly
         if (textGroup) {
           blastTl.to(
             textGroup,
@@ -349,11 +346,11 @@ export const initThreeEngine = () => {
               duration: 0.45,
               ease: "power2.in",
             },
-            "<"
+            0
           );
         }
 
-        // 4. Black veil dissolves with pure silk elegance
+        // 3. Black veil dissolves with pure silk elegance
         if (preloaderEl) {
           preloaderEl.style.pointerEvents = "none";
           gsap.to(preloaderEl, {
@@ -363,6 +360,12 @@ export const initThreeEngine = () => {
             ease: "power2.inOut",
             onComplete: () => {
               preloaderEl.style.display = "none";
+              if (lottieAnim) {
+                try {
+                  lottieAnim.destroy();
+                } catch (e) {}
+                lottieAnim = null;
+              }
               preloaderEl.remove();
             },
           });

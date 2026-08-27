@@ -278,71 +278,9 @@
       <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
       <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
-        <!-- Large Aerospace Center Rocket (Synchronized Composite) -->
-        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none">
-          
-          <!-- 1. Rocket Body SVG (Facing Upwards) -->
-          <svg
-            class="relative z-10 w-24 h-28 sm:w-28 sm:h-32 md:w-32 md:h-36 text-white drop-shadow-[0_0_20px_rgba(220,20,60,0.5)]"
-            viewBox="0 0 100 110"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <!-- Engine Nozzle Base -->
-            <path d="M42 90H58L55 98H45L42 90Z" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
-            <path d="M30 86H38L36 92H32L30 86Z" fill="#09090b"/>
-            <path d="M62 86H70L68 92H64L62 86Z" fill="#09090b"/>
-
-            <!-- Left & Right Crimson Aero-Fins -->
-            <path d="M32 64L17 84C16 85.5 17 88 19 88H34L36 74L32 64Z" fill="#DC143C" stroke="#ff5262" stroke-width="1"/>
-            <path d="M68 64L83 84C84 85.5 83 88 81 88H66L64 74L68 64Z" fill="#DC143C" stroke="#ff5262" stroke-width="1"/>
-
-            <!-- Main Streamlined Fuselage -->
-            <path d="M50 8C50 8 32 26 32 64C32 76 35 90 38 90H62C65 90 68 76 68 64C68 26 50 8 50 8Z" fill="#FFFFFF"/>
-
-            <!-- Center Crimson Nosecone -->
-            <path d="M50 8C50 8 42 20 42 34H58C58 20 50 8 50 8Z" fill="#DC143C"/>
-            <path d="M49 34H51V84H49V34Z" fill="#e4e1e8" opacity="0.6"/>
-
-            <!-- High-Precision Cyber Cockpit Porthole -->
-            <circle cx="50" cy="50" r="9" fill="#131318" stroke="#DC143C" stroke-width="2"/>
-            <circle cx="50" cy="50" r="6" fill="#1f1f24"/>
-            <circle cx="48" cy="48" r="2" fill="#FFFFFF" opacity="0.9"/>
-
-            <!-- Panel Lines -->
-            <line x1="36" y1="68" x2="64" y2="68" stroke="#d4d4d8" stroke-width="1"/>
-            <line x1="38" y1="80" x2="62" y2="80" stroke="#d4d4d8" stroke-width="1"/>
-          </svg>
-
-          <!-- 2. Exhaust Flame Jet (Positioned underneath rocket nozzles, pointing DOWN) -->
-          <div id="rocket-flame-container" class="relative -mt-3.5 z-0 flex flex-col items-center origin-top pointer-events-none">
-            <svg class="w-10 h-16 sm:w-12 sm:h-20 md:w-14 md:h-24 overflow-visible" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="flameOuterGradNew" x1="20" y1="0" x2="20" y2="80" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#FF0044" stop-opacity="0.95"/>
-                  <stop offset="45%" stop-color="#DC143C" stop-opacity="0.65"/>
-                  <stop offset="100%" stop-color="#FF0044" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="flameMidGradNew" x1="20" y1="0" x2="20" y2="60" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#FF9900" stop-opacity="1"/>
-                  <stop offset="60%" stop-color="#FF4400" stop-opacity="0.75"/>
-                  <stop offset="100%" stop-color="#FF8800" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="flameCoreGradNew" x1="20" y1="0" x2="20" y2="35" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-                  <stop offset="65%" stop-color="#FFF2A0" stop-opacity="0.85"/>
-                  <stop offset="100%" stop-color="#FF9900" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <!-- Outer Flame Plume -->
-              <path d="M12 0C12 0 4 35 20 80C36 35 28 0 28 0H12Z" fill="url(#flameOuterGradNew)"/>
-              <!-- Mid Flame Layer -->
-              <path d="M14 0C14 0 8 28 20 60C32 28 26 0 26 0H14Z" fill="url(#flameMidGradNew)"/>
-              <!-- Inner Superheated White Core -->
-              <path d="M17 0C17 0 13 18 20 35C27 18 23 0 23 0H17Z" fill="url(#flameCoreGradNew)"/>
-            </svg>
-          </div>
-
+        <!-- Grand Aerospace Lottie Rocket Centerpiece -->
+        <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-2 sm:mb-4 pointer-events-none">
+          <div id="lottie-rocket-container" class="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center drop-shadow-[0_0_30px_rgba(220,20,60,0.45)]"></div>
         </div>
 
         <!-- Monospace Counter & Status -->
