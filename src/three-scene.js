@@ -243,34 +243,32 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // ─── 4. MATERIAL DESIGN SMOKE & PHYSICS LAUNCH ENGINE ───
+  // ─── 4. MATERIAL DESIGN SPACE THRUSTER & ZERO-G DRIFT ENGINE ───
   const smokeContainer = document.getElementById("preloader-smoke-container");
-  const groundSmokeBank = document.getElementById("apple-rocket-smoke-bank");
   const rocketFlame = document.getElementById("apple-rocket-flame");
   let smokeActive = true;
   let smokeInterval = null;
-  let currentProgressVal = 0;
   let launchTriggered = false;
 
-  // Material Design Ground Smoke Puff Generator
+  // Material Design Space Thruster Ion Particle Generator
   const spawnSmokePuff = (isLaunch = false) => {
     if (!smokeContainer || !smokeActive) return;
 
     const puff = document.createElement("div");
-    const size = isLaunch ? 32 + Math.random() * 26 : 14 + Math.random() * 12;
+    const size = isLaunch ? 28 + Math.random() * 24 : 12 + Math.random() * 10;
 
     const colorRoll = Math.random();
-    let bg = "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(236,239,241,0.3) 60%, rgba(255,255,255,0) 100%)";
-    if (colorRoll < 0.35) {
-      // Material Design Orange 500 / Deep Orange accent
-      bg = isLaunch 
-        ? "radial-gradient(circle, rgba(255,152,0,0.8) 0%, rgba(255,87,34,0.45) 55%, rgba(211,47,47,0) 100%)"
-        : "radial-gradient(circle, rgba(255,152,0,0.5) 0%, rgba(255,87,34,0.25) 55%, rgba(211,47,47,0) 100%)";
-    } else if (colorRoll < 0.65) {
-      // Material Design Red 700 / Crimson accent
+    let bg = "radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(236,239,241,0.3) 55%, rgba(255,255,255,0) 100%)";
+    if (colorRoll < 0.4) {
+      // Material Design Orange 500 / Plasma Core
       bg = isLaunch
-        ? "radial-gradient(circle, rgba(244,67,54,0.75) 0%, rgba(211,47,47,0.45) 55%, rgba(183,28,28,0) 100%)"
-        : "radial-gradient(circle, rgba(244,67,54,0.45) 0%, rgba(211,47,47,0.2) 55%, rgba(183,28,28,0) 100%)";
+        ? "radial-gradient(circle, rgba(255,152,0,0.85) 0%, rgba(255,87,34,0.45) 55%, rgba(211,47,47,0) 100%)"
+        : "radial-gradient(circle, rgba(255,152,0,0.55) 0%, rgba(255,87,34,0.25) 55%, rgba(211,47,47,0) 100%)";
+    } else if (colorRoll < 0.7) {
+      // Material Design Red 700 / Crimson Accent
+      bg = isLaunch
+        ? "radial-gradient(circle, rgba(244,67,54,0.8) 0%, rgba(211,47,47,0.45) 55%, rgba(183,28,28,0) 100%)"
+        : "radial-gradient(circle, rgba(244,67,54,0.5) 0%, rgba(211,47,47,0.2) 55%, rgba(183,28,28,0) 100%)";
     }
 
     puff.className = "absolute rounded-full pointer-events-none blur-[3px] transform-gpu";
@@ -278,15 +276,15 @@ export const initThreeEngine = () => {
     puff.style.height = `${size}px`;
     puff.style.background = bg;
     puff.style.left = "50%";
-    puff.style.top = "64%";
+    puff.style.top = "60%";
     puff.style.transform = "translate(-50%, -50%) scale(0.5)";
 
     smokeContainer.appendChild(puff);
 
-    const driftX = (Math.random() - 0.5) * (isLaunch ? 80 : 35);
-    const driftY = isLaunch ? 65 + Math.random() * 50 : 25 + Math.random() * 22;
-    const endScale = isLaunch ? 3.5 + Math.random() * 1.5 : 2.0 + Math.random() * 0.6;
-    const duration = isLaunch ? 0.9 + Math.random() * 0.35 : 1.3 + Math.random() * 0.4;
+    const driftX = (Math.random() - 0.5) * (isLaunch ? 40 : 16);
+    const driftY = isLaunch ? 85 + Math.random() * 60 : 32 + Math.random() * 22;
+    const endScale = isLaunch ? 3.4 + Math.random() * 1.2 : 2.2 + Math.random() * 0.6;
+    const duration = isLaunch ? 0.85 + Math.random() * 0.3 : 1.3 + Math.random() * 0.35;
 
     gsap.to(puff, {
       x: driftX,
@@ -294,70 +292,101 @@ export const initThreeEngine = () => {
       scale: endScale,
       opacity: 0,
       duration: duration,
-      ease: "power2.out",
+      ease: "sine.out",
       onComplete: () => {
         puff.remove();
       }
     });
   };
 
-  // Continuous ground smoke churn during preparation
+  // Continuous space thruster smoke emission during zero-g flight
   smokeInterval = setInterval(() => {
     if (smokeActive) {
       spawnSmokePuff(false);
     }
-  }, 100);
+  }, 90);
 
-  // 1. FASE PERSIAPAN (0% - 89%): Realistic High-Frequency Rumble Jitter on Launchpad
-  const updateEngineRumble = () => {
-    if (launchTriggered || !rocketCenter) return;
-    // Power buildup increases as progress increases (internal engine pressure building)
-    const intensity = 0.35 + (currentProgressVal / 100) * 1.1;
-    const jx = (Math.random() - 0.5) * 1.6 * intensity;
-    const jy = (Math.random() - 0.5) * 1.1 * intensity;
-    const jrot = (Math.random() - 0.5) * 0.35 * intensity;
-    gsap.set(rocketCenter, { x: jx, y: jy, rotation: jrot });
-  };
+  // 1. FASE IDLE (0% - 89%): Multi-Axis Zero-Gravity Space Drift
+  let floatY = null;
+  let floatX = null;
+  let floatRot = null;
 
-  gsap.ticker.add(updateEngineRumble);
+  if (rocketCenter) {
+    // Vertical weightless bobbing
+    floatY = gsap.to(rocketCenter, {
+      y: -8,
+      duration: 2.4,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
 
-  // 2. FASE PELUNCURAN (90% - 100%): Physical Vertical Acceleration Launch Curve
+    // Horizontal gentle drift
+    floatX = gsap.to(rocketCenter, {
+      x: 3,
+      duration: 3.2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    // Fluid micro-tilting & roll
+    floatRot = gsap.to(rocketCenter, {
+      rotation: 1.6,
+      duration: 2.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      transformOrigin: "50% 50%"
+    });
+  }
+
+  // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Space Acceleration Launch
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    // Stop pad rumble and align straight
-    gsap.ticker.remove(updateEngineRumble);
-    if (rocketCenter) gsap.set(rocketCenter, { x: 0, rotation: 0 });
+    // Smoothly stop zero-g float tweens
+    if (floatY) floatY.kill();
+    if (floatX) floatX.kill();
+    if (floatRot) floatRot.kill();
 
-    // Spawn massive monumental ground smoke eruption
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => spawnSmokePuff(true), i * 30);
+    // Spawn dense elongated thruster boost plumes
+    for (let i = 0; i < 12; i++) {
+      setTimeout(() => spawnSmokePuff(true), i * 28);
     }
 
     const blastTl = gsap.timeline();
 
-    // Monumental ground smoke expansion at the launch pad
-    if (groundSmokeBank) {
-      blastTl.to(groundSmokeBank, {
-        scaleX: 3.0,
-        scaleY: 2.2,
-        y: 45,
-        opacity: 0,
-        transformOrigin: "70px 190px",
-        duration: 1.2,
+    // Re-align orientation straight
+    if (rocketCenter) {
+      blastTl.to(rocketCenter, {
+        x: 0,
+        rotation: 0,
+        duration: 0.18,
+        ease: "power1.out"
+      }, 0);
+    }
+
+    // Space thruster flame superheats & elongates
+    if (rocketFlame) {
+      blastTl.to(rocketFlame, {
+        scaleY: 2.8,
+        scaleX: 1.3,
+        opacity: 1,
+        duration: 0.35,
         ease: "power2.out"
       }, 0);
     }
 
-    // Rocket lifts off with physical inertia & exponential upward acceleration
+    // Rocket rockets upward with exponential high acceleration
     if (rocketCenter) {
       blastTl.to(rocketCenter, {
         y: "-160vh",
         scale: 0.86,
         duration: 1.35,
-        ease: "power4.in"
-      }, 0.05);
+        ease: "power3.in"
+      }, 0.06);
     }
 
     // Monospace counter & status fade down smoothly
@@ -374,26 +403,24 @@ export const initThreeEngine = () => {
   const progressTracker = { val: 0 };
 
   const updateDisplay = (val, text) => {
-    currentProgressVal = val;
     const intVal = Math.min(100, Math.floor(val));
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
 
-    // Trigger launch precisely when progress reaches 90%
+    // Trigger launch precisely when progress touches 90%
     if (intVal >= 90 && !launchTriggered) {
       triggerLaunch();
     }
   };
 
-  // 3. FASE MEMUDAR (Transisi Akhir / Selesai): Pure Smooth Opacity Fadeout
+  // 3. FASE EXIT & MEMUDAR (100% Selesai): Pure Smooth Opacity Fadeout
   const finishPreloader = () => {
     if (preloaderFinished) return;
     preloaderFinished = true;
 
     if (!launchTriggered) triggerLaunch();
 
-    gsap.ticker.remove(updateEngineRumble);
     smokeActive = false;
     if (smokeInterval) clearInterval(smokeInterval);
 
