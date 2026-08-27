@@ -281,98 +281,98 @@ export const initThreeEngine = () => {
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
     if (lottieAnim) {
-      lottieAnim.setSpeed(1 + (intVal / 100) * 0.75);
+      lottieAnim.setSpeed(1 + (intVal / 100) * 0.65);
     }
   };
-
-  const preloaderTl = gsap.timeline();
-
-  preloaderTl
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[0].pct,
-      duration: 0.85,
-      ease: "power2.out",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[1].pct,
-      duration: 0.85,
-      ease: "power1.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[2].pct,
-      duration: 0.75,
-      ease: "power1.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
-    });
 
   const finishPreloader = () => {
     if (preloaderFinished) return;
     preloaderFinished = true;
 
-    preloaderTl.kill();
+    if (floatTween) floatTween.kill();
+    const blastTl = gsap.timeline();
 
-    gsap.to(progressTracker, {
-      val: 100,
-      duration: 0.65,
-      ease: "power2.out",
-      onUpdate: () => updateDisplay(100, PRELOADER_STAGES[3].text),
-      onComplete: () => {
-        if (floatTween) floatTween.kill();
-        const blastTl = gsap.timeline();
+    // 1. Center rocket lift-off with smooth inertia acceleration
+    if (rocketCenter) {
+      blastTl.to(
+        rocketCenter,
+        {
+          y: "-130vh",
+          scale: 0.82,
+          duration: 1.6,
+          ease: "power2.in",
+        },
+        0
+      );
+    }
 
-        // 1. Center rocket lift-off with smooth inertia acceleration
-        if (rocketCenter) {
-          blastTl.to(
-            rocketCenter,
-            {
-              y: "-130vh",
-              scale: 0.82,
-              duration: 1.45,
-              ease: "power2.in",
-            },
-            0
-          );
-        }
+    // 2. Percentage and texts fade down smoothly
+    if (textGroup) {
+      blastTl.to(
+        textGroup,
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          ease: "power2.in",
+        },
+        0
+      );
+    }
 
-        // 2. Percentage and texts fade down smoothly
-        if (textGroup) {
-          blastTl.to(
-            textGroup,
-            {
-              opacity: 0,
-              y: 20,
-              duration: 0.45,
-              ease: "power2.in",
-            },
-            0
-          );
-        }
-
-        // 3. Black veil dissolves with pure silk elegance
-        if (preloaderEl) {
-          preloaderEl.style.pointerEvents = "none";
-          gsap.to(preloaderEl, {
-            opacity: 0,
-            delay: 0.6,
-            duration: 0.95,
-            ease: "power2.inOut",
-            onComplete: () => {
-              preloaderEl.style.display = "none";
-              if (lottieAnim) {
-                try {
-                  lottieAnim.destroy();
-                } catch (e) {}
-                lottieAnim = null;
-              }
-              preloaderEl.remove();
-            },
-          });
-        }
-      },
-    });
+    // 3. Black veil dissolves with pure silk elegance
+    if (preloaderEl) {
+      preloaderEl.style.pointerEvents = "none";
+      gsap.to(preloaderEl, {
+        opacity: 0,
+        delay: 0.7,
+        duration: 1.0,
+        ease: "power2.inOut",
+        onComplete: () => {
+          preloaderEl.style.display = "none";
+          if (lottieAnim) {
+            try {
+              lottieAnim.destroy();
+            } catch (e) {}
+            lottieAnim = null;
+          }
+          preloaderEl.remove();
+        },
+      });
+    }
   };
+
+  const preloaderTl = gsap.timeline({
+    onComplete: () => {
+      finishPreloader();
+    }
+  });
+
+  preloaderTl
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[0].pct,
+      duration: 1.15,
+      ease: "power1.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[1].pct,
+      duration: 1.15,
+      ease: "power1.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[2].pct,
+      duration: 0.95,
+      ease: "power1.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
+    })
+    .to(progressTracker, {
+      val: 100,
+      duration: 0.85,
+      ease: "power2.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
+    });
 
   const loadingManager = new THREE.LoadingManager(
     () => {
@@ -434,9 +434,8 @@ export const initThreeEngine = () => {
     }
   };
 
-  // Instant non-blocking execution (0ms delay for 100/100 performance)
+  // Deep GPU warmup in background
   executeGPUWarmup();
-  finishPreloader();
 
   // Load /tesseract.glb with DRACOLoader & Dynamic Material Assignment
   let mixer = null;

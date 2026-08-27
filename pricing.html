@@ -1828,7 +1828,7 @@
                 {
                   y: "-130vh",
                   scale: 0.82,
-                  duration: 1.45,
+                  duration: 1.6,
                   ease: "power2.in",
                 },
                 0
@@ -1842,7 +1842,7 @@
                 {
                   opacity: 0,
                   y: 20,
-                  duration: 0.45,
+                  duration: 0.5,
                   ease: "power2.in",
                 },
                 0
@@ -1852,8 +1852,8 @@
             // 3. Black veil dissolves with pure silk elegance
             gsap.to(preloaderEl, {
               opacity: 0,
-              delay: 0.6,
-              duration: 0.95,
+              delay: 0.7,
+              duration: 1.0,
               ease: "power2.inOut",
               onComplete: () => {
                 preloaderEl.style.display = "none";
@@ -1871,25 +1871,25 @@
 
         tl.to(progressTracker, {
           val: STAGES[0].pct,
-          duration: 0.85,
-          ease: "power2.out",
+          duration: 1.15,
+          ease: "power1.out",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[0].text)
         })
         .to(progressTracker, {
           val: STAGES[1].pct,
-          duration: 0.85,
+          duration: 1.15,
           ease: "power1.inOut",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[1].text)
         })
         .to(progressTracker, {
           val: STAGES[2].pct,
-          duration: 0.75,
+          duration: 0.95,
           ease: "power1.inOut",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[2].text)
         })
         .to(progressTracker, {
           val: 100,
-          duration: 0.65,
+          duration: 0.85,
           ease: "power2.out",
           onUpdate: () => updateDisplay(100, STAGES[3].text)
         });
