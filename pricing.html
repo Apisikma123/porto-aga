@@ -1899,19 +1899,7 @@
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
 
-        // Idle hover — gentle breathing
-        let floatTween = null;
-        if (rocketCenter) {
-          floatTween = gsap.to(rocketCenter, {
-            y: -10,
-            duration: 2.0,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-
-        // Initial flame state
+        // Initial flame state — small idle
         if (rocketFlame) {
           gsap.set(rocketFlame, { scaleX: 0.7, scaleY: 0.5, opacity: 0.6, transformOrigin: "70px 118px" });
         }
@@ -1936,73 +1924,49 @@
 
         const tl = gsap.timeline({
           onComplete: () => {
-            if (floatTween) floatTween.kill();
             const blastTl = gsap.timeline();
 
             if (rocketFlame) {
               blastTl.to(rocketFlame, {
-                scaleY: 2.5,
-                scaleX: 1.4,
-                opacity: 1,
+                scaleY: 2.5, scaleX: 1.4, opacity: 1,
                 transformOrigin: "70px 118px",
-                duration: 0.5,
-                ease: "power2.out",
+                duration: 0.5, ease: "power2.out",
               }, 0);
             }
-
             if (rocketCenter) {
               blastTl.to(rocketCenter, {
-                y: "-140vh",
-                scale: 0.85,
-                duration: 1.6,
-                ease: "power3.in",
+                y: "-140vh", scale: 0.85,
+                duration: 1.6, ease: "power3.in",
               }, 0.15);
             }
-
             if (textGroup) {
               blastTl.to(textGroup, {
-                opacity: 0,
-                y: 20,
-                duration: 0.5,
-                ease: "power2.in",
+                opacity: 0, y: 20,
+                duration: 0.5, ease: "power2.in",
               }, 0.1);
             }
-
             preloaderEl.style.pointerEvents = "none";
             blastTl.to(preloaderEl, {
-              opacity: 0,
-              duration: 0.9,
-              ease: "power2.inOut",
-              onComplete: () => {
-                preloaderEl.style.display = "none";
-                preloaderEl.remove();
-              }
+              opacity: 0, duration: 0.9, ease: "power2.inOut",
+              onComplete: () => { preloaderEl.style.display = "none"; preloaderEl.remove(); }
             }, 0.7);
           }
         });
 
         tl.to(progressTracker, {
-          val: STAGES[0].pct,
-          duration: 1.2,
-          ease: "power1.out",
+          val: STAGES[0].pct, duration: 1.2, ease: "power1.out",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[0].text)
         })
         .to(progressTracker, {
-          val: STAGES[1].pct,
-          duration: 1.2,
-          ease: "sine.inOut",
+          val: STAGES[1].pct, duration: 1.2, ease: "sine.inOut",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[1].text)
         })
         .to(progressTracker, {
-          val: STAGES[2].pct,
-          duration: 1.0,
-          ease: "sine.inOut",
+          val: STAGES[2].pct, duration: 1.0, ease: "sine.inOut",
           onUpdate: () => updateDisplay(progressTracker.val, STAGES[2].text)
         })
         .to(progressTracker, {
-          val: 100,
-          duration: 0.9,
-          ease: "power2.out",
+          val: 100, duration: 0.9, ease: "power2.out",
           onUpdate: () => updateDisplay(100, STAGES[3].text)
         });
       };
