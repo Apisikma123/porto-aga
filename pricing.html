@@ -393,33 +393,46 @@
                 <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
               </linearGradient>
 
-              <!-- Material Design Launchpad Smoke & Flame Gradients -->
-              <radialGradient id="smokeMdOrangePricing" cx="40%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#FFB74D" stop-opacity="0.95"/>
-                <stop offset="45%" stop-color="#FF9800" stop-opacity="0.88"/>
-                <stop offset="80%" stop-color="#FF5722" stop-opacity="0.6"/>
-                <stop offset="100%" stop-color="#D32F2F" stop-opacity="0.1"/>
+              <!-- Volumetric Pure White Smoke Gradients -->
+              <radialGradient id="smokeWhiteCorePricing" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                <stop offset="50%" stop-color="#F8FAFC" stop-opacity="0.75"/>
+                <stop offset="85%" stop-color="#E2E8F0" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
               </radialGradient>
-              <radialGradient id="smokeMdRedPricing" cx="60%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#FF5252" stop-opacity="0.95"/>
-                <stop offset="50%" stop-color="#D32F2F" stop-opacity="0.82"/>
-                <stop offset="85%" stop-color="#B71C1C" stop-opacity="0.5"/>
-                <stop offset="100%" stop-color="#7F0000" stop-opacity="0.1"/>
+              <radialGradient id="smokeWhitePlume1Pricing" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                <stop offset="60%" stop-color="#F1F5F9" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#E2E8F0" stop-opacity="0"/>
               </radialGradient>
-              <radialGradient id="smokeMdWhitePricing" cx="35%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.98"/>
-                <stop offset="60%" stop-color="#ECEFF1" stop-opacity="0.88"/>
-                <stop offset="100%" stop-color="#CFD8DC" stop-opacity="0.2"/>
-              </radialGradient>
-              <radialGradient id="smokeMdCorePricing" cx="50%" cy="15%" r="85%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-                <stop offset="35%" stop-color="#FFE082" stop-opacity="0.92"/>
-                <stop offset="70%" stop-color="#FF9800" stop-opacity="0.75"/>
-                <stop offset="100%" stop-color="#D32F2F" stop-opacity="0.15"/>
+              <radialGradient id="smokeWhitePlume2Pricing" cx="65%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                <stop offset="60%" stop-color="#F1F5F9" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#E2E8F0" stop-opacity="0"/>
               </radialGradient>
             </defs>
 
-            <!-- 1. JET FLAME EXHAUST — Pure space thruster plasma -->
+            <!-- 1. VOLUMETRIC PURE WHITE SMOKE EXHAUST TRAIL (Always follows the rocket) -->
+            <g id="apple-rocket-smoke-trail" class="rocket-smoke-trail-anim pointer-events-none">
+              <!-- Upper dense exhaust stream -->
+              <ellipse cx="70" cy="180" rx="18" ry="24" fill="url(#smokeWhiteCorePricing)"/>
+              <circle cx="50" cy="205" r="18" fill="url(#smokeWhitePlume1Pricing)"/>
+              <circle cx="90" cy="205" r="18" fill="url(#smokeWhitePlume2Pricing)"/>
+              
+              <!-- Mid expanding plume -->
+              <circle cx="40" cy="240" r="22" fill="url(#smokeWhitePlume1Pricing)"/>
+              <circle cx="100" cy="240" r="22" fill="url(#smokeWhitePlume2Pricing)"/>
+              <ellipse cx="70" cy="250" rx="26" ry="30" fill="url(#smokeWhiteCorePricing)"/>
+              
+              <!-- Lower trailing cloud puffs -->
+              <circle cx="28" cy="285" r="22" fill="url(#smokeWhitePlume1Pricing)"/>
+              <circle cx="112" cy="285" r="22" fill="url(#smokeWhitePlume2Pricing)"/>
+              <circle cx="70" cy="305" r="32" fill="url(#smokeWhiteCorePricing)"/>
+              <circle cx="45" cy="350" r="26" fill="url(#smokeWhitePlume1Pricing)"/>
+              <circle cx="95" cy="350" r="26" fill="url(#smokeWhitePlume2Pricing)"/>
+            </g>
+
+            <!-- 2. JET FLAME EXHAUST — Pure space thruster plasma -->
             <g class="rocket-flame-flicker">
               <!-- Outer Crimson/Orange Plasma Plume -->
               <path d="M56 118C56 118 46 150 70 195C94 150 84 118 84 118H56Z" fill="url(#appleFlameOuterPricing)"/>
@@ -1926,61 +1939,10 @@
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
 
-        // ─── 4. PURE WHITE SPACE THRUSTER SMOKE & SMOOTH ZERO-G DRIFT ───
-        const smokeContainer = document.getElementById("preloader-smoke-container");
-        const rocketFlame = document.getElementById("apple-rocket-flame");
-        let smokeActive = true;
-        let smokeInterval = null;
+        // ─── 4. PURE WHITE ATTACHED SMOKE TRAIL & ZERO-G DRIFT ENGINE ───
         let launchTriggered = false;
 
-        // Pure White Space Thruster Smoke Particle Generator
-        const spawnSmokePuff = (isLaunch = false) => {
-          if (!smokeContainer || !smokeActive) return;
-
-          const puff = document.createElement("div");
-          const size = isLaunch ? 28 + Math.random() * 22 : 12 + Math.random() * 10;
-
-          // Pure White Glowing Space Smoke Cloud
-          const bg = isLaunch
-            ? "radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.4) 55%, rgba(255,255,255,0) 100%)"
-            : "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.22) 60%, rgba(255,255,255,0) 100%)";
-
-          puff.className = "absolute rounded-full pointer-events-none blur-[3px] transform-gpu";
-          puff.style.width = `${size}px`;
-          puff.style.height = `${size}px`;
-          puff.style.background = bg;
-          puff.style.left = "50%";
-          puff.style.top = "60%";
-          puff.style.transform = "translate(-50%, -50%) scale(0.5)";
-
-          smokeContainer.appendChild(puff);
-
-          const driftX = (Math.random() - 0.5) * (isLaunch ? 36 : 14);
-          const driftY = isLaunch ? 80 + Math.random() * 50 : 30 + Math.random() * 20;
-          const endScale = isLaunch ? 3.2 + Math.random() * 1.0 : 2.0 + Math.random() * 0.5;
-          const duration = isLaunch ? 0.85 + Math.random() * 0.25 : 1.3 + Math.random() * 0.3;
-
-          gsap.to(puff, {
-            x: driftX,
-            y: driftY,
-            scale: endScale,
-            opacity: 0,
-            duration: duration,
-            ease: "sine.out",
-            onComplete: () => {
-              puff.remove();
-            }
-          });
-        };
-
-        // Continuous pure white smoke emission during zero-g flight
-        smokeInterval = setInterval(() => {
-          if (smokeActive) {
-            spawnSmokePuff(false);
-          }
-        }, 90);
-
-        // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float
+        // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float (GPU accelerated)
         let floatTween = null;
         if (rocketCenter) {
           floatTween = gsap.to(rocketCenter, {
@@ -1994,17 +1956,12 @@
           });
         }
 
-        // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Space Acceleration Launch
+        // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Attached Smoke Trail
         const triggerLaunch = () => {
           if (launchTriggered) return;
           launchTriggered = true;
 
           if (floatTween) floatTween.kill();
-
-          // Spawn dense elongated pure white thruster plumes
-          for (let i = 0; i < 10; i++) {
-            setTimeout(() => spawnSmokePuff(true), i * 30);
-          }
 
           const blastTl = gsap.timeline();
 
@@ -2016,13 +1973,11 @@
               duration: 0.15,
               ease: "power1.out"
             }, 0);
-          }
 
-          // Rocket shoots straight up with exponential high acceleration
-          if (rocketCenter) {
+            // Rocket + pure white attached smoke trail shoot up together continuously
             blastTl.to(rocketCenter, {
               y: "-160vh",
-              scale: 0.86,
+              scale: 0.88,
               duration: 1.35,
               ease: "power3.in"
             }, 0.05);
@@ -2045,8 +2000,6 @@
               duration: 0.85,
               ease: "power2.inOut",
               onComplete: () => {
-                smokeActive = false;
-                if (smokeInterval) clearInterval(smokeInterval);
                 preloaderEl.style.display = "none";
                 preloaderEl.remove();
               }

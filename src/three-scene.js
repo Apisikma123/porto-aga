@@ -243,61 +243,10 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // ─── 4. PURE WHITE SPACE THRUSTER SMOKE & SMOOTH ZERO-G DRIFT ───
-  const smokeContainer = document.getElementById("preloader-smoke-container");
-  const rocketFlame = document.getElementById("apple-rocket-flame");
-  let smokeActive = true;
-  let smokeInterval = null;
+  // ─── 4. PURE WHITE ATTACHED SMOKE TRAIL & ZERO-G DRIFT ENGINE ───
   let launchTriggered = false;
 
-  // Pure White Space Thruster Smoke Particle Generator
-  const spawnSmokePuff = (isLaunch = false) => {
-    if (!smokeContainer || !smokeActive) return;
-
-    const puff = document.createElement("div");
-    const size = isLaunch ? 28 + Math.random() * 22 : 12 + Math.random() * 10;
-
-    // Pure White Glowing Space Smoke Cloud
-    const bg = isLaunch
-      ? "radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.4) 55%, rgba(255,255,255,0) 100%)"
-      : "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.22) 60%, rgba(255,255,255,0) 100%)";
-
-    puff.className = "absolute rounded-full pointer-events-none blur-[3px] transform-gpu";
-    puff.style.width = `${size}px`;
-    puff.style.height = `${size}px`;
-    puff.style.background = bg;
-    puff.style.left = "50%";
-    puff.style.top = "60%";
-    puff.style.transform = "translate(-50%, -50%) scale(0.5)";
-
-    smokeContainer.appendChild(puff);
-
-    const driftX = (Math.random() - 0.5) * (isLaunch ? 36 : 14);
-    const driftY = isLaunch ? 80 + Math.random() * 50 : 30 + Math.random() * 20;
-    const endScale = isLaunch ? 3.2 + Math.random() * 1.0 : 2.0 + Math.random() * 0.5;
-    const duration = isLaunch ? 0.85 + Math.random() * 0.25 : 1.3 + Math.random() * 0.3;
-
-    gsap.to(puff, {
-      x: driftX,
-      y: driftY,
-      scale: endScale,
-      opacity: 0,
-      duration: duration,
-      ease: "sine.out",
-      onComplete: () => {
-        puff.remove();
-      }
-    });
-  };
-
-  // Continuous pure white smoke emission during zero-g flight
-  smokeInterval = setInterval(() => {
-    if (smokeActive) {
-      spawnSmokePuff(false);
-    }
-  }, 90);
-
-  // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float
+  // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float (GPU accelerated)
   let floatTween = null;
   if (rocketCenter) {
     floatTween = gsap.to(rocketCenter, {
@@ -311,17 +260,12 @@ export const initThreeEngine = () => {
     });
   }
 
-  // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Space Acceleration Launch
+  // 2. FASE BOOST / AKSELERASI (90% - 100%): Exponential Launch with Attached Smoke Trail
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
     if (floatTween) floatTween.kill();
-
-    // Spawn dense elongated pure white thruster plumes
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => spawnSmokePuff(true), i * 30);
-    }
 
     const blastTl = gsap.timeline();
 
@@ -333,13 +277,11 @@ export const initThreeEngine = () => {
         duration: 0.15,
         ease: "power1.out"
       }, 0);
-    }
 
-    // Rocket shoots straight up with exponential high acceleration
-    if (rocketCenter) {
+      // Rocket + pure white attached smoke trail shoot up together continuously
       blastTl.to(rocketCenter, {
         y: "-160vh",
-        scale: 0.86,
+        scale: 0.88,
         duration: 1.35,
         ease: "power3.in"
       }, 0.05);
@@ -363,8 +305,6 @@ export const initThreeEngine = () => {
         duration: 0.85,
         ease: "power2.inOut",
         onComplete: () => {
-          smokeActive = false;
-          if (smokeInterval) clearInterval(smokeInterval);
           preloaderEl.style.display = "none";
           preloaderEl.remove();
         }
