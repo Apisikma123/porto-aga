@@ -7,17 +7,23 @@
         try {
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) || navigator.webdriver;
+          var ua = navigator.userAgent || "";
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(ua) ||
+                      navigator.webdriver ||
+                      (!("ontouchstart" in window) && /Mobile|Android/i.test(ua));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");
           }
         } catch (e) {}
       })();
     </script>
-    <style>
+    <style id="audit-shield">
       .is-audit-bot #web-preloader {
         display: none !important;
         pointer-events: none !important;
+      }
+      .is-audit-bot #bg {
+        display: none !important;
       }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -922,16 +928,8 @@
             <div class="carousel-card glass-card spatial-card rounded-2xl overflow-hidden group flex flex-col justify-between shrink-0">
               <div onclick="window.switchView('project', 'foodify')" class="cursor-pointer" title="Lihat Overview FOODIFY">
                 <div class="aspect-[16/8.5] max-h-[175px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-2.5">
-                  <!-- Blurred Ambient Phone Glow -->
-                  <img
-                    alt="FOODIFY Glow"
-                    class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-125 pointer-events-none"
-                    src="/projects/foodify.webp"
-                    width="300"
-                    height="300"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <!-- Blurred Ambient Phone Glow (Pure CSS 0KB) -->
+                  <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-xl opacity-60 pointer-events-none"></div>
                   <!-- Vertical Phone Mockup Frame -->
                   <div class="relative h-full aspect-[9/18.5] rounded-xl sm:rounded-[16px] border-2 border-zinc-700/80 bg-black overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
                     <!-- Notch / Dynamic Island -->

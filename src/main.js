@@ -1172,11 +1172,13 @@ const initScrollRevealAnimations = () => {
         } else if (id === "activity") {
           gsap.fromTo("#activity header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
           gsap.fromTo("#activity .activity-standalone-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.08 });
+          try { initActivityHeatmap(); } catch (e) {}
         } else if (id === "projects") {
           gsap.fromTo("#projects header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
           gsap.fromTo("#projects .carousel-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: "power2.out" });
+          try { initGitHubRepos(); initPricingConfigurator(); } catch (e) {}
         } else if (id === "contact") {
-          gsap.fromTo("#contact .display-title span", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" });
+          gsap.fromTo("#contact .display-title span", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power3.out" });
           gsap.fromTo("#contact .glass-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.1 });
         } else if (id === "footer") {
           gsap.fromTo("#footer header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" });
@@ -1184,7 +1186,7 @@ const initScrollRevealAnimations = () => {
         }
       }
     });
-  }, { rootMargin: "0px 0px -80px 0px" });
+  }, { rootMargin: "180px 0px 50px 0px" });
 
   ["about", "activity", "projects", "contact", "footer"].forEach((id) => {
     const el = document.getElementById(id);
@@ -3170,27 +3172,20 @@ const boot = () => {
   initSPAViews();
   initPageTransitionLinks();
 
-  // Phase 2: Deferred non-critical widgets (Run on idle so FCP/LCP are instant)
+  // Phase 2: Instant UI reveals & deferred non-critical card tilt
+  initScrollRevealAnimations();
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(() => {
       try {
-        initActivityHeatmap();
-        initGitHubRepos();
-        initPricingConfigurator();
         initCardTilt();
-        initScrollRevealAnimations();
       } catch (e) {}
     }, { timeout: 2000 });
   } else {
     setTimeout(() => {
       try {
-        initActivityHeatmap();
-        initGitHubRepos();
-        initPricingConfigurator();
         initCardTilt();
-        initScrollRevealAnimations();
       } catch (e) {}
-    }, 200);
+    }, 300);
   }
 
   // Phase 3: Start 3D WebGL Engine when user interacts or after window load
