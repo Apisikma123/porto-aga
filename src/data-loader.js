@@ -2297,7 +2297,16 @@ export const initData = async () => {
   initActivityHeatmap();
   initProjectsCarousel();
   initPricingMarketingCarousel();
-  initSPAViews();
-  initGitHubRepos();
   initPricingConfigurator();
+
+  const loadDeferredData = () => {
+    initSPAViews();
+    initGitHubRepos();
+  };
+
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(loadDeferredData, { timeout: 3000 });
+  } else {
+    setTimeout(loadDeferredData, 1200);
+  }
 };

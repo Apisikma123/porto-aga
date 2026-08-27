@@ -343,7 +343,7 @@ window.setTheme = setTheme;
 window.toggleTheme = toggleTheme;
 
 // ─── Animated Bilingual Transition Engine (GSAP Morph) ───
-export const setLanguage = (lang) => {
+export const setLanguage = (lang, animate = true) => {
   if (!TRANSLATIONS[lang]) return;
   const dict = TRANSLATIONS[lang];
   currentLang = lang;
@@ -378,6 +378,19 @@ export const setLanguage = (lang) => {
 
   // Animated holographic text morph sequence
   const i18nElements = document.querySelectorAll("[data-i18n]");
+
+  if (!animate) {
+    i18nElements.forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+    if (window.renderPricingOnLangChange) {
+      window.renderPricingOnLangChange(lang);
+    }
+    return;
+  }
 
   gsap.to(i18nElements, {
     opacity: 0,
@@ -833,30 +846,30 @@ export const initPreloaderTimeline = () => {
   const tl = gsap.timeline();
   tl.to(progressTracker, {
     val: PRELOADER_STAGES[0].pct,
-    duration: 0.4,
+    duration: 0.12,
     ease: "power1.out",
     onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
   })
     .to(progressTracker, {
       val: PRELOADER_STAGES[1].pct,
-      duration: 0.45,
+      duration: 0.12,
       ease: "power1.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[2].pct,
-      duration: 0.35,
+      duration: 0.1,
       ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[3].pct,
-      duration: 0.3,
+      duration: 0.1,
       ease: "power2.in",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });
 
-  setTimeout(triggerLaunch, 1600);
+  setTimeout(triggerLaunch, 450);
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -900,7 +913,7 @@ export const initCritical = () => {
     el.textContent = currentYear;
   });
   setTheme(currentTheme, false);
-  setLanguage(currentLang);
+  setLanguage(currentLang, false);
   initPreloaderTimeline();
   initNavigationAndKeyboard();
   initPageTransitionLinks();
