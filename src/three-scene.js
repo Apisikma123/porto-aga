@@ -1148,12 +1148,18 @@ export const initThreeEngine = () => {
   };
   window.addEventListener("resize", onResize);
 
-  // ─── Render Loop (Rock-Solid 60/120fps Zero-GC) ───
+  // ─── Render Loop (IntersectionObserver Throttled & 60/120fps Zero-GC) ───
   let lastTime = performance.now();
+  let isCanvasVisible = true;
+  let rafId = null;
 
   const animate = () => {
-    requestAnimationFrame(animate);
-    if (document.hidden) return;
+    if (document.hidden || !isCanvasVisible) {
+      rafId = null;
+      return;
+    }
+    rafId = requestAnimationFrame(animate);
+
     const now = performance.now();
     const delta = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
@@ -1244,5 +1250,30 @@ export const initThreeEngine = () => {
 
     renderer.render(scene, camera);
   };
-  animate();
-}
+
+  if (typeof IntersectionObserver !== "undefined") {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isCanvasVisible = entry.isIntersecting;
+        if (isCanvasVisible && !rafId && !document.hidden) {
+          lastTime = performance.now();
+          rafId = requestAnimationFrame(animate);
+        }
+      });
+    }, { rootMargin: "60px" });
+    observer.observe(canvas);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && isCanvasVisible && !rafId) {
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(animate);
+    }
+  });
+
+  rafId = requestAnimationFrame(animate);
+};
+
+export const init3D = initThreeEngine;
+
+

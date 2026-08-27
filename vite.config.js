@@ -13,7 +13,7 @@ export default defineConfig({
     cors: true,
   },
   build: {
-    target: 'esnext',
+    target: 'es2022',
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
