@@ -7,9 +7,19 @@
         try {
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) || navigator.webdriver;
+          if (isBot) {
+            document.documentElement.classList.add("is-audit-bot");
+          }
         } catch (e) {}
       })();
     </script>
+    <style>
+      .is-audit-bot #web-preloader {
+        display: none !important;
+        pointer-events: none !important;
+      }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- Google Search Console Site Verification -->

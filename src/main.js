@@ -860,11 +860,10 @@ const initNavigationAndKeyboard = () => {
   if (typeof IntersectionObserver !== "undefined") {
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && currentView === "portfolio" && !isLocked) {
+        if (entry.isIntersecting && currentView === "portfolio" && !isAnimating) {
           const index = SECTION_IDS.indexOf(entry.target.id);
           if (index !== -1) {
             currentSectionIndex = index;
-            targetSectionIndex = index;
             updateActiveSidebar(index);
           }
         }
