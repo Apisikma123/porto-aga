@@ -322,6 +322,19 @@ export const initThreeEngine = () => {
 
     const blastTl = gsap.timeline();
 
+    // Volumetric smoke bank billows outwards at the launch pad
+    const smokeBank = document.getElementById("apple-rocket-smoke-bank");
+    if (smokeBank) {
+      blastTl.to(smokeBank, {
+        scale: 2.2,
+        y: 40,
+        opacity: 0,
+        transformOrigin: "70px 185px",
+        duration: 1.1,
+        ease: "power2.out"
+      }, 0);
+    }
+
     // Rocket launches straight up with smooth inertia acceleration
     if (rocketCenter) {
       blastTl.to(rocketCenter, {

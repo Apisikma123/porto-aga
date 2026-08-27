@@ -353,9 +353,46 @@
                 <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
                 <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
               </linearGradient>
+
+              <!-- Volumetric 3D Pure White Launch Smoke Gradients -->
+              <radialGradient id="smokePuffWhite1" cx="35%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.98"/>
+                <stop offset="55%" stop-color="#F4F4F5" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#E4E4E7" stop-opacity="0.25"/>
+              </radialGradient>
+              <radialGradient id="smokePuffWhite2" cx="65%" cy="30%" r="65%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                <stop offset="65%" stop-color="#E4E4E7" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#D4D4D8" stop-opacity="0.2"/>
+              </radialGradient>
+              <radialGradient id="smokePuffCore" cx="50%" cy="20%" r="80%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#FFF8E7" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#E4E4E7" stop-opacity="0.2"/>
+              </radialGradient>
             </defs>
 
-            <!-- 1. JET FLAME EXHAUST — CSS flicker only, no GSAP transform -->
+            <!-- 1. VOLUMETRIC LAUNCH SMOKE CLOUD PLUME (Authentic Rocket Smoke Cushion) -->
+            <g id="apple-rocket-smoke-bank" class="rocket-smoke-billow">
+              <!-- Left Billowing Cloud Puff -->
+              <circle cx="42" cy="180" r="18" fill="url(#smokePuffWhite1)"/>
+              <circle cx="22" cy="192" r="15" fill="url(#smokePuffWhite2)"/>
+              
+              <!-- Right Billowing Cloud Puff -->
+              <circle cx="98" cy="180" r="18" fill="url(#smokePuffWhite1)"/>
+              <circle cx="118" cy="192" r="15" fill="url(#smokePuffWhite2)"/>
+              
+              <!-- Center Base Cloud Pillows -->
+              <circle cx="70" cy="194" r="22" fill="url(#smokePuffCore)"/>
+              <circle cx="56" cy="166" r="13" fill="url(#smokePuffWhite1)"/>
+              <circle cx="84" cy="166" r="13" fill="url(#smokePuffWhite2)"/>
+
+              <!-- Outward Billowing Wisps -->
+              <circle cx="10" cy="200" r="9" fill="#FFFFFF" opacity="0.45"/>
+              <circle cx="130" cy="200" r="9" fill="#FFFFFF" opacity="0.45"/>
+            </g>
+
+            <!-- 2. JET FLAME EXHAUST — CSS flicker only, no GSAP transform -->
             <g id="apple-rocket-flame" class="rocket-flame-flicker">
               <!-- Outer Crimson/Orange Plasma Plume -->
               <path d="M56 118C56 118 46 150 70 195C94 150 84 118 84 118H56Z" fill="url(#appleFlameOuter)"/>
