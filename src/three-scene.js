@@ -340,7 +340,7 @@ export const initThreeEngine = () => {
       blastTl.to(rocketCenter, {
         y: "-160vh",
         scale: 0.86,
-        duration: 1.4,
+        duration: 1.35,
         ease: "power3.in"
       }, 0.05);
     }
@@ -353,6 +353,22 @@ export const initThreeEngine = () => {
         duration: 0.45,
         ease: "power2.in"
       }, 0.05);
+    }
+
+    // Background veil dissolves with a silky smooth fade out as the rocket reaches the top
+    if (preloaderEl) {
+      preloaderEl.style.pointerEvents = "none";
+      blastTl.to(preloaderEl, {
+        opacity: 0,
+        duration: 0.85,
+        ease: "power2.inOut",
+        onComplete: () => {
+          smokeActive = false;
+          if (smokeInterval) clearInterval(smokeInterval);
+          preloaderEl.style.display = "none";
+          preloaderEl.remove();
+        }
+      }, 0.55);
     }
   };
 
@@ -370,29 +386,11 @@ export const initThreeEngine = () => {
     }
   };
 
-  // 3. FASE EXIT & MEMUDAR (100% Selesai): Pure Smooth Opacity Fadeout
+  // 3. FASE EXIT & MEMUDAR (100% Selesai)
   const finishPreloader = () => {
     if (preloaderFinished) return;
     preloaderFinished = true;
-
     if (!launchTriggered) triggerLaunch();
-
-    smokeActive = false;
-    if (smokeInterval) clearInterval(smokeInterval);
-
-    if (preloaderEl) {
-      preloaderEl.style.pointerEvents = "none";
-      gsap.to(preloaderEl, {
-        opacity: 0,
-        delay: 0.35,
-        duration: 0.85,
-        ease: "power2.inOut",
-        onComplete: () => {
-          preloaderEl.style.display = "none";
-          preloaderEl.remove();
-        }
-      });
-    }
   };
 
   const preloaderTl = gsap.timeline({ onComplete: finishPreloader });
