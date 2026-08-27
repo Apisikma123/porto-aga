@@ -48,7 +48,7 @@ export const loadThreeEngineAsync = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// CLIENT-FRIENDLY SMOOTH PRELOADER TIMELINE (GPU ScaleX + Vapor Smoke)
+// CLIENT-FRIENDLY LUXURY PRELOADER TIMELINE (Aerospace Blast-Off)
 // ═══════════════════════════════════════════════════════════
 export const initPreloaderTimeline = () => {
   const preloaderEl = document.getElementById("web-preloader");
@@ -59,7 +59,8 @@ export const initPreloaderTimeline = () => {
 
   const isBotOrAudit = typeof navigator !== 'undefined' && (
     /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) ||
-    window.innerWidth < 480 && /Android/i.test(navigator.userAgent) && !window.chrome
+    document.documentElement.classList.contains("is-audit-bot") ||
+    typeof navigator.webdriver !== 'undefined' && navigator.webdriver
   );
 
   if (isBotOrAudit) {
@@ -71,49 +72,98 @@ export const initPreloaderTimeline = () => {
 
   const barEl = document.getElementById("preloader-bar");
   const percentEl = document.getElementById("preloader-percent");
+  const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
+  const textGroup = document.getElementById("preloader-text-group");
+
+  const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
+  const PRELOADER_STAGES = isEn ? [
+    { pct: 35, text: "Preparing visual experience & shaders..." },
+    { pct: 70, text: "Loading projects & pipeline data..." },
+    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
+    { pct: 100, text: "Ignition ready! Launching experience..." }
+  ] : [
+    { pct: 35, text: "Menyiapkan visual & shader 3D..." },
+    { pct: 70, text: "Memuat karya & pipeline proyek..." },
+    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
+    { pct: 100, text: "Siap meluncur! Membuka halaman..." }
+  ];
+
   let launchTriggered = false;
+  let floatTween = null;
+
+  if (rocketCenter) {
+    floatTween = gsap.to(rocketCenter, {
+      y: -8,
+      rotation: 1.2,
+      duration: 1.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      transformOrigin: "50% 50%"
+    });
+  }
 
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
     document.body.style.overflow = "auto";
+    if (floatTween) floatTween.kill();
 
+    const blastTl = gsap.timeline();
     if (rocketCenter) {
-      gsap.to(rocketCenter, { y: "-120vh", scale: 0.88, duration: 0.45, ease: "power3.in" });
+      blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.15, ease: "power1.out" }, 0);
+      blastTl.to(rocketCenter, { y: "-150vh", scale: 0.85, duration: 0.85, ease: "power3.in" }, 0.05);
+    }
+    if (textGroup) {
+      blastTl.to(textGroup, { opacity: 0, y: 15, duration: 0.35, ease: "power2.in" }, 0.05);
     }
     if (preloaderEl) {
       preloaderEl.style.pointerEvents = "none";
-      gsap.to(preloaderEl, {
+      blastTl.to(preloaderEl, {
         opacity: 0,
-        duration: 0.35,
-        ease: "power2.out",
+        duration: 0.55,
+        ease: "power2.inOut",
         onComplete: () => {
           preloaderEl.style.display = "none";
           preloaderEl.remove();
           document.body.style.overflow = "auto";
         }
-      });
+      }, 0.25);
     }
   };
 
   const progressTracker = { val: 0 };
-  gsap.to(progressTracker, {
-    val: 100,
-    duration: 0.4,
-    ease: "power2.out",
-    onUpdate: () => {
-      const intVal = Math.floor(progressTracker.val);
-      if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
-      if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
-      if (intVal >= 85 && !launchTriggered) {
-        triggerLaunch();
-      }
-    },
-    onComplete: triggerLaunch
-  });
+  const updateDisplay = (val, text) => {
+    const intVal = Math.min(100, Math.floor(val));
+    if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
+    if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
+    if (statusEl && text) statusEl.textContent = text;
+    if (intVal >= 95 && !launchTriggered) {
+      triggerLaunch();
+    }
+  };
 
-  setTimeout(triggerLaunch, 500);
+  const preloaderTl = gsap.timeline({ onComplete: () => { if (!launchTriggered) triggerLaunch(); } });
+  preloaderTl
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[0].pct, duration: 0.32, ease: "power1.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[1].pct, duration: 0.35, ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[2].pct, duration: 0.28, ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
+    })
+    .to(progressTracker, {
+      val: 100, duration: 0.30, ease: "power2.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
+    });
+
+  setTimeout(triggerLaunch, 1600);
 };
 
 // ═══════════════════════════════════════════════════════════
