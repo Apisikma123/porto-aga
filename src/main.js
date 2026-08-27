@@ -499,9 +499,9 @@ const updateCarouselUI = (index) => {
   const dots = document.querySelectorAll("#carousel-dots-container .carousel-dot");
   dots.forEach((dot, idx) => {
     if (idx === index) {
-      dot.className = "carousel-dot w-7 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 cursor-pointer shadow-[0_0_10px_rgba(220,20,60,0.5)]";
+      dot.className = "carousel-dot block w-7 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 shadow-[0_0_10px_rgba(220,20,60,0.5)]";
     } else {
-      dot.className = "carousel-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300 cursor-pointer";
+      dot.className = "carousel-dot block w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300";
     }
   });
 };
@@ -606,9 +606,9 @@ const updatePricingCarouselUI = (index) => {
   const dots = document.querySelectorAll("#pricing-carousel-dots .pricing-dot");
   dots.forEach((dot, idx) => {
     if (idx === index) {
-      dot.className = "pricing-dot w-7 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 cursor-pointer shadow-[0_0_10px_rgba(220,20,60,0.5)]";
+      dot.className = "pricing-dot block w-6 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 shadow-[0_0_10px_rgba(220,20,60,0.5)]";
     } else {
-      dot.className = "pricing-dot w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300 cursor-pointer";
+      dot.className = "pricing-dot block w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300";
     }
   });
 };
@@ -2968,23 +2968,37 @@ const boot = () => {
   });
   setLanguage(currentLang);
   initNavigationAndKeyboard();
-  initProjectsCarousel();
-  initPricingMarketingCarousel();
-  initScrollRevealAnimations();
-  initCardTilt();
-  initActivityHeatmap();
-  initGitHubRepos();
-  initPricingConfigurator();
-  initSPAViews();
-  initPageTransitionLinks();
-  ScrollTrigger.refresh();
 
-  // Initialize Three.js 3D viewport non-blockingly (TBT = 0ms)
-  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-    requestIdleCallback(() => initThreeEngine(), { timeout: 1000 });
-  } else {
-    setTimeout(initThreeEngine, 40);
-  }
+  const deferTask = (fn, delay = 0) => {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      requestIdleCallback(fn, { timeout: 2000 });
+    } else {
+      setTimeout(fn, delay);
+    }
+  };
+
+  // Phase 1: Carousel and SPA Link routing (Fast user interactivity)
+  deferTask(() => {
+    initProjectsCarousel();
+    initPricingMarketingCarousel();
+    initSPAViews();
+    initPageTransitionLinks();
+  }, 20);
+
+  // Phase 2: Heavy widgets (Heatmap, GitHub API, Configurator, Card 3D tilt)
+  deferTask(() => {
+    initActivityHeatmap();
+    initGitHubRepos();
+    initPricingConfigurator();
+    initCardTilt();
+  }, 60);
+
+  // Phase 3: Scroll animations & Three.js 3D viewport
+  deferTask(() => {
+    initScrollRevealAnimations();
+    ScrollTrigger.refresh();
+    initThreeEngine();
+  }, 120);
 };
 
 if (document.readyState === "loading") {
