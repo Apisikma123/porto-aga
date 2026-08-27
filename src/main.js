@@ -92,31 +92,23 @@ export const initPreloaderTimeline = () => {
   let launchTriggered = false;
   let floatTween = null;
 
-  // ─── High-Performance Pure White Vapor Smoke Canvas (Zero layout thrashing) ───
+  // ─── High-Performance Pure White Vapor Smoke Canvas (Live Flame Nozzle Tracking) ───
   const smokeCanvas = document.getElementById("preloader-smoke-canvas");
   let smokeCtx = null;
   let smokeParticles = [];
   let smokeAnimId = null;
-  let cachedNozzleX = window.innerWidth / 2;
-  let cachedNozzleY = window.innerHeight / 2 + 55;
 
-  const updateNozzleCoords = () => {
+  const resizeCanvas = () => {
     if (smokeCanvas) {
       smokeCanvas.width = window.innerWidth;
       smokeCanvas.height = window.innerHeight;
-    }
-    const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
-    if (flameNozzle) {
-      const rect = flameNozzle.getBoundingClientRect();
-      cachedNozzleX = rect.left + rect.width / 2;
-      cachedNozzleY = rect.bottom - (launchTriggered ? 15 : 8);
     }
   };
 
   if (smokeCanvas) {
     smokeCtx = smokeCanvas.getContext("2d");
-    updateNozzleCoords();
-    window.addEventListener("resize", updateNozzleCoords, { passive: true });
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive: true });
   }
 
   let frameCount = 0;
@@ -126,28 +118,30 @@ export const initPreloaderTimeline = () => {
       return;
     }
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-    // Read live position of rocket flame nozzle in real-time from GSAP transform cache (0 forced reflows)
-    let liveX = cachedNozzleX;
-    let liveY = cachedNozzleY;
-    if (rocketCenter) {
-      const curY = parseFloat(gsap.getProperty(rocketCenter, "y")) || 0;
-      const curX = parseFloat(gsap.getProperty(rocketCenter, "x")) || 0;
-      liveX = cachedNozzleX + curX;
-      liveY = cachedNozzleY + curY;
+    frameCount++;
+
+    // Exactly track the bottom of the flame from the rocket center element in real-time
+    let liveX = window.innerWidth / 2;
+    let liveY = window.innerHeight / 2 + 70;
+
+    if (rocketCenter && rocketCenter.isConnected) {
+      const rect = rocketCenter.getBoundingClientRect();
+      liveX = rect.left + rect.width / 2;
+      liveY = rect.bottom - (launchTriggered ? 25 : 12);
     }
 
-    const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 1 : 0);
+    const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
     for (let i = 0; i < spawnCount; i++) {
       smokeParticles.push({
-        x: liveX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
+        x: liveX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
         y: liveY + (Math.random() - 0.5) * 4,
-        vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-        vy: launchTriggered ? (6.0 + Math.random() * 8.0) : (1.5 + Math.random() * 1.8),
-        radius: launchTriggered ? (16 + Math.random() * 12) : (7 + Math.random() * 5),
-        growth: launchTriggered ? 0.9 : 0.4,
-        maxRadius: launchTriggered ? 75 : 32,
-        alpha: launchTriggered ? 0.75 : 0.45,
-        decay: launchTriggered ? 0.022 : 0.012,
+        vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
+        vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
+        radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
+        growth: launchTriggered ? 0.9 : 0.45,
+        maxRadius: launchTriggered ? 80 : 36,
+        alpha: launchTriggered ? 0.8 : 0.5,
+        decay: launchTriggered ? 0.02 : 0.012,
       });
     }
 
@@ -163,7 +157,7 @@ export const initPreloaderTimeline = () => {
       }
       const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
       grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
-      grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+      grad.addColorStop(0.45, `rgba(248, 250, 252, ${p.alpha * 0.6})`);
       grad.addColorStop(1, "rgba(255, 255, 255, 0)");
       smokeCtx.fillStyle = grad;
       smokeCtx.beginPath();
