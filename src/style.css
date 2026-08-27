@@ -19,7 +19,7 @@
 
 @layer base {
   html {
-    scroll-behavior: auto; /* Handled smoothly by GSAP ScrollToPlugin for silky 60/120fps response */
+    scroll-behavior: smooth;
     background: 
       radial-gradient(ellipse 90% 70% at 50% -10%, rgba(220, 20, 60, 0.15), transparent 70%),
       radial-gradient(ellipse 70% 60% at 85% 90%, rgba(40, 60, 140, 0.14), transparent 70%),
@@ -32,12 +32,14 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   body {
     background-color: transparent !important;
     color: #f4f4f5;
     overflow-x: hidden;
+    overflow-y: auto;
     font-family: var(--font-sans);
     position: relative;
     min-height: 100vh;

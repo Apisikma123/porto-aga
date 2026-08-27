@@ -38,7 +38,10 @@ export const loadThreeEngineAsync = () => {
 // ═══════════════════════════════════════════════════════════
 export const initPreloaderTimeline = () => {
   const preloaderEl = document.getElementById("web-preloader");
-  if (!preloaderEl) return;
+  if (!preloaderEl) {
+    document.body.style.overflow = "auto";
+    return;
+  }
 
   const isAuditBot = typeof navigator !== 'undefined' && (
     /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
@@ -46,9 +49,22 @@ export const initPreloaderTimeline = () => {
 
   if (isAuditBot) {
     preloaderEl.style.display = "none";
+    preloaderEl.style.pointerEvents = "none";
     preloaderEl.remove();
+    document.body.style.overflow = "auto";
     return;
   }
+
+  // Safety fallback: if anything hangs, force unlock after 1.35s
+  const safetyTimer = setTimeout(() => {
+    if (preloaderEl && preloaderEl.parentNode) {
+      preloaderEl.style.opacity = "0";
+      preloaderEl.style.pointerEvents = "none";
+      preloaderEl.style.display = "none";
+      preloaderEl.remove();
+      document.body.style.overflow = "auto";
+    }
+  }, 1350);
 
   const barEl = document.getElementById("preloader-bar");
   const percentEl = document.getElementById("preloader-percent");
@@ -154,6 +170,8 @@ export const initPreloaderTimeline = () => {
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
+    clearTimeout(safetyTimer);
+    document.body.style.overflow = "auto";
     if (floatTween) floatTween.kill();
 
     const blastTl = gsap.timeline();
@@ -174,6 +192,7 @@ export const initPreloaderTimeline = () => {
           if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
           preloaderEl.style.display = "none";
           preloaderEl.remove();
+          document.body.style.overflow = "auto";
         }
       }, 0.55);
     }
@@ -631,30 +650,13 @@ export const scrollToSection = (index, immediate = false) => {
   const targetEl = document.getElementById(SECTION_IDS[index]);
   if (!targetEl) return;
 
-  isTransitioning = true;
-  isSnapping = true;
-  lastTransitionTime = Date.now();
   updateActiveSidebar(index);
-
-  gsap.killTweensOf(window);
 
   if (immediate) {
     window.scrollTo({ top: targetEl.offsetTop, behavior: "auto" });
-    isTransitioning = false;
-    isSnapping = false;
-    return;
+  } else {
+    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-  // Smooth, stately, and cinematic glide (1.1s duration with smooth power2.inOut curve)
-  gsap.to(window, {
-    duration: 1.10,
-    scrollTo: { y: targetEl, autoKill: false },
-    ease: "power2.inOut",
-    onComplete: () => {
-      isTransitioning = false;
-      isSnapping = false;
-    },
-  });
 };
 window.scrollToSection = scrollToSection;
 
@@ -899,7 +901,7 @@ const initNavigationAndKeyboard = () => {
   if (typeof IntersectionObserver !== "undefined") {
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && !isSnapping && currentView === "portfolio") {
+        if (entry.isIntersecting && currentView === "portfolio") {
           const index = SECTION_IDS.indexOf(entry.target.id);
           if (index !== -1) {
             currentSectionIndex = index;
@@ -915,144 +917,25 @@ const initNavigationAndKeyboard = () => {
     });
   }
 
-  // ─── 1. Locked Mouse Wheel & Trackpad Interceptor (No Free Scrolling in Portfolio View) ───
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      if (currentView !== "portfolio") return;
-
-      // Allow native horizontal scrolling within horizontal containers (e.g. heatmap, carousel)
-      const target = e.target;
-      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
-      if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        return;
-      }
-
-      // Intercept vertical wheel action unconditionally to prevent browser manual free-scroll
-      e.preventDefault();
-
-      const now = Date.now();
-      // If currently snapping or in lock cooldown, absorb extra wheel events (2x scroll, rapid flicks, momentum)
-      if (isTransitioning || now - lastTransitionTime < COOLDOWN_MS) {
-        return;
-      }
-
-      // Ignore micro-deltas to prevent unintended tiny shifts
-      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) {
-        return;
-      }
-
-      if (e.deltaY > 0) {
-        // Scroll Down -> Next Section
-        if (currentSectionIndex < SECTION_IDS.length - 1) {
-          scrollToSection(currentSectionIndex + 1);
-        }
-      } else {
-        // Scroll Up -> Previous Section
-        if (currentSectionIndex > 0) {
-          scrollToSection(currentSectionIndex - 1);
-        }
-      }
-    },
-    { passive: false }
-  );
-
-  // ─── 2. Mobile & Tablet Touch / Swipe Interceptor ───
-  let touchStartY = 0;
-  let touchStartX = 0;
-  let touchStartTime = 0;
-
-  window.addEventListener(
-    "touchstart",
-    (e) => {
-      if (currentView !== "portfolio") return;
-      if (e.touches.length > 0) {
-        touchStartY = e.touches[0].clientY;
-        touchStartX = e.touches[0].clientX;
-        touchStartTime = Date.now();
-      }
-    },
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "touchmove",
-    (e) => {
-      if (currentView !== "portfolio") return;
-      if (e.touches.length > 0) {
-        const diffY = touchStartY - e.touches[0].clientY;
-        const diffX = touchStartX - e.touches[0].clientX;
-
-        // Allow horizontal swipe inside carousel / heatmap
-        const target = e.target;
-        const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
-        if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
-          return;
-        }
-
-        // Prevent native free scroll on vertical swipe
-        if (Math.abs(diffY) > 8 && Math.abs(diffY) > Math.abs(diffX)) {
-          if (e.cancelable) e.preventDefault();
-        }
-      }
-    },
-    { passive: false }
-  );
-
-  window.addEventListener(
-    "touchend",
-    (e) => {
-      if (currentView !== "portfolio") return;
-      const now = Date.now();
-      if (isTransitioning || now - lastTransitionTime < COOLDOWN_MS) return;
-
-      if (e.changedTouches.length > 0) {
-        const diffY = touchStartY - e.changedTouches[0].clientY;
-        const diffX = touchStartX - e.changedTouches[0].clientX;
-        const elapsed = now - touchStartTime;
-
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 35 && elapsed < 800) {
-          if (diffY > 0 && currentSectionIndex < SECTION_IDS.length - 1) {
-            scrollToSection(currentSectionIndex + 1);
-          } else if (diffY < 0 && currentSectionIndex > 0) {
-            scrollToSection(currentSectionIndex - 1);
-          }
-        }
-      }
-    },
-    { passive: true }
-  );
-
-  // ─── 3. Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K) ───
+  // Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
   window.addEventListener("keydown", (e) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
 
     if (currentView === "portfolio") {
-      if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
-        e.preventDefault();
-        if (!isTransitioning && currentSectionIndex < SECTION_IDS.length - 1) {
+      if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown") {
+        if (currentSectionIndex < SECTION_IDS.length - 1) {
           scrollToSection(currentSectionIndex + 1);
         }
-      } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
-        e.preventDefault();
-        if (!isTransitioning && currentSectionIndex > 0) {
+      } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp") {
+        if (currentSectionIndex > 0) {
           scrollToSection(currentSectionIndex - 1);
         }
       } else if (e.key === "Home") {
-        e.preventDefault();
-        if (!isTransitioning) {
-          scrollToSection(0);
-        }
+        scrollToSection(0);
       } else if (e.key === "End") {
-        e.preventDefault();
-        if (!isTransitioning) {
-          scrollToSection(SECTION_IDS.length - 1);
-        }
+        scrollToSection(SECTION_IDS.length - 1);
       } else if (e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        if (!isTransitioning) {
-          scrollToSection(4); // 05 Contact
-        }
+        scrollToSection(4); // 05 Pricing
       } else if (currentSectionIndex === 3) {
         if (e.key === "ArrowLeft") {
           window.slideProjectsCarousel(-1);
@@ -1061,20 +944,6 @@ const initNavigationAndKeyboard = () => {
         }
       }
     }
-  });
-
-  // ─── 4. Window Resize Alignment ───
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      if (currentView === "portfolio") {
-        const targetEl = document.getElementById(SECTION_IDS[currentSectionIndex]);
-        if (targetEl) {
-          gsap.set(window, { scrollTo: { y: targetEl, autoKill: false } });
-        }
-      }
-    }, 120);
   });
 };
 
