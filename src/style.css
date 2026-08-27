@@ -675,33 +675,46 @@ html[data-theme="light"] ::selection {
   to { transform: rotate(360deg); }
 }
 
-/* Rocket flame — gentle opacity flicker, no transforms */
+/* Rocket flame — dynamic turbulent throttle flicker */
 .rocket-flame-flicker {
-  animation: flameFlicker 0.6s ease-in-out infinite alternate;
+  transform-origin: 70px 118px;
+  animation: flameFlicker 0.4s ease-in-out infinite alternate;
 }
 @keyframes flameFlicker {
-  0% { opacity: 0.82; transform: scaleY(0.96); }
-  100% { opacity: 1; transform: scaleY(1.04); }
+  0% { opacity: 0.85; transform: scaleY(0.92) scaleX(0.97); }
+  100% { opacity: 1; transform: scaleY(1.06) scaleX(1.03); }
 }
 
-/* Volumetric launch smoke billow — organic breathing cloud cushion */
-.rocket-smoke-billow {
-  transform-origin: 70px 185px;
-  animation: smokeBillow 2.2s ease-in-out infinite alternate;
+/* Material Design Churning Launchpad Smoke - Left Plume */
+.smoke-churn-left {
+  transform-origin: 40px 185px;
+  animation: churnLeft 1.6s ease-in-out infinite alternate;
 }
-@keyframes smokeBillow {
-  0% {
-    transform: scale(0.96, 0.94) translateY(1px);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.03, 1.05) translateY(-1px);
-    opacity: 0.95;
-  }
-  100% {
-    transform: scale(0.98, 1.02) translateY(0px);
-    opacity: 0.9;
-  }
+@keyframes churnLeft {
+  0% { transform: scale(0.92) translate(0px, 0px) rotate(0deg); opacity: 0.8; }
+  50% { transform: scale(1.08) translate(-3px, -2px) rotate(-4deg); opacity: 0.95; }
+  100% { transform: scale(0.96) translate(-1px, 1px) rotate(2deg); opacity: 0.85; }
+}
+
+/* Material Design Churning Launchpad Smoke - Right Plume */
+.smoke-churn-right {
+  transform-origin: 100px 185px;
+  animation: churnRight 1.7s ease-in-out infinite alternate;
+}
+@keyframes churnRight {
+  0% { transform: scale(0.94) translate(0px, 0px) rotate(0deg); opacity: 0.82; }
+  50% { transform: scale(1.1) translate(3px, -2px) rotate(4deg); opacity: 0.98; }
+  100% { transform: scale(0.98) translate(1px, 1px) rotate(-2deg); opacity: 0.88; }
+}
+
+/* Ground Core Heat Glow & Cloud Base */
+.smoke-churn-core {
+  transform-origin: 70px 190px;
+  animation: churnCore 0.9s ease-in-out infinite alternate;
+}
+@keyframes churnCore {
+  0% { opacity: 0.78; transform: scale(0.96, 0.95); }
+  100% { opacity: 1; transform: scale(1.04, 1.05); }
 }
 
 /* Light Mode Preloader Screen */

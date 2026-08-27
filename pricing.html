@@ -393,42 +393,60 @@
                 <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
               </linearGradient>
 
-              <!-- Volumetric 3D Pure White Launch Smoke Gradients -->
-              <radialGradient id="smokePuffWhite1Pricing" cx="35%" cy="30%" r="65%">
+              <!-- Material Design Launchpad Smoke & Flame Gradients -->
+              <radialGradient id="smokeMdOrangePricing" cx="40%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FFB74D" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#FF9800" stop-opacity="0.88"/>
+                <stop offset="80%" stop-color="#FF5722" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#D32F2F" stop-opacity="0.1"/>
+              </radialGradient>
+              <radialGradient id="smokeMdRedPricing" cx="60%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FF5252" stop-opacity="0.95"/>
+                <stop offset="50%" stop-color="#D32F2F" stop-opacity="0.82"/>
+                <stop offset="85%" stop-color="#B71C1C" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#7F0000" stop-opacity="0.1"/>
+              </radialGradient>
+              <radialGradient id="smokeMdWhitePricing" cx="35%" cy="30%" r="70%">
                 <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.98"/>
-                <stop offset="55%" stop-color="#F4F4F5" stop-opacity="0.85"/>
-                <stop offset="100%" stop-color="#E4E4E7" stop-opacity="0.25"/>
+                <stop offset="60%" stop-color="#ECEFF1" stop-opacity="0.88"/>
+                <stop offset="100%" stop-color="#CFD8DC" stop-opacity="0.2"/>
               </radialGradient>
-              <radialGradient id="smokePuffWhite2Pricing" cx="65%" cy="30%" r="65%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
-                <stop offset="65%" stop-color="#E4E4E7" stop-opacity="0.7"/>
-                <stop offset="100%" stop-color="#D4D4D8" stop-opacity="0.2"/>
-              </radialGradient>
-              <radialGradient id="smokePuffCorePricing" cx="50%" cy="20%" r="80%">
+              <radialGradient id="smokeMdCorePricing" cx="50%" cy="15%" r="85%">
                 <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-                <stop offset="50%" stop-color="#FFF8E7" stop-opacity="0.8"/>
-                <stop offset="100%" stop-color="#E4E4E7" stop-opacity="0.2"/>
+                <stop offset="35%" stop-color="#FFE082" stop-opacity="0.92"/>
+                <stop offset="70%" stop-color="#FF9800" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="#D32F2F" stop-opacity="0.15"/>
               </radialGradient>
             </defs>
 
-            <!-- 1. VOLUMETRIC LAUNCH SMOKE CLOUD PLUME (Authentic Rocket Smoke Cushion) -->
-            <g id="apple-rocket-smoke-bank" class="rocket-smoke-billow">
-              <!-- Left Billowing Cloud Puff -->
-              <circle cx="42" cy="180" r="18" fill="url(#smokePuffWhite1Pricing)"/>
-              <circle cx="22" cy="192" r="15" fill="url(#smokePuffWhite2Pricing)"/>
-              
-              <!-- Right Billowing Cloud Puff -->
-              <circle cx="98" cy="180" r="18" fill="url(#smokePuffWhite1Pricing)"/>
-              <circle cx="118" cy="192" r="15" fill="url(#smokePuffWhite2Pricing)"/>
-              
-              <!-- Center Base Cloud Pillows -->
-              <circle cx="70" cy="194" r="22" fill="url(#smokePuffCorePricing)"/>
-              <circle cx="56" cy="166" r="13" fill="url(#smokePuffWhite1Pricing)"/>
-              <circle cx="84" cy="166" r="13" fill="url(#smokePuffWhite2Pricing)"/>
+            <!-- 1. MATERIAL DESIGN VOLUMETRIC LAUNCHPAD SMOKE CLOUD (Active Turbulent Pad Billow) -->
+            <g id="apple-rocket-smoke-bank" class="pointer-events-none">
+              <!-- Minimalist Material Design Launchpad Foundation -->
+              <path d="M15 200H125" stroke="#334155" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+              <path d="M36 200L44 206H96L104 200" stroke="#1E293B" stroke-width="1.5" fill="none" opacity="0.35"/>
 
-              <!-- Outward Billowing Wisps -->
-              <circle cx="10" cy="200" r="9" fill="#FFFFFF" opacity="0.45"/>
-              <circle cx="130" cy="200" r="9" fill="#FFFFFF" opacity="0.45"/>
+              <!-- Left Churning Plume (MD Orange & White) -->
+              <g class="smoke-churn-left">
+                <circle cx="36" cy="182" r="19" fill="url(#smokeMdOrangePricing)"/>
+                <circle cx="18" cy="192" r="15" fill="url(#smokeMdWhitePricing)"/>
+                <circle cx="48" cy="168" r="13" fill="url(#smokeMdWhitePricing)"/>
+                <circle cx="8" cy="198" r="9" fill="url(#smokeMdOrangePricing)" opacity="0.5"/>
+              </g>
+
+              <!-- Right Churning Plume (MD Red & White) -->
+              <g class="smoke-churn-right">
+                <circle cx="104" cy="182" r="19" fill="url(#smokeMdRedPricing)"/>
+                <circle cx="122" cy="192" r="15" fill="url(#smokeMdWhitePricing)"/>
+                <circle cx="92" cy="168" r="13" fill="url(#smokeMdWhitePricing)"/>
+                <circle cx="132" cy="198" r="9" fill="url(#smokeMdRedPricing)" opacity="0.5"/>
+              </g>
+
+              <!-- Ground Core Plasma Trench Cushion -->
+              <g class="smoke-churn-core">
+                <circle cx="70" cy="192" r="23" fill="url(#smokeMdCorePricing)"/>
+                <circle cx="58" cy="164" r="12" fill="url(#smokeMdWhitePricing)"/>
+                <circle cx="82" cy="164" r="12" fill="url(#smokeMdWhitePricing)"/>
+              </g>
             </g>
 
             <!-- 2. JET FLAME EXHAUST — CSS flicker only, no GSAP transform -->
@@ -1938,34 +1956,50 @@
           { pct: 100, text: "Siap meluncur! Membuka studio..." }
         ];
 
-        // ─── 4. PURE WHITE AEROSPACE SMOKE VAPOR SYSTEM ───
+        // ─── 4. MATERIAL DESIGN SMOKE & PHYSICS LAUNCH ENGINE ───
         const smokeContainer = document.getElementById("preloader-smoke-container");
+        const groundSmokeBank = document.getElementById("apple-rocket-smoke-bank");
+        const rocketFlame = document.getElementById("apple-rocket-flame");
         let smokeActive = true;
         let smokeInterval = null;
+        let currentProgressVal = 0;
+        let launchTriggered = false;
 
+        // Material Design Ground Smoke Puff Generator
         const spawnSmokePuff = (isLaunch = false) => {
           if (!smokeContainer || !smokeActive) return;
 
           const puff = document.createElement("div");
-          const size = isLaunch ? 28 + Math.random() * 22 : 14 + Math.random() * 12;
+          const size = isLaunch ? 32 + Math.random() * 26 : 14 + Math.random() * 12;
 
-          puff.className = "absolute rounded-full pointer-events-none blur-[4px] transform-gpu";
+          const colorRoll = Math.random();
+          let bg = "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(236,239,241,0.3) 60%, rgba(255,255,255,0) 100%)";
+          if (colorRoll < 0.35) {
+            // Material Design Orange 500 / Deep Orange accent
+            bg = isLaunch 
+              ? "radial-gradient(circle, rgba(255,152,0,0.8) 0%, rgba(255,87,34,0.45) 55%, rgba(211,47,47,0) 100%)"
+              : "radial-gradient(circle, rgba(255,152,0,0.5) 0%, rgba(255,87,34,0.25) 55%, rgba(211,47,47,0) 100%)";
+          } else if (colorRoll < 0.65) {
+            // Material Design Red 700 / Crimson accent
+            bg = isLaunch
+              ? "radial-gradient(circle, rgba(244,67,54,0.75) 0%, rgba(211,47,47,0.45) 55%, rgba(183,28,28,0) 100%)"
+              : "radial-gradient(circle, rgba(244,67,54,0.45) 0%, rgba(211,47,47,0.2) 55%, rgba(183,28,28,0) 100%)";
+          }
+
+          puff.className = "absolute rounded-full pointer-events-none blur-[3px] transform-gpu";
           puff.style.width = `${size}px`;
           puff.style.height = `${size}px`;
-          // Pure White Aerospace Vapor with soft radial dissipation
-          puff.style.background = isLaunch
-            ? "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0) 100%)"
-            : "radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0) 100%)";
+          puff.style.background = bg;
           puff.style.left = "50%";
-          puff.style.top = "60%";
+          puff.style.top = "64%";
           puff.style.transform = "translate(-50%, -50%) scale(0.5)";
 
           smokeContainer.appendChild(puff);
 
-          const driftX = (Math.random() - 0.5) * (isLaunch ? 45 : 20);
-          const driftY = isLaunch ? 65 + Math.random() * 45 : 32 + Math.random() * 24;
-          const endScale = isLaunch ? 3.2 + Math.random() * 1.2 : 2.2 + Math.random() * 0.6;
-          const duration = isLaunch ? 0.85 + Math.random() * 0.3 : 1.4 + Math.random() * 0.4;
+          const driftX = (Math.random() - 0.5) * (isLaunch ? 80 : 35);
+          const driftY = isLaunch ? 65 + Math.random() * 50 : 25 + Math.random() * 22;
+          const endScale = isLaunch ? 3.5 + Math.random() * 1.5 : 2.0 + Math.random() * 0.6;
+          const duration = isLaunch ? 0.9 + Math.random() * 0.35 : 1.3 + Math.random() * 0.4;
 
           gsap.to(puff, {
             x: driftX,
@@ -1973,74 +2007,72 @@
             scale: endScale,
             opacity: 0,
             duration: duration,
-            ease: "sine.out",
+            ease: "power2.out",
             onComplete: () => {
               puff.remove();
             }
           });
         };
 
-        // 1. FASE IDLE (0% - 89%): Continuous silky white smoke emission
+        // Continuous ground smoke churn during preparation
         smokeInterval = setInterval(() => {
           if (smokeActive) {
             spawnSmokePuff(false);
           }
-        }, 95);
+        }, 100);
 
-        // 1. FASE IDLE (0% - 89%): Luxurious, ultra-smooth buoyant hover
-        let floatTween = null;
-        if (rocketCenter) {
-          floatTween = gsap.to(rocketCenter, {
-            y: -6,
-            rotation: 0.8,
-            duration: 2.2,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            transformOrigin: "50% 50%"
-          });
-        }
+        // 1. FASE PERSIAPAN (0% - 89%): Realistic High-Frequency Rumble Jitter on Launchpad
+        const updateEngineRumble = () => {
+          if (launchTriggered || !rocketCenter) return;
+          const intensity = 0.35 + (currentProgressVal / 100) * 1.1;
+          const jx = (Math.random() - 0.5) * 1.6 * intensity;
+          const jy = (Math.random() - 0.5) * 1.1 * intensity;
+          const jrot = (Math.random() - 0.5) * 0.35 * intensity;
+          gsap.set(rocketCenter, { x: jx, y: jy, rotation: jrot });
+        };
 
-        let launchTriggered = false;
+        gsap.ticker.add(updateEngineRumble);
 
-        // 2. FASE PELUNCURAN (90% - 100%): Full speed vertical launch with high acceleration
+        // 2. FASE PELUNCURAN (90% - 100%): Physical Vertical Acceleration Launch Curve
         const triggerLaunch = () => {
           if (launchTriggered) return;
           launchTriggered = true;
 
-          if (floatTween) floatTween.kill();
+          // Stop pad rumble and align straight
+          gsap.ticker.remove(updateEngineRumble);
+          if (rocketCenter) gsap.set(rocketCenter, { x: 0, rotation: 0 });
 
-          // Spawn dense burst of white launch smoke plumes
-          for (let i = 0; i < 9; i++) {
-            setTimeout(() => spawnSmokePuff(true), i * 35);
+          // Spawn massive monumental ground smoke eruption
+          for (let i = 0; i < 10; i++) {
+            setTimeout(() => spawnSmokePuff(true), i * 30);
           }
 
           const blastTl = gsap.timeline();
 
-          // Volumetric smoke bank billows outwards at the launch pad
-          const smokeBank = document.getElementById("apple-rocket-smoke-bank");
-          if (smokeBank) {
-            blastTl.to(smokeBank, {
-              scale: 2.2,
-              y: 40,
+          // Monumental ground smoke expansion at the launch pad
+          if (groundSmokeBank) {
+            blastTl.to(groundSmokeBank, {
+              scaleX: 3.0,
+              scaleY: 2.2,
+              y: 45,
               opacity: 0,
-              transformOrigin: "70px 185px",
-              duration: 1.1,
+              transformOrigin: "70px 190px",
+              duration: 1.2,
               ease: "power2.out"
             }, 0);
           }
 
-          // Rocket launches straight up with smooth inertia acceleration
+          // Rocket lifts off with physical inertia & exponential upward acceleration
           if (rocketCenter) {
             blastTl.to(rocketCenter, {
-              y: "-150vh",
-              rotation: 0,
-              scale: 0.88,
+              y: "-160vh",
+              scale: 0.86,
               duration: 1.35,
-              ease: "power2.in"
-            }, 0);
+              ease: "power4.in"
+            }, 0.05);
           }
 
+          // Monospace counter & status fade down smoothly
           if (textGroup) {
             blastTl.to(textGroup, {
               opacity: 0,
@@ -2054,20 +2086,23 @@
         const progressTracker = { val: 0 };
 
         const updateDisplay = (val, text) => {
+          currentProgressVal = val;
           const intVal = Math.min(100, Math.floor(val));
           if (barEl) barEl.style.width = `${intVal}%`;
           if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
           if (statusEl && text) statusEl.textContent = text;
 
+          // Trigger launch precisely when progress reaches 90%
           if (intVal >= 90 && !launchTriggered) {
             triggerLaunch();
           }
         };
 
-        // 3. TRANSISI AKHIR (Selesai Loading): Pure opacity fade out to 0
+        // 3. FASE MEMUDAR (Transisi Akhir / Selesai): Pure Smooth Opacity Fadeout
         const finishPreloader = () => {
           if (!launchTriggered) triggerLaunch();
 
+          gsap.ticker.remove(updateEngineRumble);
           smokeActive = false;
           if (smokeInterval) clearInterval(smokeInterval);
 
