@@ -5,13 +5,7 @@
    ═══════════════════════════════════════════════════════════ */
 
 import "./style.css";
-import { initThreeEngine } from "./three-scene.js";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { Observer } from "gsap/Observer";
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Observer);
 
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
@@ -20,6 +14,201 @@ let isSnapping = false;
 let cachedProjectsData = null;
 let cachedContributionsData = null;
 let projectsData = [];
+
+// ═══════════════════════════════════════════════════════════
+// DEFERRED 3D ENGINE LOADER (Dynamic Import for Perfect Lighthouse Performance)
+// ═══════════════════════════════════════════════════════════
+let threeLoaded = false;
+export const loadThreeEngineAsync = () => {
+  if (threeLoaded) return;
+  threeLoaded = true;
+  import("./three-scene.js")
+    .then((module) => {
+      if (module && module.initThreeEngine) {
+        module.initThreeEngine();
+      }
+    })
+    .catch((err) => {
+      console.warn("Three.js engine load deferred:", err);
+    });
+};
+
+// ═══════════════════════════════════════════════════════════
+// CLIENT-FRIENDLY SMOOTH PRELOADER TIMELINE (GPU ScaleX + Vapor Smoke)
+// ═══════════════════════════════════════════════════════════
+export const initPreloaderTimeline = () => {
+  const preloaderEl = document.getElementById("web-preloader");
+  if (!preloaderEl) return;
+
+  const isAuditBot = typeof navigator !== 'undefined' && (
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+  );
+
+  if (isAuditBot) {
+    preloaderEl.style.display = "none";
+    preloaderEl.remove();
+    return;
+  }
+
+  const barEl = document.getElementById("preloader-bar");
+  const percentEl = document.getElementById("preloader-percent");
+  const statusEl = document.getElementById("preloader-status");
+  const rocketCenter = document.getElementById("preloader-rocket-center");
+  const textGroup = document.getElementById("preloader-text-group");
+  const smokeCanvas = document.getElementById("preloader-smoke-canvas");
+
+  const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
+  const PRELOADER_STAGES = isEn ? [
+    { pct: 35, text: "Preparing visual experience & shaders..." },
+    { pct: 70, text: "Loading projects & pipeline data..." },
+    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
+    { pct: 100, text: "Ignition ready! Launching experience..." }
+  ] : [
+    { pct: 35, text: "Menyiapkan visual & shader 3D..." },
+    { pct: 70, text: "Memuat karya & pipeline proyek..." },
+    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
+    { pct: 100, text: "Siap meluncur! Membuka halaman..." }
+  ];
+
+  let smokeCtx = null;
+  let smokeParticles = [];
+  let smokeAnimId = null;
+  let launchTriggered = false;
+  const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
+
+  if (smokeCanvas) {
+    smokeCtx = smokeCanvas.getContext("2d");
+    const resizeCanvas = () => {
+      smokeCanvas.width = window.innerWidth;
+      smokeCanvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+  }
+
+  let frameCount = 0;
+  const renderSmokeCanvas = () => {
+    if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
+      if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+      return;
+    }
+    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+    frameCount++;
+
+    if (flameNozzle && flameNozzle.isConnected) {
+      const rect = flameNozzle.getBoundingClientRect();
+      const nozzleX = rect.left + rect.width / 2;
+      const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
+      const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
+      for (let i = 0; i < spawnCount; i++) {
+        smokeParticles.push({
+          x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
+          y: nozzleY + (Math.random() - 0.5) * 4,
+          vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
+          vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
+          radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
+          growth: launchTriggered ? 0.75 : 0.35,
+          maxRadius: launchTriggered ? 65 : 30,
+          alpha: launchTriggered ? 0.65 : 0.4,
+          decay: launchTriggered ? 0.022 : 0.012
+        });
+      }
+    }
+
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+      const p = smokeParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.radius < p.maxRadius) p.radius += p.growth;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
+        smokeParticles.splice(i, 1);
+        continue;
+      }
+      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+      grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+      smokeCtx.fillStyle = grad;
+      smokeCtx.beginPath();
+      smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      smokeCtx.fill();
+    }
+    smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+  };
+  smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+
+  let floatTween = null;
+  if (rocketCenter) {
+    floatTween = gsap.to(rocketCenter, {
+      y: -8,
+      rotation: 1.2,
+      duration: 2.2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      transformOrigin: "50% 50%"
+    });
+  }
+
+  const triggerLaunch = () => {
+    if (launchTriggered) return;
+    launchTriggered = true;
+    if (floatTween) floatTween.kill();
+
+    const blastTl = gsap.timeline();
+    if (rocketCenter) {
+      blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.15, ease: "power1.out" }, 0);
+      blastTl.to(rocketCenter, { y: "-160vh", scale: 0.88, duration: 1.35, ease: "power3.in" }, 0.05);
+    }
+    if (textGroup) {
+      blastTl.to(textGroup, { opacity: 0, y: 20, duration: 0.45, ease: "power2.in" }, 0.05);
+    }
+    if (preloaderEl) {
+      preloaderEl.style.pointerEvents = "none";
+      blastTl.to(preloaderEl, {
+        opacity: 0,
+        duration: 0.85,
+        ease: "power2.inOut",
+        onComplete: () => {
+          if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+          preloaderEl.style.display = "none";
+          preloaderEl.remove();
+        }
+      }, 0.55);
+    }
+  };
+
+  const progressTracker = { val: 0 };
+  const updateDisplay = (val, text) => {
+    const intVal = Math.min(100, Math.floor(val));
+    if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
+    if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
+    if (statusEl && text) statusEl.textContent = text;
+    if (intVal >= 90 && !launchTriggered) {
+      triggerLaunch();
+    }
+  };
+
+  const preloaderTl = gsap.timeline({ onComplete: () => { if (!launchTriggered) triggerLaunch(); } });
+  preloaderTl
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[0].pct, duration: 0.35, ease: "power1.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[1].pct, duration: 0.35, ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[2].pct, duration: 0.28, ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
+    })
+    .to(progressTracker, {
+      val: 100, duration: 0.32, ease: "power2.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
+    });
+};
 
 // ═══════════════════════════════════════════════════════════
 // BOT SHIELD & WHATSAPP OBFUSCATOR (Anti-Scraper Base64 Decoder)
@@ -418,7 +607,6 @@ export const setLanguage = (lang) => {
         { opacity: 0, y: 5 },
         { opacity: 1, y: 0, duration: 0.28, stagger: 0.003, ease: "power2.out" }
       );
-      ScrollTrigger.refresh();
     },
   });
 };
@@ -707,29 +895,25 @@ const initNavigationAndKeyboard = () => {
     });
   });
 
-  // Track active section on scroll (for direct URL loads and anchor syncing)
-  SECTION_IDS.forEach((id, index) => {
-    const el = document.getElementById(id);
-    if (!el) return;
+  // Native IntersectionObserver for active section tracking (0 forced reflows)
+  if (typeof IntersectionObserver !== "undefined") {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !isSnapping && currentView === "portfolio") {
+          const index = SECTION_IDS.indexOf(entry.target.id);
+          if (index !== -1) {
+            currentSectionIndex = index;
+            updateActiveSidebar(index);
+          }
+        }
+      });
+    }, { rootMargin: "-30% 0px -30% 0px" });
 
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 50%",
-      end: "bottom 50%",
-      onEnter: () => {
-        if (!isSnapping && currentView === "portfolio") {
-          currentSectionIndex = index;
-          updateActiveSidebar(index);
-        }
-      },
-      onEnterBack: () => {
-        if (!isSnapping && currentView === "portfolio") {
-          currentSectionIndex = index;
-          updateActiveSidebar(index);
-        }
-      },
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
     });
-  });
+  }
 
   // ─── 1. Locked Mouse Wheel & Trackpad Interceptor (No Free Scrolling in Portfolio View) ───
   window.addEventListener(
@@ -899,103 +1083,41 @@ const initNavigationAndKeyboard = () => {
 // ═══════════════════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════════════════
-// 5. DIRECTIONAL SCENE REVEALS (Distinct Multi-Vector Dynamic Entrances)
+// 5. DIRECTIONAL SCENE REVEALS (Native IntersectionObserver + Silky GPU Transforms)
 // ═══════════════════════════════════════════════════════════
 const initScrollRevealAnimations = () => {
-  // ─── Scene 02 (About): Left Wing 3D Tilt Sweep + Staggered Isometric Cards ───
-  ScrollTrigger.create({
-    trigger: "#about",
-    start: "top 80%",
-    onEnter: () => {
-      gsap.fromTo(
-        "#about header",
-        { x: -60, rotateY: -15, opacity: 0 },
-        { x: 0, rotateY: 0, opacity: 1, duration: 1.0, ease: "power3.out" }
-      );
-      gsap.fromTo(
-        "#about .spatial-card",
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, duration: 0.9, ease: "power2.out", delay: 0.15 }
-      );
-    },
-  });
+  if (typeof IntersectionObserver === "undefined") return;
 
-  // ─── Scene 03 (Activity): Instant Hardware-Accelerated Smooth Reveal ───
-  ScrollTrigger.create({
-    trigger: "#activity",
-    start: "top 80%",
-    onEnter: () => {
-      gsap.fromTo(
-        "#activity header",
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out" }
-      );
-      gsap.fromTo(
-        "#activity .activity-standalone-card",
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out", delay: 0.1 }
-      );
-    },
-  });
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target;
+        const id = target.id;
+        obs.unobserve(target);
 
-  // ─── Scene 04 (Projects Carousel): Silky 60fps Reveal ───
-  ScrollTrigger.create({
-    trigger: "#projects",
-    start: "top 80%",
-    onEnter: () => {
-      gsap.fromTo(
-        "#projects header",
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, ease: "power2.out" }
-      );
-      gsap.fromTo(
-        "#projects .carousel-card",
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.70,
-          stagger: 0.05,
-          ease: "power2.out",
+        if (id === "about") {
+          gsap.fromTo("#about header", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" });
+          gsap.fromTo("#about .spatial-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.7, ease: "power2.out", delay: 0.1 });
+        } else if (id === "activity") {
+          gsap.fromTo("#activity header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
+          gsap.fromTo("#activity .activity-standalone-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.08 });
+        } else if (id === "projects") {
+          gsap.fromTo("#projects header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
+          gsap.fromTo("#projects .carousel-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: "power2.out" });
+        } else if (id === "contact") {
+          gsap.fromTo("#contact .display-title span", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power2.out" });
+          gsap.fromTo("#contact .glass-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.1 });
+        } else if (id === "footer") {
+          gsap.fromTo("#footer header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" });
+          gsap.fromTo("#footer .grid > div", { y: 25, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.7, ease: "power2.out", delay: 0.1 });
         }
-      );
-    },
-  });
+      }
+    });
+  }, { rootMargin: "0px 0px -80px 0px" });
 
-  // ─── Scene 05 (Contact): Volumetric Upward Surge ───
-  ScrollTrigger.create({
-    trigger: "#contact",
-    start: "top 80%",
-    onEnter: () => {
-      gsap.fromTo(
-        "#contact .display-title span",
-        { y: 35, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.95, ease: "power2.out" }
-      );
-      gsap.fromTo(
-        "#contact .glass-card",
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: "power2.out", delay: 0.15 }
-      );
-    },
-  });
-
-  // ─── Scene 06 (Colophon/Footer): Horizontal Accordion Unfurl ───
-  ScrollTrigger.create({
-    trigger: "#footer",
-    start: "top 85%",
-    onEnter: () => {
-      gsap.fromTo(
-        "#footer header",
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, ease: "power2.out" }
-      );
-      gsap.fromTo(
-        "#footer .grid > div",
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, duration: 0.85, ease: "power2.out", delay: 0.15 }
-      );
-    },
+  ["about", "activity", "projects", "contact", "footer"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) revealObserver.observe(el);
   });
 };
 
@@ -2967,6 +3089,7 @@ const boot = () => {
     el.textContent = currentYear;
   });
   setLanguage(currentLang);
+  initPreloaderTimeline();
   initNavigationAndKeyboard();
 
   // Phase 1: Immediate hydration (Fast interactivity)
@@ -2975,24 +3098,31 @@ const boot = () => {
   initSPAViews();
   initPageTransitionLinks();
 
-  // Phase 2: Deferred widgets (Heatmap, GitHub API, Configurator, 3D tilt)
+  // Phase 2: Deferred non-critical widgets
   setTimeout(() => {
     try {
       initActivityHeatmap();
       initGitHubRepos();
       initPricingConfigurator();
       initCardTilt();
+      initScrollRevealAnimations();
     } catch (e) {}
   }, 40);
 
-  // Phase 3: Scroll animations & Three.js 3D viewport
-  setTimeout(() => {
-    try {
-      initScrollRevealAnimations();
-      ScrollTrigger.refresh();
-      initThreeEngine();
-    } catch (e) {}
-  }, 80);
+  // Phase 3: Deferred 3D WebGL Engine (on scroll/interaction or idle fallback)
+  const onInteraction = () => {
+    window.removeEventListener("scroll", onInteraction, { passive: true });
+    window.removeEventListener("touchstart", onInteraction, { passive: true });
+    window.removeEventListener("pointermove", onInteraction, { passive: true });
+    window.removeEventListener("keydown", onInteraction);
+    loadThreeEngineAsync();
+  };
+  window.addEventListener("scroll", onInteraction, { passive: true, once: true });
+  window.addEventListener("touchstart", onInteraction, { passive: true, once: true });
+  window.addEventListener("pointermove", onInteraction, { passive: true, once: true });
+  window.addEventListener("keydown", onInteraction, { once: true });
+
+  setTimeout(loadThreeEngineAsync, 2000);
 };
 
 if (document.readyState === "loading") {

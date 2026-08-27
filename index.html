@@ -111,34 +111,19 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .material-symbols-outlined {
-        font-family: 'Material Symbols Outlined', sans-serif;
-        font-weight: normal;
-        font-style: normal;
-        font-size: 24px;
-        line-height: 1;
-        letter-spacing: normal;
-        text-transform: none;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        -webkit-font-feature-settings: 'liga';
-        -webkit-font-smoothing: antialiased;
-      }
     </style>
 
-    <!-- Google Fonts & Material Symbols (Non-blocking media swap for instant FCP) -->
+    <!-- Google Fonts (Non-blocking media swap for instant FCP) -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&display=swap"
       />
     </noscript>
 
@@ -434,8 +419,8 @@
         <div class="w-full h-1 bg-white/10 relative overflow-hidden rounded-full preloader-track">
           <div
             id="preloader-bar"
-            class="absolute inset-y-0 left-0 bg-[#DC143C] shadow-[0_0_12px_#DC143C] rounded-full transition-all duration-150 ease-out"
-            style="width: 0%;"
+            class="absolute inset-y-0 left-0 w-full bg-[#DC143C] shadow-[0_0_12px_#DC143C] rounded-full origin-left transform-gpu transition-transform duration-150 ease-out"
+            style="transform: scaleX(0);"
           ></div>
         </div>
         <div class="flex justify-between items-center text-[0.68rem] sm:text-xs text-zinc-500 font-mono">
