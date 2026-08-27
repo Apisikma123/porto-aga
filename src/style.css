@@ -19,7 +19,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto !important;
     background: 
       radial-gradient(ellipse 90% 70% at 50% -10%, rgba(220, 20, 60, 0.15), transparent 70%),
       radial-gradient(ellipse 70% 60% at 85% 90%, rgba(40, 60, 140, 0.14), transparent 70%),
@@ -935,22 +935,80 @@ html[data-theme="light"] aside[aria-label="Keyboard Navigation"] span {
   font-weight: 600 !important;
 }
 
-/* Light Availability Badge */
-html[data-theme="light"] div[aria-label="Availability Status"] {
-  background: rgba(255, 255, 255, 0.90) !important;
+/* Light Availability Badge & Status Capsules */
+html[data-theme="light"] div[aria-label="Availability Status"],
+html[data-theme="light"] a[aria-label="Open to Work"],
+html[data-theme="light"] .bg-\[\#131318\],
+html[data-theme="light"] .bg-\[\#131318\]\/90,
+html[data-theme="light"] .bg-\[\#131318\]\/80,
+html[data-theme="light"] .bg-\[\#1b1b20\] {
+  background: rgba(255, 255, 255, 0.92) !important;
   border: 1px solid rgba(15, 23, 42, 0.14) !important;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  color: #090a10 !important;
   text-shadow: none !important;
 }
 
-html[data-theme="light"] div[aria-label="Availability Status"] span[data-i18n="statusAvailable"] {
+html[data-theme="light"] a[aria-label="Open to Work"]:hover {
+  background: #ffffff !important;
+  border-color: rgba(220, 20, 60, 0.6) !important;
+  box-shadow: 0 12px 35px -5px rgba(220, 20, 60, 0.20) !important;
+}
+
+html[data-theme="light"] div[aria-label="Availability Status"] span,
+html[data-theme="light"] a[aria-label="Open to Work"] span,
+html[data-theme="light"] .bg-\[\#131318\] span,
+html[data-theme="light"] [data-i18n="footerAvailable"] {
   color: #090a10 !important;
   font-weight: 700 !important;
 }
 
+html[data-theme="light"] a[aria-label="Open to Work"]:hover span {
+  color: #DC143C !important;
+}
+
 /* Universal High-Contrast Text Rules for Light Mode */
-html[data-theme="light"] .text-white:not(.btn-crimson):not(.lang-btn.active):not([class*="bg-[#DC143C]"]):not([class*="bg-red-"]) {
+html[data-theme="light"] .text-white:not(.btn-crimson):not(.lang-btn.active):not(.bg-\[\#DC143C\]):not(#wa-dispatch-btn):not(#wa-dispatch-btn *):not(.all-projects-filter-btn.active) {
   color: #090a10 !important;
+}
+
+/* Explicit Button States in Light Mode (Semua Karya, Project Navigation, etc.) */
+html[data-theme="light"] button[onclick*="switchView('all-projects')"],
+html[data-theme="light"] button[onclick*="switchView('portfolio')"] {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+  border: 1px solid rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] button[onclick*="switchView('all-projects')"] span,
+html[data-theme="light"] button[onclick*="switchView('portfolio')"] span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] button[onclick*="switchView('all-projects')"]:hover,
+html[data-theme="light"] button[onclick*="switchView('portfolio')"]:hover {
+  background-color: #DC143C !important;
+  border-color: #DC143C !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] button[onclick*="switchView('all-projects')"]:hover span,
+html[data-theme="light"] button[onclick*="switchView('portfolio')"]:hover span {
+  color: #ffffff !important;
+}
+
+/* Dynamic Hover Color Transitions for Elements with hover:bg-[#DC143C] */
+html[data-theme="light"] button:hover[class*="hover:bg-[#DC143C]"],
+html[data-theme="light"] a:hover[class*="hover:bg-[#DC143C]"] {
+  background-color: #DC143C !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] button:hover[class*="hover:bg-[#DC143C]"] *,
+html[data-theme="light"] a:hover[class*="hover:bg-[#DC143C]"] * {
+  color: #ffffff !important;
 }
 
 html[data-theme="light"] .text-zinc-100,
@@ -1046,6 +1104,133 @@ html[data-theme="light"] .btn-crimson,
 html[data-theme="light"] .lang-btn.active,
 html[data-theme="light"] .bg-\[\#DC143C\] {
   color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME: SECTION 06 CONTACT AMBIENT CLARITY
+   ═══════════════════════════════════════════════════════════ */
+html[data-theme="light"] #contact .section-content {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.10), 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+  padding: 3rem 2rem !important;
+}
+
+html[data-theme="light"] #contact .eyebrow {
+  color: #DC143C !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] #contact .eyebrow span {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] #contact .display-title,
+html[data-theme="light"] #contact .display-title span {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #contact .display-title span.text-\[\#DC143C\] {
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] #contact .body-copy {
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+html[data-theme="light"] #contact-whatsapp-btn {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border: 1px solid rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="light"] #contact-whatsapp-btn:hover {
+  background: rgba(220, 20, 60, 0.08) !important;
+  border-color: #DC143C !important;
+  color: #DC143C !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME: SECTION 07 FOOTER TYPOGRAPHY & CONTRAST
+   ═══════════════════════════════════════════════════════════ */
+html[data-theme="light"] #footer {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] #footer .eyebrow,
+html[data-theme="light"] #footer span.eyebrow {
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="light"] #footer .text-zinc-500,
+html[data-theme="light"] #footer .text-zinc-600 {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="light"] #footer .text-zinc-400 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #footer .text-zinc-300,
+html[data-theme="light"] #footer .text-zinc-200 {
+  color: #090a10 !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="light"] #footer [data-i18n="footerLocation"] {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="light"] #footer a:not(.btn-crimson):not(#footer-whatsapp-link) {
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] #footer a:not(.btn-crimson):not(#footer-whatsapp-link):hover {
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] #footer button {
+  color: #1e293b !important;
+}
+
+html[data-theme="light"] #footer button:hover {
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] #footer button span.tabular-nums {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] #footer button:hover span.tabular-nums {
+  color: #DC143C !important;
+}
+
+html[data-theme="light"] #footer a[href*="pricing.html"],
+html[data-theme="light"] #footer a[href*="jasa-pembuatan-"],
+html[data-theme="light"] #footer a[href*="projects.html"],
+html[data-theme="light"] #footer a[href*="project.html"] {
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+html[data-theme="light"] #footer a[href*="pricing.html"]:hover,
+html[data-theme="light"] #footer a[href*="jasa-pembuatan-"]:hover,
+html[data-theme="light"] #footer a[href*="projects.html"]:hover,
+html[data-theme="light"] #footer a[href*="project.html"]:hover {
+  color: #DC143C !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="light"] #footer .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.12) !important;
 }
 
 /* Light In-App Markdown Modal */
@@ -1308,8 +1493,8 @@ html[data-theme="light"] .repo-card a:hover {
    ═══════════════════════════════════════════════════════════ */
 
 /* Inactive Dots in Light Mode (High Contrast Slate) */
-html[data-theme="light"] .carousel-dot:not(.w-7),
-html[data-theme="light"] .pricing-dot:not(.w-7),
+html[data-theme="light"] .carousel-dot:not(.active),
+html[data-theme="light"] .pricing-dot:not(.active),
 html[data-theme="light"] .carousel-dot.w-2,
 html[data-theme="light"] .pricing-dot.w-2 {
   background-color: #94a3b8 !important;
@@ -1317,8 +1502,8 @@ html[data-theme="light"] .pricing-dot.w-2 {
   border: 1px solid rgba(15, 23, 42, 0.15) !important;
 }
 
-html[data-theme="light"] .carousel-dot:not(.w-7):hover,
-html[data-theme="light"] .pricing-dot:not(.w-7):hover,
+html[data-theme="light"] .carousel-dot:not(.active):hover,
+html[data-theme="light"] .pricing-dot:not(.active):hover,
 html[data-theme="light"] .carousel-dot.w-2:hover,
 html[data-theme="light"] .pricing-dot.w-2:hover {
   background-color: #475569 !important;
@@ -1326,7 +1511,10 @@ html[data-theme="light"] .pricing-dot.w-2:hover {
 }
 
 /* Active Dots in Light Mode (Vibrant Crimson) */
+html[data-theme="light"] .carousel-dot.active,
+html[data-theme="light"] .pricing-dot.active,
 html[data-theme="light"] .carousel-dot.w-7,
+html[data-theme="light"] .pricing-dot.w-6,
 html[data-theme="light"] .pricing-dot.w-7 {
   background-color: #DC143C !important;
   opacity: 1 !important;
@@ -1499,16 +1687,6 @@ html[data-theme="light"] #pricing-carousel-counter {
    GLOBAL LIGHT THEME SYSTEM OVERRIDES (Zero White Text On Light Mode)
    ═══════════════════════════════════════════════════════════ */
 
-html[data-theme="light"] {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
-
-html[data-theme="light"] body {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
-
 /* Global Light Headings, Paragraphs and Spans */
 html[data-theme="light"] h1,
 html[data-theme="light"] h2,
@@ -1524,7 +1702,7 @@ html[data-theme="light"] p {
 }
 
 /* Universal text classes in Light Mode */
-html[data-theme="light"] .text-white:not(.btn-crimson):not(.lang-btn.active):not([class*="bg-[#DC143C]"]):not([class*="bg-red-"]):not([class*="bg-green-"]):not(#wa-dispatch-btn):not(#wa-dispatch-btn *) {
+html[data-theme="light"] .text-white:not(.btn-crimson):not(.lang-btn.active):not(.bg-\[\#DC143C\]):not(#wa-dispatch-btn):not(#wa-dispatch-btn *):not(.all-projects-filter-btn.active) {
   color: #090a10 !important;
 }
 
@@ -1564,7 +1742,14 @@ html[data-theme="light"] .bg-zinc-950\/90,
 html[data-theme="light"] .bg-zinc-900,
 html[data-theme="light"] .bg-\[\#090a10\],
 html[data-theme="light"] .bg-\[\#040509\],
-html[data-theme="light"] .bg-black\/60 {
+html[data-theme="light"] .bg-\[\#131318\],
+html[data-theme="light"] .bg-\[\#131318\]\/90,
+html[data-theme="light"] .bg-\[\#131318\]\/80,
+html[data-theme="light"] .bg-\[\#1b1b20\],
+html[data-theme="light"] .bg-black\/60,
+html[data-theme="light"] .bg-black\/70,
+html[data-theme="light"] .bg-black\/80,
+html[data-theme="light"] .bg-black\/90 {
   background-color: rgba(255, 255, 255, 0.92) !important;
   border-color: rgba(15, 23, 42, 0.12) !important;
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06) !important;
@@ -1933,6 +2118,17 @@ html[data-theme="light"] span.tabular-nums.text-zinc-600 {
 /* ═══════════════════════════════════════════════════════════
    100% ZOOM VIEWPORT FIT & DENSITY ADAPTATION (Zero-Overflow Guarantee)
    ═══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  #pricing {
+    min-height: 100svh;
+    padding-top: 4rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+  #pricing .pricing-carousel-card {
+    max-height: 240px;
+  }
+}
+
 @media (min-width: 1024px) {
   #portfolio-view > section {
     min-height: 100svh;

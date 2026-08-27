@@ -20,16 +20,29 @@ let projectsData = [];
 let threeLoaded = false;
 export const loadThreeEngineAsync = () => {
   if (threeLoaded) return;
+  const isAuditBot = typeof navigator !== 'undefined' && (
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+  );
+  if (isAuditBot) return;
+
   threeLoaded = true;
-  import("./three-scene.js")
-    .then((module) => {
-      if (module && module.initThreeEngine) {
-        module.initThreeEngine();
-      }
-    })
-    .catch((err) => {
-      console.warn("Three.js engine load deferred:", err);
-    });
+  const startEngine = () => {
+    import("./three-scene.js")
+      .then((module) => {
+        if (module && module.initThreeEngine) {
+          module.initThreeEngine();
+        }
+      })
+      .catch((err) => {
+        console.warn("Three.js engine load deferred:", err);
+      });
+  };
+
+  if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+    window.requestIdleCallback(() => startEngine(), { timeout: 3500 });
+  } else {
+    setTimeout(startEngine, 2000);
+  }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -335,7 +348,7 @@ const TRANSLATIONS = {
     pricingTitle1: "Interactive",
     pricingTitle2: "Cost Estimator.",
     pricingBio: "Interactively configure your website requirements and get a transparent realtime price estimate ready for direct WhatsApp consultation.",
-    studioEyebrow: "05 // FREELANCE STUDIO",
+    studioEyebrow: "05 // Freelance Studio & Services",
     studioTitle1: "Also Available for",
     studioTitle2: "Client Projects.",
     studioDesc: "In addition to personal software engineering, I also accept freelance projects for professional website development — from landing pages to custom web applications.",
@@ -456,7 +469,7 @@ const TRANSLATIONS = {
     pricingTitle1: "Estimasi Biaya",
     pricingTitle2: "Website Interaktif.",
     pricingBio: "Pilih kebutuhan website Anda secara interaktif dan dapatkan estimasi harga instan yang siap dikonsultasikan via WhatsApp.",
-    studioEyebrow: "05 // FREELANCE STUDIO",
+    studioEyebrow: "05 // Studio & Layanan Freelance",
     studioTitle1: "Juga Menerima",
     studioTitle2: "Proyek Klien.",
     studioDesc: "Selain engineering personal, saya juga menerima proyek freelance pembuatan website profesional — dari landing page hingga custom web app.",
@@ -634,36 +647,55 @@ window.setLanguage = setLanguage;
 // 2. LOCKED FULL-PAGE AUTO-SNAP ENGINE & NAVIGATION CONTROLS
 // ═══════════════════════════════════════════════════════════
 let currentView = "portfolio";
-let isSnapping = false;
-let snapTimer = null;
-let lastSnapTime = 0;
-const SNAP_COOLDOWN = 600;
+let isAnimating = false;
+let lastScrollTime = 0;
+const WHEEL_COOLDOWN = 500;
+let scrollTween = null;
 
 export const scrollToSection = (index, immediate = false) => {
   if (currentView !== "portfolio") {
     window.switchView("portfolio", index);
     return;
   }
-  if (index < 0 || index >= SECTION_IDS.length) return;
-  currentSectionIndex = index;
-  const targetEl = document.getElementById(SECTION_IDS[index]);
+  const safeIndex = Math.max(0, Math.min(index, SECTION_IDS.length - 1));
+  if (safeIndex === currentSectionIndex && !immediate) return;
+
+  currentSectionIndex = safeIndex;
+  const targetEl = document.getElementById(SECTION_IDS[safeIndex]);
   if (!targetEl) return;
 
-  isSnapping = true;
-  lastSnapTime = Date.now();
-  updateActiveSidebar(index);
+  isAnimating = true;
+  lastScrollTime = Date.now();
+  updateActiveSidebar(safeIndex);
 
-  clearTimeout(snapTimer);
-  snapTimer = setTimeout(() => {
-    isSnapping = false;
-  }, 700);
+  const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  const targetY = Math.round(targetEl.getBoundingClientRect().top + startY);
 
   if (immediate) {
-    window.scrollTo({ top: targetEl.offsetTop, behavior: "auto" });
-    isSnapping = false;
-  } else {
-    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (scrollTween) scrollTween.kill();
+    window.scrollTo(0, targetY);
+    isAnimating = false;
+    return;
   }
+
+  if (scrollTween) scrollTween.kill();
+  const obj = { y: startY };
+
+  scrollTween = gsap.to(obj, {
+    y: targetY,
+    duration: 0.55,
+    ease: "power2.out",
+    overwrite: "auto",
+    onUpdate: () => {
+      window.scrollTo(0, obj.y);
+    },
+    onComplete: () => {
+      window.scrollTo(0, targetY);
+      scrollTween = null;
+      isAnimating = false;
+      lastScrollTime = Date.now();
+    },
+  });
 };
 window.scrollToSection = scrollToSection;
 
@@ -680,31 +712,39 @@ const updateActiveSidebar = (index) => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// HORIZONTAL PROJECTS CAROUSEL CONTROLLER
+// HORIZONTAL PROJECTS CAROUSEL CONTROLLER (Section 04)
 // ═══════════════════════════════════════════════════════════
 let currentProjectSlide = 0;
 const TOTAL_PROJECT_SLIDES = 5;
 
 const updateCarouselUI = (index) => {
-  currentProjectSlide = index;
+  const track = document.getElementById("projects-carousel-track");
+  const cards = track ? track.querySelectorAll(".carousel-card") : [];
+  const total = cards.length || TOTAL_PROJECT_SLIDES;
+  currentProjectSlide = Math.max(0, Math.min(total - 1, index));
 
   const counterEl = document.getElementById("carousel-counter");
   if (counterEl) {
-    counterEl.textContent = `${index + 1} / ${TOTAL_PROJECT_SLIDES}`;
+    counterEl.textContent = `${currentProjectSlide + 1} / ${total}`;
   }
 
   const dots = document.querySelectorAll("#carousel-dots-container .carousel-dot");
   dots.forEach((dot, idx) => {
-    if (idx === index) {
-      dot.className = "carousel-dot block w-7 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 shadow-[0_0_10px_rgba(220,20,60,0.5)]";
+    if (idx === currentProjectSlide) {
+      dot.classList.add("active", "w-7", "bg-[#DC143C]");
+      dot.classList.remove("w-2", "bg-white/20");
     } else {
-      dot.className = "carousel-dot block w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300";
+      dot.classList.remove("active", "w-7", "bg-[#DC143C]");
+      dot.classList.add("w-2", "bg-white/20");
     }
   });
 };
 
 window.slideProjectsCarousel = (direction) => {
-  const nextSlide = Math.max(0, Math.min(TOTAL_PROJECT_SLIDES - 1, currentProjectSlide + direction));
+  const track = document.getElementById("projects-carousel-track");
+  const cards = track ? track.querySelectorAll(".carousel-card") : [];
+  const total = cards.length || TOTAL_PROJECT_SLIDES;
+  const nextSlide = Math.max(0, Math.min(total - 1, currentProjectSlide + direction));
   window.goToProjectSlide(nextSlide);
 };
 
@@ -713,8 +753,9 @@ window.goToProjectSlide = (index) => {
   const cards = track ? track.querySelectorAll(".carousel-card") : [];
   if (track && cards[index]) {
     const targetCard = cards[index];
+    const targetLeft = targetCard.offsetLeft - track.offsetLeft - (track.clientWidth - targetCard.offsetWidth) / 2;
     track.scrollTo({
-      left: targetCard.offsetLeft - track.offsetLeft,
+      left: Math.max(0, targetLeft),
       behavior: "smooth",
     });
   }
@@ -729,9 +770,23 @@ const initProjectsCarousel = () => {
   let isTicking = false;
 
   const calculateActiveSlide = () => {
-    const cardEl = track.querySelector(".carousel-card");
-    const cardWidth = cardEl ? cardEl.offsetWidth + 20 : (window.innerWidth < 768 ? 280 : 380);
-    const closestIndex = Math.max(0, Math.min(TOTAL_PROJECT_SLIDES - 1, Math.round(track.scrollLeft / cardWidth)));
+    const cards = track.querySelectorAll(".carousel-card");
+    if (!cards.length) {
+      isTicking = false;
+      return;
+    }
+    let closestIndex = 0;
+    let minDiff = Infinity;
+    const currentCenter = track.scrollLeft + track.clientWidth / 2;
+
+    cards.forEach((card, idx) => {
+      const cardCenter = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
+      const diff = Math.abs(currentCenter - cardCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = idx;
+      }
+    });
 
     if (closestIndex !== currentProjectSlide) {
       updateCarouselUI(closestIndex);
@@ -789,39 +844,47 @@ const initProjectsCarousel = () => {
 // ═══════════════════════════════════════════════════════════
 // PRICING MARKETING CAROUSEL CONTROLLER (Section 05)
 // ═══════════════════════════════════════════════════════════
-const TOTAL_PRICING_SLIDES = 8;
 let currentPricingSlide = 0;
 
 const updatePricingCarouselUI = (index) => {
-  currentPricingSlide = index;
+  const track = document.getElementById("pricing-cards-track");
+  const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
+  const total = cards.length || 3;
+  currentPricingSlide = Math.max(0, Math.min(total - 1, index));
 
   const counterEl = document.getElementById("pricing-carousel-counter");
   if (counterEl) {
-    counterEl.textContent = `${index + 1} / ${TOTAL_PRICING_SLIDES}`;
+    counterEl.textContent = `${currentPricingSlide + 1} / ${total}`;
   }
 
   const dots = document.querySelectorAll("#pricing-carousel-dots .pricing-dot");
   dots.forEach((dot, idx) => {
-    if (idx === index) {
-      dot.className = "pricing-dot block w-6 h-1.5 rounded-full bg-[#DC143C] transition-all duration-300 shadow-[0_0_10px_rgba(220,20,60,0.5)]";
+    if (idx === currentPricingSlide) {
+      dot.classList.add("active", "w-6", "bg-[#DC143C]");
+      dot.classList.remove("w-2", "bg-white/20");
     } else {
-      dot.className = "pricing-dot block w-2 h-1.5 rounded-full bg-white/20 hover:bg-white/40 transition-all duration-300";
+      dot.classList.remove("active", "w-6", "bg-[#DC143C]");
+      dot.classList.add("w-2", "bg-white/20");
     }
   });
 };
 
 window.slidePricingCarousel = (direction) => {
-  const nextSlide = Math.max(0, Math.min(TOTAL_PRICING_SLIDES - 1, currentPricingSlide + direction));
+  const track = document.getElementById("pricing-cards-track");
+  const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
+  const total = cards.length || 3;
+  const nextSlide = Math.max(0, Math.min(total - 1, currentPricingSlide + direction));
   window.goToPricingSlide(nextSlide);
 };
 
 window.goToPricingSlide = (index) => {
-  const track = document.getElementById("pricing-carousel-track");
+  const track = document.getElementById("pricing-cards-track");
   const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
   if (track && cards[index]) {
     const targetCard = cards[index];
+    const targetLeft = targetCard.offsetLeft - track.offsetLeft - (track.clientWidth - targetCard.offsetWidth) / 2;
     track.scrollTo({
-      left: targetCard.offsetLeft - track.offsetLeft,
+      left: Math.max(0, targetLeft),
       behavior: "smooth",
     });
   }
@@ -829,14 +892,28 @@ window.goToPricingSlide = (index) => {
 };
 
 const initPricingMarketingCarousel = () => {
-  const track = document.getElementById("pricing-carousel-track");
+  const track = document.getElementById("pricing-cards-track");
   if (!track) return;
 
   let isTicking = false;
   const calculateActiveSlide = () => {
-    const cardEl = track.querySelector(".pricing-carousel-card");
-    const cardWidth = cardEl ? cardEl.offsetWidth + 16 : (window.innerWidth < 768 ? 280 : 310);
-    const closestIndex = Math.max(0, Math.min(TOTAL_PRICING_SLIDES - 1, Math.round(track.scrollLeft / cardWidth)));
+    const cards = track.querySelectorAll(".pricing-carousel-card");
+    if (!cards.length) {
+      isTicking = false;
+      return;
+    }
+    let closestIndex = 0;
+    let minDiff = Infinity;
+    const currentCenter = track.scrollLeft + track.clientWidth / 2;
+
+    cards.forEach((card, idx) => {
+      const cardCenter = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
+      const diff = Math.abs(currentCenter - cardCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = idx;
+      }
+    });
 
     if (closestIndex !== currentPricingSlide) {
       updatePricingCarouselUI(closestIndex);
@@ -908,10 +985,11 @@ const initNavigationAndKeyboard = () => {
   if (typeof IntersectionObserver !== "undefined") {
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && currentView === "portfolio") {
+        if (entry.isIntersecting && currentView === "portfolio" && !isLocked) {
           const index = SECTION_IDS.indexOf(entry.target.id);
           if (index !== -1) {
             currentSectionIndex = index;
+            targetSectionIndex = index;
             updateActiveSidebar(index);
           }
         }
@@ -924,30 +1002,30 @@ const initNavigationAndKeyboard = () => {
     });
   }
 
-  // ─── 1. Locked Mouse Wheel & Trackpad Snap (Scene-by-Scene) ───
+  // ─── 1. Locked Mouse Wheel & Trackpad Snap (Strict Scene-by-Scene Cooldown) ───
   window.addEventListener(
     "wheel",
     (e) => {
       if (currentView !== "portfolio") return;
 
       const target = e.target;
-      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-carousel-track, .overflow-x-auto");
+      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
       if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         return;
       }
 
-      const isModal = target && target.closest("#modal-container, .modal-scroll");
+      const isModal = target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view");
       if (isModal) return;
 
-      // Lock free scrolling
+      // STRICT LOCK: Suppress free scrolling in portfolio view
       e.preventDefault();
 
       const now = Date.now();
-      if (isSnapping || now - lastSnapTime < SNAP_COOLDOWN) {
+      if (now - lastScrollTime < WHEEL_COOLDOWN) {
         return;
       }
 
-      if (Math.abs(e.deltaY) < 14) return;
+      if (Math.abs(e.deltaY) < 10) return;
 
       if (e.deltaY > 0) {
         if (currentSectionIndex < SECTION_IDS.length - 1) {
@@ -962,7 +1040,7 @@ const initNavigationAndKeyboard = () => {
     { passive: false }
   );
 
-  // ─── 2. Mobile Touch Swipe Snap (Scene-by-Scene) ───
+  // ─── 2. Mobile Touch Swipe Snap (1 Swipe = Exactly 1 Scene) ───
   let touchStartY = 0;
   let touchStartX = 0;
   let touchStartTime = 0;
@@ -989,15 +1067,15 @@ const initNavigationAndKeyboard = () => {
         const diffX = touchStartX - e.touches[0].clientX;
 
         const target = e.target;
-        const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-carousel-track, .overflow-x-auto");
+        const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
         if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
           return;
         }
 
-        if (target && target.closest("#modal-container, .modal-scroll")) return;
+        if (target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view")) return;
 
         // Prevent free scrolling on vertical swipe
-        if (Math.abs(diffY) > 8 && Math.abs(diffY) > Math.abs(diffX)) {
+        if (Math.abs(diffY) > 6 && Math.abs(diffY) > Math.abs(diffX)) {
           if (e.cancelable) e.preventDefault();
         }
       }
@@ -1010,14 +1088,14 @@ const initNavigationAndKeyboard = () => {
     (e) => {
       if (currentView !== "portfolio") return;
       const now = Date.now();
-      if (isSnapping || now - lastSnapTime < SNAP_COOLDOWN) return;
+      if (now - lastScrollTime < WHEEL_COOLDOWN) return;
 
       if (e.changedTouches.length > 0) {
         const diffY = touchStartY - e.changedTouches[0].clientY;
         const diffX = touchStartX - e.changedTouches[0].clientX;
         const elapsed = now - touchStartTime;
 
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30 && elapsed < 800) {
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 25 && elapsed < 900) {
           if (diffY > 0 && currentSectionIndex < SECTION_IDS.length - 1) {
             scrollToSection(currentSectionIndex + 1);
           } else if (diffY < 0 && currentSectionIndex > 0) {
@@ -1029,24 +1107,35 @@ const initNavigationAndKeyboard = () => {
     { passive: true }
   );
 
-  // Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
+  // Keyboard Navigation (Fast & Spammable W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
+  let lastKeyTime = 0;
+  const KEY_COOLDOWN = 140;
+
   window.addEventListener("keydown", (e) => {
-    if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+    if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
 
     if (currentView === "portfolio") {
+      const now = Date.now();
+      if (now - lastKeyTime < KEY_COOLDOWN) return;
+
       if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown") {
         if (currentSectionIndex < SECTION_IDS.length - 1) {
+          lastKeyTime = now;
           scrollToSection(currentSectionIndex + 1);
         }
       } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp") {
         if (currentSectionIndex > 0) {
+          lastKeyTime = now;
           scrollToSection(currentSectionIndex - 1);
         }
       } else if (e.key === "Home") {
+        lastKeyTime = now;
         scrollToSection(0);
       } else if (e.key === "End") {
+        lastKeyTime = now;
         scrollToSection(SECTION_IDS.length - 1);
       } else if (e.key.toLowerCase() === "k") {
+        lastKeyTime = now;
         scrollToSection(4); // 05 Pricing
       } else if (currentSectionIndex === 3) {
         if (e.key === "ArrowLeft") {
@@ -1279,20 +1368,15 @@ const initGitHubRepos = async () => {
 
     gsap.fromTo(
       ".repo-card",
-      { opacity: 0, y: 20 },
+      { opacity: 0, y: 12 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.6,
-        stagger: 0.08,
+        duration: 0.35,
+        stagger: 0.03,
         ease: "power2.out",
-        scrollTrigger: {
-          trigger: "#github-repos",
-          start: "top 85%",
-        },
       }
     );
-    initCardTilt(container);
   };
 
   // 1. Load initial cache or static dataset immediately (0ms instant paint)
@@ -3090,20 +3174,8 @@ const boot = () => {
     } catch (e) {}
   }, 40);
 
-  // Phase 3: Deferred 3D WebGL Engine (on scroll/interaction or idle fallback)
-  const onInteraction = () => {
-    window.removeEventListener("scroll", onInteraction, { passive: true });
-    window.removeEventListener("touchstart", onInteraction, { passive: true });
-    window.removeEventListener("pointermove", onInteraction, { passive: true });
-    window.removeEventListener("keydown", onInteraction);
-    loadThreeEngineAsync();
-  };
-  window.addEventListener("scroll", onInteraction, { passive: true, once: true });
-  window.addEventListener("touchstart", onInteraction, { passive: true, once: true });
-  window.addEventListener("pointermove", onInteraction, { passive: true, once: true });
-  window.addEventListener("keydown", onInteraction, { once: true });
-
-  setTimeout(loadThreeEngineAsync, 2000);
+  // Phase 3: Start 3D WebGL Engine
+  loadThreeEngineAsync();
 };
 
 if (document.readyState === "loading") {

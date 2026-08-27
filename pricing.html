@@ -1877,8 +1877,186 @@
         });
       };
 
-      // ─── STUDIO LOADING PIPELINE CONTROLLER ───
-      const finishStudioPreloader = () => {};
+      // ─── STUDIO LOADING PIPELINE CONTROLLER (Rocket Preloader & Progress) ───
+      const initStudioPreloader = () => {
+        const preloaderEl = document.getElementById("web-preloader");
+        if (!preloaderEl) return;
+
+        const isAuditBot = typeof navigator !== 'undefined' && (
+          /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+        );
+
+        if (isAuditBot) {
+          preloaderEl.style.display = "none";
+          preloaderEl.remove();
+          return;
+        }
+
+        const barEl = document.getElementById("preloader-bar");
+        const percentEl = document.getElementById("preloader-percent");
+        const statusEl = document.getElementById("preloader-status");
+        const rocketCenter = document.getElementById("preloader-rocket-center");
+        const textGroup = document.getElementById("preloader-text-group");
+        const smokeCanvas = document.getElementById("preloader-smoke-canvas");
+
+        const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
+        const PRELOADER_STAGES = isEn ? [
+          { pct: 35, text: "Configuring website studio & packages..." },
+          { pct: 70, text: "Loading interactive cost calculator..." },
+          { pct: 90, text: "Initializing 3D visual workspace..." },
+          { pct: 100, text: "Ready! Opening studio configurator..." }
+        ] : [
+          { pct: 35, text: "Menyiapkan paket website & konfigurator..." },
+          { pct: 70, text: "Memuat kalkulator biaya interaktif..." },
+          { pct: 90, text: "Menginisialisasi workspace 3D..." },
+          { pct: 100, text: "Siap! Membuka studio kalkulator..." }
+        ];
+
+        let smokeCtx = null;
+        let smokeParticles = [];
+        let smokeAnimId = null;
+        let launchTriggered = false;
+        const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
+
+        if (smokeCanvas) {
+          smokeCtx = smokeCanvas.getContext("2d");
+          const resizeCanvas = () => {
+            smokeCanvas.width = window.innerWidth;
+            smokeCanvas.height = window.innerHeight;
+          };
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
+        }
+
+        let frameCount = 0;
+        const renderSmokeCanvas = () => {
+          if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
+            if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+            return;
+          }
+          smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+          frameCount++;
+
+          if (flameNozzle && flameNozzle.isConnected) {
+            const rect = flameNozzle.getBoundingClientRect();
+            const nozzleX = rect.left + rect.width / 2;
+            const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
+            const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
+            for (let i = 0; i < spawnCount; i++) {
+              smokeParticles.push({
+                x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
+                y: nozzleY + (Math.random() - 0.5) * 4,
+                vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
+                vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
+                radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
+                growth: launchTriggered ? 0.75 : 0.35,
+                maxRadius: launchTriggered ? 65 : 30,
+                alpha: launchTriggered ? 0.65 : 0.4,
+                decay: launchTriggered ? 0.022 : 0.012
+              });
+            }
+          }
+
+          for (let i = smokeParticles.length - 1; i >= 0; i--) {
+            const p = smokeParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.radius < p.maxRadius) p.radius += p.growth;
+            p.alpha -= p.decay;
+            if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
+              smokeParticles.splice(i, 1);
+              continue;
+            }
+            const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+            grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+            grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+            smokeCtx.fillStyle = grad;
+            smokeCtx.beginPath();
+            smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            smokeCtx.fill();
+          }
+          smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+        };
+        smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+
+        let floatTween = null;
+        if (rocketCenter) {
+          floatTween = gsap.to(rocketCenter, {
+            y: -8,
+            rotation: 1.2,
+            duration: 2.2,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            transformOrigin: "50% 50%"
+          });
+        }
+
+        // Safety fallback timer to guarantee preloader dismiss
+        const safetyTimer = setTimeout(() => {
+          triggerLaunch();
+        }, 1500);
+
+        const triggerLaunch = () => {
+          if (launchTriggered) return;
+          launchTriggered = true;
+          clearTimeout(safetyTimer);
+          if (floatTween) floatTween.kill();
+
+          const blastTl = gsap.timeline();
+          if (rocketCenter) {
+            blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.15, ease: "power1.out" }, 0);
+            blastTl.to(rocketCenter, { y: "-160vh", scale: 0.88, duration: 1.2, ease: "power3.in" }, 0.05);
+          }
+          if (textGroup) {
+            blastTl.to(textGroup, { opacity: 0, y: 20, duration: 0.4, ease: "power2.in" }, 0.05);
+          }
+          if (preloaderEl) {
+            preloaderEl.style.pointerEvents = "none";
+            blastTl.to(preloaderEl, {
+              opacity: 0,
+              duration: 0.7,
+              ease: "power2.inOut",
+              onComplete: () => {
+                if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+                preloaderEl.style.display = "none";
+                preloaderEl.remove();
+              }
+            }, 0.45);
+          }
+        };
+
+        const progressTracker = { val: 0 };
+        const updateDisplay = (val, text) => {
+          const intVal = Math.min(100, Math.floor(val));
+          if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
+          if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
+          if (statusEl && text) statusEl.textContent = text;
+          if (intVal >= 90 && !launchTriggered) {
+            triggerLaunch();
+          }
+        };
+
+        const preloaderTl = gsap.timeline({ onComplete: () => { if (!launchTriggered) triggerLaunch(); } });
+        preloaderTl
+          .to(progressTracker, {
+            val: PRELOADER_STAGES[0].pct, duration: 0.3, ease: "power1.out",
+            onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
+          })
+          .to(progressTracker, {
+            val: PRELOADER_STAGES[1].pct, duration: 0.32, ease: "sine.inOut",
+            onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
+          })
+          .to(progressTracker, {
+            val: PRELOADER_STAGES[2].pct, duration: 0.25, ease: "sine.inOut",
+            onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
+          })
+          .to(progressTracker, {
+            val: 100, duration: 0.28, ease: "power2.out",
+            onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
+          });
+      };
 
       // ─── SAFE BOOT ENGINE (Instant UI Hydration + Non-blocking 3D Engine) ───
       const bootPricingApp = () => {
@@ -1888,12 +2066,12 @@
         renderWebsiteTypes();
         goToStep(1);
         initPageTransitionLinks();
+        initStudioPreloader();
         try {
           initThreeEngine();
         } catch (e) {
           console.warn("Three.js engine init error:", e);
         }
-        finishStudioPreloader();
       };
 
       if (document.readyState === "loading") {

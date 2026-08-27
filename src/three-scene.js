@@ -35,16 +35,18 @@ export const initThreeEngine = () => {
   const cameraTarget = new THREE.Vector3(0, 0, 0);
   const currentCameraTarget = new THREE.Vector3(0, 0, 0);
 
-  // WebGLRenderer setup optimized for low battery impact and high FPS on mobile
+  // WebGLRenderer setup optimized for silky 60/120fps and low GPU thermal load
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
     antialias: !isPhone,
     powerPreference: "high-performance",
-    precision: isPhone ? "mediump" : "highp",
+    precision: "mediump",
+    stencil: false,
+    depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : (isMobile ? 1.5 : 1.75)));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isPhone ? 1.0 : 1.25));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -909,7 +911,7 @@ export const initThreeEngine = () => {
   scrollTl
     .to(
       tesseractGroup.position,
-      { x: isMobile ? 0 : 2.2, y: isMobile ? 2.0 : 0.4, z: isMobile ? -1.6 : -0.6, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0 : 2.2, y: isMobile ? 2.3 : 0.4, z: isMobile ? -2.2 : -0.6, ease: "power2.inOut", duration: 1 },
       3
     )
     .to(
@@ -919,7 +921,7 @@ export const initThreeEngine = () => {
     )
     .to(
       tesseractGroup.scale,
-      { x: isMobile ? 0.28 : 0.65, y: isMobile ? 0.28 : 0.65, z: isMobile ? 0.28 : 0.65, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0.22 : 0.65, y: isMobile ? 0.22 : 0.65, z: isMobile ? 0.22 : 0.65, ease: "power2.inOut", duration: 1 },
       3
     )
     .to(
@@ -1138,11 +1140,11 @@ export const initThreeEngine = () => {
 
   // Window Resize Handler
   const onResize = () => {
-    const isMob = window.innerWidth < 1024;
+    const isMob = window.innerWidth < 768;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMob ? 1.5 : 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.0 : 1.25));
   };
   window.addEventListener("resize", onResize);
 
@@ -1151,6 +1153,7 @@ export const initThreeEngine = () => {
 
   const animate = () => {
     requestAnimationFrame(animate);
+    if (document.hidden) return;
     const now = performance.now();
     const delta = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
