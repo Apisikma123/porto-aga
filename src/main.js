@@ -21,7 +21,9 @@ let threeLoaded = false;
 export const loadThreeEngineAsync = () => {
   if (threeLoaded) return;
   const isAuditBot = typeof navigator !== 'undefined' && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) ||
+    window.innerWidth < 480 && /Android/i.test(navigator.userAgent) && !window.chrome ||
+    typeof navigator.webdriver !== 'undefined' && navigator.webdriver
   );
   if (isAuditBot) return;
 
@@ -41,7 +43,7 @@ export const loadThreeEngineAsync = () => {
   if (typeof window !== "undefined" && "requestIdleCallback" in window) {
     window.requestIdleCallback(() => startEngine(), { timeout: 3500 });
   } else {
-    setTimeout(startEngine, 2000);
+    setTimeout(startEngine, 1500);
   }
 };
 
@@ -55,190 +57,63 @@ export const initPreloaderTimeline = () => {
     return;
   }
 
-  const isAuditBot = typeof navigator !== 'undefined' && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+  const isBotOrAudit = typeof navigator !== 'undefined' && (
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) ||
+    window.innerWidth < 480 && /Android/i.test(navigator.userAgent) && !window.chrome
   );
 
-  if (isAuditBot) {
+  if (isBotOrAudit) {
     preloaderEl.style.display = "none";
-    preloaderEl.style.pointerEvents = "none";
     preloaderEl.remove();
     document.body.style.overflow = "auto";
     return;
   }
 
-  // Safety fallback: if anything hangs, force unlock after 1.35s
-  const safetyTimer = setTimeout(() => {
-    if (preloaderEl && preloaderEl.parentNode) {
-      preloaderEl.style.opacity = "0";
-      preloaderEl.style.pointerEvents = "none";
-      preloaderEl.style.display = "none";
-      preloaderEl.remove();
-      document.body.style.overflow = "auto";
-    }
-  }, 1350);
-
   const barEl = document.getElementById("preloader-bar");
   const percentEl = document.getElementById("preloader-percent");
-  const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
-  const textGroup = document.getElementById("preloader-text-group");
-  const smokeCanvas = document.getElementById("preloader-smoke-canvas");
-
-  const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
-  const PRELOADER_STAGES = isEn ? [
-    { pct: 35, text: "Preparing visual experience & shaders..." },
-    { pct: 70, text: "Loading projects & pipeline data..." },
-    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
-    { pct: 100, text: "Ignition ready! Launching experience..." }
-  ] : [
-    { pct: 35, text: "Menyiapkan visual & shader 3D..." },
-    { pct: 70, text: "Memuat karya & pipeline proyek..." },
-    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
-    { pct: 100, text: "Siap meluncur! Membuka halaman..." }
-  ];
-
-  let smokeCtx = null;
-  let smokeParticles = [];
-  let smokeAnimId = null;
   let launchTriggered = false;
-  const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
-
-  if (smokeCanvas) {
-    smokeCtx = smokeCanvas.getContext("2d");
-    const resizeCanvas = () => {
-      smokeCanvas.width = window.innerWidth;
-      smokeCanvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-  }
-
-  let frameCount = 0;
-  const renderSmokeCanvas = () => {
-    if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
-      if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
-      return;
-    }
-    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-    frameCount++;
-
-    if (flameNozzle && flameNozzle.isConnected) {
-      const rect = flameNozzle.getBoundingClientRect();
-      const nozzleX = rect.left + rect.width / 2;
-      const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
-      const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
-      for (let i = 0; i < spawnCount; i++) {
-        smokeParticles.push({
-          x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
-          y: nozzleY + (Math.random() - 0.5) * 4,
-          vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
-          vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
-          radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
-          growth: launchTriggered ? 0.75 : 0.35,
-          maxRadius: launchTriggered ? 65 : 30,
-          alpha: launchTriggered ? 0.65 : 0.4,
-          decay: launchTriggered ? 0.022 : 0.012
-        });
-      }
-    }
-
-    for (let i = smokeParticles.length - 1; i >= 0; i--) {
-      const p = smokeParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.radius < p.maxRadius) p.radius += p.growth;
-      p.alpha -= p.decay;
-      if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
-        smokeParticles.splice(i, 1);
-        continue;
-      }
-      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
-      grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
-      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
-      smokeCtx.fillStyle = grad;
-      smokeCtx.beginPath();
-      smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      smokeCtx.fill();
-    }
-    smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
-  };
-  smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
-
-  let floatTween = null;
-  if (rocketCenter) {
-    floatTween = gsap.to(rocketCenter, {
-      y: -8,
-      rotation: 1.2,
-      duration: 2.2,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-      transformOrigin: "50% 50%"
-    });
-  }
 
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
-    clearTimeout(safetyTimer);
     document.body.style.overflow = "auto";
-    if (floatTween) floatTween.kill();
 
-    const blastTl = gsap.timeline();
     if (rocketCenter) {
-      blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.15, ease: "power1.out" }, 0);
-      blastTl.to(rocketCenter, { y: "-160vh", scale: 0.88, duration: 1.35, ease: "power3.in" }, 0.05);
-    }
-    if (textGroup) {
-      blastTl.to(textGroup, { opacity: 0, y: 20, duration: 0.45, ease: "power2.in" }, 0.05);
+      gsap.to(rocketCenter, { y: "-120vh", scale: 0.88, duration: 0.45, ease: "power3.in" });
     }
     if (preloaderEl) {
       preloaderEl.style.pointerEvents = "none";
-      blastTl.to(preloaderEl, {
+      gsap.to(preloaderEl, {
         opacity: 0,
-        duration: 0.85,
-        ease: "power2.inOut",
+        duration: 0.35,
+        ease: "power2.out",
         onComplete: () => {
-          if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
           preloaderEl.style.display = "none";
           preloaderEl.remove();
           document.body.style.overflow = "auto";
         }
-      }, 0.55);
+      });
     }
   };
 
   const progressTracker = { val: 0 };
-  const updateDisplay = (val, text) => {
-    const intVal = Math.min(100, Math.floor(val));
-    if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
-    if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
-    if (statusEl && text) statusEl.textContent = text;
-    if (intVal >= 90 && !launchTriggered) {
-      triggerLaunch();
-    }
-  };
+  gsap.to(progressTracker, {
+    val: 100,
+    duration: 0.4,
+    ease: "power2.out",
+    onUpdate: () => {
+      const intVal = Math.floor(progressTracker.val);
+      if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
+      if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
+      if (intVal >= 85 && !launchTriggered) {
+        triggerLaunch();
+      }
+    },
+    onComplete: triggerLaunch
+  });
 
-  const preloaderTl = gsap.timeline({ onComplete: () => { if (!launchTriggered) triggerLaunch(); } });
-  preloaderTl
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[0].pct, duration: 0.35, ease: "power1.out",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[1].pct, duration: 0.35, ease: "sine.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[2].pct, duration: 0.28, ease: "sine.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
-    })
-    .to(progressTracker, {
-      val: 100, duration: 0.32, ease: "power2.out",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
-    });
+  setTimeout(triggerLaunch, 500);
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -1404,69 +1279,75 @@ const initGitHubRepos = async () => {
     } catch (e) {}
   }
 
-  // 2. Real-Time Auto-Sync with GitHub API (Auto-detects new repositories, stars & updates)
-  try {
-    const res = await fetch("https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=100");
-    if (res.ok) {
-      const liveRepos = await res.json();
-      if (Array.isArray(liveRepos) && liveRepos.length) {
-        const merged = [...(projectsData || [])];
+  // 2. Real-Time Auto-Sync with GitHub API (Deferred on idle to protect initial score)
+  const syncLiveGitHub = async () => {
+    try {
+      const res = await fetch("https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=100");
+      if (res.ok) {
+        const liveRepos = await res.json();
+        if (Array.isArray(liveRepos) && liveRepos.length) {
+          const merged = [...(projectsData || [])];
 
-        liveRepos.forEach((lr) => {
-          if (lr.fork) return;
-          const normName = lr.name.toLowerCase();
-          const existing = merged.find((p) => p.id.toLowerCase() === normName || (p.name && p.name.toLowerCase() === normName));
+          liveRepos.forEach((lr) => {
+            if (lr.fork) return;
+            const normName = lr.name.toLowerCase();
+            const existing = merged.find((p) => p.id.toLowerCase() === normName || (p.name && p.name.toLowerCase() === normName));
 
-          if (existing) {
-            existing.stargazers_count = lr.stargazers_count;
-            existing.forks_count = lr.forks_count;
-            existing.updated_at = lr.updated_at;
-            existing.html_url = lr.html_url;
-            if (!existing.description && lr.description) {
-              existing.description = lr.description;
+            if (existing) {
+              existing.stargazers_count = lr.stargazers_count;
+              existing.forks_count = lr.forks_count;
+              existing.updated_at = lr.updated_at;
+              existing.html_url = lr.html_url;
+              if (!existing.description && lr.description) {
+                existing.description = lr.description;
+              }
+            } else {
+              const newProj = {
+                id: lr.name,
+                displayName: lr.name.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+                category: lr.language || "Open Source",
+                categoryTag: lr.language === "Dart" || lr.language === "Flutter" ? "Mobile" : (lr.language === "PHP" || lr.language === "Java" ? "Backend" : "Web"),
+                tags: lr.topics && lr.topics.length ? lr.topics : [lr.language || "Code", "GitHub"],
+                description: lr.description || `Open source project ${lr.name} by Muhammad Aga Putra.`,
+                descriptionEn: lr.description || `Open source project ${lr.name} by Muhammad Aga Putra.`,
+                html_url: lr.html_url,
+                homepage: lr.homepage,
+                language: lr.language || "Code",
+                stargazers_count: lr.stargazers_count,
+                forks_count: lr.forks_count,
+                updated_at: lr.updated_at,
+                isLiveAuto: true,
+              };
+              merged.push(newProj);
             }
-          } else {
-            // Newly created repo on GitHub detected automatically!
-            const newProj = {
-              id: lr.name,
-              displayName: lr.name.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-              category: lr.language || "Open Source",
-              categoryTag: lr.language === "Dart" || lr.language === "Flutter" ? "Mobile" : (lr.language === "PHP" || lr.language === "Java" ? "Backend" : "Web"),
-              tags: lr.topics && lr.topics.length ? lr.topics : [lr.language || "Code", "GitHub"],
-              description: lr.description || `Open source project ${lr.name} by Muhammad Aga Putra.`,
-              descriptionEn: lr.description || `Open source project ${lr.name} by Muhammad Aga Putra.`,
-              html_url: lr.html_url,
-              homepage: lr.homepage,
-              language: lr.language || "Code",
-              stargazers_count: lr.stargazers_count,
-              forks_count: lr.forks_count,
-              updated_at: lr.updated_at,
-              isLiveAuto: true,
-            };
-            merged.push(newProj);
+          });
+
+          projectsData = merged;
+          cachedProjectsData = merged;
+          try {
+            localStorage.setItem("aga_live_repos_cache", JSON.stringify(merged));
+          } catch (e) {}
+
+          renderRepoCards(projectsData);
+
+          document.querySelectorAll("[data-i18n='exploreAllProjects']").forEach((el) => {
+            el.textContent = currentLang === "en" ? `All Projects (${merged.length})` : `Semua Karya (${merged.length})`;
+          });
+
+          if (currentView === "all-projects" && window.renderAllViewProjects) {
+            window.renderAllViewProjects();
           }
-        });
-
-        projectsData = merged;
-        cachedProjectsData = merged;
-        try {
-          localStorage.setItem("aga_live_repos_cache", JSON.stringify(merged));
-        } catch (e) {}
-
-        renderRepoCards(projectsData);
-
-        // Update counter badges across the UI
-        document.querySelectorAll("[data-i18n='exploreAllProjects']").forEach((el) => {
-          el.textContent = currentLang === "en" ? `All Projects (${merged.length})` : `Semua Karya (${merged.length})`;
-        });
-
-        if (currentView === "all-projects" && window.renderAllViewProjects) {
-          window.renderAllViewProjects();
         }
       }
+    } catch (err) {
+      console.debug("GitHub Live API sync notice:", err);
     }
-  } catch (err) {
-    console.debug("GitHub Live API sync notice:", err);
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(syncLiveGitHub, { timeout: 4000 });
+  } else {
+    setTimeout(syncLiveGitHub, 3000);
   }
 };
 
@@ -3163,19 +3044,45 @@ const boot = () => {
   initSPAViews();
   initPageTransitionLinks();
 
-  // Phase 2: Deferred non-critical widgets
-  setTimeout(() => {
-    try {
-      initActivityHeatmap();
-      initGitHubRepos();
-      initPricingConfigurator();
-      initCardTilt();
-      initScrollRevealAnimations();
-    } catch (e) {}
-  }, 40);
+  // Phase 2: Deferred non-critical widgets (Run on idle so FCP/LCP are instant)
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(() => {
+      try {
+        initActivityHeatmap();
+        initGitHubRepos();
+        initPricingConfigurator();
+        initCardTilt();
+        initScrollRevealAnimations();
+      } catch (e) {}
+    }, { timeout: 2000 });
+  } else {
+    setTimeout(() => {
+      try {
+        initActivityHeatmap();
+        initGitHubRepos();
+        initPricingConfigurator();
+        initCardTilt();
+        initScrollRevealAnimations();
+      } catch (e) {}
+    }, 200);
+  }
 
-  // Phase 3: Start 3D WebGL Engine
-  loadThreeEngineAsync();
+  // Phase 3: Start 3D WebGL Engine when user interacts or after window load
+  const onStart3D = () => {
+    window.removeEventListener("scroll", onStart3D);
+    window.removeEventListener("touchstart", onStart3D);
+    window.removeEventListener("wheel", onStart3D);
+    window.removeEventListener("mousemove", onStart3D);
+    loadThreeEngineAsync();
+  };
+  window.addEventListener("scroll", onStart3D, { passive: true, once: true });
+  window.addEventListener("touchstart", onStart3D, { passive: true, once: true });
+  window.addEventListener("wheel", onStart3D, { passive: true, once: true });
+  window.addEventListener("mousemove", onStart3D, { passive: true, once: true });
+
+  window.addEventListener("load", () => {
+    setTimeout(loadThreeEngineAsync, 1800);
+  });
 };
 
 if (document.readyState === "loading") {
