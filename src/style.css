@@ -675,6 +675,15 @@ html[data-theme="light"] ::selection {
   to { transform: rotate(360deg); }
 }
 
+/* Rocket flame — gentle opacity flicker, no transforms */
+.rocket-flame-flicker {
+  animation: flameFlicker 0.8s ease-in-out infinite alternate;
+}
+@keyframes flameFlicker {
+  0% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
 /* Light Mode Preloader Screen */
 html[data-theme="light"] #web-preloader {
   background: 

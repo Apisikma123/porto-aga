@@ -280,8 +280,11 @@
         
         <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
         <div id="preloader-rocket-center" class="relative flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none overflow-visible">
+          <!-- Dynamic Smoke Particle Emitter Container -->
+          <div id="preloader-smoke-container" class="absolute inset-0 pointer-events-none overflow-visible flex items-center justify-center z-0"></div>
+
           <svg
-            class="w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.5)]"
+            class="relative z-10 w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-[0_0_35px_rgba(220,20,60,0.5)]"
             viewBox="0 0 140 200"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -352,8 +355,8 @@
               </linearGradient>
             </defs>
 
-            <!-- 1. JET FLAME EXHAUST (Anchored at nozzle base x=70 y=118) -->
-            <g id="apple-rocket-flame" style="transform-origin: 70px 118px;">
+            <!-- 1. JET FLAME EXHAUST — CSS flicker only, no GSAP transform -->
+            <g id="apple-rocket-flame" class="rocket-flame-flicker">
               <!-- Outer Crimson/Orange Plasma Plume -->
               <path d="M56 118C56 118 46 150 70 195C94 150 84 118 84 118H56Z" fill="url(#appleFlameOuter)"/>
               <!-- Mid Golden Core -->

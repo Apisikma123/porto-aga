@@ -227,7 +227,6 @@ export const initThreeEngine = () => {
   const percentEl = document.getElementById("preloader-percent");
   const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
-  const rocketFlame = document.getElementById("apple-rocket-flame");
   const textGroup = document.getElementById("preloader-text-group");
 
   const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
@@ -235,19 +234,123 @@ export const initThreeEngine = () => {
   const PRELOADER_STAGES = isEn ? [
     { pct: 35, text: "Preparing visual experience & shaders..." },
     { pct: 70, text: "Loading projects & pipeline data..." },
-    { pct: 92, text: "Finalizing 3D cosmic geometry..." },
+    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
     { pct: 100, text: "Ignition ready! Launching experience..." }
   ] : [
     { pct: 35, text: "Menyiapkan visual & shader 3D..." },
     { pct: 70, text: "Memuat karya & pipeline proyek..." },
-    { pct: 92, text: "Menyempurnakan geometri interaktif..." },
+    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // Initial flame state — small idle
-  if (rocketFlame) {
-    gsap.set(rocketFlame, { scaleX: 0.7, scaleY: 0.5, opacity: 0.6, transformOrigin: "70px 118px" });
+  // ─── 4. MATERIAL DESIGN SMOKE PARTICLE SYSTEM ───
+  const smokeContainer = document.getElementById("preloader-smoke-container");
+  let smokeActive = true;
+  let smokeInterval = null;
+
+  const spawnSmokePuff = (isLaunch = false) => {
+    if (!smokeContainer || !smokeActive) return;
+
+    const puff = document.createElement("div");
+    const size = isLaunch ? 24 + Math.random() * 20 : 12 + Math.random() * 10;
+    
+    // Palette: Material Design Crimson (#DC143C), Flame (#FF0044), Plasma Gold (#FFA000), Soft Zinc (#E4E4E7)
+    const colorRoll = Math.random();
+    let bg = "rgba(244, 244, 245, 0.22)";
+    if (colorRoll < 0.35) {
+      bg = "rgba(220, 20, 60, 0.4)";
+    } else if (colorRoll < 0.65) {
+      bg = "rgba(255, 0, 68, 0.35)";
+    } else if (colorRoll < 0.85) {
+      bg = "rgba(255, 160, 0, 0.35)";
+    }
+
+    puff.className = "absolute rounded-full pointer-events-none blur-[2px] transform-gpu";
+    puff.style.width = `${size}px`;
+    puff.style.height = `${size}px`;
+    puff.style.background = bg;
+    puff.style.left = "50%";
+    puff.style.top = "62%";
+    puff.style.transform = "translate(-50%, -50%) scale(0.6)";
+
+    smokeContainer.appendChild(puff);
+
+    const driftX = (Math.random() - 0.5) * (isLaunch ? 50 : 24);
+    const driftY = isLaunch ? 60 + Math.random() * 50 : 28 + Math.random() * 25;
+    const endScale = isLaunch ? 2.8 + Math.random() * 1.2 : 1.6 + Math.random() * 0.6;
+    const duration = isLaunch ? 0.75 + Math.random() * 0.35 : 1.1 + Math.random() * 0.4;
+
+    gsap.to(puff, {
+      x: driftX,
+      y: driftY,
+      scale: endScale,
+      opacity: 0,
+      duration: duration,
+      ease: "power2.out",
+      onComplete: () => {
+        puff.remove();
+      }
+    });
+  };
+
+  // 1. FASE IDLE (0% - 89%): Continuous smoke emission
+  smokeInterval = setInterval(() => {
+    if (smokeActive) {
+      spawnSmokePuff(false);
+    }
+  }, 110);
+
+  // 1. FASE IDLE (0% - 89%): Natural floating hover and gentle subtle tilt
+  let floatTween = null;
+  if (rocketCenter) {
+    floatTween = gsap.to(rocketCenter, {
+      y: -7,
+      rotation: 1.2,
+      duration: 1.6,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      transformOrigin: "50% 50%"
+    });
   }
+
+  let launchTriggered = false;
+
+  // 2. FASE PELUNCURAN (90% - 100%): Full speed vertical launch with high acceleration
+  const triggerLaunch = () => {
+    if (launchTriggered) return;
+    launchTriggered = true;
+
+    if (floatTween) floatTween.kill();
+
+    // Spawn dense burst of launch smoke plumes
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => spawnSmokePuff(true), i * 40);
+    }
+
+    const blastTl = gsap.timeline();
+
+    // Rocket launches straight up with high acceleration
+    if (rocketCenter) {
+      blastTl.to(rocketCenter, {
+        y: "-150vh",
+        rotation: 0,
+        scale: 0.9,
+        duration: 1.25,
+        ease: "power3.in"
+      }, 0);
+    }
+
+    // Monospace counter & status fade down smoothly
+    if (textGroup) {
+      blastTl.to(textGroup, {
+        opacity: 0,
+        y: 20,
+        duration: 0.45,
+        ease: "power2.in"
+      }, 0.05);
+    }
+  };
 
   const progressTracker = { val: 0 };
 
@@ -256,50 +359,35 @@ export const initThreeEngine = () => {
     if (barEl) barEl.style.width = `${intVal}%`;
     if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
     if (statusEl && text) statusEl.textContent = text;
-    // Instant set — zero lag, perfectly locked to bar
-    if (rocketFlame) {
-      const t = intVal / 100;
-      gsap.set(rocketFlame, {
-        scaleY: 0.5 + t * 0.8,
-        scaleX: 0.7 + t * 0.4,
-        opacity: 0.6 + t * 0.4,
-        transformOrigin: "70px 118px"
-      });
+
+    // Trigger launch precisely when progress touches 90%
+    if (intVal >= 90 && !launchTriggered) {
+      triggerLaunch();
     }
   };
 
+  // 3. TRANSISI AKHIR (Selesai Loading): Pure opacity fade out to 0
   const finishPreloader = () => {
     if (preloaderFinished) return;
     preloaderFinished = true;
 
-    const blastTl = gsap.timeline();
+    if (!launchTriggered) triggerLaunch();
 
-    // Flame burst + rocket lift + text fade — all on ONE timeline, absolute offsets
-    if (rocketFlame) {
-      blastTl.to(rocketFlame, {
-        scaleY: 2.5, scaleX: 1.4, opacity: 1,
-        transformOrigin: "70px 118px",
-        duration: 0.5, ease: "power2.out",
-      }, 0);
-    }
-    if (rocketCenter) {
-      blastTl.to(rocketCenter, {
-        y: "-140vh", scale: 0.85,
-        duration: 1.6, ease: "power3.in",
-      }, 0.15);
-    }
-    if (textGroup) {
-      blastTl.to(textGroup, {
-        opacity: 0, y: 20,
-        duration: 0.5, ease: "power2.in",
-      }, 0.1);
-    }
+    smokeActive = false;
+    if (smokeInterval) clearInterval(smokeInterval);
+
     if (preloaderEl) {
       preloaderEl.style.pointerEvents = "none";
-      blastTl.to(preloaderEl, {
-        opacity: 0, duration: 0.9, ease: "power2.inOut",
-        onComplete: () => { preloaderEl.style.display = "none"; preloaderEl.remove(); },
-      }, 0.7);
+      gsap.to(preloaderEl, {
+        opacity: 0,
+        delay: 0.35,
+        duration: 0.85,
+        ease: "power2.inOut",
+        onComplete: () => {
+          preloaderEl.style.display = "none";
+          preloaderEl.remove();
+        }
+      });
     }
   };
 
@@ -307,19 +395,19 @@ export const initThreeEngine = () => {
 
   preloaderTl
     .to(progressTracker, {
-      val: PRELOADER_STAGES[0].pct, duration: 1.2, ease: "power1.out",
+      val: PRELOADER_STAGES[0].pct, duration: 1.15, ease: "power1.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
     })
     .to(progressTracker, {
-      val: PRELOADER_STAGES[1].pct, duration: 1.2, ease: "sine.inOut",
+      val: PRELOADER_STAGES[1].pct, duration: 1.15, ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
     })
     .to(progressTracker, {
-      val: PRELOADER_STAGES[2].pct, duration: 1.0, ease: "sine.inOut",
+      val: PRELOADER_STAGES[2].pct, duration: 0.85, ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
     })
     .to(progressTracker, {
-      val: 100, duration: 0.9, ease: "power2.out",
+      val: 100, duration: 0.95, ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });
 
