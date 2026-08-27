@@ -126,20 +126,28 @@ export const initPreloaderTimeline = () => {
       return;
     }
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-    frameCount++;
+    // Read live position of rocket flame nozzle in real-time from GSAP transform cache (0 forced reflows)
+    let liveX = cachedNozzleX;
+    let liveY = cachedNozzleY;
+    if (rocketCenter) {
+      const curY = parseFloat(gsap.getProperty(rocketCenter, "y")) || 0;
+      const curX = parseFloat(gsap.getProperty(rocketCenter, "x")) || 0;
+      liveX = cachedNozzleX + curX;
+      liveY = cachedNozzleY + curY;
+    }
 
-    const spawnCount = launchTriggered ? 4 : (frameCount % 2 === 0 ? 1 : 0);
+    const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 1 : 0);
     for (let i = 0; i < spawnCount; i++) {
       smokeParticles.push({
-        x: cachedNozzleX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
-        y: cachedNozzleY + (Math.random() - 0.5) * 4,
-        vx: (Math.random() - 0.5) * (launchTriggered ? 1.8 : 0.8),
-        vy: launchTriggered ? (5.5 + Math.random() * 7) : (1.5 + Math.random() * 1.8),
-        radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
-        growth: launchTriggered ? 0.8 : 0.4,
-        maxRadius: launchTriggered ? 70 : 32,
-        alpha: launchTriggered ? 0.7 : 0.45,
-        decay: launchTriggered ? 0.02 : 0.012,
+        x: liveX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
+        y: liveY + (Math.random() - 0.5) * 4,
+        vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+        vy: launchTriggered ? (6.0 + Math.random() * 8.0) : (1.5 + Math.random() * 1.8),
+        radius: launchTriggered ? (16 + Math.random() * 12) : (7 + Math.random() * 5),
+        growth: launchTriggered ? 0.9 : 0.4,
+        maxRadius: launchTriggered ? 75 : 32,
+        alpha: launchTriggered ? 0.75 : 0.45,
+        decay: launchTriggered ? 0.022 : 0.012,
       });
     }
 
