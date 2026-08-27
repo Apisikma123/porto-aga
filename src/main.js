@@ -92,6 +92,80 @@ export const initPreloaderTimeline = () => {
   let launchTriggered = false;
   let floatTween = null;
 
+  // ─── High-Performance Pure White Vapor Smoke Canvas (Zero layout thrashing) ───
+  const smokeCanvas = document.getElementById("preloader-smoke-canvas");
+  let smokeCtx = null;
+  let smokeParticles = [];
+  let smokeAnimId = null;
+  let cachedNozzleX = window.innerWidth / 2;
+  let cachedNozzleY = window.innerHeight / 2 + 55;
+
+  const updateNozzleCoords = () => {
+    if (smokeCanvas) {
+      smokeCanvas.width = window.innerWidth;
+      smokeCanvas.height = window.innerHeight;
+    }
+    const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
+    if (flameNozzle) {
+      const rect = flameNozzle.getBoundingClientRect();
+      cachedNozzleX = rect.left + rect.width / 2;
+      cachedNozzleY = rect.bottom - (launchTriggered ? 15 : 8);
+    }
+  };
+
+  if (smokeCanvas) {
+    smokeCtx = smokeCanvas.getContext("2d");
+    updateNozzleCoords();
+    window.addEventListener("resize", updateNozzleCoords, { passive: true });
+  }
+
+  let frameCount = 0;
+  const renderSmokeCanvas = () => {
+    if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
+      if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+      return;
+    }
+    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+    frameCount++;
+
+    const spawnCount = launchTriggered ? 4 : (frameCount % 2 === 0 ? 1 : 0);
+    for (let i = 0; i < spawnCount; i++) {
+      smokeParticles.push({
+        x: cachedNozzleX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
+        y: cachedNozzleY + (Math.random() - 0.5) * 4,
+        vx: (Math.random() - 0.5) * (launchTriggered ? 1.8 : 0.8),
+        vy: launchTriggered ? (5.5 + Math.random() * 7) : (1.5 + Math.random() * 1.8),
+        radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
+        growth: launchTriggered ? 0.8 : 0.4,
+        maxRadius: launchTriggered ? 70 : 32,
+        alpha: launchTriggered ? 0.7 : 0.45,
+        decay: launchTriggered ? 0.02 : 0.012,
+      });
+    }
+
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+      const p = smokeParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.radius < p.maxRadius) p.radius += p.growth;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
+        smokeParticles.splice(i, 1);
+        continue;
+      }
+      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+      grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
+      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+      smokeCtx.fillStyle = grad;
+      smokeCtx.beginPath();
+      smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      smokeCtx.fill();
+    }
+    smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+  };
+  smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
+
   if (rocketCenter) {
     floatTween = gsap.to(rocketCenter, {
       y: -8,
@@ -125,6 +199,7 @@ export const initPreloaderTimeline = () => {
         duration: 0.55,
         ease: "power2.inOut",
         onComplete: () => {
+          if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
           preloaderEl.style.display = "none";
           preloaderEl.remove();
           document.body.style.overflow = "auto";
