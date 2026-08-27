@@ -243,33 +243,24 @@ export const initThreeEngine = () => {
     { pct: 100, text: "Siap meluncur! Membuka halaman..." }
   ];
 
-  // ─── 4. MATERIAL DESIGN SPACE THRUSTER & ZERO-G DRIFT ENGINE ───
+  // ─── 4. PURE WHITE SPACE THRUSTER SMOKE & SMOOTH ZERO-G DRIFT ───
   const smokeContainer = document.getElementById("preloader-smoke-container");
   const rocketFlame = document.getElementById("apple-rocket-flame");
   let smokeActive = true;
   let smokeInterval = null;
   let launchTriggered = false;
 
-  // Material Design Space Thruster Ion Particle Generator
+  // Pure White Space Thruster Smoke Particle Generator
   const spawnSmokePuff = (isLaunch = false) => {
     if (!smokeContainer || !smokeActive) return;
 
     const puff = document.createElement("div");
-    const size = isLaunch ? 28 + Math.random() * 24 : 12 + Math.random() * 10;
+    const size = isLaunch ? 28 + Math.random() * 22 : 12 + Math.random() * 10;
 
-    const colorRoll = Math.random();
-    let bg = "radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(236,239,241,0.3) 55%, rgba(255,255,255,0) 100%)";
-    if (colorRoll < 0.4) {
-      // Material Design Orange 500 / Plasma Core
-      bg = isLaunch
-        ? "radial-gradient(circle, rgba(255,152,0,0.85) 0%, rgba(255,87,34,0.45) 55%, rgba(211,47,47,0) 100%)"
-        : "radial-gradient(circle, rgba(255,152,0,0.55) 0%, rgba(255,87,34,0.25) 55%, rgba(211,47,47,0) 100%)";
-    } else if (colorRoll < 0.7) {
-      // Material Design Red 700 / Crimson Accent
-      bg = isLaunch
-        ? "radial-gradient(circle, rgba(244,67,54,0.8) 0%, rgba(211,47,47,0.45) 55%, rgba(183,28,28,0) 100%)"
-        : "radial-gradient(circle, rgba(244,67,54,0.5) 0%, rgba(211,47,47,0.2) 55%, rgba(183,28,28,0) 100%)";
-    }
+    // Pure White Glowing Space Smoke Cloud
+    const bg = isLaunch
+      ? "radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.4) 55%, rgba(255,255,255,0) 100%)"
+      : "radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.22) 60%, rgba(255,255,255,0) 100%)";
 
     puff.className = "absolute rounded-full pointer-events-none blur-[3px] transform-gpu";
     puff.style.width = `${size}px`;
@@ -281,10 +272,10 @@ export const initThreeEngine = () => {
 
     smokeContainer.appendChild(puff);
 
-    const driftX = (Math.random() - 0.5) * (isLaunch ? 40 : 16);
-    const driftY = isLaunch ? 85 + Math.random() * 60 : 32 + Math.random() * 22;
-    const endScale = isLaunch ? 3.4 + Math.random() * 1.2 : 2.2 + Math.random() * 0.6;
-    const duration = isLaunch ? 0.85 + Math.random() * 0.3 : 1.3 + Math.random() * 0.35;
+    const driftX = (Math.random() - 0.5) * (isLaunch ? 36 : 14);
+    const driftY = isLaunch ? 80 + Math.random() * 50 : 30 + Math.random() * 20;
+    const endScale = isLaunch ? 3.2 + Math.random() * 1.0 : 2.0 + Math.random() * 0.5;
+    const duration = isLaunch ? 0.85 + Math.random() * 0.25 : 1.3 + Math.random() * 0.3;
 
     gsap.to(puff, {
       x: driftX,
@@ -299,41 +290,20 @@ export const initThreeEngine = () => {
     });
   };
 
-  // Continuous space thruster smoke emission during zero-g flight
+  // Continuous pure white smoke emission during zero-g flight
   smokeInterval = setInterval(() => {
     if (smokeActive) {
       spawnSmokePuff(false);
     }
   }, 90);
 
-  // 1. FASE IDLE (0% - 89%): Multi-Axis Zero-Gravity Space Drift
-  let floatY = null;
-  let floatX = null;
-  let floatRot = null;
-
+  // 1. FASE IDLE (0% - 89%): Single-Tween Silky Smooth Zero-G Float
+  let floatTween = null;
   if (rocketCenter) {
-    // Vertical weightless bobbing
-    floatY = gsap.to(rocketCenter, {
+    floatTween = gsap.to(rocketCenter, {
       y: -8,
-      duration: 2.4,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Horizontal gentle drift
-    floatX = gsap.to(rocketCenter, {
-      x: 3,
-      duration: 3.2,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
-
-    // Fluid micro-tilting & roll
-    floatRot = gsap.to(rocketCenter, {
-      rotation: 1.6,
-      duration: 2.8,
+      rotation: 1.2,
+      duration: 2.2,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
@@ -346,47 +316,33 @@ export const initThreeEngine = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    // Smoothly stop zero-g float tweens
-    if (floatY) floatY.kill();
-    if (floatX) floatX.kill();
-    if (floatRot) floatRot.kill();
+    if (floatTween) floatTween.kill();
 
-    // Spawn dense elongated thruster boost plumes
-    for (let i = 0; i < 12; i++) {
-      setTimeout(() => spawnSmokePuff(true), i * 28);
+    // Spawn dense elongated pure white thruster plumes
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => spawnSmokePuff(true), i * 30);
     }
 
     const blastTl = gsap.timeline();
 
-    // Re-align orientation straight
+    // Re-align orientation to 0deg smoothly
     if (rocketCenter) {
       blastTl.to(rocketCenter, {
         x: 0,
         rotation: 0,
-        duration: 0.18,
+        duration: 0.15,
         ease: "power1.out"
       }, 0);
     }
 
-    // Space thruster flame superheats & elongates
-    if (rocketFlame) {
-      blastTl.to(rocketFlame, {
-        scaleY: 2.8,
-        scaleX: 1.3,
-        opacity: 1,
-        duration: 0.35,
-        ease: "power2.out"
-      }, 0);
-    }
-
-    // Rocket rockets upward with exponential high acceleration
+    // Rocket shoots straight up with exponential high acceleration
     if (rocketCenter) {
       blastTl.to(rocketCenter, {
         y: "-160vh",
         scale: 0.86,
-        duration: 1.35,
+        duration: 1.4,
         ease: "power3.in"
-      }, 0.06);
+      }, 0.05);
     }
 
     // Monospace counter & status fade down smoothly
