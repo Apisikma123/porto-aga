@@ -2969,36 +2969,30 @@ const boot = () => {
   setLanguage(currentLang);
   initNavigationAndKeyboard();
 
-  const deferTask = (fn, delay = 0) => {
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      requestIdleCallback(fn, { timeout: 2000 });
-    } else {
-      setTimeout(fn, delay);
-    }
-  };
+  // Phase 1: Immediate hydration (Fast interactivity)
+  initProjectsCarousel();
+  initPricingMarketingCarousel();
+  initSPAViews();
+  initPageTransitionLinks();
 
-  // Phase 1: Carousel and SPA Link routing (Fast user interactivity)
-  deferTask(() => {
-    initProjectsCarousel();
-    initPricingMarketingCarousel();
-    initSPAViews();
-    initPageTransitionLinks();
-  }, 20);
-
-  // Phase 2: Heavy widgets (Heatmap, GitHub API, Configurator, Card 3D tilt)
-  deferTask(() => {
-    initActivityHeatmap();
-    initGitHubRepos();
-    initPricingConfigurator();
-    initCardTilt();
-  }, 60);
+  // Phase 2: Deferred widgets (Heatmap, GitHub API, Configurator, 3D tilt)
+  setTimeout(() => {
+    try {
+      initActivityHeatmap();
+      initGitHubRepos();
+      initPricingConfigurator();
+      initCardTilt();
+    } catch (e) {}
+  }, 40);
 
   // Phase 3: Scroll animations & Three.js 3D viewport
-  deferTask(() => {
-    initScrollRevealAnimations();
-    ScrollTrigger.refresh();
-    initThreeEngine();
-  }, 120);
+  setTimeout(() => {
+    try {
+      initScrollRevealAnimations();
+      ScrollTrigger.refresh();
+      initThreeEngine();
+    } catch (e) {}
+  }, 80);
 };
 
 if (document.readyState === "loading") {
