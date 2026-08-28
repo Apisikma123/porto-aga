@@ -172,6 +172,7 @@ export const createFeaturedProjectCardElement = (item) => {
             loading="lazy"
             decoding="async"
             fetchpriority="low"
+            draggable="false"
             sizes="(max-width: 640px) 120px, 200px"
           />
         </div>
@@ -189,6 +190,7 @@ export const createFeaturedProjectCardElement = (item) => {
           loading="lazy"
           decoding="async"
           fetchpriority="low"
+          draggable="false"
           sizes="(max-width: 640px) 280px, (max-width: 1024px) 400px, 480px"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 pointer-events-none"></div>

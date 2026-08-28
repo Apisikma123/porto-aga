@@ -514,64 +514,115 @@ export const updateActiveSidebar = (index) => {
   });
 };
 
-// ─── Reusable Smooth Drag-To-Scroll Engine ───
+// ─── Reusable High-Performance Drag-To-Scroll Engine (Desktop Mouse & Touch) ───
 export const enableDragToScroll = (track) => {
-  if (!track || track.dataset.dragEnabled === "true") return;
-  track.dataset.dragEnabled = "true";
+  if (!track || track._dragInitialized) return;
+  track._dragInitialized = true;
 
   let isDown = false;
   let startX = 0;
   let startY = 0;
   let scrollLeft = 0;
   let hasDragged = false;
+  let velX = 0;
+  let lastX = 0;
+  let lastTime = 0;
+  let rafMomentum = null;
 
   track.style.cursor = "grab";
+  track.style.setProperty("-webkit-user-select", "none");
+  track.style.setProperty("user-select", "none");
 
-  track.addEventListener("mousedown", (e) => {
-    if (e.button !== 0) return;
-    isDown = true;
-    hasDragged = false;
-    startX = e.pageX - track.offsetLeft;
-    startY = e.pageY;
-    scrollLeft = track.scrollLeft;
-    track.style.cursor = "grabbing";
-    track.style.userSelect = "none";
-    track.style.scrollBehavior = "auto";
-    track.style.scrollSnapType = "none";
+  // Prevent browser native image/link ghost drag
+  track.addEventListener("dragstart", (e) => {
+    e.preventDefault();
+    return false;
   });
 
-  window.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    const x = e.pageX - track.offsetLeft;
-    const walk = x - startX;
-    const diffY = Math.abs(e.pageY - startY);
+  const onPointerDown = (e) => {
+    // Only primary button on mouse
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.target && e.target.closest("button, input, textarea, select")) return;
 
-    if (Math.abs(walk) > 5 || diffY > 5) {
+    if (rafMomentum) {
+      cancelAnimationFrame(rafMomentum);
+      rafMomentum = null;
+    }
+
+    isDown = true;
+    hasDragged = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    lastX = e.clientX;
+    lastTime = performance.now();
+    scrollLeft = track.scrollLeft;
+    velX = 0;
+
+    track.style.cursor = "grabbing";
+    track.style.setProperty("scroll-behavior", "auto", "important");
+    track.style.setProperty("scroll-snap-type", "none", "important");
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDown) return;
+
+    const currentX = e.clientX;
+    const diffX = currentX - startX;
+    const diffY = Math.abs(e.clientY - startY);
+
+    if (Math.abs(diffX) > 4 || diffY > 4) {
       hasDragged = true;
     }
 
     if (hasDragged) {
       e.preventDefault();
-      track.scrollLeft = scrollLeft - walk;
-    }
-  });
+      track.scrollLeft = scrollLeft - diffX;
 
-  const stopDrag = () => {
+      const now = performance.now();
+      const dt = Math.max(1, now - lastTime);
+      velX = (currentX - lastX) / dt;
+      lastX = currentX;
+      lastTime = now;
+    }
+  };
+
+  const onPointerUp = () => {
     if (!isDown) return;
     isDown = false;
+
     track.style.cursor = "grab";
-    track.style.removeProperty("user-select");
-    track.style.removeProperty("scroll-behavior");
-    track.style.removeProperty("scroll-snap-type");
+
+    // Inertia release if dragged with speed
+    if (hasDragged && Math.abs(velX) > 0.15) {
+      let momentumVel = velX * 16;
+      const momentumLoop = () => {
+        if (Math.abs(momentumVel) < 0.5) {
+          track.style.removeProperty("scroll-behavior");
+          track.style.removeProperty("scroll-snap-type");
+          rafMomentum = null;
+          return;
+        }
+        track.scrollLeft -= momentumVel;
+        momentumVel *= 0.88;
+        rafMomentum = requestAnimationFrame(momentumLoop);
+      };
+      rafMomentum = requestAnimationFrame(momentumLoop);
+    } else {
+      track.style.removeProperty("scroll-behavior");
+      track.style.removeProperty("scroll-snap-type");
+    }
 
     setTimeout(() => {
       hasDragged = false;
-    }, 100);
+    }, 120);
   };
 
-  window.addEventListener("mouseup", stopDrag);
-  track.addEventListener("mouseleave", stopDrag);
+  track.addEventListener("pointerdown", onPointerDown);
+  window.addEventListener("pointermove", onPointerMove, { passive: false });
+  window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("pointercancel", onPointerUp);
 
+  // Suppress link click / modal open when user was dragging
   track.addEventListener(
     "click",
     (e) => {
@@ -644,12 +695,17 @@ export const initNavigationAndKeyboard = () => {
         // Vertical mouse wheel over horizontal scroll container: convert to horizontal track scrolling
         const maxScrollLeft = isHorizontalContainer.scrollWidth - isHorizontalContainer.clientWidth;
         if (maxScrollLeft > 5) {
-          const atStart = isHorizontalContainer.scrollLeft <= 2;
-          const atEnd = isHorizontalContainer.scrollLeft >= maxScrollLeft - 2;
+          const atStart = isHorizontalContainer.scrollLeft <= 4;
+          const atEnd = isHorizontalContainer.scrollLeft >= maxScrollLeft - 4;
 
           if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
             e.preventDefault();
-            isHorizontalContainer.scrollLeft += e.deltaY * 1.2;
+            isHorizontalContainer.style.setProperty("scroll-behavior", "auto", "important");
+            isHorizontalContainer.scrollLeft += e.deltaY * 1.25;
+            clearTimeout(isHorizontalContainer._wheelTimer);
+            isHorizontalContainer._wheelTimer = setTimeout(() => {
+              isHorizontalContainer.style.removeProperty("scroll-behavior");
+            }, 100);
             return;
           }
         }
