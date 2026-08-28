@@ -2026,16 +2026,19 @@ html[data-theme="light"] aside .rounded-xl.border[class*="bg-[#DC143C]/10"] {
    ═══════════════════════════════════════════════════════════ */
 
 #project-detail-view,
+#project-detail-modal,
 #all-projects-view {
-  background-color: rgba(4, 5, 9, 0.96) !important;
+  background-color: rgba(4, 5, 9, 0.98) !important;
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   color: #f1f5f9 !important;
+  z-index: 99999 !important;
 }
 
 html[data-theme="light"] #project-detail-view,
+html[data-theme="light"] #project-detail-modal,
 html[data-theme="light"] #all-projects-view {
-  background-color: rgba(238, 242, 248, 0.97) !important;
+  background-color: rgba(248, 250, 252, 0.98) !important;
   color: #090a10 !important;
 }
 

@@ -643,6 +643,8 @@
 
         document.body.style.overflow = 'hidden';
         modal.classList.remove('hidden');
+        modal.style.display = 'block';
+        modal.style.zIndex = '99999';
         modal.scrollTop = 0;
         history.replaceState(null, '', '#project/' + proj.id);
       }
@@ -651,6 +653,7 @@
         const modal = document.getElementById('project-detail-modal');
         if (modal) {
           modal.classList.add('hidden');
+          modal.style.display = 'none';
         }
         document.body.style.overflow = 'auto';
         history.replaceState(null, '', window.location.pathname + window.location.search);
