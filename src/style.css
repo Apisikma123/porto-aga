@@ -2039,6 +2039,29 @@ html[data-theme="light"] #all-projects-view {
   color: #090a10 !important;
 }
 
+/* Image Preview Overlay Floating Badges (Visual Architecture Preview, Language Badges) */
+#detail-view-banner-container [class*="bg-black"],
+#detail-view-banner-container [class*="bg-black"] *,
+#detail-view-banner-badge,
+[data-i18n="visualPreview"],
+.aspect-\[16\/8\.5\] [class*="bg-black"],
+.aspect-\[16\/8\.5\] [class*="bg-black"] * {
+  color: #f8fafc !important;
+  background-color: rgba(0, 0, 0, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html[data-theme="light"] #detail-view-banner-container [class*="bg-black"],
+html[data-theme="light"] #detail-view-banner-container [class*="bg-black"] *,
+html[data-theme="light"] #detail-view-banner-badge,
+html[data-theme="light"] [data-i18n="visualPreview"],
+html[data-theme="light"] .aspect-\[16\/8\.5\] [class*="bg-black"],
+html[data-theme="light"] .aspect-\[16\/8\.5\] [class*="bg-black"] * {
+  color: #f8fafc !important;
+  background-color: rgba(0, 0, 0, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 html[data-theme="light"] #detail-view-title {
   color: #090a10 !important;
 }
