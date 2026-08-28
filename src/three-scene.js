@@ -1294,5 +1294,6 @@ export const initThreeEngine = () => {
 };
 
 export const init3D = initThreeEngine;
+export const initThreeScene = initThreeEngine;
 
 

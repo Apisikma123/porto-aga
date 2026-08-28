@@ -2434,11 +2434,35 @@
         goToStep(1);
         initPageTransitionLinks();
         initStudioPreloader();
-        try {
-          initThreeEngine();
-        } catch (e) {
-          console.warn("Three.js engine init error:", e);
+
+        let initialized3D = false;
+        function activate3D() {
+          if (initialized3D) return;
+          initialized3D = true;
+          try {
+            initThreeEngine();
+          } catch (e) {
+            console.warn("Three.js engine init error:", e);
+          }
         }
+
+        function schedule3D() {
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(() => activate3D(), { timeout: 1500 });
+          } else {
+            setTimeout(activate3D, 500);
+          }
+        }
+
+        if (document.readyState === "complete") {
+          schedule3D();
+        } else {
+          window.addEventListener("load", schedule3D, { once: true });
+        }
+
+        ["pointerdown", "touchstart", "wheel", "keydown"].forEach((event) => {
+          window.addEventListener(event, activate3D, { once: true, passive: true });
+        });
       };
 
       if (document.readyState === "loading") {
