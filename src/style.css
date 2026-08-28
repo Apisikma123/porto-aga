@@ -835,19 +835,23 @@ html[data-theme="light"] header nav button:hover {
 #theme-toggle-btn #theme-icon,
 #theme-icon,
 .theme-toggle-btn .material-symbols-outlined {
-  display: inline-flex !important;
+  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
   height: 100% !important;
-  line-height: 1 !important;
-  font-size: 1.15rem !important;
   margin: 0 !important;
   padding: 0 !important;
   text-align: center !important;
-  vertical-align: middle !important;
   user-select: none !important;
   pointer-events: none !important;
+}
+
+#theme-toggle-btn svg,
+#theme-icon svg {
+  display: block !important;
+  margin: auto !important;
+  flex-shrink: 0 !important;
 }
 
 html[data-theme="light"] #theme-toggle-btn,

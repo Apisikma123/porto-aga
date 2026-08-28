@@ -292,6 +292,10 @@ export const setCookie = (name, value, days = 365) => {
 export let currentLang = getCookie("aga_lang") || (typeof localStorage !== "undefined" ? localStorage.getItem("aga_portfolio_lang") : null) || "en";
 export let currentTheme = getCookie("aga_theme") || (typeof localStorage !== "undefined" ? localStorage.getItem("aga_portfolio_theme") : null) || "dark";
 
+export const SUN_SVG = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
+
+export const MOON_SVG = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
 // ─── Theme Mode Architecture (Dark / Celestial Light) ───
 export const setTheme = (theme, animate = true) => {
   currentTheme = theme;
@@ -310,12 +314,12 @@ export const setTheme = (theme, animate = true) => {
         duration: 0.22,
         ease: "power2.in",
         onComplete: () => {
-          themeIcon.textContent = theme === "light" ? "dark_mode" : "light_mode";
+          themeIcon.innerHTML = theme === "light" ? MOON_SVG : SUN_SVG;
           gsap.to(themeIcon, { scale: 1, duration: 0.25, ease: "back.out(2)" });
         },
       });
     } else {
-      themeIcon.textContent = theme === "light" ? "dark_mode" : "light_mode";
+      themeIcon.innerHTML = theme === "light" ? MOON_SVG : SUN_SVG;
     }
   }
 
