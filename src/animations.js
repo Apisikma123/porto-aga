@@ -48,96 +48,12 @@ export const initScrollRevealAnimations = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// VELVETY SMOOTH 60FPS 3D TILT ENGINE (SPRING LERP + ZERO JITTER)
+// VELVETY SMOOTH 60FPS 3D TILT ENGINE DELEGATION
 // ═══════════════════════════════════════════════════════════
-export const initCardTilt = (root = document) => {
-  // STRICT CHECK: Only enable on desktop devices with fine pointer (mouse/trackpad).
-  if (!window.matchMedia("(pointer: fine)").matches) return;
-
-  const cards = root.querySelectorAll(
-    ".spatial-card, .glass-card, .activity-standalone-card, .carousel-card, .tesseract-card, .repo-card, .pricing-carousel-card, .activity-metric-card"
-  );
-
-  cards.forEach((card) => {
-    if (
-      card.dataset.tiltInitialized === "true" ||
-      card.tagName === "ARTICLE" ||
-      card.closest("article") ||
-      card.id === "detail-view-article" ||
-      card.querySelector("#detail-view-markdown") ||
-      card.closest("#side-nav")
-    ) {
-      return;
-    }
-
-    card.dataset.tiltInitialized = "true";
-
-    let targetRotX = 0;
-    let targetRotY = 0;
-    let currentRotX = 0;
-    let currentRotY = 0;
-    let targetScale = 1;
-    let currentScale = 1;
-    let isHovering = false;
-    let rafId = null;
-    let cachedRect = null;
-
-    const maxTilt = 6.5; // Luxury subtle tilt angle
-
-    const updateTilt = () => {
-      // Velvety smooth dampened lerp
-      currentRotX += (targetRotX - currentRotX) * 0.09;
-      currentRotY += (targetRotY - currentRotY) * 0.09;
-      currentScale += (targetScale - currentScale) * 0.09;
-
-      card.style.transform = `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`;
-
-      const diff =
-        Math.abs(targetRotX - currentRotX) +
-        Math.abs(targetRotY - currentRotY) +
-        Math.abs(targetScale - currentScale);
-
-      if (isHovering || diff > 0.01) {
-        rafId = requestAnimationFrame(updateTilt);
-      } else {
-        card.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
-        card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-        rafId = null;
-        cachedRect = null;
-      }
-    };
-
-    card.addEventListener("pointerenter", () => {
-      isHovering = true;
-      targetScale = 1.02;
-      card.style.transition = "none";
-      card.style.willChange = "transform";
-      cachedRect = card.getBoundingClientRect();
-      if (!rafId) rafId = requestAnimationFrame(updateTilt);
-    });
-
-    card.addEventListener("pointermove", (e) => {
-      if (!cachedRect) cachedRect = card.getBoundingClientRect();
-      if (cachedRect.width === 0 || cachedRect.height === 0) return;
-
-      const normX = ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1;
-      const normY = ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1;
-
-      targetRotX = -normY * maxTilt;
-      targetRotY = normX * maxTilt;
-      targetScale = 1.02;
-
-      if (!rafId) rafId = requestAnimationFrame(updateTilt);
-    });
-
-    card.addEventListener("pointerleave", () => {
-      isHovering = false;
-      targetRotX = 0;
-      targetRotY = 0;
-      targetScale = 1;
-      if (!rafId) rafId = requestAnimationFrame(updateTilt);
-    });
-  });
+export const initCardTilt = () => {
+  if (typeof window !== "undefined" && window.initGlobalCardTilt) {
+    window.initGlobalCardTilt();
+  }
 };
 window.initCardTilt = initCardTilt;
 
@@ -146,17 +62,5 @@ window.initCardTilt = initCardTilt;
 // ═══════════════════════════════════════════════════════════
 export const initAnimations = () => {
   initScrollRevealAnimations();
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(() => {
-      try {
-        initCardTilt();
-      } catch (e) {}
-    }, { timeout: 2000 });
-  } else {
-    setTimeout(() => {
-      try {
-        initCardTilt();
-      } catch (e) {}
-    }, 300);
-  }
+  initCardTilt();
 };

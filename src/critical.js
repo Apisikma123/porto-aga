@@ -459,6 +459,17 @@ export const scrollToSection = (index, immediate = false) => {
   }, 500);
 };
 window.scrollToSection = scrollToSection;
+window.getCurrentSectionIndex = () => currentSectionIndex;
+window.goToPrevSection = () => {
+  if (currentSectionIndex > 0) {
+    scrollToSection(currentSectionIndex - 1);
+  }
+};
+window.goToNextSection = () => {
+  if (currentSectionIndex < SECTION_IDS.length - 1) {
+    scrollToSection(currentSectionIndex + 1);
+  }
+};
 
 export const updateActiveSidebar = (index) => {
   const sideNavItems = document.querySelectorAll(".side-nav-item");
@@ -922,11 +933,10 @@ export const initPageTransitionLinks = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════
 // GLOBAL VELVETY 3D TILT ENGINE (EVENT DELEGATION + SPRING LERP)
 // ═══════════════════════════════════════════════════════════
 export const initGlobalCardTilt = () => {
-  if (typeof window === "undefined" || !window.matchMedia("(pointer: fine)").matches) return;
+  if (typeof window === "undefined") return;
 
   const CARD_SELECTOR = `
     [data-tilt],
@@ -956,7 +966,7 @@ export const initGlobalCardTilt = () => {
   let currentTranslateY = 0;
   let rafId = null;
 
-  const maxTilt = 9.0; // Expressive luxury 3D tilt
+  const maxTilt = 10.0; // Rich expressive 3D perspective tilt
 
   const updateTiltPhysics = () => {
     if (!activeCard) {
@@ -964,14 +974,14 @@ export const initGlobalCardTilt = () => {
       return;
     }
 
-    currentRotX += (targetRotX - currentRotX) * 0.12;
-    currentRotY += (targetRotY - currentRotY) * 0.12;
-    currentScale += (targetScale - currentScale) * 0.12;
-    currentTranslateY += (targetTranslateY - currentTranslateY) * 0.12;
+    currentRotX += (targetRotX - currentRotX) * 0.14;
+    currentRotY += (targetRotY - currentRotY) * 0.14;
+    currentScale += (targetScale - currentScale) * 0.14;
+    currentTranslateY += (targetTranslateY - currentTranslateY) * 0.14;
 
     activeCard.style.setProperty(
       "transform",
-      `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateY(${currentTranslateY.toFixed(2)}px) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`,
+      `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateY(${currentTranslateY.toFixed(2)}px) translateZ(12px) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`,
       "important"
     );
 
@@ -991,7 +1001,7 @@ export const initGlobalCardTilt = () => {
       );
       activeCard.style.setProperty(
         "transform",
-        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)",
+        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px) scale3d(1, 1, 1)",
         "important"
       );
       const cardToReset = activeCard;
@@ -1008,14 +1018,16 @@ export const initGlobalCardTilt = () => {
     }
   };
 
-  document.addEventListener("pointermove", (e) => {
-    const card = e.target.closest(CARD_SELECTOR);
+  const handlePointer = (e) => {
+    if (e.pointerType === "touch") return;
+
+    const card = e.target && e.target.closest ? e.target.closest(CARD_SELECTOR) : null;
 
     if (card && (!card.closest("article") && card.id !== "detail-view-article" && !card.closest("#side-nav") && !card.closest("nav"))) {
       if (activeCard !== card) {
         if (activeCard) {
           activeCard.style.setProperty("transition", "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)", "important");
-          activeCard.style.setProperty("transform", "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)", "important");
+          activeCard.style.setProperty("transform", "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px) scale3d(1, 1, 1)", "important");
         }
         activeCard = card;
         activeCard.style.setProperty("transition", "none", "important");
@@ -1036,7 +1048,7 @@ export const initGlobalCardTilt = () => {
 
       targetRotX = -normY * maxTilt;
       targetRotY = normX * maxTilt;
-      targetScale = 1.03;
+      targetScale = 1.035;
       targetTranslateY = -6;
 
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
@@ -1047,9 +1059,12 @@ export const initGlobalCardTilt = () => {
       targetTranslateY = 0;
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     }
-  }, { passive: true });
+  };
 
-  document.addEventListener("pointerleave", () => {
+  window.addEventListener("pointermove", handlePointer, { passive: true });
+  window.addEventListener("mousemove", handlePointer, { passive: true });
+
+  window.addEventListener("pointerleave", () => {
     if (activeCard) {
       targetRotX = 0;
       targetRotY = 0;
