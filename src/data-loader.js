@@ -809,12 +809,12 @@ export const switchView = async (viewName, param, updateHash = true) => {
   const projectDetailEl = document.getElementById("project-detail-view");
   const allProjectsEl = document.getElementById("all-projects-view");
 
-  if (!projectDetailEl || !allProjectsEl) {
-    if (viewName === "project") {
-      window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
-    } else if (viewName === "all-projects") {
-      window.location.href = "/projects.html";
-    }
+  if (viewName === "project" && !projectDetailEl) {
+    window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
+    return;
+  }
+  if (viewName === "all-projects" && !allProjectsEl) {
+    window.location.href = "/projects.html";
     return;
   }
 
@@ -835,7 +835,7 @@ export const switchView = async (viewName, param, updateHash = true) => {
 
   if (viewName === "portfolio") {
     document.body.style.overflow = "auto";
-    const activeOverlay = [projectDetailEl, allProjectsEl].find((el) => !el.classList.contains("hidden") || el.style.display === "block");
+    const activeOverlay = [projectDetailEl, allProjectsEl].filter(Boolean).find((el) => !el.classList.contains("hidden") || el.style.display === "block");
     if (activeOverlay) {
       gsap.to(activeOverlay, {
         opacity: 0,
@@ -854,15 +854,27 @@ export const switchView = async (viewName, param, updateHash = true) => {
     if (updateHash) {
       history.pushState(null, "", window.location.pathname + window.location.search);
     }
-  } else if (viewName === "project") {
-    allProjectsEl.classList.add("hidden");
+  } else if (viewName === "project" && projectDetailEl) {
+    if (allProjectsEl) allProjectsEl.classList.add("hidden");
 
     const projectId = param || "foodify";
-    const proj = projectsData.find(
+    const featuredMatch = FEATURED_PROJECTS.find(
+      (p) => p.id.toLowerCase() === projectId.toLowerCase()
+    );
+    const proj = (projectsData && projectsData.find(
       (p) =>
         p.id.toLowerCase() === projectId.toLowerCase() ||
         (p.name && p.name.toLowerCase() === projectId.toLowerCase())
-    ) || {
+    )) || (featuredMatch ? {
+      id: featuredMatch.id,
+      displayName: featuredMatch.titleFallback,
+      category: featuredMatch.tagFallback,
+      tags: featuredMatch.tags,
+      description: featuredMatch.descFallback,
+      html_url: featuredMatch.repoUrl,
+      language: featuredMatch.tags[0] || "Code",
+      readme: `# ${featuredMatch.titleFallback}\n\n${featuredMatch.descFallback}\n\n- **GitHub:** [${featuredMatch.repoUrl}](${featuredMatch.repoUrl})`
+    } : {
       id: projectId,
       displayName: projectId.toUpperCase(),
       category: "Software Engineering",
@@ -871,7 +883,7 @@ export const switchView = async (viewName, param, updateHash = true) => {
       html_url: "https://github.com/Apisikma123/" + projectId,
       language: "Code",
       readme: "# " + projectId.toUpperCase() + "\n\nDocumentation repository for " + projectId + "."
-    };
+    });
 
     currentDetailProject = proj;
 

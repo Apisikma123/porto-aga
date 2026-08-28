@@ -430,8 +430,9 @@ window.switchView = async (viewName, param, updateHash = true) => {
     console.warn("switchView fallback navigation:", e);
   }
 
-  if (viewName === "project" && param) {
-    window.location.href = "/project.html?id=" + encodeURIComponent(param);
+  const projectDetailEl = document.getElementById("project-detail-view");
+  if (viewName === "project" && !projectDetailEl) {
+    window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
   } else if (viewName === "all-projects") {
     window.location.href = "/projects.html";
   }
@@ -441,7 +442,7 @@ export const openProjectDetail = (projectId) => {
   if (window.switchView) {
     window.switchView("project", projectId);
   } else {
-    window.location.href = "/project.html?id=" + encodeURIComponent(projectId);
+    window.location.href = "/project.html?id=" + encodeURIComponent(projectId || "foodify");
   }
 };
 window.openProjectDetail = openProjectDetail;
@@ -476,6 +477,20 @@ if (typeof document !== "undefined") {
           e.stopPropagation();
           if (window.openProjectDetail) {
             window.openProjectDetail(m[1]);
+          }
+          return;
+        }
+      }
+
+      if (onclickAttr.includes("switchView")) {
+        const m = onclickAttr.match(/switchView\(\s*['"]([^'"]+)['"]\s*(?:,\s*['"]([^'"]+)['"])?\s*\)/);
+        if (m && m[1]) {
+          e.preventDefault();
+          e.stopPropagation();
+          const viewName = m[1];
+          const param = m[2] || null;
+          if (window.switchView) {
+            window.switchView(viewName, param);
           }
           return;
         }
