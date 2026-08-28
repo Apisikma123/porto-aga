@@ -21,7 +21,7 @@ export const initThreeEngine = () => {
   );
   if (isAuditBot) return;
 
-  const canvas = document.getElementById("bg");
+  const canvas = document.getElementById("bg") || document.getElementById("webgl-canvas");
   if (!canvas) return;
 
   // Scene setup

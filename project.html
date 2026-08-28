@@ -202,12 +202,12 @@
       }
     </style>
   </head>
-  <body class="font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen bg-[#090a10]">
+  <body class="bg-transparent text-zinc-100 font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative">
     
     <!-- Dynamic 3D WebGL Canvas Background -->
-    <canvas id="webgl-canvas" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></canvas>
+    <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none" aria-hidden="true"></canvas>
 
     <!-- React Application Mount Point -->
-    <div id="root" class="relative z-10 min-h-screen"></div>
+    <div id="root" class="relative z-10 min-h-screen w-full flex-1"></div>
   </body>
 </html>

@@ -89,6 +89,9 @@ export default function ProjectDetailApp() {
           .catch(() => {});
       }
       setLoading(false);
+      setTimeout(() => {
+        if (window.update3DSceneForView) window.update3DSceneForView('project');
+      }, 100);
     };
 
     loadData();
@@ -99,6 +102,7 @@ export default function ProjectDetailApp() {
     setTheme(next);
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('aga_portfolio_theme', next);
+    if (window.updateThreeTheme) window.updateThreeTheme(next);
   };
 
   const switchLanguage = (newLang) => {
