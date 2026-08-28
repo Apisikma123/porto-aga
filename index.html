@@ -1446,7 +1446,7 @@
               onclick="window.switchView('portfolio', 3)"
               class="inline-flex items-center justify-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider cursor-pointer group leading-none"
             >
-              <svg class="w-4 h-4 shrink-0 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <svg class="w-3.5 h-3.5 shrink-0 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
               <span data-i18n="backToPortfolio">Kembali ke Portofolio (Section 04)</span>
             </button>
 
@@ -1635,14 +1635,17 @@
 
             <!-- Search + Filter Bar -->
             <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-4 border-t border-white/5">
-              <div class="relative w-full md:w-80">
-                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">search</span>
+              <div class="relative w-full md:w-80 flex items-center">
+                <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
                 <input
                   type="text"
                   id="all-view-search-input"
                   placeholder="Cari proyek (Flutter, Laravel, PWA...)"
                   oninput="window.handleAllViewSearch(this.value)"
-                  class="w-full rounded-lg bg-white/[0.04] border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500"
+                  class="w-full rounded-lg bg-white/[0.04] border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 leading-none"
                 />
               </div>
 
