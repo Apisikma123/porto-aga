@@ -2,6 +2,7 @@ import "./style.css";
 import { marked } from "marked";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
+import "./three-scene.js";
 
 // Configure marked with syntax highlighting
 marked.setOptions({

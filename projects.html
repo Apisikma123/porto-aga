@@ -106,6 +106,9 @@
     </script>
   </head>
   <body class="font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between">
+    
+    <!-- Dynamic 3D WebGL Canvas Background -->
+    <canvas id="webgl-canvas" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></canvas>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. TOP HEADER & NAVIGATION                                -->
@@ -493,7 +496,7 @@
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
 
           card.innerHTML = `
-            <div onclick="openProjectModal('${p.id}')" class="cursor-pointer" title="${dict.readReadme} - ${p.displayName}">
+            <a href="/project.html?id=${p.id}" class="block cursor-pointer" title="${dict.readReadme} - ${p.displayName}">
               <!-- Image Banner or Header -->
               <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
                 <img
@@ -536,18 +539,17 @@
                   ${(p.tags || [p.language]).slice(0, 3).map(t => `<span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">${t}</span>`).join('')}
                 </div>
               </div>
-            </div>
+            </a>
 
             <!-- Card Bottom Actions -->
             <div class="p-5 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-3">
-              <button
-                type="button"
-                onclick="openProjectModal('${p.id}')"
+              <a
+                href="/project.html?id=${p.id}"
                 class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2.5 px-3 text-center transition-all inline-flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
               >
                 <span>${dict.readReadme}</span>
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </button>
+              </a>
 
               <a
                 href="${p.html_url}"

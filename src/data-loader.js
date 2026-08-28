@@ -167,7 +167,7 @@ export const createFeaturedProjectCardElement = (item) => {
     .join("\n                    ");
 
   card.innerHTML = `
-    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
+    <a href="/project.html?id=${encodeURIComponent(item.id)}" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
       ${mediaHtml}
       <div class="p-4 sm:p-5">
         <div class="flex justify-between items-center mb-1.5">
@@ -184,17 +184,16 @@ export const createFeaturedProjectCardElement = (item) => {
           ${tagsHtml}
         </div>
       </div>
-    </div>
+    </a>
     <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
-      <button
-        type="button"
-        onclick="window.openProjectDetail('${item.id}')"
+      <a
+        href="/project.html?id=${encodeURIComponent(item.id)}"
         class="relative z-30 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors cursor-pointer py-1.5 px-2 rounded hover:bg-white/5"
         title="Overview Singkat - ${item.titleFallback}"
       >
         <span>Overview Singkat</span>
         <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </button>
+      </a>
       <a
         href="${item.repoUrl}"
         target="_blank"
