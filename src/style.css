@@ -2440,4 +2440,26 @@ html[data-theme="light"] #markdown-output td {
   color: #27272a;
 }
 
+/* Ensure button and link child icons/text never swallow clicks */
+button *,
+a * {
+  pointer-events: none;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  pointer-events: auto !important;
+}
+
+/* Ensure 3D transformed cards allow clean click-through to child buttons */
+.carousel-card,
+.pricing-carousel-card,
+.project-card,
+[data-tilt] {
+  touch-action: pan-y pinch-zoom;
+}
+
 

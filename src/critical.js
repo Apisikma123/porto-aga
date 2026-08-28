@@ -437,6 +437,31 @@ window.switchView = async (viewName, param, updateHash = true) => {
   }
 };
 
+// Global Click Delegation (Capture Phase) - Guarantees clicks work inside 3D transformed containers
+if (typeof document !== "undefined") {
+  document.addEventListener(
+    "click",
+    (e) => {
+      const btn = e.target && e.target.closest ? e.target.closest("button, a, [onclick*='switchView'], [data-open-project]") : null;
+      if (!btn) return;
+
+      const onclickAttr = btn.getAttribute("onclick") || "";
+      const match = onclickAttr.match(/switchView\(\s*['"]([^'"]+)['"]\s*(?:,\s*['"]?([^'")]*)['"]?)?/);
+      if (match) {
+        e.preventDefault();
+        e.stopPropagation();
+        const viewName = match[1];
+        const rawParam = match[2];
+        const param = rawParam && rawParam.trim() ? rawParam.trim() : null;
+        if (window.switchView) {
+          window.switchView(viewName, param);
+        }
+      }
+    },
+    true
+  );
+}
+
 // ═══════════════════════════════════════════════════════════
 // 2. LOCKED FULL-PAGE AUTO-SNAP ENGINE & NAVIGATION CONTROLS
 // ═══════════════════════════════════════════════════════════
