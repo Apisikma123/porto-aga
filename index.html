@@ -1450,13 +1450,18 @@
               <span data-i18n="backToPortfolio">Kembali ke Portofolio (Section 04)</span>
             </button>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
               <button
                 type="button"
                 onclick="window.switchView('all-projects')"
-                class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs cursor-pointer transition-colors"
+                class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs cursor-pointer transition-colors leading-none touch-manipulation active:scale-95"
               >
-                <span class="material-symbols-outlined text-xs">grid_view</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
                 <span>Semua Karya (17)</span>
               </button>
 
@@ -1465,10 +1470,13 @@
                 href="https://github.com/Apisikma123"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-semibold cursor-pointer transition-colors shadow-[0_0_15px_rgba(220,20,60,0.35)]"
+                class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] border border-transparent text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] leading-none touch-manipulation active:scale-95 group"
               >
                 <span>GitHub</span>
-                <span class="material-symbols-outlined text-xs">arrow_outward</span>
+                <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
               </a>
             </div>
           </div>
