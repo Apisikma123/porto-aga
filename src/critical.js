@@ -3,8 +3,6 @@
    Muhammad Aga Putra | Frontend Software Engineer & System Architect
    ═══════════════════════════════════════════════════════════ */
 
-import { gsap } from "gsap";
-
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
 export let currentSectionIndex = 0;

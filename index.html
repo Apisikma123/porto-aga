@@ -107,8 +107,9 @@
     <meta name="twitter:creator" content="@Apisikma123" />
     <meta name="twitter:site" content="@Apisikma123" />
 
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="/src/style.css" />
+    <!-- Main Stylesheet (Non-blocking with critical inline styles) -->
+    <link rel="stylesheet" href="/src/style.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="/src/style.css" /></noscript>
 
     <!-- Critical Hero & Preloader Inline Styles for Instant 0ms Paint -->
     <style>
