@@ -673,9 +673,19 @@ html[data-theme="light"] ::selection {
    AWARD-WINNING LUXURY EDITORIAL PRELOADER PIPELINE
    ═══════════════════════════════════════════════════════════ */
 #web-preloader {
-  background-color: #040509;
+  background-color: transparent;
   color: #ffffff;
-  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+#preloader-backdrop {
+  background-color: #040509;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+#preloader-rocket-center {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 #web-preloader .preloader-glyph-ring {
@@ -720,12 +730,11 @@ html[data-theme="light"] ::selection {
 }
 
 /* Light Mode Preloader Screen */
-html[data-theme="light"] #web-preloader {
+html[data-theme="light"] #preloader-backdrop {
   background: 
     radial-gradient(ellipse 90% 70% at 50% -10%, rgba(220, 20, 60, 0.12), transparent 70%),
     radial-gradient(130% 90% at 50% 10%, #f4f7fb 0%, #e2e8f2 55%, #d5dde9 100%) !important;
   background-color: #e2e8f2 !important;
-  color: #090a10 !important;
 }
 
 html[data-theme="light"] #web-preloader .text-white {

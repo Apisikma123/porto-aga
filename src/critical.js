@@ -423,7 +423,7 @@ window.setLanguage = setLanguage;
 // ═══════════════════════════════════════════════════════════
 let isAnimating = false;
 let lastScrollTime = 0;
-const WHEEL_COOLDOWN = 500;
+const WHEEL_COOLDOWN = 800;
 let scrollTween = null;
 
 export const scrollToSection = (index, immediate = false) => {
@@ -457,7 +457,7 @@ export const scrollToSection = (index, immediate = false) => {
 
   scrollTween = gsap.to(obj, {
     y: targetY,
-    duration: 0.55,
+    duration: 0.65,
     ease: "power2.out",
     overwrite: "auto",
     onUpdate: () => {
@@ -466,8 +466,10 @@ export const scrollToSection = (index, immediate = false) => {
     onComplete: () => {
       window.scrollTo(0, targetY);
       scrollTween = null;
-      isAnimating = false;
       lastScrollTime = Date.now();
+      setTimeout(() => {
+        isAnimating = false;
+      }, 150);
     },
   });
 };
@@ -536,12 +538,14 @@ export const initNavigationAndKeyboard = () => {
       // STRICT LOCK: Suppress free scrolling in portfolio view
       e.preventDefault();
 
+      if (isAnimating) return;
+
       const now = Date.now();
       if (now - lastScrollTime < WHEEL_COOLDOWN) {
         return;
       }
 
-      if (Math.abs(e.deltaY) < 10) return;
+      if (Math.abs(e.deltaY) < 18) return;
 
       if (e.deltaY > 0) {
         if (currentSectionIndex < SECTION_IDS.length - 1) {
@@ -603,6 +607,7 @@ export const initNavigationAndKeyboard = () => {
     "touchend",
     (e) => {
       if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
+      if (isAnimating) return;
       const now = Date.now();
       if (now - lastScrollTime < WHEEL_COOLDOWN) return;
 
@@ -691,6 +696,7 @@ export const initPreloaderTimeline = () => {
   const percentEl = document.getElementById("preloader-percent");
   const statusEl = document.getElementById("preloader-status");
   const rocketCenter = document.getElementById("preloader-rocket-center");
+  const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
   const textGroup = document.getElementById("preloader-text-group");
 
   const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
@@ -737,23 +743,27 @@ export const initPreloaderTimeline = () => {
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
     frameCount++;
 
-    // Track bottom of flame with pure zero-reflow layout math
-    const liveX = window.innerWidth / 2;
-    const liveY = window.innerHeight / 2 + (launchTriggered ? 45 : 62);
+    if (flameNozzle && flameNozzle.isConnected) {
+      const rect = flameNozzle.getBoundingClientRect();
+      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+        const liveX = rect.left + rect.width / 2;
+        const liveY = rect.bottom - (launchTriggered ? 14 : 6);
 
-    const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
-    for (let i = 0; i < spawnCount; i++) {
-      smokeParticles.push({
-        x: liveX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
-        y: liveY + (Math.random() - 0.5) * 4,
-        vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
-        vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
-        radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
-        growth: launchTriggered ? 0.9 : 0.45,
-        maxRadius: launchTriggered ? 80 : 36,
-        alpha: launchTriggered ? 0.8 : 0.5,
-        decay: launchTriggered ? 0.02 : 0.012,
-      });
+        const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
+        for (let i = 0; i < spawnCount; i++) {
+          smokeParticles.push({
+            x: liveX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
+            y: liveY + (Math.random() - 0.5) * 4,
+            vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
+            vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
+            radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
+            growth: launchTriggered ? 0.9 : 0.45,
+            maxRadius: launchTriggered ? 80 : 36,
+            alpha: launchTriggered ? 0.8 : 0.5,
+            decay: launchTriggered ? 0.02 : 0.012,
+          });
+        }
+      }
     }
 
     for (let i = smokeParticles.length - 1; i >= 0; i--) {
@@ -797,41 +807,51 @@ export const initPreloaderTimeline = () => {
     });
   }
 
+  const headerEl = document.getElementById("preloader-header");
+  const footerEl = document.getElementById("preloader-footer");
+  const backdropEl = document.getElementById("preloader-backdrop");
+
   const triggerLaunch = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
     if (floatTween) floatTween.kill();
 
+    preloaderEl.style.pointerEvents = "none";
+
     const launchTl = gsap.timeline({
       onComplete: () => {
         if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
         window.removeEventListener("resize", resizeCanvas);
-        gsap.to(preloaderEl, {
-          opacity: 0,
-          duration: 0.45,
-          ease: "power2.inOut",
-          onComplete: () => {
-            preloaderEl.style.display = "none";
-            preloaderEl.remove();
-            document.body.style.overflow = "auto";
-          },
-        });
+        preloaderEl.style.display = "none";
+        preloaderEl.remove();
+        document.body.style.overflow = "auto";
       },
     });
 
+    // Hanya latar backdrop, header, footer & teks yang fade — Roket & Asap tetap 100% solid
     if (textGroup) {
-      launchTl.to(textGroup, { opacity: 0, y: -20, duration: 0.35, ease: "power2.in" }, 0);
+      launchTl.to(textGroup, { opacity: 0, y: -20, duration: 0.5, ease: "power2.out" }, 0);
+    }
+    if (headerEl) {
+      launchTl.to(headerEl, { opacity: 0, y: -15, duration: 0.5, ease: "power2.out" }, 0);
+    }
+    if (footerEl) {
+      launchTl.to(footerEl, { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 0);
+    }
+    if (backdropEl) {
+      launchTl.to(backdropEl, { opacity: 0, duration: 1.25, ease: "power2.inOut" }, 0.05);
     }
 
+    // Roket meluncur ke atas secara mulus dan anggun (60fps, 100% solid opacity)
     if (rocketCenter) {
       launchTl.to(rocketCenter, {
-        y: -window.innerHeight - 300,
-        scale: 1.15,
+        y: -window.innerHeight - 350,
+        scale: 1.12,
         rotation: 0,
-        duration: 0.75,
-        ease: "power4.in",
-      }, 0.1);
+        duration: 1.35,
+        ease: "power3.in",
+      }, 0.05);
     }
   };
 
@@ -839,37 +859,40 @@ export const initPreloaderTimeline = () => {
   const updateDisplay = (pct, text) => {
     const roundPct = Math.round(pct);
     if (barEl) barEl.style.width = `${roundPct}%`;
-    if (percentEl) percentEl.textContent = `${roundPct}%`;
+    if (percentEl) percentEl.textContent = `${roundPct}`;
     if (statusEl && text) statusEl.textContent = text;
   };
 
-  const tl = gsap.timeline();
+  const tl = gsap.timeline({
+    onComplete: () => {
+      setTimeout(triggerLaunch, 120);
+    },
+  });
+
   tl.to(progressTracker, {
     val: PRELOADER_STAGES[0].pct,
-    duration: 0.12,
+    duration: 0.35,
     ease: "power1.out",
     onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
   })
     .to(progressTracker, {
       val: PRELOADER_STAGES[1].pct,
-      duration: 0.12,
-      ease: "power1.inOut",
+      duration: 0.40,
+      ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[2].pct,
-      duration: 0.1,
-      ease: "power2.out",
+      duration: 0.35,
+      ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[3].pct,
-      duration: 0.1,
-      ease: "power2.in",
+      duration: 0.30,
+      ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });
-
-  setTimeout(triggerLaunch, 450);
 };
 
 // ═══════════════════════════════════════════════════════════

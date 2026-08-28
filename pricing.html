@@ -296,10 +296,13 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div
       id="web-preloader"
-      class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto transition-all"
+      class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto overflow-hidden"
     >
+      <!-- Dedicated Smooth Fading Backdrop (Rocket & Smoke remain 100% solid & non-fading) -->
+      <div id="preloader-backdrop" class="absolute inset-0 z-0 bg-[#040509] pointer-events-none"></div>
+
       <!-- Top Brand Header -->
-      <div class="flex items-center justify-between font-mono text-[0.62rem] sm:text-xs text-zinc-500 uppercase tracking-widest border-b border-white/10 pb-4">
+      <div id="preloader-header" class="relative z-20 flex items-center justify-between font-mono text-[0.62rem] sm:text-xs text-zinc-500 uppercase tracking-widest border-b border-white/10 pb-4">
         <div class="flex items-center gap-2.5 text-zinc-300 font-semibold tracking-wider">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
@@ -465,7 +468,7 @@
       </div>
 
       <!-- Bottom Progress Track -->
-      <div class="space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
+      <div id="preloader-footer" class="relative z-20 space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
         <div class="w-full h-1 bg-white/10 relative overflow-hidden rounded-full preloader-track">
           <div
             id="preloader-bar"
@@ -1939,21 +1942,23 @@
 
           if (flameNozzle && flameNozzle.isConnected) {
             const rect = flameNozzle.getBoundingClientRect();
-            const nozzleX = rect.left + rect.width / 2;
-            const nozzleY = rect.bottom - (launchTriggered ? 20 : 10);
-            const spawnCount = launchTriggered ? 3 : (frameCount % 2 === 0 ? 1 : 0);
-            for (let i = 0; i < spawnCount; i++) {
-              smokeParticles.push({
-                x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 6),
-                y: nozzleY + (Math.random() - 0.5) * 4,
-                vx: (Math.random() - 0.5) * (launchTriggered ? 1.6 : 0.7),
-                vy: launchTriggered ? (5.0 + Math.random() * 6.5) : (1.4 + Math.random() * 1.6),
-                radius: launchTriggered ? (14 + Math.random() * 10) : (7 + Math.random() * 5),
-                growth: launchTriggered ? 0.75 : 0.35,
-                maxRadius: launchTriggered ? 65 : 30,
-                alpha: launchTriggered ? 0.65 : 0.4,
-                decay: launchTriggered ? 0.022 : 0.012
-              });
+            if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+              const nozzleX = rect.left + rect.width / 2;
+              const nozzleY = rect.bottom - (launchTriggered ? 14 : 6);
+              const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
+              for (let i = 0; i < spawnCount; i++) {
+                smokeParticles.push({
+                  x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
+                  y: nozzleY + (Math.random() - 0.5) * 4,
+                  vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
+                  vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
+                  radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
+                  growth: launchTriggered ? 0.9 : 0.45,
+                  maxRadius: launchTriggered ? 80 : 36,
+                  alpha: launchTriggered ? 0.8 : 0.5,
+                  decay: launchTriggered ? 0.02 : 0.012
+                });
+              }
             }
           }
 
@@ -1961,20 +1966,23 @@
             const p = smokeParticles[i];
             p.x += p.vx;
             p.y += p.vy;
-            if (p.radius < p.maxRadius) p.radius += p.growth;
+            p.radius = Math.min(p.maxRadius, p.radius + p.growth);
             p.alpha -= p.decay;
             if (p.alpha <= 0 || p.y > smokeCanvas.height + 50) {
               smokeParticles.splice(i, 1);
               continue;
             }
+            smokeCtx.save();
             const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-            grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
-            grad.addColorStop(0.5, `rgba(248, 250, 252, ${p.alpha * 0.55})`);
-            grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+            grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
+            grad.addColorStop(0.35, `rgba(240, 243, 255, ${p.alpha * 0.6})`);
+            grad.addColorStop(0.7, `rgba(220, 230, 255, ${p.alpha * 0.25})`);
+            grad.addColorStop(1, "rgba(200, 215, 255, 0)");
             smokeCtx.fillStyle = grad;
             smokeCtx.beginPath();
             smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
             smokeCtx.fill();
+            smokeCtx.restore();
           }
           smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
         };
@@ -1998,32 +2006,46 @@
           triggerLaunch();
         }, 1500);
 
+        const headerEl = document.getElementById("preloader-header");
+        const footerEl = document.getElementById("preloader-footer");
+        const backdropEl = document.getElementById("preloader-backdrop");
+
         const triggerLaunch = () => {
           if (launchTriggered) return;
           launchTriggered = true;
           clearTimeout(safetyTimer);
           if (floatTween) floatTween.kill();
 
-          const blastTl = gsap.timeline();
-          if (rocketCenter) {
-            blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.15, ease: "power1.out" }, 0);
-            blastTl.to(rocketCenter, { y: "-160vh", scale: 0.88, duration: 1.2, ease: "power3.in" }, 0.05);
-          }
-          if (textGroup) {
-            blastTl.to(textGroup, { opacity: 0, y: 20, duration: 0.4, ease: "power2.in" }, 0.05);
-          }
-          if (preloaderEl) {
-            preloaderEl.style.pointerEvents = "none";
-            blastTl.to(preloaderEl, {
-              opacity: 0,
-              duration: 0.7,
-              ease: "power2.inOut",
-              onComplete: () => {
-                if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+          if (preloaderEl) preloaderEl.style.pointerEvents = "none";
+
+          const blastTl = gsap.timeline({
+            onComplete: () => {
+              if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+              if (preloaderEl) {
                 preloaderEl.style.display = "none";
                 preloaderEl.remove();
               }
-            }, 0.45);
+            }
+          });
+
+          // Hanya latar backdrop, header, footer & teks yang fade — Roket & Asap tetap 100% solid
+          if (textGroup) {
+            blastTl.to(textGroup, { opacity: 0, y: -20, duration: 0.5, ease: "power2.out" }, 0);
+          }
+          if (headerEl) {
+            blastTl.to(headerEl, { opacity: 0, y: -15, duration: 0.5, ease: "power2.out" }, 0);
+          }
+          if (footerEl) {
+            blastTl.to(footerEl, { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 0);
+          }
+          if (backdropEl) {
+            blastTl.to(backdropEl, { opacity: 0, duration: 1.25, ease: "power2.inOut" }, 0.05);
+          }
+
+          // Roket meluncur ke atas secara mulus (60fps, 100% solid opacity)
+          if (rocketCenter) {
+            blastTl.to(rocketCenter, { x: 0, rotation: 0, duration: 0.2, ease: "power1.out" }, 0);
+            blastTl.to(rocketCenter, { y: "-160vh", scale: 0.95, duration: 1.35, ease: "power3.in" }, 0.05);
           }
         };
 
@@ -2033,27 +2055,28 @@
           if (barEl) barEl.style.transform = `scaleX(${intVal / 100})`;
           if (percentEl) percentEl.textContent = String(intVal).padStart(2, "0");
           if (statusEl && text) statusEl.textContent = text;
-          if (intVal >= 90 && !launchTriggered) {
-            triggerLaunch();
-          }
         };
 
-        const preloaderTl = gsap.timeline({ onComplete: () => { if (!launchTriggered) triggerLaunch(); } });
+        const preloaderTl = gsap.timeline({
+          onComplete: () => {
+            setTimeout(triggerLaunch, 120);
+          }
+        });
         preloaderTl
           .to(progressTracker, {
-            val: PRELOADER_STAGES[0].pct, duration: 0.3, ease: "power1.out",
+            val: PRELOADER_STAGES[0].pct, duration: 0.35, ease: "power1.out",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
           })
           .to(progressTracker, {
-            val: PRELOADER_STAGES[1].pct, duration: 0.32, ease: "sine.inOut",
+            val: PRELOADER_STAGES[1].pct, duration: 0.40, ease: "sine.inOut",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
           })
           .to(progressTracker, {
-            val: PRELOADER_STAGES[2].pct, duration: 0.25, ease: "sine.inOut",
+            val: PRELOADER_STAGES[2].pct, duration: 0.35, ease: "sine.inOut",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
           })
           .to(progressTracker, {
-            val: 100, duration: 0.28, ease: "power2.out",
+            val: 100, duration: 0.30, ease: "power2.out",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
           });
       };

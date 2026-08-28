@@ -770,7 +770,7 @@ export const initThreeEngine = () => {
       trigger: "main",
       start: "top top",
       end: "bottom bottom",
-      scrub: 0.4,
+      scrub: 1.4,
     },
   });
 
@@ -1110,7 +1110,7 @@ export const initThreeEngine = () => {
     }
   };
 
-  // ─── Scroll-Driven Rotational Inertia Handler ───
+  // ─── Scroll-Driven Rotational Inertia Handler (Gentle & Damped) ───
   let scrollVelocity = 0;
   let lastScrollY = window.scrollY;
 
@@ -1120,7 +1120,7 @@ export const initThreeEngine = () => {
       const currentScrollY = window.scrollY;
       const deltaY = currentScrollY - lastScrollY;
       lastScrollY = currentScrollY;
-      scrollVelocity += deltaY * 0.00035;
+      scrollVelocity += Math.min(Math.max(deltaY * 0.00008, -0.006), 0.006);
     },
     { passive: true }
   );
