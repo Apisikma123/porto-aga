@@ -819,6 +819,37 @@ html[data-theme="light"] header nav button:hover {
 }
 
 /* Theme Toggle & Language Buttons */
+#theme-toggle-btn,
+.theme-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#theme-toggle-btn #theme-icon,
+#theme-icon,
+.theme-toggle-btn .material-symbols-outlined {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  line-height: 1 !important;
+  font-size: 1.15rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  user-select: none !important;
+  pointer-events: none !important;
+}
+
 html[data-theme="light"] #theme-toggle-btn,
 html[data-theme="light"] .lang-btn:not(.active) {
   background: rgba(255, 255, 255, 0.90) !important;
