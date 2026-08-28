@@ -1335,6 +1335,26 @@ html[data-theme="light"] .markdown-body blockquote {
   border-left-color: #DC143C !important;
 }
 
+/* Light Theme Card Preview & Mockup Fix */
+html[data-theme="light"] .carousel-card .aspect-\[16\/8\.5\],
+html[data-theme="light"] .carousel-card .phone-mockup-banner {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] .carousel-card .phone-mockup-badge,
+html[data-theme="light"] .carousel-card .bg-black\/80 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] .carousel-card .phone-mockup-badge span,
+html[data-theme="light"] .carousel-card .bg-black\/80 span {
+  color: #0f172a !important;
+}
+
 /* ═══════════════════════════════════════════════════════════
    LIGHT THEME: SECTION 05 MARKETING FUNNEL & CONVERSION BOX
    ═══════════════════════════════════════════════════════════ */

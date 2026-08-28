@@ -122,7 +122,7 @@ export const createFeaturedProjectCardElement = (item) => {
   let mediaHtml = "";
   if (item.isPhoneMockup) {
     mediaHtml = `
-      <div class="aspect-[16/8.5] max-h-[175px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-2.5">
+      <div class="phone-mockup-banner aspect-[16/8.5] max-h-[175px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-2.5">
         <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-xl opacity-60 pointer-events-none"></div>
         <div class="relative h-full aspect-[9/18.5] rounded-xl sm:rounded-[16px] border-2 border-zinc-700/80 bg-black overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
           <div class="absolute top-1 left-1/2 -translate-x-1/2 w-7 h-1.5 bg-black rounded-full border border-white/20 z-10"></div>
@@ -137,7 +137,7 @@ export const createFeaturedProjectCardElement = (item) => {
             fetchpriority="low"
           />
         </div>
-        <div class="absolute bottom-2 right-2.5 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-white/10 text-[0.55rem] font-mono text-zinc-300 flex items-center gap-1">
+        <div class="phone-mockup-badge absolute bottom-2 right-2.5 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-white/10 text-[0.55rem] font-mono text-zinc-300 flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
           <span>Flutter Mobile</span>
         </div>
@@ -167,7 +167,7 @@ export const createFeaturedProjectCardElement = (item) => {
     .join("\n                    ");
 
   card.innerHTML = `
-    <a href="/project.html?id=${encodeURIComponent(item.id)}" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
+    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
       ${mediaHtml}
       <div class="p-4 sm:p-5">
         <div class="flex justify-between items-center mb-1.5">
@@ -184,16 +184,17 @@ export const createFeaturedProjectCardElement = (item) => {
           ${tagsHtml}
         </div>
       </div>
-    </a>
+    </div>
     <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
-      <a
-        href="/project.html?id=${encodeURIComponent(item.id)}"
+      <button
+        type="button"
+        onclick="window.openProjectDetail('${item.id}')"
         class="relative z-30 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors cursor-pointer py-1.5 px-2 rounded hover:bg-white/5"
         title="Overview Singkat - ${item.titleFallback}"
       >
         <span>Overview Singkat</span>
         <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
+      </button>
       <a
         href="${item.repoUrl}"
         target="_blank"
