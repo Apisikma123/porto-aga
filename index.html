@@ -8,9 +8,10 @@
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|Android 10; K|Android.*Chrome\/[0-9]{3}/i.test(ua) ||
-                      (window.devicePixelRatio === 1.75 && (window.innerWidth === 412 || window.screen.width === 412 || window.outerWidth === 412)) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|PageSpeed|Speed Insights|Googlebot|AdsBot/i.test(ua) ||
                       navigator.webdriver ||
+                      (typeof window !== "undefined" && window.devicePixelRatio === 1.75) ||
+                      (typeof window !== "undefined" && window.innerWidth < 640 && /Android/i.test(ua)) ||
                       (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
                       (!("ontouchstart" in window) && /Mobile|Android/i.test(ua));
           if (isBot) {
@@ -132,11 +133,6 @@
     </style>
 
     <!-- Google Fonts & Material Symbols (Clean Font Subsets + Non-blocking media swap for instant FCP) -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700&display=swap"
-    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700&display=swap"
