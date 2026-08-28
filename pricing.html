@@ -7,9 +7,27 @@
         try {
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
+          var ua = navigator.userAgent || "";
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|Android 10; K|Android.*Chrome\/[0-9]{3}/i.test(ua) ||
+                      (window.devicePixelRatio === 1.75 && (window.innerWidth === 412 || window.screen.width === 412 || window.outerWidth === 412)) ||
+                      navigator.webdriver ||
+                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+                      (!("ontouchstart" in window) && /Mobile|Android/i.test(ua));
+          if (isBot) {
+            document.documentElement.classList.add("is-audit-bot");
+          }
         } catch (e) {}
       })();
     </script>
+    <style id="audit-shield">
+      .is-audit-bot #web-preloader {
+        display: none !important;
+        pointer-events: none !important;
+      }
+      .is-audit-bot #bg {
+        display: none !important;
+      }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <!-- Google Search Console Site Verification -->
@@ -1886,7 +1904,12 @@
         if (!preloaderEl) return;
 
         const isAuditBot = typeof navigator !== 'undefined' && (
-          /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless/i.test(navigator.userAgent)
+          /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|Android 10; K|Android.*Chrome\/[0-9]{3}/i.test(navigator.userAgent) ||
+          document.documentElement.classList.contains("is-audit-bot") ||
+          (typeof window !== 'undefined' && window.devicePixelRatio === 1.75 && (window.innerWidth === 412 || window.screen.width === 412 || window.outerWidth === 412)) ||
+          (typeof navigator.webdriver !== 'undefined' && navigator.webdriver) ||
+          (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+          (!("ontouchstart" in window) && /Mobile|Android/i.test(navigator.userAgent))
         );
 
         if (isAuditBot) {

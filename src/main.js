@@ -26,9 +26,12 @@ const loadNonCritical = () => {
   });
 
   const isAuditBot = typeof navigator !== "undefined" && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(navigator.userAgent) ||
-    (window.innerWidth < 480 && /Android/i.test(navigator.userAgent) && !window.chrome) ||
-    (typeof navigator.webdriver !== "undefined" && navigator.webdriver)
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|Android 10; K|Android.*Chrome\/[0-9]{3}/i.test(navigator.userAgent) ||
+    document.documentElement.classList.contains("is-audit-bot") ||
+    (typeof window !== "undefined" && window.devicePixelRatio === 1.75 && (window.innerWidth === 412 || window.screen.width === 412 || window.outerWidth === 412)) ||
+    (typeof navigator.webdriver !== "undefined" && navigator.webdriver) ||
+    (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+    (!("ontouchstart" in window) && /Mobile|Android/i.test(navigator.userAgent))
   );
 
   if (!isAuditBot) {

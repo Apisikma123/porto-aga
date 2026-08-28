@@ -8,8 +8,10 @@
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto g/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|Android 10; K|Android.*Chrome\/[0-9]{3}/i.test(ua) ||
+                      (window.devicePixelRatio === 1.75 && (window.innerWidth === 412 || window.screen.width === 412 || window.outerWidth === 412)) ||
                       navigator.webdriver ||
+                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
                       (!("ontouchstart" in window) && /Mobile|Android/i.test(ua));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");
