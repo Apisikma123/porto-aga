@@ -236,9 +236,14 @@ export const renderFeaturedProjectsCarousel = () => {
   });
   track.appendChild(fragment);
 
+  if (window.enableDragToScroll) {
+    window.enableDragToScroll(track);
+  }
+
   updateCarouselUI(currentProjectSlide);
 };
 window.renderFeaturedProjectsCarousel = renderFeaturedProjectsCarousel;
+
 
 export const updateCarouselUI = (index) => {
   const track = document.getElementById("projects-carousel-track");
@@ -384,6 +389,10 @@ window.goToPricingSlide = (index) => {
 export const initPricingMarketingCarousel = () => {
   const track = document.getElementById("pricing-cards-track");
   if (!track) return;
+
+  if (window.enableDragToScroll) {
+    window.enableDragToScroll(track);
+  }
 
   let isTicking = false;
   const calculateActiveSlide = () => {
@@ -682,7 +691,10 @@ export const initActivityHeatmap = () => {
         cell.style.backgroundColor = COLOR_LEVELS[lvl];
         fragment.appendChild(cell);
       }
-      container.appendChild(fragment);
+      const scrollWrapper = document.getElementById("activity-heatmap-scroll");
+      if (scrollWrapper && window.enableDragToScroll) {
+        window.enableDragToScroll(scrollWrapper);
+      }
     }
   };
 

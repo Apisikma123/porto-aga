@@ -514,6 +514,77 @@ export const updateActiveSidebar = (index) => {
   });
 };
 
+// ─── Reusable Smooth Drag-To-Scroll Engine ───
+export const enableDragToScroll = (track) => {
+  if (!track || track.dataset.dragEnabled === "true") return;
+  track.dataset.dragEnabled = "true";
+
+  let isDown = false;
+  let startX = 0;
+  let startY = 0;
+  let scrollLeft = 0;
+  let hasDragged = false;
+
+  track.style.cursor = "grab";
+
+  track.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return;
+    isDown = true;
+    hasDragged = false;
+    startX = e.pageX - track.offsetLeft;
+    startY = e.pageY;
+    scrollLeft = track.scrollLeft;
+    track.style.cursor = "grabbing";
+    track.style.userSelect = "none";
+    track.style.scrollBehavior = "auto";
+    track.style.scrollSnapType = "none";
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    const x = e.pageX - track.offsetLeft;
+    const walk = x - startX;
+    const diffY = Math.abs(e.pageY - startY);
+
+    if (Math.abs(walk) > 5 || diffY > 5) {
+      hasDragged = true;
+    }
+
+    if (hasDragged) {
+      e.preventDefault();
+      track.scrollLeft = scrollLeft - walk;
+    }
+  });
+
+  const stopDrag = () => {
+    if (!isDown) return;
+    isDown = false;
+    track.style.cursor = "grab";
+    track.style.removeProperty("user-select");
+    track.style.removeProperty("scroll-behavior");
+    track.style.removeProperty("scroll-snap-type");
+
+    setTimeout(() => {
+      hasDragged = false;
+    }, 100);
+  };
+
+  window.addEventListener("mouseup", stopDrag);
+  track.addEventListener("mouseleave", stopDrag);
+
+  track.addEventListener(
+    "click",
+    (e) => {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    true
+  );
+};
+window.enableDragToScroll = enableDragToScroll;
+
 export const initNavigationAndKeyboard = () => {
   const sideNavItems = document.querySelectorAll(".side-nav-item");
 
@@ -547,6 +618,15 @@ export const initNavigationAndKeyboard = () => {
     });
   }
 
+  // ─── 0. Universal Drag-To-Scroll Engine for Horizontal Tracks ───
+  const initHorizontalDragScroll = () => {
+    const tracks = document.querySelectorAll(
+      "#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto"
+    );
+    tracks.forEach((track) => enableDragToScroll(track));
+  };
+  initHorizontalDragScroll();
+
   // ─── 1. Locked Mouse Wheel & Trackpad Snap (Strict Scene-by-Scene Cooldown) ───
   window.addEventListener(
     "wheel",
@@ -555,8 +635,24 @@ export const initNavigationAndKeyboard = () => {
 
       const target = e.target;
       const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
-      if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        return;
+      if (isHorizontalContainer) {
+        // Trackpad horizontal swipe
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          return;
+        }
+
+        // Vertical mouse wheel over horizontal scroll container: convert to horizontal track scrolling
+        const maxScrollLeft = isHorizontalContainer.scrollWidth - isHorizontalContainer.clientWidth;
+        if (maxScrollLeft > 5) {
+          const atStart = isHorizontalContainer.scrollLeft <= 2;
+          const atEnd = isHorizontalContainer.scrollLeft >= maxScrollLeft - 2;
+
+          if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
+            e.preventDefault();
+            isHorizontalContainer.scrollLeft += e.deltaY * 1.2;
+            return;
+          }
+        }
       }
 
       const isModal = target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view");
@@ -615,7 +711,7 @@ export const initNavigationAndKeyboard = () => {
 
         const target = e.target;
         const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
-        if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
+        if (isHorizontalContainer && Math.abs(diffX) > 4) {
           return;
         }
 
@@ -642,6 +738,11 @@ export const initNavigationAndKeyboard = () => {
         const diffY = touchStartY - e.changedTouches[0].clientY;
         const diffX = touchStartX - e.changedTouches[0].clientX;
         const elapsed = now - touchStartTime;
+
+        const isHorizontalContainer = e.target && e.target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
+        if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
+          return;
+        }
 
         if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 25 && elapsed < 900) {
           if (diffY > 0 && currentSectionIndex < SECTION_IDS.length - 1) {
