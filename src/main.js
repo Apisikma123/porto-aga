@@ -6,20 +6,15 @@
 import "./style.css";
 import "./critical.js";
 
-// Render dynamic content after DOM load
-if (document.readyState === "loading") {
-  window.addEventListener("DOMContentLoaded", () => {
-    import("./data-loader.js").then((m) => m.initData());
-  });
-} else {
-  import("./data-loader.js").then((m) => m.initData());
-}
-
-// Defer heavy animation and 3D libraries until browser idle
+// Defer dynamic data, heavy animation and 3D libraries until browser idle
 let nonCriticalLoaded = false;
 const loadNonCritical = () => {
   if (nonCriticalLoaded) return;
   nonCriticalLoaded = true;
+
+  import("./data-loader.js").then((m) => {
+    if (m && m.initData) m.initData();
+  });
 
   import("./animations.js").then((m) => {
     if (m && m.initAnimations) m.initAnimations();
