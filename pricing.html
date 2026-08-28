@@ -5,8 +5,7 @@
     <script>
       (function () {
         try {
-          var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
-          document.documentElement.setAttribute("data-theme", savedTheme);
+          document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
           var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|PageSpeed|Speed Insights|Googlebot|AdsBot/i.test(ua) ||
                       navigator.webdriver ||
@@ -527,35 +526,11 @@
         <a href="/#projects" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Projects</a>
         <a href="/pricing.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Studio</a>
         <a href="/#contact" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
-        <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Colophon</a>
+        <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Footer</a>
       </nav>
 
-      <!-- Right Actions: Theme Toggle + Language Switcher + Contact Button -->
+      <!-- Right Actions: Language Switcher + Contact Button -->
       <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
-        <!-- Theme Mode Toggle -->
-        <button
-          type="button"
-          id="theme-toggle-btn"
-          onclick="window.toggleTheme()"
-          class="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
-          aria-label="Toggle Theme"
-          title="Toggle Light/Dark Theme"
-        >
-          <span id="theme-icon" class="flex items-center justify-center pointer-events-none">
-            <svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2"></path>
-              <path d="M12 20v2"></path>
-              <path d="m4.93 4.93 1.41 1.41"></path>
-              <path d="m17.66 17.66 1.41 1.41"></path>
-              <path d="M2 12h2"></path>
-              <path d="M20 12h2"></path>
-              <path d="m6.34 17.66-1.41 1.41"></path>
-              <path d="m19.07 4.93-1.41 1.41"></path>
-            </svg>
-          </span>
-        </button>
-
         <!-- Bilingual Toggle (EN | ID) -->
         <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg">
           <button type="button" id="btn-lang-en" class="lang-btn cursor-pointer" onclick="window.switchLanguage('en')">EN</button>
@@ -626,7 +601,7 @@
           <a href="/#footer" class="side-nav-item group flex items-center text-left py-1">
             <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Colophon</span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Footer</span>
           </a>
         </li>
       </ul>
@@ -638,33 +613,34 @@
     <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-16 sm:pt-20 pb-12">
       
       <!-- Top Navigation & Breadcrumb Back Button -->
-      <div class="flex items-center justify-between gap-2 mb-4 sm:mb-6">
+      <div class="flex items-center justify-between gap-4 mb-6 sm:mb-8">
         <a
           href="/"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded border border-white/10 bg-[#1b1b20] hover:bg-[#2a292f] text-zinc-300 hover:text-white transition-all font-mono text-[0.72rem] sm:text-xs cursor-pointer group shadow-sm"
+          class="btn-back"
+          title="Kembali ke Portofolio 3D"
         >
-          <span class="material-symbols-outlined text-sm text-[#FF0044] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
-          <span class="hidden sm:inline">Portofolio 3D</span>
-          <span class="sm:hidden">Portofolio</span>
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span class="hidden sm:inline" data-i18n="backBtn">Portofolio 3D</span>
+          <span class="sm:hidden" data-i18n="backBtnSm">Portofolio</span>
         </a>
-        <span class="inline-flex items-center gap-1.5 text-[0.7rem] sm:text-xs font-mono text-zinc-400 bg-white/5 border border-white/10 px-3 py-1 rounded">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#FF0044]"></span>
-          <span>Open for Commissions</span>
+        <span class="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+          <span data-i18n="openCommissions">Open for Commissions</span>
         </span>
       </div>
 
       <!-- Page Hero Header -->
       <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14 px-1">
-        <p class="eyebrow mb-2 sm:mb-3 text-[0.65rem] sm:text-xs">
+        <p class="eyebrow mb-2 sm:mb-3 text-[0.65rem] sm:text-xs" data-i18n="heroEyebrow">
           <span class="mr-2 sm:mr-3 tabular-nums text-zinc-500">05</span>Studio Commissions &amp; Services
         </p>
         <h1 class="display-title text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-white tracking-tight leading-tight mb-3 sm:mb-4">
-          <span class="font-light">Bespoke Web Development</span> <br class="hidden sm:inline" />
+          <span class="font-light" data-i18n="heroTitleLight">Bespoke Web Development</span> <br class="hidden sm:inline" />
           <span class="font-black text-white">
-            &amp; Digital Architecture<span class="text-[#DC143C]">.</span>
+            <span data-i18n="heroTitleBold">&amp; Digital Architecture</span><span class="text-[#DC143C]">.</span>
           </span>
         </h1>
-        <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto mb-6">
+        <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto mb-6" data-i18n="heroDesc">
           Aplikasi web performa tinggi, landing page terarah, dan visual modern. Dikerjakan langsung dengan arsitektur bersih tanpa perantara.
         </p>
 
@@ -676,38 +652,38 @@
       <div class="mb-14 sm:mb-20">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6 px-1">
           <div>
-            <p class="eyebrow text-[0.65rem] sm:text-xs mb-1">
+            <p class="eyebrow text-[0.65rem] sm:text-xs mb-1" data-i18n="tiersEyebrow">
               <span class="mr-2 tabular-nums text-zinc-500">01</span>Commission Tiers
             </p>
-            <h2 class="display-title text-lg sm:text-2xl font-bold text-white">Tiga Skala Pengerjaan</h2>
+            <h2 class="display-title text-lg sm:text-2xl font-bold text-white" data-i18n="tiersTitle">Tiga Skala Pengerjaan</h2>
           </div>
-          <p class="body-copy text-xs text-zinc-400 font-light">Pilih paket langsung atau sesuaikan di kalkulator.</p>
+          <p class="body-copy text-xs text-zinc-400 font-light" data-i18n="tiersDesc">Pilih paket langsung atau sesuaikan di kalkulator.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
           
           <!-- Tier 1: Single-Page Editorial -->
-          <div class="pricing-tier-card rounded-lg border border-white/10 p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-200">
+          <div class="pricing-tier-card glass-card rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-300">
             <div>
               <div class="flex justify-between items-start mb-4">
-                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 01</span>
-                <span class="text-xs font-mono text-zinc-300">1–2 Hari</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 01</span>
+                <span class="text-xs font-mono text-zinc-300" data-i18n="t1Time">1–2 Hari</span>
               </div>
-              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Single-Page / Landing Page</h3>
-              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed">Untuk kampanye produk, promo, personal bio, atau landing page terarah.</p>
+              <h3 class="text-lg font-bold text-white mb-1" data-i18n="t1Name">Single-Page / Landing Page</h3>
+              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed" data-i18n="t1Desc">Untuk kampanye produk, promo, personal bio, atau landing page terarah.</p>
               
               <div class="font-mono mb-6">
                 <span class="text-[0.68rem] text-zinc-500 line-through block">Rp 750.000</span>
                 <div class="text-2xl sm:text-3xl font-black text-white">Rp 499.000</div>
-                <span class="text-[0.62rem] text-zinc-400">Fixed rate • 100% Source Code Handover</span>
+                <span class="text-[0.62rem] text-zinc-400" data-i18n="t1PriceNote">Fixed rate • 100% Source Code Handover</span>
               </div>
 
-              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono">
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 1 Halaman Responsif Mobile &amp; Desktop</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Direct WhatsApp Lead Action</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Sub-Detik (&lt; 0.8s) TTFB</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Panduan Deploy &amp; Repositori GitHub</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Full Source Code Handover</li>
+              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono" id="t1-bullets">
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t1B1">1 Halaman Responsif Mobile &amp; Desktop</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t1B2">Direct WhatsApp Lead Action</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t1B3">Sub-Detik (&lt; 0.8s) TTFB</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t1B4">Panduan Deploy &amp; Repositori GitHub</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t1B5">Full Source Code Handover</span></li>
               </ul>
             </div>
 
@@ -715,15 +691,16 @@
               <a
                 href="#"
                 onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin commission Paket Single-Page Landing Page (Rp499.000). Apakah slot pengerjaan minggu ini tersedia?'); return false;"
-                class="w-full rounded bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                class="w-full rounded-xl bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 touch-manipulation"
               >
-                <span>Pesan Tier 01</span>
+                <span data-i18n="t1OrderBtn">Pesan Tier 01</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </a>
               <button
                 type="button"
-                onclick="state.websiteType='landing-page'; state.designLevel='clean'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                onclick="window.scrollToConfigurator('landing-page', 'clean');"
                 class="w-full text-center text-[0.68rem] font-mono text-zinc-400 hover:text-white py-1 transition-colors cursor-pointer"
+                data-i18n="t1CalcBtn"
               >
                 Kalkulator Custom ↓
               </button>
@@ -731,33 +708,33 @@
           </div>
 
           <!-- Tier 2: Business Platform (FEATURED / MOST POPULAR) -->
-          <div class="pricing-tier-card rounded-lg border-2 border-[#FF0044] p-6 flex flex-col justify-between shadow-[0_0_30px_rgba(255,0,68,0.15)] relative">
+          <div class="pricing-tier-card glass-card rounded-2xl border-2 border-[#DC143C] p-6 flex flex-col justify-between shadow-[0_0_30px_rgba(220,20,60,0.2)] relative">
             <!-- Best Value Pill -->
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded bg-[#FF0044] text-white text-[0.62rem] font-mono font-bold uppercase tracking-wider">
-              <span>RECOMMENDED</span>
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-0.5 rounded-full bg-[#DC143C] text-white text-[0.62rem] font-mono font-bold uppercase tracking-wider shadow-md" data-i18n="t2Badge">
+              RECOMMENDED
             </div>
 
             <div>
               <div class="flex justify-between items-start mb-4 mt-1">
-                <span class="px-2 py-0.5 rounded bg-[#FF0044]/20 text-[0.65rem] font-mono uppercase tracking-wider text-[#FF0044] font-bold">Tier 02</span>
-                <span class="text-xs font-mono text-zinc-300">3–5 Hari</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-[#DC143C]/20 border border-[#DC143C]/40 text-[0.65rem] font-mono uppercase tracking-wider text-[#DC143C] font-bold">Tier 02</span>
+                <span class="text-xs font-mono text-zinc-300" data-i18n="t2Time">3–5 Hari</span>
               </div>
-              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Company Profile &amp; Bisnis</h3>
-              <p class="text-xs text-zinc-300 font-light mb-4 leading-relaxed">Fondasi kredibilitas korporat, UMKM berkembang, dan firma profesional.</p>
+              <h3 class="text-lg font-bold text-white mb-1" data-i18n="t2Name">Company Profile &amp; Bisnis</h3>
+              <p class="text-xs text-zinc-300 font-light mb-4 leading-relaxed" data-i18n="t2Desc">Fondasi kredibilitas korporat, UMKM berkembang, dan firma profesional.</p>
               
               <div class="font-mono mb-6">
                 <span class="text-[0.68rem] text-zinc-400 line-through block">Rp 2.250.000</span>
                 <div class="text-2xl sm:text-3xl font-black text-white">Rp 1.499.000</div>
-                <span class="text-[0.62rem] text-zinc-400">Clean Architecture • Full Source Code Handover</span>
+                <span class="text-[0.62rem] text-zinc-400" data-i18n="t2PriceNote">Clean Architecture • Full Source Code Handover</span>
               </div>
 
-              <ul class="space-y-2 text-xs text-zinc-200 mb-6 border-t border-white/10 pt-4 font-mono">
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> Hingga 5 Halaman Terstruktur</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> <strong>Panduan Setup Domain &amp; DNS Klien</strong></li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> <strong>Integrasi Direct WhatsApp Lead Action</strong></li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> Technical On-Page SEO Schema</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> GSAP Micro-Interactions</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044] font-bold">—</span> 30-Day Code Warranty</li>
+              <ul class="space-y-2 text-xs text-zinc-200 mb-6 border-t border-white/10 pt-4 font-mono" id="t2-bullets">
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <span data-i18n="t2B1">Hingga 5 Halaman Terstruktur</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <strong data-i18n="t2B2">Panduan Setup Domain &amp; DNS Klien</strong></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <strong data-i18n="t2B3">Integrasi Direct WhatsApp Lead Action</strong></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <span data-i18n="t2B4">Technical On-Page SEO Schema</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <span data-i18n="t2B5">GSAP Micro-Interactions</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C] font-bold">—</span> <span data-i18n="t2B6">30-Day Code Warranty</span></li>
               </ul>
             </div>
 
@@ -765,15 +742,16 @@
               <a
                 href="#"
                 onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin memesan Paket Business Platform Company Profile (Rp1.499.000). Mari kita diskusikan spesifikasi proyek saya.'); return false;"
-                class="w-full rounded bg-[#FF0044] hover:bg-[#d60039] text-white font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,0,68,0.35)] cursor-pointer"
+                class="w-full rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] cursor-pointer active:scale-95 touch-manipulation"
               >
-                <span>Pesan Tier 02</span>
+                <span data-i18n="t2OrderBtn">Pesan Tier 02</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </a>
               <button
                 type="button"
-                onclick="state.websiteType='company-profile'; state.designLevel='clean'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                onclick="window.scrollToConfigurator('company-profile', 'clean');"
                 class="w-full text-center text-[0.68rem] font-mono text-zinc-300 hover:text-white py-1 transition-colors cursor-pointer"
+                data-i18n="t2CalcBtn"
               >
                 Kalkulator Custom ↓
               </button>
@@ -781,27 +759,27 @@
           </div>
 
           <!-- Tier 3: Custom App & WebGL -->
-          <div class="pricing-tier-card rounded-lg border border-white/10 p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-200">
+          <div class="pricing-tier-card glass-card rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-white/20 transition-all duration-300">
             <div>
               <div class="flex justify-between items-start mb-4">
-                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 03</span>
-                <span class="text-xs font-mono text-zinc-300">7–14 Hari</span>
+                <span class="px-2.5 py-0.5 rounded-lg bg-white/5 border border-white/10 text-[0.65rem] font-mono uppercase tracking-wider text-zinc-400">Tier 03</span>
+                <span class="text-xs font-mono text-zinc-300" data-i18n="t3Time">7–14 Hari</span>
               </div>
-              <h3 class="text-lg font-bold text-white mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Web App &amp; WebGL Platform</h3>
-              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed">Arsitektur aplikasi: Toko Online Midtrans, Booking, SaaS Dashboard, atau 3D WebGL.</p>
+              <h3 class="text-lg font-bold text-white mb-1" data-i18n="t3Name">Web App &amp; WebGL Platform</h3>
+              <p class="text-xs text-zinc-400 font-light mb-4 leading-relaxed" data-i18n="t3Desc">Arsitektur aplikasi: Toko Online Midtrans, Booking, SaaS Dashboard, atau 3D WebGL.</p>
               
               <div class="font-mono mb-6">
-                <span class="text-[0.68rem] text-zinc-500 block">Mulai dari</span>
+                <span class="text-[0.68rem] text-zinc-500 block" data-i18n="startingFrom">Mulai dari</span>
                 <div class="text-2xl sm:text-3xl font-black text-white">Rp 3.499.000</div>
-                <span class="text-[0.62rem] text-zinc-400">Custom Database + API + Dashboard</span>
+                <span class="text-[0.62rem] text-zinc-400" data-i18n="t3PriceNote">Custom Database + API + Dashboard</span>
               </div>
 
-              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono">
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Database Real-time &amp; Auth</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Payment Gateway (QRIS, VA, Card)</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> Admin CMS / Dashboard Panel</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 3D WebGL / Shader Scene</li>
-                <li class="flex items-center gap-2"><span class="text-[#FF0044]">—</span> 3-Month Maintenance Warranty</li>
+              <ul class="space-y-2 text-xs text-zinc-300 mb-6 border-t border-white/10 pt-4 font-mono" id="t3-bullets">
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t3B1">Database Real-time &amp; Auth</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t3B2">Payment Gateway (QRIS, VA, Card)</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t3B3">Admin CMS / Dashboard Panel</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t3B4">3D WebGL / Shader Scene</span></li>
+                <li class="flex items-center gap-2"><span class="text-[#DC143C]">—</span> <span data-i18n="t3B5">3-Month Maintenance Warranty</span></li>
               </ul>
             </div>
 
@@ -809,15 +787,16 @@
               <a
                 href="#"
                 onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya ingin konsultasi kebutuhan Web App / E-Commerce custom untuk proyek saya.'); return false;"
-                class="w-full rounded bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                class="w-full rounded-xl bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 touch-manipulation"
               >
-                <span>Inisiasi Custom</span>
+                <span data-i18n="t3OrderBtn">Inisiasi Custom</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </a>
               <button
                 type="button"
-                onclick="state.websiteType='web-app'; state.designLevel='custom-3d'; renderWebsiteTypes(); goToStep(1); document.getElementById('configurator-anchor').scrollIntoView({behavior:'smooth'});"
+                onclick="window.scrollToConfigurator('custom-web-app', 'custom-3d');"
                 class="w-full text-center text-[0.68rem] font-mono text-zinc-400 hover:text-white py-1 transition-colors cursor-pointer"
+                data-i18n="t3CalcBtn"
               >
                 Kalkulator Custom ↓
               </button>
@@ -832,7 +811,7 @@
         <div class="flex items-center gap-3">
           <div class="h-px bg-white/10 flex-1"></div>
           <span class="eyebrow text-[0.65rem] sm:text-xs px-3 py-1 rounded-full bg-zinc-950/80 border border-white/10 text-zinc-400">
-            <span class="mr-2 tabular-nums text-zinc-500">02</span>Interactive Studio Configurator
+            <span class="mr-2 tabular-nums text-zinc-500">02</span><span data-i18n="configuratorEyebrow">Interactive Studio Configurator</span>
           </span>
           <div class="h-px bg-white/10 flex-1"></div>
         </div>
@@ -847,9 +826,8 @@
               <span class="material-symbols-outlined text-xl sm:text-2xl">calculate</span>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5 mb-0.5">
-                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-                <span class="text-[0.6rem] sm:text-[0.65rem] text-zinc-400 font-mono uppercase tracking-wider font-semibold">Estimasi Real-Time</span>
+              <div class="mb-0.5">
+                <span class="text-[0.6rem] sm:text-[0.65rem] text-zinc-400 font-mono uppercase tracking-wider font-semibold" data-i18n="liveEstimate">Estimasi Real-Time</span>
               </div>
               <h3 id="top-package-name" class="text-xs sm:text-base font-bold text-white truncate">Landing Page</h3>
             </div>
@@ -858,7 +836,7 @@
           <!-- Price & Action Button (Never Breaks / Shrinks Gracefully) -->
           <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-4 pt-2.5 sm:pt-0 border-t border-white/5 sm:border-t-0">
             <div class="text-left sm:text-right min-w-0">
-              <span class="text-[0.55rem] sm:text-[0.62rem] font-mono text-zinc-400 uppercase tracking-wider block">Total Estimasi Awal</span>
+              <span class="text-[0.55rem] sm:text-[0.62rem] font-mono text-zinc-400 uppercase tracking-wider block" data-i18n="totalStartingEstimate">Total Estimasi Awal</span>
               <div id="top-package-price" class="font-mono text-base sm:text-2xl md:text-3xl font-black text-white whitespace-nowrap tracking-tight">
                 Rp499.000
               </div>
@@ -868,7 +846,7 @@
               onclick="goToStep(6)"
               class="shrink-0 rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white px-3 sm:px-5 py-2 sm:py-2.5 font-mono text-[0.7rem] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1 shadow-[0_0_20px_rgba(220,20,60,0.4)] cursor-pointer touch-manipulation active:scale-[0.97]"
             >
-              <span>Lihat Rincian</span>
+              <span data-i18n="viewDetails">Lihat Rincian</span>
               <span class="material-symbols-outlined text-xs sm:text-sm">arrow_forward</span>
             </button>
           </div>
@@ -879,7 +857,7 @@
       <div class="mb-5 sm:mb-6 rounded-2xl border border-white/10 bg-zinc-950/70 backdrop-blur-xl p-3 sm:p-4 shadow-lg">
         <div class="flex items-center justify-between gap-3 mb-2.5 px-1 font-mono text-xs">
           <div class="flex items-center gap-2 text-zinc-300 shrink-0 whitespace-nowrap">
-            <span class="text-zinc-500">Langkah:</span>
+            <span class="text-zinc-500" data-i18n="stepLabel">Langkah:</span>
             <span id="progress-label" class="font-bold text-white tabular-nums">1 / 7</span>
           </div>
           <span id="progress-step-name" class="text-[#DC143C] font-semibold uppercase tracking-wider truncate text-right">01 Jenis Website</span>
@@ -915,18 +893,18 @@
         </div>
       </div>
 
-      <!-- Configurator Body: 2 Columns (Wizard Steps 8 cols + Sticky Summary 4 cols) -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <!-- Configurator Body: Full-Width Wizard -->
+      <div>
         
-        <!-- Left Column: Wizard Steps (8 cols) -->
-        <div class="lg:col-span-8 rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-2xl p-5 sm:p-7 shadow-[0_16px_40px_rgba(0,0,0,0.6)]">
+        <!-- Wizard Steps: Full Width -->
+        <div id="wizard-column" class="rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-2xl p-5 sm:p-7 md:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.6)]">
           
           <!-- STEP 1: Pilih Jenis Website -->
           <div id="step-1" class="wizard-step">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 1: Pilih Jenis Website</h2>
-                <p class="text-xs text-zinc-400">Pilih model website yang ingin kamu bangun. Setiap paket memiliki starting price transparan.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step1Title">Langkah 1: Pilih Jenis Website</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step1Desc">Pilih model website yang ingin kamu bangun. Setiap paket memiliki starting price transparan.</p>
               </div>
               <span class="font-mono text-xs text-zinc-400 uppercase px-2.5 py-1 rounded bg-white/5 border border-white/10 shrink-0 whitespace-nowrap tabular-nums">1 / 7</span>
             </div>
@@ -939,10 +917,10 @@
             <div class="flex justify-between items-center mt-6 pt-4 border-t border-white/10 gap-3">
               <a href="/#pricing" class="pricing-btn-back inline-flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </a>
               <button type="button" onclick="goToStep(2)" class="pricing-btn-next">
-                <span>Lanjut ke Scope</span>
+                <span data-i18n="btnNextScope">Lanjut ke Scope</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
             </div>
@@ -952,8 +930,8 @@
           <div id="step-2" class="wizard-step hidden">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 2: Tentukan Scope &amp; Halaman</h2>
-                <p class="text-xs text-zinc-400">Pilih skala konten atau perkiraan jumlah halaman yang dibutuhkan.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step2Title">Langkah 2: Tentukan Scope &amp; Halaman</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step2Desc">Pilih skala konten atau perkiraan jumlah halaman yang dibutuhkan.</p>
               </div>
               <span class="font-mono text-xs text-zinc-400 uppercase px-2.5 py-1 rounded bg-white/5 border border-white/10 shrink-0 whitespace-nowrap tabular-nums">2 / 7</span>
             </div>
@@ -967,9 +945,9 @@
             <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4 text-xs text-zinc-300 space-y-2">
               <h3 class="font-bold text-white flex items-center gap-1.5 text-xs">
                 <span class="material-symbols-outlined text-sm text-[#DC143C]">info</span>
-                <span>Transparansi Scope Paket Dasar</span>
+                <span data-i18n="step2ClarityTitle">Transparansi Scope Paket Dasar</span>
               </h3>
-              <p class="text-zinc-400 leading-relaxed text-[0.72rem]" id="step2-scope-summary">
+              <p class="text-zinc-400 leading-relaxed text-[0.72rem]" id="step2-scope-summary" data-i18n="step2ClarityDesc">
                 Paket dasar mencakup pembuatan struktur inti responsif, integrasi kontak WhatsApp langsung, dan deployment cloud gratis.
               </p>
             </div>
@@ -977,10 +955,10 @@
             <div class="flex justify-between mt-6 pt-4 border-t border-white/10 gap-3">
               <button type="button" onclick="goToStep(1)" class="pricing-btn-back">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </button>
               <button type="button" onclick="goToStep(3)" class="pricing-btn-next">
-                <span>Lanjut ke Desain</span>
+                <span data-i18n="btnNextDesign">Lanjut ke Desain</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
             </div>
@@ -990,8 +968,8 @@
           <div id="step-3" class="wizard-step hidden">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 3: Pilih Level Desain</h2>
-                <p class="text-xs text-zinc-400">Semua pilihan sudah 100% responsif mobile. Pilih tingkat eksklusivitas visual yang diinginkan.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step3Title">Langkah 3: Pilih Level Desain</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step3Desc">Semua pilihan sudah 100% responsif mobile. Pilih tingkat eksklusivitas visual yang diinginkan.</p>
               </div>
               <span class="font-mono text-xs text-zinc-400 uppercase px-2.5 py-1 rounded bg-white/5 border border-white/10 shrink-0 whitespace-nowrap tabular-nums">3 / 7</span>
             </div>
@@ -1004,10 +982,10 @@
             <div class="flex justify-between mt-6 pt-4 border-t border-white/10 gap-3">
               <button type="button" onclick="goToStep(2)" class="pricing-btn-back">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </button>
               <button type="button" onclick="goToStep(4)" class="pricing-btn-next">
-                <span>Lanjut ke Add-ons</span>
+                <span data-i18n="btnNextAddons">Lanjut ke Add-ons</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
             </div>
@@ -1017,8 +995,8 @@
           <div id="step-4" class="wizard-step hidden">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 4: Pilih Fitur Tambahan (Add-ons)</h2>
-                <p class="text-xs text-zinc-400">Tingkatkan fungsionalitas website dengan integrasi SEO, Payment, CMS, atau Multi-bahasa.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step4Title">Langkah 4: Pilih Fitur Tambahan (Add-ons)</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step4Desc">Tingkatkan fungsionalitas website dengan integrasi SEO, Payment, CMS, atau Multi-bahasa.</p>
               </div>
               <span class="font-mono text-xs text-zinc-400 uppercase px-2.5 py-1 rounded bg-white/5 border border-white/10 shrink-0 whitespace-nowrap tabular-nums">4 / 7</span>
             </div>
@@ -1031,74 +1009,79 @@
             <div class="flex justify-between mt-6 pt-4 border-t border-white/10 gap-3">
               <button type="button" onclick="goToStep(3)" class="pricing-btn-back">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </button>
               <button type="button" onclick="goToStep(5)" class="pricing-btn-next">
-                <span>Lanjut ke Detail</span>
+                <span data-i18n="btnNextDetail">Lanjut ke Detail</span>
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
             </div>
           </div>
 
-          <!-- STEP 5: Detail Kebutuhan & Konteks Bisnis -->
+          <!-- STEP 5: Detail Kebutuhan & Konteks Bisnis (Spacious Wide Form Layout) -->
           <div id="step-5" class="wizard-step hidden">
-            <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+            <div class="flex items-start sm:items-center justify-between gap-3 mb-6 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 5: Detail Kebutuhan &amp; Bisnis</h2>
-                <p class="text-xs text-zinc-400">Informasi opsional agar kami memahami konteks bisnis Anda dengan tepat.</p>
+                <h2 class="text-base sm:text-xl font-bold text-white" data-i18n="step5Title">Langkah 5: Detail Kebutuhan &amp; Bisnis</h2>
+                <p class="text-xs sm:text-sm text-zinc-400 mt-0.5" data-i18n="step5Desc">Informasi opsional agar kami memahami konteks bisnis Anda dengan tepat.</p>
               </div>
               <span class="font-mono text-xs text-zinc-400 uppercase px-2.5 py-1 rounded bg-white/5 border border-white/10 shrink-0 whitespace-nowrap tabular-nums">5 / 7</span>
             </div>
 
-            <div class="space-y-4">
-              <div>
-                <label for="client-name" class="block text-xs font-semibold text-zinc-200 mb-1">
-                  Nama Anda / Brand <span class="text-zinc-500 font-normal">(opsional)</span>
-                </label>
-                <input
-                  type="text"
-                  id="client-name"
-                  maxlength="80"
-                  class="w-full rounded-xl bg-white/[0.04] border border-white/12 focus:border-[#DC143C]/70 focus:bg-white/[0.08] focus:outline-none px-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 transition-all"
-                  placeholder="Contoh: apjoer viery"
-                />
+            <div class="space-y-6">
+              <!-- Row 1: Nama / Brand & Jenis Bisnis in Responsive 2-Col Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label for="client-name" class="block text-xs font-semibold text-zinc-200 mb-2">
+                    <span data-i18n="labelClientName">Nama Anda / Brand</span> <span class="text-zinc-500 font-normal" data-i18n="labelClientNameOptional">(opsional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="client-name"
+                    maxlength="80"
+                    class="w-full rounded-xl bg-white/[0.04] border border-white/12 focus:border-[#DC143C]/70 focus:bg-white/[0.08] focus:outline-none px-4 py-3 font-mono text-xs sm:text-sm text-white placeholder-zinc-500 transition-all shadow-inner"
+                    placeholder="Contoh: apjoer viery"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-zinc-200 mb-2">
+                    <span data-i18n="labelBusinessType">Jenis Bisnis</span> <span class="text-zinc-500 font-normal" data-i18n="labelClientNameOptional">(opsional)</span>
+                  </label>
+                  <div id="business-types-container" class="flex flex-wrap gap-2"></div>
+                </div>
               </div>
 
+              <!-- Row 2: Project Goals Chips -->
               <div>
-                <label class="block text-xs font-semibold text-zinc-200 mb-1.5">
-                  Jenis Bisnis <span class="text-zinc-500 font-normal">(opsional)</span>
-                </label>
-                <div id="business-types-container" class="flex flex-wrap gap-2"></div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-semibold text-zinc-200 mb-1.5">
-                  Tujuan Utama Website <span class="text-zinc-500 font-normal">(opsional)</span>
+                <label class="block text-xs font-semibold text-zinc-200 mb-2">
+                  <span data-i18n="labelProjectGoal">Tujuan Utama Website</span> <span class="text-zinc-500 font-normal" data-i18n="labelClientNameOptional">(opsional)</span>
                 </label>
                 <div id="project-goals-container" class="flex flex-wrap gap-2"></div>
               </div>
 
+              <!-- Row 3: Special Notes Textarea -->
               <div>
-                <label for="client-notes" class="block text-xs font-semibold text-zinc-200 mb-1">
-                  Catatan Khusus / Referensi Website <span class="text-zinc-500 font-normal">(opsional)</span>
+                <label for="client-notes" class="block text-xs font-semibold text-zinc-200 mb-2">
+                  <span data-i18n="labelClientNotes">Catatan Khusus / Referensi Website</span> <span class="text-zinc-500 font-normal" data-i18n="labelClientNameOptional">(opsional)</span>
                 </label>
                 <textarea
                   id="client-notes"
-                  rows="3"
+                  rows="4"
                   maxlength="500"
-                  class="w-full rounded-xl bg-white/[0.04] border border-white/12 focus:border-[#DC143C]/70 focus:bg-white/[0.08] focus:outline-none px-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 transition-all resize-none"
+                  class="w-full rounded-xl bg-white/[0.04] border border-white/12 focus:border-[#DC143C]/70 focus:bg-white/[0.08] focus:outline-none px-4 py-3 font-mono text-xs sm:text-sm text-white placeholder-zinc-500 transition-all resize-none shadow-inner"
                   placeholder="Tuliskan jika ada referensi desain atau alur khusus yang diinginkan..."
                 ></textarea>
               </div>
             </div>
 
-            <div class="flex justify-between mt-6 pt-4 border-t border-white/10 gap-3">
+            <div class="flex justify-between mt-8 pt-5 border-t border-white/10 gap-3">
               <button type="button" onclick="goToStep(4)" class="pricing-btn-back">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </button>
               <button type="button" onclick="goToStep(6)" class="pricing-btn-next">
-                <span>Lihat Ringkasan Estimasi</span>
+                <span data-i18n="btnNextSummary">Lihat Ringkasan Estimasi</span>
                 <span class="material-symbols-outlined text-sm">receipt_long</span>
               </button>
             </div>
@@ -1108,10 +1091,10 @@
           <div id="step-6" class="wizard-step hidden">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 6: Ringkasan Estimasi Biaya</h2>
-                <p class="text-xs text-zinc-400">Rincian transparan konfigurasi website yang telah Anda pilih.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step6Title">Langkah 6: Ringkasan Estimasi Biaya</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step6Desc">Rincian transparan konfigurasi website yang telah Anda pilih.</p>
               </div>
-              <span class="font-mono text-xs text-emerald-400 uppercase px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 font-bold shrink-0 whitespace-nowrap">Siap Konsultasi</span>
+              <span class="font-mono text-xs text-[#DC143C] uppercase px-2.5 py-1 rounded bg-[#DC143C]/10 border border-[#DC143C]/20 font-bold shrink-0 whitespace-nowrap" data-i18n="badgeConsultationReady">Siap Konsultasi</span>
             </div>
 
             <div class="space-y-4">
@@ -1122,16 +1105,16 @@
               <div class="rounded-2xl border border-[#DC143C]/50 bg-gradient-to-br from-[#DC143C]/20 via-zinc-950 to-zinc-950 p-5 shadow-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
                   <div>
-                    <span class="text-[0.62rem] font-mono text-zinc-300 uppercase tracking-wider block">Total Estimasi Awal</span>
+                    <span class="text-[0.62rem] font-mono text-zinc-300 uppercase tracking-wider block" data-i18n="totalStartingEstimate">Total Estimasi Awal</span>
                     <span id="summary-total-price" class="text-2xl sm:text-4xl font-black text-white">Rp499.000</span>
                   </div>
                   <div class="text-right">
-                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[0.65rem] font-bold border border-emerald-500/30 whitespace-nowrap">
+                    <span class="inline-block px-3 py-1 rounded-full bg-[#DC143C]/15 text-zinc-200 font-mono text-[0.65rem] font-bold border border-[#DC143C]/30 whitespace-nowrap" data-i18n="badgeTransparent">
                       100% Transparan
                     </span>
                   </div>
                 </div>
-                <p class="text-[0.68rem] text-zinc-400 leading-relaxed">
+                <p class="text-[0.68rem] text-zinc-400 leading-relaxed" data-i18n="noteSummaryDisclaimer">
                   Estimasi awal transparan. Harga final disesuaikan dan dikonfirmasi setelah diskusi scope teknis via WhatsApp tanpa biaya tersembunyi.
                 </p>
               </div>
@@ -1140,7 +1123,7 @@
               <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3.5 text-xs text-zinc-300 flex items-start gap-2.5">
                 <span class="material-symbols-outlined text-base text-[#DC143C] shrink-0 mt-0.5">info</span>
                 <div class="text-[0.72rem] leading-relaxed">
-                  <strong class="text-white">Catatan Domain &amp; Hosting:</strong> Biaya jasa development difokuskan untuk desain &amp; coding. Biaya domain (.com / .id) dan server hosting cloud dibayar langsung ke registrar provider resmi, dan kami bantu setup gratis sampai online.
+                  <strong class="text-white" data-i18n="labelDomainHostingNote">Catatan Domain &amp; Hosting:</strong> <span data-i18n="domainHostingDesc">Biaya jasa development difokuskan untuk desain &amp; coding. Biaya domain (.com / .id) dan server hosting cloud dibayar langsung ke registrar provider resmi, dan kami bantu setup gratis sampai online.</span>
                 </div>
               </div>
             </div>
@@ -1148,10 +1131,10 @@
             <div class="flex justify-between mt-6 pt-4 border-t border-white/10 gap-3">
               <button type="button" onclick="goToStep(5)" class="pricing-btn-back">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                <span>Kembali</span>
+                <span data-i18n="btnBack">Kembali</span>
               </button>
               <button type="button" onclick="goToStep(7)" class="pricing-btn-next pricing-btn-wa">
-                <span>Kirim Brief ke WhatsApp</span>
+                <span data-i18n="btnNextWhatsApp">Kirim Brief ke WhatsApp</span>
                 <span class="material-symbols-outlined text-sm">chat</span>
               </button>
             </div>
@@ -1161,8 +1144,8 @@
           <div id="step-7" class="wizard-step hidden">
             <div class="flex items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
               <div class="min-w-0 pr-2">
-                <h2 class="text-base sm:text-lg font-bold text-white">Langkah 7: Kirim Konfigurasi ke WhatsApp</h2>
-                <p class="text-xs text-zinc-400">Pesan otomatis telah diformat rapi untuk langsung dikirim ke WhatsApp developer.</p>
+                <h2 class="text-base sm:text-lg font-bold text-white" data-i18n="step7Title">Langkah 7: Kirim Konfigurasi ke WhatsApp</h2>
+                <p class="text-xs text-zinc-400" data-i18n="step7Desc">Pesan otomatis telah diformat rapi untuk langsung dikirim ke WhatsApp developer.</p>
               </div>
               <span class="font-mono text-xs text-green-400 uppercase px-2.5 py-1 rounded bg-green-500/10 border border-green-500/20 font-bold shrink-0 whitespace-nowrap">Direct Dispatch</span>
             </div>
@@ -1172,9 +1155,9 @@
                 <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10 text-xs text-zinc-300 font-medium">
                   <span class="flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-sm text-green-400">chat</span>
-                    <span>Pratinjau Pesan WhatsApp</span>
+                    <span data-i18n="previewTitle">Pratinjau Pesan WhatsApp</span>
                   </span>
-                  <button type="button" onclick="copyWhatsAppMessage()" class="text-[0.65rem] font-mono text-[#DC143C] hover:text-white cursor-pointer" id="copy-btn-label">
+                  <button type="button" onclick="copyWhatsAppMessage()" class="text-[0.65rem] font-mono text-[#DC143C] hover:text-white cursor-pointer" id="copy-btn-label" data-i18n="copyBtn">
                     Salin Teks
                   </button>
                 </div>
@@ -1185,7 +1168,7 @@
               <div class="flex flex-col sm:flex-row justify-between gap-3 pt-2">
                 <button type="button" onclick="goToStep(6)" class="pricing-btn-back">
                   <span class="material-symbols-outlined text-sm">arrow_back</span>
-                  <span>Kembali</span>
+                  <span data-i18n="btnBack">Kembali</span>
                 </button>
                 <a
                   id="wa-dispatch-btn"
@@ -1195,7 +1178,7 @@
                   class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-mono text-xs font-bold uppercase tracking-wider px-7 py-3.5 transition-all shadow-[0_0_25px_rgba(34,197,94,0.45)] hover:shadow-[0_0_35px_rgba(34,197,94,0.65)] active:scale-[0.98]"
                 >
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  <span>Kirim ke WhatsApp Sekarang</span>
+                  <span data-i18n="sendWaBtn">Kirim ke WhatsApp Sekarang</span>
                 </a>
               </div>
             </div>
@@ -1203,53 +1186,6 @@
 
         </div>
 
-        <!-- Right Column: Sticky Real-Time Live Bill Card (4 cols) -->
-        <aside class="lg:col-span-4 sticky top-24">
-          <div class="rounded-2xl border border-white/12 bg-zinc-950/85 backdrop-blur-2xl p-5 sm:p-6 shadow-[0_16px_40px_rgba(0,0,0,0.6)]">
-            <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-              <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                <span class="material-symbols-outlined text-sm text-[#DC143C]">receipt_long</span>
-                <span>Rincian Konfigurasi</span>
-              </h3>
-              <span class="font-mono text-[0.62rem] text-emerald-400 uppercase tracking-wider font-semibold">LIVE</span>
-            </div>
-
-            <!-- Live Details List -->
-            <div id="sidebar-bill-details" class="py-2 text-xs space-y-2.5">
-              <!-- Rendered by JS -->
-            </div>
-
-            <!-- Price Box -->
-            <div class="mt-4 pt-4 border-t border-white/10 bg-[#DC143C]/10 rounded-xl p-4">
-              <span class="font-mono text-[0.62rem] text-zinc-300 uppercase tracking-wider block mb-0.5">Estimasi Biaya</span>
-              <p id="sidebar-bill-price" class="text-2xl font-black text-white">Rp499.000</p>
-              <p class="text-[0.65rem] text-zinc-400 mt-1">Transparan • Bebas Konsultasi</p>
-            </div>
-
-            <!-- WhatsApp Action Button -->
-            <div class="mt-4">
-              <button
-                type="button"
-                onclick="goToStep(7)"
-                class="w-full rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-bold uppercase tracking-wider py-3 transition-all shadow-[0_0_20px_rgba(220,20,60,0.4)] flex items-center justify-center gap-1.5 active:scale-[0.98] cursor-pointer"
-              >
-                <span class="material-symbols-outlined text-sm">chat</span>
-                <span>Konsultasi WhatsApp</span>
-              </button>
-            </div>
-
-            <!-- Services Quick Links -->
-            <div class="mt-6 pt-4 border-t border-white/5">
-              <span class="text-[0.62rem] font-mono text-zinc-500 uppercase tracking-wider block mb-2">Halaman Layanan Spesifik</span>
-              <div class="flex flex-wrap gap-1.5 text-[0.65rem] font-mono">
-                <a href="/jasa-pembuatan-landing-page.html" class="text-zinc-400 hover:text-[#DC143C] transition-colors">Landing Page</a> •
-                <a href="/jasa-pembuatan-company-profile.html" class="text-zinc-400 hover:text-[#DC143C] transition-colors">Company Profile</a> •
-                <a href="/jasa-pembuatan-toko-online.html" class="text-zinc-400 hover:text-[#DC143C] transition-colors">Toko Online</a> •
-                <a href="/jasa-pembuatan-portfolio.html" class="text-zinc-400 hover:text-[#DC143C] transition-colors">Portfolio</a>
-              </div>
-            </div>
-
-          </div>
       </div>
 
       <!-- ═══════════════════════════════════════════════════════════ -->
@@ -1257,56 +1193,56 @@
       <!-- ═══════════════════════════════════════════════════════════ -->
       <section class="mt-20 sm:mt-24 pt-12 border-t border-white/10">
         <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="font-mono text-xs text-[#FF0044] uppercase tracking-widest font-bold block mb-1">ENGINEERING STANDARDS</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
-            Prinsip Rekayasa &amp; <span class="text-[#FF0044]">Jaminan Kualitas</span>
+          <span class="font-mono text-xs text-[#DC143C] uppercase tracking-widest font-bold block mb-1" data-i18n="standardsEyebrow">ENGINEERING STANDARDS</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight" data-i18n="standardsTitle">
+            Prinsip Rekayasa &amp; <span class="text-[#DC143C]">Jaminan Kualitas</span>
           </h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           
-          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
-            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+          <div class="rounded-2xl border border-white/10 glass-card p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-[#DC143C]/10 border border-[#DC143C]/30 flex items-center justify-center text-[#DC143C] mb-3 font-mono text-sm font-bold">
               100
             </div>
-            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Performa Sub-Detik</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+            <h3 class="font-bold text-white text-sm mb-1" data-i18n="s1Title">Performa Sub-Detik</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3" data-i18n="s1Desc">
               Skor Core Web Vitals 100 dengan waktu muat di bawah 0.8 detik. Fondasi teknis optimal untuk retensi dan SEO.
             </p>
-            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Metrik: TTFB &lt; 200ms</span>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2" data-i18n="s1Metric">Metrik: TTFB &lt; 200ms</span>
           </div>
 
-          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
-            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+          <div class="rounded-2xl border border-white/10 glass-card p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-[#DC143C]/10 border border-[#DC143C]/30 flex items-center justify-center text-[#DC143C] mb-3 font-mono text-sm font-bold">
               <span class="material-symbols-outlined text-lg">terminal</span>
             </div>
-            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Direct Engineering</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+            <h3 class="font-bold text-white text-sm mb-1" data-i18n="s2Title">Direct Engineering</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3" data-i18n="s2Desc">
               Kolaborasi langsung dengan engineer yang menulis kode Anda. Diskusi teknis presisi tanpa perantara non-teknis.
             </p>
-            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Komunikasi: Direct Developer Line</span>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2" data-i18n="s2Metric">Komunikasi: Direct Developer Line</span>
           </div>
 
-          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
-            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+          <div class="rounded-2xl border border-white/10 glass-card p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-[#DC143C]/10 border border-[#DC143C]/30 flex items-center justify-center text-[#DC143C] mb-3 font-mono text-sm font-bold">
               <span class="material-symbols-outlined text-lg">layers</span>
             </div>
-            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">Bespoke Architecture</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+            <h3 class="font-bold text-white text-sm mb-1" data-i18n="s3Title">Bespoke Architecture</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3" data-i18n="s3Desc">
               Desain visual berkelas, tipografi presisi, dan animasi mikro responsif yang meningkatkan kredibilitas brand Anda.
             </p>
-            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Standar: Cyber-Professional Spec</span>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2" data-i18n="s3Metric">Standar: Cyber-Professional Spec</span>
           </div>
 
-          <div class="rounded-lg border border-white/10 bg-[#1b1b20] p-5 hover:border-white/20 transition-all">
-            <div class="w-9 h-9 rounded bg-[#FF0044]/10 border border-[#FF0044]/30 flex items-center justify-center text-[#FF0044] mb-3 font-mono text-sm font-bold">
+          <div class="rounded-2xl border border-white/10 glass-card p-5 hover:border-white/20 transition-all">
+            <div class="w-9 h-9 rounded-lg bg-[#DC143C]/10 border border-[#DC143C]/30 flex items-center justify-center text-[#DC143C] mb-3 font-mono text-sm font-bold">
               <span class="material-symbols-outlined text-lg">code</span>
             </div>
-            <h3 class="font-bold text-white text-sm mb-1 font-['Plus_Jakarta_Sans',sans-serif]">100% Hak Milik Kode</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3">
+            <h3 class="font-bold text-white text-sm mb-1" data-i18n="s4Title">100% Hak Milik Kode</h3>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3" data-i18n="s4Desc">
               Source code, aset, dan repositori Git diserahkan utuh. Bebas di-deploy ke provider mana pun tanpa lock-in.
             </p>
-            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2">Status: Zero Vendor Lock-in</span>
+            <span class="text-[0.62rem] font-mono text-zinc-500 block border-t border-white/5 pt-2" data-i18n="s4Metric">Status: Zero Vendor Lock-in</span>
           </div>
 
         </div>
@@ -1317,50 +1253,50 @@
       <!-- ═══════════════════════════════════════════════════════════ -->
       <section class="mt-16 sm:mt-24 pt-12 border-t border-white/10">
         <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="font-mono text-xs text-[#FF0044] uppercase tracking-widest font-bold block mb-1">FREQUENTLY ASKED QUESTIONS</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight font-['Plus_Jakarta_Sans',sans-serif]">
-            Panduan &amp; <span class="text-[#FF0044]">Pertanyaan Umum</span>
+          <span class="font-mono text-xs text-[#DC143C] uppercase tracking-widest font-bold block mb-1" data-i18n="faqEyebrow">FREQUENTLY ASKED QUESTIONS</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight" data-i18n="faqTitle">
+            Panduan &amp; <span class="text-[#DC143C]">Pertanyaan Umum</span>
           </h2>
         </div>
 
         <div class="max-w-4xl mx-auto space-y-3">
           
-          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
+          <details class="group rounded-2xl border border-white/10 glass-card p-4 transition-all open:border-[#DC143C]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Bagaimana skema pembayaran dan proses pengerjaan?</span>
+              <span data-i18n="faqQ1">Bagaimana skema pembayaran dan proses pengerjaan?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
-            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
+            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light" data-i18n="faqA1">
               Skema pembayaran menggunakan sistem <strong>50% Down Payment (DP)</strong> di awal untuk inisiasi sprint, dan <strong>50% pelunasan</strong> setelah website selesai di-review, diverifikasi, dan siap go-live. Penyerahan source code dan akses admin diberikan penuh setelah pelunasan.
             </p>
           </details>
 
-          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
+          <details class="group rounded-2xl border border-white/10 glass-card p-4 transition-all open:border-[#DC143C]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Berapa lama estimasi pengerjaan setiap proyek?</span>
+              <span data-i18n="faqQ2">Berapa lama estimasi pengerjaan setiap proyek?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
-            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
+            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light" data-i18n="faqA2">
               Landing Page single-page umumnya selesai dalam <strong>1–2 hari kerja</strong>. Company Profile multi-halaman selesai dalam <strong>3–5 hari kerja</strong>. Aplikasi web kustom, sistem booking, atau integrasi database membutuhkan <strong>7–14 hari kerja</strong> tergantung kesiapan materi.
             </p>
           </details>
 
-          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
+          <details class="group rounded-2xl border border-white/10 glass-card p-4 transition-all open:border-[#DC143C]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Apakah domain dan hosting ditanggung oleh klien?</span>
+              <span data-i18n="faqQ3">Apakah domain dan hosting ditanggung oleh klien?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
-            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
+            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light" data-i18n="faqA3">
               <strong>Ya, biaya domain dan hosting menjadi tanggungan pihak klien.</strong> Biaya jasa pembuatan website difokuskan murni untuk arsitektur UI/UX, rekayasa frontend/backend, dan optimasi performa. Kami siap memberikan konsultasi dan panduan teknis saat Anda melakukan registrasi domain dan pemilihan hosting.
             </p>
           </details>
 
-          <details class="group rounded border border-white/10 bg-[#1b1b20] p-4 transition-all open:border-[#FF0044]/50">
+          <details class="group rounded-2xl border border-white/10 glass-card p-4 transition-all open:border-[#DC143C]/50">
             <summary class="flex items-center justify-between font-semibold text-sm text-white cursor-pointer list-none">
-              <span>Apakah saya mendapatkan akses penuh ke source code?</span>
+              <span data-i18n="faqQ4">Apakah saya mendapatkan akses penuh ke source code?</span>
               <span class="material-symbols-outlined text-sm text-zinc-400 group-open:rotate-180 transition-transform">expand_more</span>
             </summary>
-            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light">
+            <p class="mt-3 text-xs text-zinc-300 leading-relaxed pt-3 border-t border-white/5 font-light" data-i18n="faqA4">
               Ya, 100% source code, aset desain, dan konfigurasi repositori GitHub akan diserahkan kepada Anda. Tidak ada biaya sewa tersembunyi atau keterikatan vendor.
             </p>
           </details>
@@ -1373,30 +1309,27 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- FOOTER                                                     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- FOOTER                                                     -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
     <footer class="relative z-10 border-t border-white/10 py-8 px-4 sm:px-6 md:px-12 bg-[#090a10] font-mono text-xs text-zinc-500 mt-16">
       <div class="max-w-6xl mx-auto space-y-6 lg:pl-28 xl:pl-36">
         
         <!-- Internal Referral Links Grid (Halaman Perujuk) -->
         <div class="pb-6 border-b border-white/10">
-          <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-[#DC143C] block mb-2.5 font-semibold">
+          <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-[#DC143C] block mb-2.5 font-semibold" data-i18n="footerReferralTitle">
             LAYANAN SPESIFIK &amp; JASA PEMBUATAN WEBSITE CEPAT (INTERNAL REFERRAL INDEX)
           </span>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-zinc-400">
-            <a href="/" class="hover:text-[#DC143C] transition-colors truncate">→ Beranda / Portofolio 3D</a>
-            <a href="/jasa-pembuatan-landing-page.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Landing Page Murah</a>
-            <a href="/jasa-pembuatan-company-profile.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Company Profile</a>
-            <a href="/jasa-pembuatan-toko-online.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Toko Online E-Commerce</a>
-            <a href="/jasa-pembuatan-portfolio.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Website Portfolio</a>
-            <a href="/jasa-pembuatan-website-booking.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Web Booking &amp; Reservasi</a>
-            <a href="/jasa-pembuatan-website-absensi.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Sistem Absensi &amp; HR</a>
-            <a href="/jasa-pembuatan-web-app.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Web App &amp; SaaS</a>
-            <a href="/jasa-pembuatan-web-app-custom.html" class="hover:text-[#DC143C] transition-colors truncate">→ Jasa Web Custom &amp; Dashboard</a>
-            <a href="/jasa-pembuatan-website.html" class="hover:text-[#DC143C] transition-colors truncate">→ Semua Layanan Website</a>
-            <a href="/projects.html" class="hover:text-[#DC143C] transition-colors truncate">→ Katalog 17 Repositori</a>
-            <a href="/project.html" class="hover:text-[#DC143C] transition-colors truncate">→ Studi Kasus Proyek</a>
+            <a href="/" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerHome">→ Beranda / Portofolio 3D</a>
+            <a href="/jasa-pembuatan-landing-page.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerLanding">→ Jasa Landing Page Murah</a>
+            <a href="/jasa-pembuatan-company-profile.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerCompro">→ Jasa Company Profile</a>
+            <a href="/jasa-pembuatan-toko-online.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerStore">→ Jasa Toko Online E-Commerce</a>
+            <a href="/jasa-pembuatan-portfolio.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerPortfolio">→ Jasa Website Portfolio</a>
+            <a href="/jasa-pembuatan-website-booking.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerBooking">→ Jasa Web Booking &amp; Reservasi</a>
+            <a href="/jasa-pembuatan-website-absensi.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerAbsensi">→ Jasa Sistem Absensi &amp; HR</a>
+            <a href="/jasa-pembuatan-web-app.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerWebApp">→ Jasa Web App &amp; SaaS</a>
+            <a href="/jasa-pembuatan-web-app-custom.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerCustom">→ Jasa Web Custom &amp; Dashboard</a>
+            <a href="/jasa-pembuatan-website.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerAllServices">→ Semua Layanan Website</a>
+            <a href="/projects.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerCatalog">→ Katalog 17 Repositori</a>
+            <a href="/project.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerCaseStudy">→ Studi Kasus Proyek</a>
           </div>
         </div>
 
@@ -1405,9 +1338,9 @@
             <span class="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
           </div>
           <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
-            <a href="/#start" class="hover:text-white transition-colors">Portofolio 3D</a>
-            <a href="/projects.html" class="hover:text-white transition-colors">Semua Karya</a>
-            <a href="/jasa-pembuatan-website.html" class="hover:text-white transition-colors">Layanan Website</a>
+            <a href="/#start" class="hover:text-white transition-colors" data-i18n="footerNav3D">Portofolio 3D</a>
+            <a href="/projects.html" class="hover:text-white transition-colors" data-i18n="footerNavWorks">Semua Karya</a>
+            <a href="/jasa-pembuatan-website.html" class="hover:text-white transition-colors" data-i18n="footerNavServices">Layanan Website</a>
             <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
             <a href="#" onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya tertarik konsultasi.'); return false;" class="text-green-400 hover:text-white transition-colors cursor-pointer">WhatsApp ↗</a>
           </div>
@@ -1444,7 +1377,360 @@
         clientNotes: ""
       };
 
-      let currentLang = localStorage.getItem('porto_lang') || 'id';
+      let currentLang = localStorage.getItem('porto_lang') || localStorage.getItem('aga_portfolio_lang') || 'id';
+
+      // ─── COMPREHENSIVE BILINGUAL DICTIONARY ───
+      const I18N_PRICING = {
+        id: {
+          backBtn: "Portofolio 3D",
+          backBtnSm: "Portofolio",
+          openCommissions: "Open for Commissions",
+          heroEyebrow: "05 STUDIO COMMISSIONS & SERVICES",
+          heroTitleLight: "Bespoke Web Development",
+          heroTitleBold: "& Digital Architecture",
+          heroDesc: "Aplikasi web performa tinggi, landing page terarah, dan visual modern. Dikerjakan langsung dengan arsitektur bersih tanpa perantara.",
+          tiersEyebrow: "01 COMMISSION TIERS",
+          tiersTitle: "Tiga Skala Pengerjaan",
+          tiersDesc: "Pilih paket langsung atau sesuaikan di kalkulator.",
+          startingFrom: "Mulai dari",
+          t1Time: "1–2 Hari",
+          t1Name: "Single-Page / Landing Page",
+          t1Desc: "Untuk kampanye produk, promo, personal bio, atau landing page terarah.",
+          t1PriceNote: "Fixed rate • 100% Source Code Handover",
+          t1B1: "1 Halaman Responsif Mobile & Desktop",
+          t1B2: "Direct WhatsApp Lead Action",
+          t1B3: "Sub-Detik (< 0.8s) TTFB",
+          t1B4: "Panduan Deploy & Repositori GitHub",
+          t1B5: "Full Source Code Handover",
+          t1OrderBtn: "Pesan Tier 01",
+          t1CalcBtn: "Kalkulator Custom ↓",
+          t2Badge: "RECOMMENDED",
+          t2Time: "3–5 Hari",
+          t2Name: "Company Profile & Bisnis",
+          t2Desc: "Fondasi kredibilitas korporat, UMKM berkembang, dan firma profesional.",
+          t2PriceNote: "Clean Architecture • Full Source Code Handover",
+          t2B1: "Hingga 5 Halaman Terstruktur",
+          t2B2: "Panduan Setup Domain & DNS Klien",
+          t2B3: "Integrasi Direct WhatsApp Lead Action",
+          t2B4: "Technical On-Page SEO Schema",
+          t2B5: "GSAP Micro-Interactions",
+          t2B6: "30-Day Code Warranty",
+          t2OrderBtn: "Pesan Tier 02",
+          t2CalcBtn: "Kalkulator Custom ↓",
+          t3Time: "7–14 Hari",
+          t3Name: "Web App & WebGL Platform",
+          t3Desc: "Arsitektur aplikasi: Toko Online Midtrans, Booking, SaaS Dashboard, atau 3D WebGL.",
+          t3PriceNote: "Custom Database + API + Dashboard",
+          t3B1: "Database Real-time & Auth",
+          t3B2: "Payment Gateway (QRIS, VA, Card)",
+          t3B3: "Admin CMS / Dashboard Panel",
+          t3B4: "3D WebGL / Shader Scene",
+          t3B5: "3-Month Maintenance Warranty",
+          t3OrderBtn: "Inisiasi Custom",
+          t3CalcBtn: "Kalkulator Custom ↓",
+          configuratorEyebrow: "Interactive Studio Configurator",
+          liveEstimate: "Estimasi Real-Time",
+          totalStartingEstimate: "Total Estimasi Awal",
+          viewDetails: "Lihat Rincian",
+          stepLabel: "Langkah:",
+          stepTabs: ["01 Jenis", "02 Scope", "03 Desain", "04 Add-ons", "05 Detail", "06 Estimasi", "07 WhatsApp"],
+          stepProgressNames: [
+            "01 Jenis Website",
+            "02 Scope & Halaman",
+            "03 Level Desain",
+            "04 Add-ons & Fitur",
+            "05 Detail & Bisnis",
+            "06 Ringkasan Estimasi",
+            "07 Kirim WhatsApp"
+          ],
+          step1Title: "Langkah 1: Pilih Jenis Website",
+          step1Desc: "Pilih model website yang ingin kamu bangun. Setiap paket memiliki starting price transparan.",
+          btnBack: "Kembali",
+          btnNextScope: "Lanjut ke Scope",
+          step2Title: "Langkah 2: Tentukan Scope & Halaman",
+          step2Desc: "Pilih skala konten atau perkiraan jumlah halaman yang dibutuhkan.",
+          step2ClarityTitle: "Transparansi Scope Paket Dasar",
+          step2ClarityDesc: "Paket dasar mencakup pembuatan struktur inti responsif, integrasi kontak WhatsApp langsung, dan deployment cloud gratis.",
+          btnNextDesign: "Lanjut ke Desain",
+          step3Title: "Langkah 3: Pilih Level Desain",
+          step3Desc: "Semua pilihan sudah 100% responsif mobile. Pilih tingkat eksklusivitas visual yang diinginkan.",
+          btnNextAddons: "Lanjut ke Add-ons",
+          step4Title: "Langkah 4: Pilih Fitur Tambahan (Add-ons)",
+          step4Desc: "Tingkatkan fungsionalitas website dengan integrasi SEO, Payment, CMS, atau Multi-bahasa.",
+          btnNextDetail: "Lanjut ke Detail",
+          step5Title: "Langkah 5: Detail Kebutuhan & Bisnis",
+          step5Desc: "Informasi opsional agar kami memahami konteks bisnis Anda dengan tepat.",
+          labelClientName: "Nama Anda / Brand",
+          labelClientNameOptional: "(opsional)",
+          placeholderClientName: "Contoh: apjoer viery",
+          labelBusinessType: "Jenis Bisnis",
+          labelProjectGoal: "Tujuan Utama Website",
+          labelClientNotes: "Catatan Khusus / Referensi Website",
+          placeholderClientNotes: "Tuliskan jika ada referensi desain atau alur khusus yang diinginkan...",
+          btnNextSummary: "Lihat Ringkasan Estimasi",
+          step6Title: "Langkah 6: Ringkasan Estimasi Biaya",
+          step6Desc: "Rincian transparan konfigurasi website yang telah Anda pilih.",
+          badgeConsultationReady: "Siap Konsultasi",
+          badgeTransparent: "100% Transparan",
+          noteSummaryDisclaimer: "Estimasi awal transparan. Harga final disesuaikan dan dikonfirmasi setelah diskusi scope teknis via WhatsApp tanpa biaya tersembunyi.",
+          labelDomainHostingNote: "Catatan Domain & Hosting:",
+          domainHostingDesc: "Biaya jasa development difokuskan untuk desain & coding. Biaya domain (.com / .id) dan server hosting cloud dibayar langsung ke registrar provider resmi, dan kami bantu setup gratis sampai online.",
+          btnNextWhatsApp: "Kirim Brief ke WhatsApp",
+          step7Title: "Langkah 7: Kirim Konfigurasi ke WhatsApp",
+          step7Desc: "Pesan otomatis telah diformat rapi untuk langsung dikirim ke WhatsApp developer.",
+          previewTitle: "Pratinjau Pesan WhatsApp",
+          copyBtn: "Salin Teks",
+          copiedBtn: "Tersalin!",
+          sendWaBtn: "Kirim ke WhatsApp Sekarang",
+          sidebarTitle: "Rincian Konfigurasi",
+          sidebarPriceLabel: "Estimasi Biaya",
+          sidebarPriceNote: "Transparan • Bebas Konsultasi",
+          sidebarCtaBtn: "Konsultasi WhatsApp",
+          sidebarServicesHeading: "Halaman Layanan Spesifik",
+          standardsEyebrow: "ENGINEERING STANDARDS",
+          standardsTitle: "Prinsip Rekayasa & Jaminan Kualitas",
+          s1Title: "Performa Sub-Detik",
+          s1Desc: "Skor Core Web Vitals 100 dengan waktu muat di bawah 0.8 detik. Fondasi teknis optimal untuk retensi dan SEO.",
+          s1Metric: "Metrik: TTFB < 200ms",
+          s2Title: "Direct Engineering",
+          s2Desc: "Kolaborasi langsung dengan engineer yang menulis kode Anda. Diskusi teknis presisi tanpa perantara non-teknis.",
+          s2Metric: "Komunikasi: Direct Developer Line",
+          s3Title: "Bespoke Architecture",
+          s3Desc: "Desain visual berkelas, tipografi presisi, dan animasi mikro responsif yang meningkatkan kredibilitas brand Anda.",
+          s3Metric: "Standar: Cyber-Professional Spec",
+          s4Title: "100% Hak Milik Kode",
+          s4Desc: "Source code, aset, dan repositori Git diserahkan utuh. Bebas di-deploy ke provider mana pun tanpa lock-in.",
+          s4Metric: "Status: Zero Vendor Lock-in",
+          faqEyebrow: "FREQUENTLY ASKED QUESTIONS",
+          faqTitle: "Panduan & Pertanyaan Umum",
+          faqQ1: "Bagaimana skema pembayaran dan proses pengerjaan?",
+          faqA1: "Skema pembayaran menggunakan sistem <strong>50% Down Payment (DP)</strong> di awal untuk inisiasi sprint, dan <strong>50% pelunasan</strong> setelah website selesai di-review, diverifikasi, dan siap go-live. Penyerahan source code dan akses admin diberikan penuh setelah pelunasan.",
+          faqQ2: "Berapa lama estimasi pengerjaan setiap proyek?",
+          faqA2: "Landing Page single-page umumnya selesai dalam <strong>1–2 hari kerja</strong>. Company Profile multi-halaman selesai dalam <strong>3–5 hari kerja</strong>. Aplikasi web kustom, sistem booking, atau integrasi database membutuhkan <strong>7–14 hari kerja</strong> tergantung kesiapan materi.",
+          faqQ3: "Apakah domain dan hosting ditanggung oleh klien?",
+          faqA3: "<strong>Ya, biaya domain dan hosting menjadi tanggungan pihak klien.</strong> Biaya jasa pembuatan website difokuskan murni untuk arsitektur UI/UX, rekayasa frontend/backend, dan optimasi performa. Kami siap memberikan konsultasi dan panduan teknis saat Anda melakukan registrasi domain dan pemilihan hosting.",
+          faqQ4: "Apakah saya mendapatkan akses penuh ke source code?",
+          faqA4: "Ya, 100% source code, aset desain, dan konfigurasi repositori GitHub akan diserahkan kepada Anda. Tidak ada biaya sewa tersembunyi atau keterikatan vendor.",
+          footerReferralTitle: "LAYANAN SPESIFIK & JASA PEMBUATAN WEBSITE CEPAT (INTERNAL REFERRAL INDEX)",
+          footerHome: "→ Beranda / Portofolio 3D",
+          footerLanding: "→ Jasa Landing Page Murah",
+          footerCompro: "→ Jasa Company Profile",
+          footerStore: "→ Jasa Toko Online E-Commerce",
+          footerPortfolio: "→ Jasa Website Portfolio",
+          footerBooking: "→ Jasa Web Booking & Reservasi",
+          footerAbsensi: "→ Jasa Sistem Absensi & HR",
+          footerWebApp: "→ Jasa Web App & SaaS",
+          footerCustom: "→ Jasa Web Custom & Dashboard",
+          footerAllServices: "→ Semua Layanan Website",
+          footerCatalog: "→ Katalog 17 Repositori",
+          footerCaseStudy: "→ Studi Kasus Proyek",
+          footerNav3D: "Portofolio 3D",
+          footerNavWorks: "Semua Karya",
+          footerNavServices: "Layanan Website"
+        },
+        en: {
+          backBtn: "3D Portfolio",
+          backBtnSm: "Portfolio",
+          openCommissions: "Open for Commissions",
+          heroEyebrow: "05 STUDIO COMMISSIONS & SERVICES",
+          heroTitleLight: "Bespoke Web Development",
+          heroTitleBold: "& Digital Architecture",
+          heroDesc: "High-performance web applications, goal-driven landing pages, and cutting-edge aesthetics. Handcrafted with clean architecture and zero intermediaries.",
+          tiersEyebrow: "01 COMMISSION TIERS",
+          tiersTitle: "Three Core Service Tiers",
+          tiersDesc: "Choose an instant tier or configure a custom project below.",
+          startingFrom: "Starting from",
+          t1Time: "1–2 Days",
+          t1Name: "Single-Page / Landing Page",
+          t1Desc: "For product launches, promo campaigns, personal bio, or targeted landing pages.",
+          t1PriceNote: "Fixed rate • 100% Source Code Handover",
+          t1B1: "1 Fully Responsive Page (Mobile & Desktop)",
+          t1B2: "Direct WhatsApp Lead Action Trigger",
+          t1B3: "Sub-Second (< 0.8s) TTFB Speed",
+          t1B4: "Deployment Guide & GitHub Repository",
+          t1B5: "100% Full Source Code Handover",
+          t1OrderBtn: "Order Tier 01",
+          t1CalcBtn: "Custom Calculator ↓",
+          t2Badge: "RECOMMENDED",
+          t2Time: "3–5 Days",
+          t2Name: "Company Profile & Business",
+          t2Desc: "Corporate credibility foundation for growing businesses and modern firms.",
+          t2PriceNote: "Clean Architecture • Full Source Code Handover",
+          t2B1: "Up to 5 Structured Pages",
+          t2B2: "Domain & DNS Setup Assistance",
+          t2B3: "Direct WhatsApp Lead Action Integration",
+          t2B4: "Technical On-Page SEO Schema",
+          t2B5: "GSAP Micro-Interactions",
+          t2B6: "30-Day Code Warranty",
+          t2OrderBtn: "Order Tier 02",
+          t2CalcBtn: "Custom Calculator ↓",
+          t3Time: "7–14 Days",
+          t3Name: "Web App & WebGL Platform",
+          t3Desc: "App architecture: Online Store with Midtrans, Booking System, SaaS Dashboard, or 3D WebGL.",
+          t3PriceNote: "Custom Database + API + Dashboard",
+          t3B1: "Real-time Database & Authentication",
+          t3B2: "Payment Gateway (QRIS, VA, Card)",
+          t3B3: "Admin CMS / Dashboard Panel",
+          t3B4: "3D WebGL / Shader Scene",
+          t3B5: "3-Month Maintenance Warranty",
+          t3OrderBtn: "Initiate Custom",
+          t3CalcBtn: "Custom Calculator ↓",
+          configuratorEyebrow: "Interactive Studio Configurator",
+          liveEstimate: "Live Real-Time Estimate",
+          totalStartingEstimate: "Initial Estimate Total",
+          viewDetails: "View Breakdown",
+          stepLabel: "Step:",
+          stepTabs: ["01 Type", "02 Scope", "03 Design", "04 Add-ons", "05 Details", "06 Estimate", "07 WhatsApp"],
+          stepProgressNames: [
+            "01 Website Type",
+            "02 Scope & Pages",
+            "03 Visual Design Level",
+            "04 Add-ons & Features",
+            "05 Requirements & Context",
+            "06 Full Estimate Summary",
+            "07 Dispatch to WhatsApp"
+          ],
+          step1Title: "Step 1: Select Website Type",
+          step1Desc: "Choose the baseline website architecture you want to build. Every package comes with clear upfront pricing.",
+          btnBack: "Back",
+          btnNextScope: "Continue to Scope",
+          step2Title: "Step 2: Define Scope & Page Count",
+          step2Desc: "Select the content scale or estimated number of pages required.",
+          step2ClarityTitle: "Base Scope Transparency",
+          step2ClarityDesc: "Base tier includes responsive core structure, direct WhatsApp contact action, and free cloud deployment guide.",
+          btnNextDesign: "Continue to Design",
+          step3Title: "Step 3: Select Design & Visual Polish Level",
+          step3Desc: "All options are 100% mobile responsive. Pick your desired visual exclusivity level.",
+          btnNextAddons: "Continue to Add-ons",
+          step4Title: "Step 4: Select Optional Add-ons & Features",
+          step4Desc: "Supercharge your website with SEO Schema, Payment Gateways, Headless CMS, or Multi-language support.",
+          btnNextDetail: "Continue to Details",
+          step5Title: "Step 5: Business Context & Project Notes",
+          step5Desc: "Optional information to help us understand your business goals precisely.",
+          labelClientName: "Your Name / Brand Name",
+          labelClientNameOptional: "(optional)",
+          placeholderClientName: "e.g. Acme Studio",
+          labelBusinessType: "Industry / Business Type",
+          labelProjectGoal: "Primary Website Goal",
+          labelClientNotes: "Special Notes / Reference Websites",
+          placeholderClientNotes: "Mention any design references, special user flows, or custom requirements...",
+          btnNextSummary: "View Full Estimate Breakdown",
+          step6Title: "Step 6: Comprehensive Cost Estimate Breakdown",
+          step6Desc: "Transparent itemized breakdown of your chosen web architecture.",
+          badgeConsultationReady: "Ready for Consultation",
+          badgeTransparent: "100% Transparent",
+          noteSummaryDisclaimer: "Transparent starting estimate. Final fixed scope is confirmed after brief technical discussion via WhatsApp with zero hidden fees.",
+          labelDomainHostingNote: "Domain & Cloud Hosting Note:",
+          domainHostingDesc: "Engineering fees cover UI/UX design and production coding. Domain (.com / .id) and cloud hosting are billed directly by official providers, with free setup assistance from our studio.",
+          btnNextWhatsApp: "Dispatch Brief to WhatsApp",
+          step7Title: "Step 7: Dispatch Configuration to WhatsApp",
+          step7Desc: "A clean, pre-formatted brief ready to be sent directly to the developer's WhatsApp line.",
+          previewTitle: "WhatsApp Message Preview",
+          copyBtn: "Copy Text",
+          copiedBtn: "Copied!",
+          sendWaBtn: "Send to WhatsApp Now",
+          sidebarTitle: "Configuration Details",
+          sidebarPriceLabel: "Estimated Price",
+          sidebarPriceNote: "Transparent • Free Consultation",
+          sidebarCtaBtn: "WhatsApp Consultation",
+          sidebarServicesHeading: "Specific Service Pages",
+          standardsEyebrow: "ENGINEERING STANDARDS",
+          standardsTitle: "Engineering Principles & Quality Guarantees",
+          s1Title: "Sub-Second Performance",
+          s1Desc: "100 Core Web Vitals score with under 0.8s load times. Built for maximum user retention and search engine rankings.",
+          s1Metric: "Metric: TTFB < 200ms",
+          s2Title: "Direct Engineering",
+          s2Desc: "Direct communication with the engineer writing your code. Clear technical discussion without non-technical middlemen.",
+          s2Metric: "Channel: Direct Developer Line",
+          s3Title: "Bespoke Architecture",
+          s3Desc: "Refined aesthetics, bespoke typography, and smooth micro-interactions that elevate your brand credibility.",
+          s3Metric: "Standard: Cyber-Professional Spec",
+          s4Title: "100% Code Ownership",
+          s4Desc: "Full source code, production assets, and Git repository handed over. Freely deployable to any provider without lock-in.",
+          s4Metric: "Status: Zero Vendor Lock-in",
+          faqEyebrow: "FREQUENTLY ASKED QUESTIONS",
+          faqTitle: "Guidelines & FAQ",
+          faqQ1: "How does the payment and sprint milestone process work?",
+          faqA1: "We operate on a <strong>50% Down Payment (DP)</strong> milestone to kick off development sprint, and <strong>50% upon final staging review</strong>, verification, and go-live readiness. Full source code repository and admin credentials are transferred upon final payment.",
+          faqQ2: "What is the expected turnaround time for each project?",
+          faqA2: "Single-page landing pages typically complete in <strong>1–2 business days</strong>. Multi-page Company Profiles take <strong>3–5 business days</strong>. Custom Web Apps, booking platforms, and database integrations take <strong>7–14 business days</strong> depending on asset readiness.",
+          faqQ3: "Are domain and hosting costs included in the fees?",
+          faqA3: "<strong>No, domain registration and cloud server hosting are owned and paid directly by the client.</strong> Our fee is strictly dedicated to UI/UX engineering, clean codebase implementation, and performance optimization. We assist in full DNS/Cloud setup at no extra charge.",
+          faqQ4: "Do I get full ownership of the source code?",
+          faqA4: "Yes, 100% of the source code, design assets, and GitHub repository are fully transferred to you. No recurring subscription lock-ins or hidden retention clauses.",
+          footerReferralTitle: "SPECIFIC SERVICES & FAST WEBSITE CREATION (INTERNAL REFERRAL INDEX)",
+          footerHome: "→ Home / 3D Portfolio",
+          footerLanding: "→ Affordable Landing Page Service",
+          footerCompro: "→ Company Profile Web Service",
+          footerStore: "→ Online Store & E-Commerce Service",
+          footerPortfolio: "→ Portfolio Website Service",
+          footerBooking: "→ Booking & Reservation Web App",
+          footerAbsensi: "→ Attendance & HR Web App",
+          footerWebApp: "→ Web App & SaaS Development",
+          footerCustom: "→ Custom Web & Dashboard Service",
+          footerAllServices: "→ All Website Services",
+          footerCatalog: "→ Catalog of 17 Repositories",
+          footerCaseStudy: "→ Project Case Studies",
+          footerNav3D: "3D Portfolio",
+          footerNavWorks: "All Works",
+          footerNavServices: "Web Services"
+        }
+      };
+
+      // ─── APPLY LANGUAGE TO ENTIRE DOM ───
+      function applyPricingLanguage(lang) {
+        currentLang = lang;
+        const dict = I18N_PRICING[lang] || I18N_PRICING.id;
+        
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            if (key === 'standardsTitle') {
+              el.innerHTML = lang === 'en' 
+                ? `Engineering Principles & <span class="text-[#DC143C]">Quality Guarantees</span>` 
+                : `Prinsip Rekayasa & <span class="text-[#DC143C]">Jaminan Kualitas</span>`;
+            } else if (key === 'faqTitle') {
+              el.innerHTML = lang === 'en' 
+                ? `Guidelines & <span class="text-[#DC143C]">FAQ</span>` 
+                : `Panduan & <span class="text-[#DC143C]">Pertanyaan Umum</span>`;
+            } else if (key === 'faqA1' || key === 'faqA2' || key === 'faqA3' || key === 'faqA4') {
+              el.innerHTML = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
+        });
+
+        // Update input placeholders
+        const nameInput = document.getElementById('client-name');
+        if (nameInput) nameInput.placeholder = dict.placeholderClientName || '';
+        const notesInput = document.getElementById('client-notes');
+        if (notesInput) notesInput.placeholder = dict.placeholderClientNotes || '';
+
+        // Update step tabs
+        for (let i = 1; i <= 7; i++) {
+          const tabEl = document.getElementById(`step-tab-${i}`);
+          if (tabEl && dict.stepTabs && dict.stepTabs[i - 1]) {
+            tabEl.textContent = dict.stepTabs[i - 1];
+          }
+        }
+
+        // Update step progress name
+        const progressStepName = document.getElementById('progress-step-name');
+        if (progressStepName && dict.stepProgressNames && dict.stepProgressNames[state.step - 1]) {
+          progressStepName.textContent = dict.stepProgressNames[state.step - 1];
+        }
+
+        // Re-render forms
+        renderWebsiteTypes();
+        if (state.step === 2) renderPageOptions();
+        if (state.step === 3) renderDesignLevels();
+        if (state.step === 4) renderAddons();
+        if (state.step === 5) { renderBusinessTypes(); renderProjectGoals(); }
+        if (state.step === 6) renderSummary();
+        if (state.step === 7) renderWhatsAppPreview();
+        updateLiveBill();
+      }
 
       // ─── PARSE SMART URL PARAMETERS ───
       function parseSmartDefaultUrl() {
@@ -1496,9 +1782,9 @@
         const pLabel = document.getElementById('progress-label');
         if (pLabel) pLabel.textContent = `${step} / 7`;
 
-        const stepNamesId = ["01 Jenis Website", "02 Scope & Halaman", "03 Level Desain", "04 Fitur Add-ons", "05 Detail Bisnis", "06 Ringkasan Estimasi", "07 Kirim WhatsApp"];
+        const dict = I18N_PRICING[currentLang] || I18N_PRICING.id;
         const pName = document.getElementById('progress-step-name');
-        if (pName) pName.textContent = stepNamesId[step - 1];
+        if (pName && dict.stepProgressNames) pName.textContent = dict.stepProgressNames[step - 1];
 
         // Specific step renders
         if (step === 2) renderPageOptions();
@@ -1517,6 +1803,7 @@
         if (!grid) return;
         grid.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         PRICING_CONFIG.websiteTypes.forEach(wt => {
           const isSelected = state.websiteType === wt.id;
           const card = document.createElement('button');
@@ -1529,6 +1816,8 @@
             updateLiveBill();
           };
 
+          const incList = (isEn && wt.includedEn) ? wt.includedEn : wt.includedId;
+
           card.innerHTML = `
             <div class="flex items-start gap-3">
               <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-[#DC143C]/20 text-[#DC143C]' : 'bg-white/5 text-zinc-400'}">
@@ -1536,20 +1825,20 @@
               </div>
               <div class="flex-1 min-w-0 text-left">
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <h3 class="text-sm font-bold ${isSelected ? 'text-white' : 'text-zinc-200'} truncate">${currentLang === 'en' ? wt.nameEn : wt.nameId}</h3>
-                  <span class="font-mono text-xs font-black shrink-0 ${isSelected ? 'text-[#DC143C]' : 'text-zinc-300'}">Mulai ${formatPriceRp(wt.startingPrice)}</span>
+                  <h3 class="text-sm font-bold ${isSelected ? 'text-white' : 'text-zinc-200'} truncate">${isEn ? wt.nameEn : wt.nameId}</h3>
+                  <span class="font-mono text-xs font-black shrink-0 ${isSelected ? 'text-[#DC143C]' : 'text-zinc-300'}">${isEn ? 'From' : 'Mulai'} ${formatPriceRp(wt.startingPrice)}</span>
                 </div>
-                <p class="text-[0.7rem] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'} leading-relaxed mb-2">${currentLang === 'en' ? wt.descEn : wt.descId}</p>
-                <div class="text-[0.62rem] font-mono text-emerald-400">
-                  Estimasi: ${formatPriceRp(wt.rangeMin)} – ${formatPriceRp(wt.rangeMax)}
+                <p class="text-[0.7rem] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'} leading-relaxed mb-2">${isEn ? wt.descEn : wt.descId}</p>
+                <div class="text-[0.62rem] font-mono text-zinc-400">
+                  ${isEn ? 'Est.' : 'Estimasi'}: ${formatPriceRp(wt.rangeMin)} – ${formatPriceRp(wt.rangeMax)}
                 </div>
               </div>
             </div>
             ${isSelected ? `
             <div class="mt-3 pt-3 border-t border-white/10 text-[0.65rem] text-zinc-300">
-              <span class="font-mono text-[0.58rem] text-zinc-400 uppercase tracking-wider block mb-1">Termasuk di Paket Dasar:</span>
+              <span class="font-mono text-[0.58rem] text-zinc-400 uppercase tracking-wider block mb-1">${isEn ? 'Included in Base Package:' : 'Termasuk di Paket Dasar:'}</span>
               <ul class="space-y-0.5 text-zinc-300">
-                ${wt.includedId.map(inc => `<li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-400">check</span><span>${inc}</span></li>`).join('')}
+                ${incList.map(inc => `<li class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#DC143C]">check</span><span>${inc}</span></li>`).join('')}
               </ul>
             </div>` : ''}
           `;
@@ -1563,6 +1852,7 @@
         if (!con) return;
         con.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         const wt = PRICING_CONFIG.websiteTypes.find(w => w.id === state.websiteType) || PRICING_CONFIG.websiteTypes[0];
         const opts = PRICING_CONFIG.pageOptions[wt.id];
 
@@ -1571,9 +1861,9 @@
             <div class="p-4 rounded-xl border border-white/10 bg-white/[0.02] text-xs text-zinc-300">
               <div class="flex items-center gap-2 mb-1">
                 <span class="material-symbols-outlined text-[#DC143C] text-sm">check_circle</span>
-                <span class="font-bold text-white">${currentLang === 'en' ? wt.nameEn : wt.nameId} — Scope Terintegrasi</span>
+                <span class="font-bold text-white">${isEn ? wt.nameEn : wt.nameId} — ${isEn ? 'Integrated Scope' : 'Scope Terintegrasi'}</span>
               </div>
-              <p class="text-zinc-400 text-[0.72rem]">${wt.scopeId}</p>
+              <p class="text-zinc-400 text-[0.72rem]">${isEn ? (wt.scopeEn || wt.scopeId) : wt.scopeId}</p>
             </div>
           `;
           return;
@@ -1596,10 +1886,10 @@
                 <span class="w-5 h-5 rounded-full border ${isSelected ? 'border-[#DC143C] bg-[#DC143C] shadow-[0_0_10px_rgba(220,20,60,0.4)]' : 'border-white/30 bg-white/5'} flex items-center justify-center text-white shrink-0 transition-all">
                   ${isSelected ? '<svg class="w-3 h-3 text-white stroke-[3.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
                 </span>
-                <span class="text-xs font-semibold ${isSelected ? 'text-white' : 'text-zinc-300'}">${currentLang === 'en' ? opt.labelEn : opt.labelId}</span>
+                <span class="text-xs font-semibold ${isSelected ? 'text-white' : 'text-zinc-300'}">${isEn ? opt.labelEn : opt.labelId}</span>
               </div>
               <span class="font-mono text-xs ${opt.price === 0 ? 'text-zinc-500' : 'text-[#DC143C] font-bold'}">
-                ${opt.price === 0 ? 'Termasuk' : `+${formatPriceRpFull(opt.price)}`}
+                ${opt.price === 0 ? (isEn ? 'Included' : 'Termasuk') : `+${formatPriceRpFull(opt.price)}`}
               </span>
             </div>
           `;
@@ -1613,6 +1903,7 @@
         if (!con) return;
         con.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         PRICING_CONFIG.designLevels.forEach(dl => {
           const isSelected = state.designLevel === dl.id;
           const btn = document.createElement('button');
@@ -1631,12 +1922,12 @@
               </div>
               <div class="flex-1 min-w-0 text-left">
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-sm font-bold ${isSelected ? 'text-white' : 'text-zinc-200'}">${currentLang === 'en' ? dl.nameEn : dl.nameId}</span>
+                  <span class="text-sm font-bold ${isSelected ? 'text-white' : 'text-zinc-200'}">${isEn ? dl.nameEn : dl.nameId}</span>
                   <span class="font-mono text-xs font-bold ${dl.price === 0 ? 'text-zinc-500' : 'text-[#DC143C]'}">
-                    ${dl.price === 0 ? 'Termasuk Paket' : `+${formatPriceRpFull(dl.price)}`}
+                    ${dl.price === 0 ? (isEn ? 'Included in Package' : 'Termasuk Paket') : `+${formatPriceRpFull(dl.price)}`}
                   </span>
                 </div>
-                <p class="text-[0.7rem] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'} leading-relaxed">${currentLang === 'en' ? dl.descEn : dl.descId}</p>
+                <p class="text-[0.7rem] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'} leading-relaxed">${isEn ? dl.descEn : dl.descId}</p>
               </div>
             </div>
           `;
@@ -1650,12 +1941,13 @@
         if (!con) return;
         con.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         const categories = [
-          { key: 'general', title: 'Fitur Optimasi & Kecepatan' },
-          { key: 'business', title: 'Fitur Bisnis & Komunikasi' },
-          { key: 'ecommerce', title: 'Fitur E-Commerce & Transaksi' },
-          { key: 'booking', title: 'Fitur Booking & Jadwal' },
-          { key: 'attendance', title: 'Fitur Manajemen Absensi' }
+          { key: 'general', titleId: 'Fitur Optimasi & Kecepatan', titleEn: 'Optimization & Speed Features' },
+          { key: 'business', titleId: 'Fitur Bisnis & Komunikasi', titleEn: 'Business & Communication Features' },
+          { key: 'ecommerce', titleId: 'Fitur E-Commerce & Transaksi', titleEn: 'E-Commerce & Transaction Features' },
+          { key: 'booking', titleId: 'Fitur Booking & Jadwal', titleEn: 'Booking & Scheduling Features' },
+          { key: 'attendance', titleId: 'Fitur Manajemen Absensi', titleEn: 'Attendance & HR Management Features' }
         ];
 
         categories.forEach(cat => {
@@ -1664,7 +1956,7 @@
 
           const catDiv = document.createElement('div');
           catDiv.className = 'space-y-2';
-          catDiv.innerHTML = `<h3 class="text-xs font-bold text-zinc-300 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-[#DC143C]">extension</span><span>${cat.title}</span></h3>`;
+          catDiv.innerHTML = `<h3 class="text-xs font-bold text-zinc-300 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-[#DC143C]">extension</span><span>${isEn ? cat.titleEn : cat.titleId}</span></h3>`;
 
           const chipsDiv = document.createElement('div');
           chipsDiv.className = 'grid grid-cols-1 sm:grid-cols-2 gap-2.5';
@@ -1691,8 +1983,8 @@
                     ${isSelected ? '<svg class="w-3 h-3 text-white stroke-[3.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
                   </span>
                   <div>
-                    <span class="text-xs font-semibold ${isSelected ? 'text-white' : 'text-zinc-200'} block">${currentLang === 'en' ? a.nameEn : a.nameId}</span>
-                    <span class="text-[0.65rem] text-zinc-500 leading-snug block">${currentLang === 'en' ? a.nameEn : a.descId}</span>
+                    <span class="text-xs font-semibold ${isSelected ? 'text-white' : 'text-zinc-200'} block">${isEn ? a.nameEn : a.nameId}</span>
+                    <span class="text-[0.65rem] text-zinc-500 leading-snug block">${isEn ? a.nameEn : a.descId}</span>
                   </div>
                 </div>
                 <span class="font-mono text-xs text-[#DC143C] font-bold shrink-0">+${formatPriceRp(a.price)}</span>
@@ -1712,6 +2004,7 @@
         if (!con) return;
         con.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         PRICING_CONFIG.businessTypes.forEach(b => {
           const isSelected = state.businessType === b.id;
           const chip = document.createElement('button');
@@ -1721,7 +2014,7 @@
             state.businessType = state.businessType === b.id ? null : b.id;
             renderBusinessTypes();
           };
-          chip.innerHTML = `<span class="text-xs ${isSelected ? 'text-white font-bold' : 'text-zinc-300'}">${currentLang === 'en' ? b.labelEn : b.labelId}</span>`;
+          chip.innerHTML = `<span class="text-xs ${isSelected ? 'text-white font-bold' : 'text-zinc-300'}">${isEn ? b.labelEn : b.labelId}</span>`;
           con.appendChild(chip);
         });
       }
@@ -1731,6 +2024,7 @@
         if (!con) return;
         con.innerHTML = '';
 
+        const isEn = currentLang === 'en';
         PRICING_CONFIG.projectGoals.forEach(g => {
           const isSelected = state.projectGoal === g.id;
           const chip = document.createElement('button');
@@ -1740,7 +2034,7 @@
             state.projectGoal = state.projectGoal === g.id ? null : g.id;
             renderProjectGoals();
           };
-          chip.innerHTML = `<span class="text-xs ${isSelected ? 'text-white font-bold' : 'text-zinc-300'}">${currentLang === 'en' ? g.labelEn : g.labelId}</span>`;
+          chip.innerHTML = `<span class="text-xs ${isSelected ? 'text-white font-bold' : 'text-zinc-300'}">${isEn ? g.labelEn : g.labelId}</span>`;
           con.appendChild(chip);
         });
       }
@@ -1784,11 +2078,12 @@
 
       window.copyWhatsAppMessage = function() {
         const text = document.getElementById('wa-preview-text')?.textContent || '';
+        const isEn = currentLang === 'en';
         navigator.clipboard.writeText(text).then(() => {
           const label = document.getElementById('copy-btn-label');
           if (label) {
-            label.textContent = 'Berhasil Disalin!';
-            setTimeout(() => { label.textContent = 'Salin Teks'; }, 2000);
+            label.textContent = isEn ? 'Copied!' : 'Tersalin!';
+            setTimeout(() => { label.textContent = isEn ? 'Copy Text' : 'Salin Teks'; }, 2000);
           }
         });
       };
@@ -1797,11 +2092,12 @@
       function updateLiveBill() {
         const wt = PRICING_CONFIG.websiteTypes.find(w => w.id === state.websiteType) || PRICING_CONFIG.websiteTypes[0];
         const estimate = calculatePricingEstimate(state, currentLang);
+        const isEn = currentLang === 'en';
 
         // Top bar
         const topName = document.getElementById('top-package-name');
         const topPrice = document.getElementById('top-package-price');
-        if (topName) topName.textContent = currentLang === 'en' ? wt.nameEn : wt.nameId;
+        if (topName) topName.textContent = isEn ? wt.nameEn : wt.nameId;
         if (topPrice) topPrice.textContent = estimate.displayPrice;
 
         // Sidebar details
@@ -1814,22 +2110,22 @@
           let h = `
             <div class="flex items-center gap-2 pb-2 border-b border-white/5">
               <span class="material-symbols-outlined text-sm text-[#DC143C]">${wt.icon}</span>
-              <span class="text-xs font-bold text-white">${currentLang === 'en' ? wt.nameEn : wt.nameId}</span>
+              <span class="text-xs font-bold text-white">${isEn ? wt.nameEn : wt.nameId}</span>
             </div>
           `;
 
           const dl = PRICING_CONFIG.designLevels.find(d => d.id === state.designLevel);
           if (dl) {
-            h += `<div class="flex items-center justify-between text-[0.7rem] text-zinc-400"><span>Desain:</span><span class="text-zinc-200">${currentLang === 'en' ? dl.nameEn : dl.nameId}</span></div>`;
+            h += `<div class="flex items-center justify-between text-[0.7rem] text-zinc-400"><span>${isEn ? 'Design:' : 'Desain:'}</span><span class="text-zinc-200">${isEn ? dl.nameEn : dl.nameId}</span></div>`;
           }
 
           if (state.selectedAddons.size > 0) {
-            h += `<div class="pt-1.5"><span class="text-[0.65rem] text-zinc-400 block mb-1">Add-ons (${state.selectedAddons.size}):</span><div class="flex flex-wrap gap-1">`;
+            h += `<div class="pt-1.5"><span class="text-[0.65rem] text-zinc-400 block mb-1">${isEn ? 'Add-ons' : 'Add-ons'} (${state.selectedAddons.size}):</span><div class="flex flex-wrap gap-1">`;
             state.selectedAddons.forEach(aid => {
               for (const cat of Object.values(PRICING_CONFIG.addons)) {
                 const item = cat.find(a => a.id === aid);
                 if (item) {
-                  h += `<span class="text-[0.58rem] font-mono px-1.5 py-0.5 rounded bg-white/5 text-zinc-300">${currentLang === 'en' ? item.nameEn : item.nameId}</span>`;
+                  h += `<span class="text-[0.58rem] font-mono px-1.5 py-0.5 rounded bg-white/5 text-zinc-300">${isEn ? item.nameEn : item.nameId}</span>`;
                   break;
                 }
               }
@@ -1840,6 +2136,21 @@
           sideDetails.innerHTML = h;
         }
       }
+
+      // ─── SMOOTH SCROLL TO CALCULATOR ───
+      window.scrollToConfigurator = function(websiteType, designLevel = 'clean') {
+        if (websiteType) state.websiteType = websiteType;
+        if (designLevel) state.designLevel = designLevel;
+        state.pageOption = 0;
+        renderWebsiteTypes();
+        goToStep(1);
+        const anchor = document.getElementById('configurator-anchor');
+        if (anchor) {
+          const yOffset = -20;
+          const y = anchor.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      };
 
       // ─── COOKIE & THEME / I18N SYNC ───
       function setCookie(name, val, days = 365) {
@@ -1852,17 +2163,6 @@
         return v ? decodeURIComponent(v[2]) : null;
       }
 
-      window.toggleTheme = function() {
-        const c = document.documentElement.getAttribute('data-theme') || 'dark';
-        const n = c === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', n);
-        try { localStorage.setItem('aga_portfolio_theme', n); } catch(e) {}
-        const icon = document.getElementById('theme-icon');
-        const sunSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-        const moonSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-        if (icon) icon.innerHTML = n === 'light' ? moonSvg : sunSvg;
-      };
-
       window.switchLanguage = function(lang) {
         currentLang = lang;
         try {
@@ -1873,8 +2173,7 @@
         document.documentElement.setAttribute('lang', lang);
         document.getElementById('btn-lang-en')?.classList.toggle('active', lang === 'en');
         document.getElementById('btn-lang-id')?.classList.toggle('active', lang === 'id');
-        renderWebsiteTypes();
-        goToStep(state.step);
+        applyPricingLanguage(lang);
       };
 
       // ─── SMOOTH FLUID PAGE TRANSITION INTERCEPTOR ───
@@ -2123,7 +2422,15 @@
         const footerYear = document.getElementById('footer-year');
         if (footerYear) footerYear.textContent = new Date().getFullYear();
         parseSmartDefaultUrl();
-        renderWebsiteTypes();
+
+        // Initial Language Sync
+        const storedLang = localStorage.getItem('porto_lang') || localStorage.getItem('aga_portfolio_lang') || getCookie('aga_lang') || 'id';
+        currentLang = storedLang;
+        document.documentElement.setAttribute('lang', storedLang);
+        document.getElementById('btn-lang-en')?.classList.toggle('active', storedLang === 'en');
+        document.getElementById('btn-lang-id')?.classList.toggle('active', storedLang === 'id');
+        applyPricingLanguage(storedLang);
+
         goToStep(1);
         initPageTransitionLinks();
         initStudioPreloader();

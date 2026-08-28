@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
-        try {
-          var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
-          document.documentElement.setAttribute("data-theme", savedTheme);
-        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", "dark");
       })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -126,35 +123,11 @@
         <a href="/projects.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
         <a href="/pricing.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Studio</a>
         <a href="/#contact" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
-        <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Colophon</a>
+        <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Footer</a>
       </nav>
 
-      <!-- Right Actions: Theme Toggle + Language Switcher + Contact Button -->
+      <!-- Right Actions: Language Switcher + Contact Button -->
       <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
-        <!-- Theme Mode Toggle -->
-        <button
-          type="button"
-          id="theme-toggle-btn"
-          onclick="toggleTheme()"
-          class="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
-          aria-label="Toggle Theme"
-          title="Toggle Light/Dark Theme"
-        >
-          <span id="theme-icon" class="flex items-center justify-center pointer-events-none">
-            <svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2"></path>
-              <path d="M12 20v2"></path>
-              <path d="m4.93 4.93 1.41 1.41"></path>
-              <path d="m17.66 17.66 1.41 1.41"></path>
-              <path d="M2 12h2"></path>
-              <path d="M20 12h2"></path>
-              <path d="m6.34 17.66-1.41 1.41"></path>
-              <path d="m19.07 4.93-1.41 1.41"></path>
-            </svg>
-          </span>
-        </button>
-
         <!-- Bilingual Toggle (EN | ID) -->
         <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg">
           <button type="button" id="btn-lang-en" class="lang-btn cursor-pointer" onclick="switchLanguage('en')">EN</button>
@@ -162,13 +135,10 @@
         </div>
 
         <a
-          href="/pricing.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden sm:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+          href="/#contact"
+          class="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-300 transition-all duration-300 hover:border-[#DC143C]/60 hover:text-white hover:bg-[#DC143C]/10 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
         >
-          <span class="material-symbols-outlined text-xs">calculate</span>
-          <span>Estimasi Harga ↗</span>
+          <span>Let's Talk</span>
         </a>
       </div>
     </header>
@@ -228,7 +198,7 @@
           <a href="/#footer" class="side-nav-item group flex items-center text-left py-1">
             <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Colophon</span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Footer</span>
           </a>
         </li>
       </ul>
@@ -241,15 +211,16 @@
       
       <!-- Directory Header -->
       <div class="border-b border-white/10 pb-8 mb-8">
-        <div class="flex items-center justify-between gap-4 mb-3">
-          <p class="eyebrow text-[#DC143C]" id="label-eyebrow">04 // KATALOG KARYA LENGKAP</p>
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
           <a
             href="/"
-            class="inline-flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider"
+            class="btn-back"
+            title="Kembali ke Portofolio 3D"
           >
-            <span class="material-symbols-outlined text-xs">arrow_back</span>
-            <span>Portofolio 3D</span>
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+            <span id="back-btn-text">Portofolio 3D</span>
           </a>
+          <p class="eyebrow text-[#DC143C]" id="label-eyebrow">04 // KATALOG KARYA LENGKAP</p>
         </div>
 
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4" id="label-title">
@@ -264,16 +235,13 @@
           
           <!-- Live Instant Search Bar -->
           <div class="relative w-full md:w-96 flex items-center">
-            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 pointer-events-none text-base z-10 flex items-center justify-center">search</span>
             <input
               type="text"
               id="search-input"
               placeholder="Cari proyek (Flutter, Laravel, PWA...)"
               oninput="handleSearch(this.value)"
-              class="w-full rounded-lg bg-zinc-950/60 backdrop-blur-md border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 leading-none transition-colors"
+              class="w-full rounded-xl bg-zinc-950/60 backdrop-blur-md border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 leading-none transition-colors"
             />
           </div>
 
@@ -445,35 +413,104 @@
 
         const dict = I18N[currentLang];
 
+        const KNOWN_PROJECT_IMAGES = {
+          foodify: "/projects/foodify.webp",
+          wilmarbuku: "/projects/wilmarbuku.webp",
+          "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
+          "grow-a-garden": "/projects/grow-a-garden.webp",
+          bkj: "/projects/bkj.webp",
+        };
+
         filtered.forEach(p => {
           const card = document.createElement('div');
           card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-white/20';
           
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
+          const normId = (p.id || '').toLowerCase();
+          const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
 
-          card.innerHTML = `
-            <a href="/project.html?id=${p.id}" class="block cursor-pointer" title="${dict.readReadme} - ${p.displayName}">
-              <!-- Image Banner or Header -->
+          let bannerHtml = '';
+          if (normId === 'foodify') {
+            bannerHtml = `
+              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] to-[#07080e] flex items-center justify-center p-2.5">
+                <img src="/projects/foodify.webp" width="320" height="640" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 pointer-events-none" />
+                <div class="relative h-full aspect-[9/18.5] rounded-xl border-2 border-zinc-700 bg-black overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300">
+                  <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" class="w-full h-full object-cover object-top" />
+                </div>
+                <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[0.55rem] font-mono text-[#DC143C] border border-white/10">Mobile UI</div>
+              </div>
+            `;
+          } else if (hasKnownImg) {
+            bannerHtml = `
               <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
                 <img
-                  src="${p.previewImage || `/projects/${p.id}.webp`}"
+                  src="${hasKnownImg}"
                   alt="${p.displayName}"
-                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
-                  class="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  class="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                   loading="lazy"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 pointer-events-none"></div>
-                
                 ${p.featured ? `
                   <span class="absolute top-3 left-3 bg-[#DC143C] text-white font-mono text-[0.62rem] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded shadow-lg">
                     ${dict.featuredTag}
                   </span>
                 ` : ''}
-
                 <span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-zinc-300 font-mono text-[0.62rem] px-2 py-0.5 rounded border border-white/10">
                   ${p.language || 'Code'}
                 </span>
               </div>
+            `;
+          } else {
+            // Niche macOS Terminal Mockup Placeholder
+            bannerHtml = `
+              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-[#0b0c14] flex flex-col justify-between p-3.5 font-mono select-none group-hover:border-[#DC143C]/40 transition-colors">
+                <!-- macOS Title Bar -->
+                <div class="flex items-center justify-between pb-2 border-b border-white/5">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block shadow-sm"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
+                  </div>
+                  <div class="text-[0.6rem] text-zinc-500 flex items-center gap-1">
+                    <span class="text-zinc-600">zsh —</span>
+                    <span class="text-zinc-300 font-medium truncate max-w-[130px]">${p.id}</span>
+                  </div>
+                  <span class="text-[0.55rem] px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
+                </div>
+
+                <!-- Terminal Body -->
+                <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-[0.62rem] leading-relaxed">
+                  <div class="flex items-center gap-1.5 text-zinc-400">
+                    <span class="text-[#DC143C] font-bold">❯</span>
+                    <span class="text-emerald-400">~/projects</span>
+                    <span class="text-zinc-500 font-normal">git:(<span class="text-amber-400">main</span>)</span>
+                  </div>
+                  <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
+                    <span class="text-zinc-500">$</span>
+                    <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
+                    <span class="text-[#DC143C] text-[0.55rem] font-bold animate-pulse">●</span>
+                  </div>
+                  <div class="text-[0.58rem] text-zinc-500 pl-2 flex items-center gap-2">
+                    <span class="text-zinc-600">stack:</span>
+                    <span class="text-zinc-400 truncate">${(p.tags || [p.language || 'Code']).slice(0, 3).join(' • ')}</span>
+                  </div>
+                </div>
+
+                <!-- Terminal Footer -->
+                <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[0.55rem] text-zinc-500">
+                  <span class="flex items-center gap-1 text-emerald-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span class="tracking-wide">BUILD READY</span>
+                  </span>
+                  <span class="text-zinc-600 uppercase tracking-wider">${p.category || 'PROJECT'}</span>
+                </div>
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            <a href="/project.html?id=${p.id}" class="block cursor-pointer" title="${dict.readReadme} - ${p.displayName}">
+              ${bannerHtml}
 
               <!-- Card Body -->
               <div class="p-6">
@@ -498,10 +535,10 @@
             </a>
 
             <!-- Card Bottom Actions -->
-            <div class="p-5 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-3">
+            <div class="p-4 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-2.5">
               <a
                 href="/project.html?id=${p.id}"
-                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2.5 px-3 text-center transition-all inline-flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
+                class="flex-1 h-9 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-200 hover:text-white px-3.5 transition-all inline-flex items-center justify-center gap-2 font-semibold text-[0.7rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
               >
                 <span>${dict.readReadme}</span>
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -511,10 +548,10 @@
                 href="${p.html_url}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="rounded-md border border-white/10 hover:border-white/30 text-zinc-400 hover:text-white p-2.5 transition-colors flex items-center justify-center touch-manipulation"
+                class="w-9 h-9 shrink-0 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-400 hover:text-white transition-all inline-flex items-center justify-center touch-manipulation active:scale-95"
                 title="GitHub Repository"
               >
-                <span class="material-symbols-outlined text-sm">code</span>
+                <span class="material-symbols-outlined text-[1.1rem]">code</span>
               </a>
             </div>
           `;
@@ -522,22 +559,6 @@
           grid.appendChild(card);
         });
       }
-
-      function toggleTheme() {
-        const current = document.documentElement.getAttribute('data-theme') || 'dark';
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('aga_portfolio_theme', next);
-        updateThemeIcon(next);
-      }
-
-      function updateThemeIcon(theme) {
-        const icon = document.getElementById('theme-icon');
-        const sunSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-        const moonSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-        if (icon) icon.innerHTML = theme === 'light' ? moonSvg : sunSvg;
-      }
-      updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
       document.addEventListener('DOMContentLoaded', init);
     </script>

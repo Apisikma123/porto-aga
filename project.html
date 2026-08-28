@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
-        try {
-          var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
-          document.documentElement.setAttribute("data-theme", savedTheme);
-        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", "dark");
       })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -75,10 +72,18 @@
       />
     </noscript>
 
+    <!-- Main Stylesheet (Tailwind & Design System) -->
+    <link rel="stylesheet" href="/src/style.css" />
+
     <!-- Bundled Markdown & Highlight.js Engine -->
     <script type="module" src="/src/project-detail.js"></script>
 
     <style>
+      html, body {
+        background-color: #040509 !important;
+        color: #f4f4f5 !important;
+        min-height: 100vh;
+      }
       /* Markdown Content Luxury Styling */
       .markdown-body {
         color: #d4d4d8;
@@ -176,8 +181,19 @@
         margin: 1.5rem 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       }
+      .markdown-body {
+        color: #d4d4d8;
+        font-family: var(--font-sans);
+        line-height: 1.8;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+      }
       .markdown-body table {
         width: 100%;
+        max-width: 100%;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         border-collapse: collapse;
         margin: 1.5rem 0;
         font-size: 0.88rem;
@@ -202,10 +218,10 @@
       }
     </style>
   </head>
-  <body class="bg-transparent text-zinc-100 font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative">
+  <body data-page="project-detail" class="project-detail-body bg-transparent text-zinc-100 font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative">
     
-    <!-- Dynamic 3D WebGL Canvas Background -->
-    <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none" aria-hidden="true"></canvas>
+    <!-- Dynamic 3D WebGL Canvas Background (Blurred 3D Depth-of-Field) -->
+    <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none project-detail-canvas canvas-blurred-3d" aria-hidden="true"></canvas>
 
     <!-- React Application Mount Point -->
     <div id="root" class="relative z-10 min-h-screen w-full flex-1"></div>

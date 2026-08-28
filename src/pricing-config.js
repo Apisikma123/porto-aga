@@ -28,6 +28,13 @@ export const PRICING_CONFIG = {
         "Formulir Kontak / Inquiry Dasar",
         "Panduan Deploy & Handover Source Code"
       ],
+      includedEn: [
+        "1 Single-Page Layout",
+        "Mobile & Desktop Responsive",
+        "Direct WhatsApp CTA Trigger",
+        "Basic Contact / Inquiry Form",
+        "Deployment Guide & Source Code Handover"
+      ],
       excludedId: [
         "Animasi 3D kompleks",
         "Copywriting artikel panjang",
@@ -58,6 +65,13 @@ export const PRICING_CONFIG = {
         "Desain Estetik & Mobile Responsive",
         "Gratis Deployment ke Cloud"
       ],
+      includedEn: [
+        "Multi-section / 1–3 Page Showcase",
+        "Project Catalog & Category Filtering",
+        "Social Links & CV Download Action",
+        "Aesthetic Design & Mobile Responsive",
+        "Free Cloud Deployment Setup"
+      ],
       excludedId: [
         "E-commerce transaksi online",
         "Sistem user login member",
@@ -84,6 +98,13 @@ export const PRICING_CONFIG = {
         "Profil Perusahaan, Visi & Misi, Legalitas",
         "Katalog Layanan & Keunggulan",
         "Integrasi Google Maps & WhatsApp CTA",
+        "Basic On-Page SEO Optimization"
+      ],
+      includedEn: [
+        "1–5 Complete Standard Business Pages",
+        "Company Profile, Mission, Legal Info",
+        "Services Catalog & Highlights",
+        "Google Maps & WhatsApp CTA Integration",
         "Basic On-Page SEO Optimization"
       ],
       excludedId: [
@@ -114,6 +135,13 @@ export const PRICING_CONFIG = {
         "CMS / Panel Admin Penulisan Konten",
         "Desain Fast-Loading Reader-Friendly"
       ],
+      includedEn: [
+        "SEO-Friendly Content & Sitemap",
+        "Categories, Tags, & Article Search",
+        "Author Box, Related Posts, Social Share",
+        "CMS / Admin Content Authoring Panel",
+        "Fast-Loading Reader-Friendly Layout"
+      ],
       excludedId: [
         "Sistem langganan berbayar (paywall)",
         "Aplikasi mobile native"
@@ -140,6 +168,13 @@ export const PRICING_CONFIG = {
         "Notifikasi Otomatis ke WhatsApp / Email",
         "Dashboard Admin Kelola Jadwal & Status",
         "Integrasi Google Calendar / Database"
+      ],
+      includedEn: [
+        "Interactive Calendar & Slot Booking",
+        "Automated Client Booking Form",
+        "Automated WhatsApp / Email Alerts",
+        "Admin Dashboard for Schedule & Status",
+        "Google Calendar / Database Integration"
       ],
       excludedId: [
         "Payment gateway auto-split escrow",
@@ -168,6 +203,13 @@ export const PRICING_CONFIG = {
         "Panel Admin Kelola Produk, Stok & Pesanan",
         "Bebas Potongan Komisi Marketplace"
       ],
+      includedEn: [
+        "Product Catalog, Categories & Variants",
+        "Full Shopping Cart System",
+        "WhatsApp Checkout & Invoice Alerts",
+        "Admin Panel for Products, Stock & Orders",
+        "Zero Marketplace Commission Fees"
+      ],
       excludedId: [
         "Multi-vendor marketplace seperti Shopee/Tokopedia",
         "Sistem pergudangan multi-hub logistik otomatis"
@@ -194,6 +236,13 @@ export const PRICING_CONFIG = {
         "Manajemen Cuti, Izin, dan Sakit",
         "Ekspor Laporan Bulanan ke Excel / PDF",
         "Manajemen Data Karyawan & Hak Akses"
+      ],
+      includedEn: [
+        "GPS & Selfie Check-In / Out System",
+        "Real-time Attendance & Tardy Dashboard",
+        "Leave, Sick & Time-Off Management",
+        "Monthly Report Export (Excel / PDF)",
+        "Employee Directory & Role Access"
       ],
       excludedId: [
         "Hardware mesin sidik jari fisik",
@@ -222,6 +271,13 @@ export const PRICING_CONFIG = {
         "Pencarian Cepat, Filter Kompleks & Ekspor Data",
         "Arsitektur Database Terenkripsi & Backup"
       ],
+      includedEn: [
+        "Secure Multi-Role Auth (Admin/Staff/Manager)",
+        "Unified Business Data CRUD Modules",
+        "Analytics Dashboard & Statistical Charts",
+        "Fast Search, Complex Filters & Data Export",
+        "Encrypted Database Architecture & Backups"
+      ],
       excludedId: [
         "Infrastruktur high-availability multi-datacenter"
       ],
@@ -248,6 +304,13 @@ export const PRICING_CONFIG = {
         "Database Architecture Berkinerja Tinggi",
         "Integrasi Pihak Ketiga (Payment, SMS, WA Gateway, Maps)",
         "Dokumentasi Teknis Lengkap & Garansi Bug"
+      ],
+      includedEn: [
+        "Tailor-Made Bespoke Architecture",
+        "Interactive Frontend + Resilient Backend API",
+        "High-Performance Database Architecture",
+        "3rd Party Integrations (Payment, SMS, WA, Maps)",
+        "Complete Technical Documentation & Bug Warranty"
       ],
       excludedId: [
         "Scope tambahan di luar kesepakatan spesifikasi awal"
@@ -479,28 +542,33 @@ export function calculatePricingEstimate(state, lang = "id") {
 }
 
 export function buildWhatsAppMessage(state, lang = "id") {
+  const isEn = lang === "en";
   const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === state.websiteType) || PRICING_CONFIG.websiteTypes[0];
   const estimate = calculatePricingEstimate(state, lang);
 
   let m = "";
   if (state.clientName) {
-    m += `Halo Aga, saya *${state.clientName.trim()}*. Saya ingin konsultasi pembuatan website.\n\n`;
+    m += isEn 
+      ? `Hi Aga, I'm *${state.clientName.trim()}*. I'd like to discuss a bespoke web project.\n\n`
+      : `Halo Aga, saya *${state.clientName.trim()}*. Saya ingin konsultasi pembuatan website.\n\n`;
   } else {
-    m += `Halo Aga, saya ingin konsultasi pembuatan website.\n\n`;
+    m += isEn 
+      ? `Hi Aga, I'd like to discuss a bespoke web project.\n\n`
+      : `Halo Aga, saya ingin konsultasi pembuatan website.\n\n`;
   }
 
-  m += `📋 *RINGKASAN KONFIGURASI WEBSITE*\n`;
+  m += isEn ? `📋 *PROJECT CONFIGURATION BRIEF*\n` : `📋 *RINGKASAN KONFIGURASI WEBSITE*\n`;
   m += `────────────────────────────\n`;
-  m += `• *Jenis Website:* ${lang === "en" ? wt.nameEn : wt.nameId}\n`;
+  m += `• *${isEn ? "Website Type" : "Jenis Website"}:* ${isEn ? wt.nameEn : wt.nameId}\n`;
 
   if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
     const poList = PRICING_CONFIG.pageOptions[wt.id];
     const po = poList[state.pageOption || 0] || poList[0];
-    if (po) m += `• *Jumlah Halaman:* ${lang === "en" ? po.labelEn : po.labelId}\n`;
+    if (po) m += `• *${isEn ? "Page Scope" : "Jumlah Halaman"}:* ${isEn ? po.labelEn : po.labelId}\n`;
   }
 
   const dl = PRICING_CONFIG.designLevels.find((d) => d.id === state.designLevel) || PRICING_CONFIG.designLevels[0];
-  if (dl) m += `• *Level Desain:* ${lang === "en" ? dl.nameEn : dl.nameId}\n`;
+  if (dl) m += `• *${isEn ? "Design Level" : "Level Desain"}:* ${isEn ? dl.nameEn : dl.nameId}\n`;
 
   if (state.selectedAddons && state.selectedAddons.size > 0) {
     const addonNames = [];
@@ -508,33 +576,38 @@ export function buildWhatsAppMessage(state, lang = "id") {
       for (const cat of Object.values(PRICING_CONFIG.addons)) {
         const item = cat.find((a) => a.id === aid);
         if (item) {
-          addonNames.push(lang === "en" ? item.nameEn : item.nameId);
+          addonNames.push(isEn ? item.nameEn : item.nameId);
           break;
         }
       }
     });
     if (addonNames.length > 0) {
-      m += `• *Fitur Add-on:* ${addonNames.join(", ")}\n`;
+      m += `• *${isEn ? "Add-on Features" : "Fitur Add-on"}:* ${addonNames.join(", ")}\n`;
     }
   }
 
   if (state.businessType) {
     const b = PRICING_CONFIG.businessTypes.find((x) => x.id === state.businessType);
-    if (b) m += `• *Jenis Bisnis:* ${lang === "en" ? b.labelEn : b.labelId}\n`;
+    if (b) m += `• *${isEn ? "Industry" : "Jenis Bisnis"}:* ${isEn ? b.labelEn : b.labelId}\n`;
   }
 
   if (state.projectGoal) {
     const g = PRICING_CONFIG.projectGoals.find((x) => x.id === state.projectGoal);
-    if (g) m += `• *Tujuan Website:* ${lang === "en" ? g.labelEn : g.labelId}\n`;
+    if (g) m += `• *${isEn ? "Primary Goal" : "Tujuan Website"}:* ${isEn ? g.labelEn : g.labelId}\n`;
   }
 
-  m += `\n💰 *Estimasi Awal:* ${estimate.displayPrice}\n`;
-  m += `_(Catatan: Estimasi transparan, scope final dikonfirmasi setelah konsultasi)_\n`;
+  m += isEn 
+    ? `\n💰 *Initial Estimate:* ${estimate.displayPrice}\n_(Note: Transparent estimate, final fixed scope confirmed during consultation)_\n`
+    : `\n💰 *Estimasi Awal:* ${estimate.displayPrice}\n_(Catatan: Estimasi transparan, scope final dikonfirmasi setelah konsultasi)_\n`;
 
   if (state.clientNotes) {
-    m += `\n📝 *Catatan Khusus:*\n"${state.clientNotes.trim()}"\n`;
+    m += isEn 
+      ? `\n📝 *Special Notes:*\n"${state.clientNotes.trim()}"\n`
+      : `\n📝 *Catatan Khusus:*\n"${state.clientNotes.trim()}"\n`;
   }
 
-  m += `\nSaya ingin mengetahui langkah selanjutnya dan jadwal pengerjaannya. Terima kasih!`;
+  m += isEn 
+    ? `\nI'd like to know next steps and timeline availability. Thank you!`
+    : `\nSaya ingin mengetahui langkah selanjutnya dan jadwal pengerjaannya. Terima kasih!`;
   return m;
 }

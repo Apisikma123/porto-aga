@@ -3,21 +3,21 @@ import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 
-marked.setOptions({
+marked.use({
   gfm: true,
   breaks: true,
-  highlight: function (code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(code, { language: lang }).value;
-      } catch (e) {}
-    }
-    try {
-      return hljs.highlightAuto(code).value;
-    } catch (e) {}
-    return code;
-  },
 });
+
+const renderMarkdown = (text) => {
+  if (!text) return '';
+  try {
+    const raw = marked.parse(text);
+    return typeof raw === 'string' ? raw : (raw?.toString?.() || text);
+  } catch (e) {
+    console.warn('Markdown render error:', e);
+    return text;
+  }
+};
 
 export default function ProjectDetailApp() {
   const [lang, setLang] = useState(() => localStorage.getItem('porto_lang') || 'id');
@@ -91,11 +91,24 @@ export default function ProjectDetailApp() {
       setLoading(false);
       setTimeout(() => {
         if (window.update3DSceneForView) window.update3DSceneForView('project');
-      }, 100);
+        if (typeof window !== 'undefined' && window.ScrollTrigger) window.ScrollTrigger.refresh();
+      }, 120);
     };
 
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (project) {
+      setTimeout(() => {
+        document.querySelectorAll('.markdown-body pre code').forEach((block) => {
+          try {
+            hljs.highlightElement(block);
+          } catch (e) {}
+        });
+      }, 50);
+    }
+  }, [project?.readme, project?.id]);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -190,36 +203,11 @@ export default function ProjectDetailApp() {
           <a href="/projects.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
           <a href="/pricing.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Studio</a>
           <a href="/#contact" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
-          <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Colophon</a>
+          <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Footer</a>
         </nav>
 
-        {/* Right Actions: Theme Toggle + Language Switcher + Pricing Button */}
+        {/* Right Actions: Language Switcher + Contact Button */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
-            aria-label="Toggle Theme"
-          >
-            {theme === 'light' ? (
-              <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            ) : (
-              <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </svg>
-            )}
-          </button>
-
           <div className="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg font-mono text-xs">
             <button
               type="button"
@@ -238,13 +226,10 @@ export default function ProjectDetailApp() {
           </div>
 
           <a
-            href="/pricing.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden sm:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+            href="/#contact"
+            className="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-300 transition-all duration-300 hover:border-[#DC143C]/60 hover:text-white hover:bg-[#DC143C]/10 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
           >
-            <span className="material-symbols-outlined text-xs">calculate</span>
-            <span>Estimasi Harga ↗</span>
+            <span>Let's Talk</span>
           </a>
         </div>
       </header>
@@ -302,7 +287,7 @@ export default function ProjectDetailApp() {
             <a href="/#footer" className="side-nav-item group flex items-center text-left py-1">
               <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
               <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Colophon</span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Footer</span>
             </a>
           </li>
         </ul>
@@ -329,50 +314,153 @@ export default function ProjectDetailApp() {
           </div>
         ) : (
           <div>
-            {/* Visual Preview Banner (iPhone Mockup if Mobile, wide landscape if web) */}
-            {project.category === 'Mobile' || project.categoryTag === 'Mobile' || project.id === 'foodify' || (project.tags && project.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t))) ? (
-              <div className="phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
-                <div className="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-full border border-white/20 z-10 flex items-center justify-end pr-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-800 border border-white/10"></div>
+            {/* Top Action / Back to Portfolio Breadcrumb Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
+              <a
+                href="/#activity"
+                className="btn-back"
+                title={lang === 'en' ? 'Back to Portfolio' : 'Kembali ke Portofolio'}
+              >
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>{lang === 'en' ? 'Back to Portfolio' : 'Kembali ke Portofolio'}</span>
+              </a>
+
+              <div className="flex items-center gap-2.5">
+                <a
+                  href="/projects.html"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs cursor-pointer transition-colors leading-none touch-manipulation active:scale-95"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  <span>{lang === 'en' ? 'All Works (17)' : 'Semua Karya (17)'}</span>
+                </a>
+
+                {project.html_url && (
+                  <a
+                    href={project.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] leading-none touch-manipulation active:scale-95 group"
+                  >
+                    <span>GitHub</span>
+                    <svg className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Visual Preview Banner (iPhone Mockup if Mobile with known image, wide landscape if web with known image, or macOS Terminal Window if placeholder/empty) */}
+            {(() => {
+              const KNOWN_PROJECT_IMAGES = {
+                foodify: "/projects/foodify.webp",
+                wilmarbuku: "/projects/wilmarbuku.webp",
+                "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
+                "grow-a-garden": "/projects/grow-a-garden.webp",
+                bkj: "/projects/bkj.webp",
+              };
+              const normId = (project.id || '').toLowerCase();
+              const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (project.previewImage && KNOWN_PROJECT_IMAGES[project.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+
+              if (normId === 'foodify' || (hasKnownImg && (project.category === 'Mobile' || project.categoryTag === 'Mobile' || (project.tags && project.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)))))) {
+                return (
+                  <div className="phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
+                    <div className="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
+                      <img
+                        src={hasKnownImg || `/projects/${project.id}.webp`}
+                        alt={`${project.displayName} Preview`}
+                        className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
+                      />
+                    </div>
                   </div>
-                  <img
-                    src={project.previewImage || `/projects/${project.id}.webp`}
-                    alt={`${project.displayName} Preview`}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';
-                    }}
-                    className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
-                  />
+                );
+              }
+
+              if (hasKnownImg) {
+                return (
+                  <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                    <img
+                      src={hasKnownImg}
+                      alt={`${project.displayName} Preview`}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
+                      <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+                        <span>{dict.preview || 'Visual Architecture Preview'}</span>
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">{project.language || 'Code'}</span>
+                    </div>
+                  </div>
+                );
+              }
+
+              // Niche macOS Terminal Banner Placeholder
+              return (
+                <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative shadow-[0_12px_40px_rgba(0,0,0,0.7)] select-none">
+                  {/* macOS Title Bar */}
+                  <div className="px-4 py-3 bg-[#12131e] border-b border-white/10 flex items-center justify-between font-mono text-xs text-zinc-400">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#ff5f56] inline-block shadow-sm"></span>
+                      <span className="w-3 h-3 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
+                      <span className="w-3 h-3 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
+                      <span className="ml-2 text-zinc-500 text-xs font-sans">Terminal</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-zinc-400 text-xs">
+                      <span className="text-zinc-500">zsh —</span>
+                      <span className="text-zinc-300 font-semibold">{project.id}</span>
+                      <span className="text-zinc-500">git:(<span className="text-amber-400">main</span>)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] text-zinc-400 font-mono">{project.language || 'Code'}</span>
+                    </div>
+                  </div>
+
+                  {/* macOS Terminal Body */}
+                  <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm text-zinc-300 space-y-3 bg-gradient-to-b from-[#0b0c14] to-[#07080d]">
+                    <div className="flex items-center gap-2 text-zinc-400">
+                      <span className="text-[#DC143C] font-bold">❯</span>
+                      <span className="text-emerald-400">aga@studio</span>
+                      <span className="text-zinc-600">:</span>
+                      <span className="text-cyan-400">~/projects/{project.id}</span>
+                      <span className="text-zinc-500">git:(<span className="text-amber-400">main</span>)</span>
+                    </div>
+                    <div className="text-zinc-200 flex items-center gap-2 pl-4">
+                      <span className="text-zinc-500">$</span>
+                      <span>git log -1 --pretty=format:"%h %s (%cr)"</span>
+                    </div>
+                    <div className="text-zinc-500 pl-4 text-xs">
+                      commit <span className="text-amber-400 font-semibold">a8f2d1e</span> (<span className="text-emerald-400">HEAD -&gt; main</span>) • Architecture baseline verified
+                    </div>
+                    <div className="pt-2 flex items-center gap-2 text-zinc-400">
+                      <span className="text-[#DC143C] font-bold">❯</span>
+                      <span className="text-zinc-200">cat project-manifest.json</span>
+                    </div>
+                    <div className="bg-black/50 border border-white/5 rounded-xl p-4 text-xs font-mono space-y-1 text-zinc-400">
+                      <div><span className="text-zinc-600">"name":</span> <span className="text-emerald-300">"{project.displayName}"</span>,</div>
+                      <div><span className="text-zinc-600">"category":</span> <span className="text-cyan-300">"{project.category || 'Software Engineering'}"</span>,</div>
+                      <div><span className="text-zinc-600">"stack":</span> [<span className="text-amber-300">{(project.tags || [project.language]).map(t => `"${t}"`).join(', ')}</span>],</div>
+                      <div><span className="text-zinc-600">"status":</span> <span className="text-emerald-400">"Production Ready"</span></div>
+                    </div>
+                    <div className="flex items-center gap-2 text-zinc-400 pt-1">
+                      <span className="text-[#DC143C] font-bold">❯</span>
+                      <span className="inline-block w-2.5 h-4 bg-[#DC143C] animate-pulse align-middle"></span>
+                    </div>
+                  </div>
                 </div>
-                <div className="phone-mockup-badge absolute bottom-4 right-4 px-3 py-1 rounded-md bg-black/80 backdrop-blur-md border border-white/10 text-xs font-mono text-zinc-300 flex items-center gap-1.5 shadow-lg">
-                  <span className="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-                  <span>{project.language || 'Flutter Mobile'}</span>
-                </div>
-              </div>
-            ) : (
-              <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-                <img
-                  src={project.previewImage || `/projects/${project.id}.webp`}
-                  alt={`${project.displayName} Preview`}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';
-                  }}
-                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
-                  <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-                    <span>{dict.preview}</span>
-                  </span>
-                  <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">{project.language || 'Code'}</span>
-                </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Hero Header */}
             <div className="border-b border-white/10 pb-10 mb-12">
@@ -383,7 +471,7 @@ export default function ProjectDetailApp() {
                   {project.language || 'Code'}
                 </span>
                 {project.featured && (
-                  <span className="font-mono text-[0.65rem] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                  <span className="font-mono text-[0.65rem] text-[#DC143C] bg-[#DC143C]/10 border border-[#DC143C]/20 px-2 py-0.5 rounded-md">
                     Featured Case Study
                   </span>
                 )}
@@ -426,7 +514,7 @@ export default function ProjectDetailApp() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               {/* Left Column: Markdown */}
               <div className="lg:col-span-8">
-                <article className="glass-card rounded-2xl p-6 sm:p-10 border border-white/10 relative">
+                <article className="glass-card rounded-2xl p-6 sm:p-10 border border-white/10 relative overflow-hidden">
                   <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10 font-mono text-xs text-zinc-400">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-sm text-[#DC143C]">description</span>
@@ -440,7 +528,7 @@ export default function ProjectDetailApp() {
                   <div
                     className="markdown-body"
                     dangerouslySetInnerHTML={{
-                      __html: marked.parse(project.readme || `# ${project.displayName}\n\n${project.description || ''}`),
+                      __html: renderMarkdown(project.readme || `# ${project.displayName}\n\n${project.description || ''}`),
                     }}
                   />
                 </article>
@@ -448,7 +536,7 @@ export default function ProjectDetailApp() {
 
               {/* Right Column: Sidebar */}
               <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28 font-mono text-xs">
-                <div className="glass-card rounded-xl p-5 border border-white/10 space-y-3">
+                <div className="glass-card rounded-2xl p-5 border border-white/10 space-y-3">
                   <span className="eyebrow text-zinc-500 text-[0.62rem] block">{dict.telemetry}</span>
 
                   <div className="space-y-1">
@@ -470,8 +558,8 @@ export default function ProjectDetailApp() {
 
                   <div className="space-y-1 pt-2 border-t border-white/5">
                     <span className="text-zinc-500 text-[0.62rem]">{dict.status}</span>
-                    <span className="text-emerald-400 flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> {dict.public}
+                    <span className="text-zinc-300 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C]"></span> {dict.public}
                     </span>
                   </div>
 
@@ -479,7 +567,7 @@ export default function ProjectDetailApp() {
                     <button
                       type="button"
                       onClick={copyClone}
-                      className="w-full rounded-md bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
+                      className="w-full rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
                     >
                       <span className="truncate mr-2 font-mono">{copied ? 'Tersalin!' : `git clone ${project.html_url}.git`}</span>
                       <span className="material-symbols-outlined text-xs text-zinc-400">content_copy</span>
@@ -488,14 +576,14 @@ export default function ProjectDetailApp() {
                 </div>
 
                 {/* WhatsApp Project CTA */}
-                <div className="glass-card rounded-xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
+                <div className="glass-card rounded-2xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
                   <h4 className="font-sans font-bold text-sm text-white">{dict.discussTitle}</h4>
                   <p className="font-sans text-xs text-zinc-400 font-light leading-relaxed">{dict.discussDesc}</p>
                   <a
                     href={`https://wa.me/${waNum}?text=${waText}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-crimson rounded-lg py-2.5 px-4 w-full block font-mono text-[0.68rem] uppercase tracking-wider font-semibold"
+                    className="btn-crimson rounded-xl py-2.5 px-4 w-full block font-mono text-[0.68rem] uppercase tracking-wider font-semibold"
                   >
                     {dict.discussBtn}
                   </a>
@@ -503,7 +591,7 @@ export default function ProjectDetailApp() {
 
                 {/* Other Projects Quick Switcher */}
                 {otherProjects.length > 0 && (
-                  <div className="glass-card rounded-xl p-5 border border-white/10 space-y-3">
+                  <div className="glass-card rounded-2xl p-5 border border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="eyebrow text-zinc-500 text-[0.62rem]">{dict.otherProj}</span>
                       <a href="/projects.html" className="text-[#DC143C] hover:text-white text-[0.62rem] uppercase">

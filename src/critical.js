@@ -38,7 +38,7 @@ export const TRANSLATIONS = {
     navProjects: "Projects",
     navPricing: "Studio",
     navContact: "Contact",
-    navFooter: "Colophon",
+    navFooter: "Footer",
     ctaInitiate: "Let's Talk",
     sidebarHeader: "On this page",
     sideStart: "Start",
@@ -47,7 +47,7 @@ export const TRANSLATIONS = {
     sideProjects: "Projects",
     sidePricing: "Studio",
     sideContact: "Contact",
-    sideFooter: "Colophon",
+    sideFooter: "Footer",
     navHint: "Navigation",
     navScene: "Scene",
     navContactKey: "Contact",
@@ -76,6 +76,21 @@ export const TRANSLATIONS = {
     activityDesc: "Real-time contribution history and daily coding activity tracked directly from GitHub.",
     liveSync: "Live Sync",
     velocityMatrix: "365-Day Activity Matrix",
+    dayMon: "Mon",
+    dayWed: "Wed",
+    dayFri: "Fri",
+    monthJan: "Jan",
+    monthFeb: "Feb",
+    monthMar: "Mar",
+    monthApr: "Apr",
+    monthMay: "May",
+    monthJun: "Jun",
+    monthJul: "Jul",
+    monthAug: "Aug",
+    monthSep: "Sep",
+    monthOct: "Oct",
+    monthNov: "Nov",
+    monthDec: "Dec",
     less: "Less",
     more: "More",
     projectsEyebrow: "04 // Featured Projects",
@@ -127,7 +142,7 @@ export const TRANSLATIONS = {
     contactBio: "Open to full-time engineering roles, freelance projects, and collaboration opportunities. Let's discuss your next project.",
     btnStartConv: "Start Conversation",
     scrollFooter: "Scroll for Details & Footer [07]",
-    footerEyebrow: "07 // Colophon & Contact",
+    footerEyebrow: "07 // Footer & Contact",
     footerColStack: "Tech Stack",
     footerColDesign: "Design & Credits",
     footerColInspiration: "DESIGN INSPIRATION",
@@ -197,6 +212,21 @@ export const TRANSLATIONS = {
     activityDesc: "Riwayat kontribusi dan aktivitas koding harian yang terhubung langsung dengan GitHub.",
     liveSync: "Sinkronisasi Langsung",
     velocityMatrix: "Matriks Aktivitas 365 Hari",
+    dayMon: "Sen",
+    dayWed: "Rab",
+    dayFri: "Jum",
+    monthJan: "Jan",
+    monthFeb: "Feb",
+    monthMar: "Mar",
+    monthApr: "Apr",
+    monthMay: "Mei",
+    monthJun: "Jun",
+    monthJul: "Jul",
+    monthAug: "Agu",
+    monthSep: "Sep",
+    monthOct: "Okt",
+    monthNov: "Nov",
+    monthDec: "Des",
     less: "Sedikit",
     more: "Banyak",
     projectsEyebrow: "04 // Proyek Pilihan",
@@ -248,7 +278,7 @@ export const TRANSLATIONS = {
     contactBio: "Terbuka untuk pekerjaan full-time, proyek freelance, atau diskusi ide baru. Mari bicarakan proyek Anda.",
     btnStartConv: "Kirim Pesan",
     scrollFooter: "Scroll untuk Detail & Footer [07]",
-    footerEyebrow: "07 // Informasi & Kontak",
+    footerEyebrow: "07 // Footer & Kontak",
     footerColStack: "Teknologi",
     footerColDesign: "Desain & Kredit",
     footerColInspiration: "INSPIRASI DESAIN",
@@ -290,56 +320,18 @@ export const setCookie = (name, value, days = 365) => {
 };
 
 export let currentLang = getCookie("aga_lang") || (typeof localStorage !== "undefined" ? localStorage.getItem("aga_portfolio_lang") : null) || "en";
-export let currentTheme = getCookie("aga_theme") || (typeof localStorage !== "undefined" ? localStorage.getItem("aga_portfolio_theme") : null) || "dark";
+export const currentTheme = "dark";
 
-export const SUN_SVG = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-
-export const MOON_SVG = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-
-// ─── Theme Mode Architecture (Dark / Celestial Light) ───
-export const setTheme = (theme, animate = true) => {
-  currentTheme = theme;
+// ─── Theme Mode Architecture (Dark Obsidian Fixed) ───
+export const setTheme = () => {
+  document.documentElement.setAttribute("data-theme", "dark");
   try {
-    localStorage.setItem("aga_portfolio_theme", theme);
+    localStorage.setItem("aga_portfolio_theme", "dark");
   } catch (e) {}
-  setCookie("aga_theme", theme, 365);
-  document.documentElement.setAttribute("data-theme", theme);
-
-  const themeIcon = document.getElementById("theme-icon");
-  if (themeIcon) {
-    if (animate) {
-      gsap.to(themeIcon, {
-        rotate: theme === "light" ? 180 : 0,
-        scale: 0.7,
-        duration: 0.22,
-        ease: "power2.in",
-        onComplete: () => {
-          themeIcon.innerHTML = theme === "light" ? MOON_SVG : SUN_SVG;
-          gsap.to(themeIcon, { scale: 1, duration: 0.25, ease: "back.out(2)" });
-        },
-      });
-    } else {
-      themeIcon.innerHTML = theme === "light" ? MOON_SVG : SUN_SVG;
-    }
-  }
-
-  // Smoothly morph Three.js 3D WebGL atmosphere
-  if (window.updateThreeTheme) {
-    window.updateThreeTheme(theme, animate);
-  }
-
-  // Synchronize GitHub Heatmap palette
-  if (window.renderActivityHeatmap) {
-    window.renderActivityHeatmap();
-  }
-};
-
-export const toggleTheme = () => {
-  const nextTheme = currentTheme === "dark" ? "light" : "dark";
-  setTheme(nextTheme, true);
+  setCookie("aga_theme", "dark", 365);
 };
 window.setTheme = setTheme;
-window.toggleTheme = toggleTheme;
+window.toggleTheme = () => {};
 
 // ─── Animated Bilingual Transition Engine (GSAP Morph) ───
 export const setLanguage = (lang, animate = true) => {

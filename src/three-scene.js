@@ -94,14 +94,17 @@ export const initThreeEngine = () => {
   // ─── OBJECT 1: MASTER 4D TESSERACT (Hero Artifact) ───
   // ═══════════════════════════════════════════════════════════
   const isPricingPage = typeof window !== "undefined" && window.location.pathname.includes("pricing");
+  const isProjectPage = typeof window !== "undefined" && (window.location.pathname.includes("project") || (typeof document !== "undefined" && document.querySelector(".project-detail-body")));
   const tesseractGroup = new THREE.Group();
   tesseractGroup.position.set(
-    isPricingPage ? (isMobile ? 0 : 3.2) : (isMobile ? 0 : 2.0),
-    isPricingPage ? (isMobile ? 1.5 : -0.2) : (isMobile ? 1.1 : 0),
-    isPricingPage ? (isMobile ? -1.6 : -1.4) : (isMobile ? -0.8 : 0.1)
+    isPricingPage ? (isMobile ? 0 : 3.2) : (isProjectPage ? (isMobile ? 0 : 2.2) : (isMobile ? 0 : 2.0)),
+    isPricingPage ? (isMobile ? 1.5 : -0.2) : (isProjectPage ? (isMobile ? 1.8 : 0.8) : (isMobile ? 1.1 : 0)),
+    isPricingPage ? (isMobile ? -1.6 : -1.4) : (isProjectPage ? (isMobile ? -1.8 : -1.0) : (isMobile ? -0.8 : 0.1))
   );
   if (isPricingPage) {
     tesseractGroup.scale.set(0.65, 0.65, 0.65);
+  } else if (isProjectPage) {
+    tesseractGroup.scale.set(isMobile ? 0.32 : 0.68, isMobile ? 0.32 : 0.68, isMobile ? 0.32 : 0.68);
   }
   scene.add(tesseractGroup);
 
@@ -385,7 +388,11 @@ export const initThreeEngine = () => {
   // ─── OBJECT 2: OBSIDIAN-CRIMSON POLYHEDRAL CRYSTAL ───
   // ═══════════════════════════════════════════════════════════
   const polyhedronGroup = new THREE.Group();
-  polyhedronGroup.position.set(isMobile ? -1.2 : -2.5, isMobile ? -1.0 : -1.2, -1.8);
+  polyhedronGroup.position.set(
+    isProjectPage ? (isMobile ? -1.2 : -2.6) : (isMobile ? -1.2 : -2.5),
+    isProjectPage ? (isMobile ? 1.0 : 1.4) : (isMobile ? -1.0 : -1.2),
+    -1.8
+  );
   polyhedronGroup.scale.set(isMobile ? 0.24 : 0.45, isMobile ? 0.24 : 0.45, isMobile ? 0.24 : 0.45);
   scene.add(polyhedronGroup);
 
@@ -418,7 +425,11 @@ export const initThreeEngine = () => {
   // ─── OBJECT 3: CELESTIAL GYROSCOPIC QUANTUM RINGS ───
   // ═══════════════════════════════════════════════════════════
   const gyroRingsGroup = new THREE.Group();
-  gyroRingsGroup.position.set(isMobile ? 1.2 : 2.4, isMobile ? 1.2 : 1.6, -2.2);
+  gyroRingsGroup.position.set(
+    isProjectPage ? (isMobile ? 1.2 : 2.4) : (isMobile ? 1.2 : 2.4),
+    isProjectPage ? (isMobile ? -1.2 : -1.6) : (isMobile ? 1.2 : 1.6),
+    -2.2
+  );
   gyroRingsGroup.scale.set(isMobile ? 0.22 : 0.36, isMobile ? 0.22 : 0.36, isMobile ? 0.22 : 0.36);
   scene.add(gyroRingsGroup);
 
@@ -772,9 +783,10 @@ export const initThreeEngine = () => {
   // ═══════════════════════════════════════════════════════════
   // 4. DYNAMIC 3D CAMERA PATH & CINEMATIC TIMELINE (5 Seamless Phases)
   // ═══════════════════════════════════════════════════════════
+  const mainTrigger = (typeof document !== "undefined" && (document.querySelector("main") || document.getElementById("root") || document.body)) || "body";
   const scrollTl = gsap.timeline({
     scrollTrigger: {
-      trigger: "main",
+      trigger: mainTrigger,
       start: "top top",
       end: "bottom bottom",
       scrub: 1.4,

@@ -5,6 +5,25 @@
 
 import { gsap } from "gsap";
 import { currentLang, getProtectedWhatsAppNumber } from "./critical.js";
+import { marked } from "marked";
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-dark.css";
+
+marked.use({
+  gfm: true,
+  breaks: true,
+});
+
+const renderMarkdownContent = (text) => {
+  if (!text) return "";
+  try {
+    const res = marked.parse(text);
+    return typeof res === "string" ? res : (res?.toString?.() || text);
+  } catch (e) {
+    console.warn("Markdown parse error:", e);
+    return text;
+  }
+};
 
 export let cachedProjectsData = null;
 export let cachedContributionsData = null;
@@ -137,10 +156,6 @@ export const createFeaturedProjectCardElement = (item) => {
             fetchpriority="low"
           />
         </div>
-        <div class="phone-mockup-badge absolute bottom-2 right-2.5 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-white/10 text-[0.55rem] font-mono text-zinc-300 flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-          <span>Flutter Mobile</span>
-        </div>
       </div>
     `;
   } else {
@@ -167,7 +182,7 @@ export const createFeaturedProjectCardElement = (item) => {
     .join("\n                    ");
 
   card.innerHTML = `
-    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
+    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="${item.titleFallback}">
       ${mediaHtml}
       <div class="p-4 sm:p-5">
         <div class="flex justify-between items-center mb-1.5">
@@ -184,27 +199,6 @@ export const createFeaturedProjectCardElement = (item) => {
           ${tagsHtml}
         </div>
       </div>
-    </div>
-    <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
-      <button
-        type="button"
-        onclick="window.openProjectDetail('${item.id}')"
-        class="relative z-30 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors cursor-pointer py-1.5 px-2 rounded hover:bg-white/5"
-        title="Overview Singkat - ${item.titleFallback}"
-      >
-        <span>Overview Singkat</span>
-        <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </button>
-      <a
-        href="${item.repoUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Buka repository GitHub untuk proyek ${item.titleFallback}"
-        class="relative z-30 rounded bg-white/5 hover:bg-[#DC143C] text-zinc-300 hover:text-white border border-white/10 hover:border-transparent px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none group"
-      >
-        <span>GitHub</span>
-        <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-      </a>
     </div>
   `;
 
@@ -441,7 +435,7 @@ export const initGitHubRepos = async () => {
 
       const card = document.createElement("div");
       card.className =
-        "repo-card glass-card rounded-xl p-4 flex flex-col justify-between group hover:border-[#DC143C]/40 transition-all";
+        "repo-card glass-card rounded-2xl p-4 flex flex-col justify-between group hover:border-[#DC143C]/40 transition-all";
       card.innerHTML = `
         <div class="mb-3">
           <div class="flex justify-between items-center mb-1">
@@ -785,38 +779,39 @@ export const openProjectDetail = async (projectId) => {
   if (repoNameEl) repoNameEl.textContent = proj.id;
   if (sideLangEl) sideLangEl.textContent = (proj.tags || [proj.language]).slice(0, 3).join(", ");
 
-  const isMobile = proj.category === "Mobile" || proj.categoryTag === "Mobile" || proj.id === "foodify" || (proj.tags && proj.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)));
+  const normId = (proj.id || "").toLowerCase();
+  const KNOWN_PROJECT_IMAGES = {
+    foodify: "/projects/foodify.webp",
+    wilmarbuku: "/projects/wilmarbuku.webp",
+    "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
+    "grow-a-garden": "/projects/grow-a-garden.webp",
+    bkj: "/projects/bkj.webp",
+  };
+  const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (proj.previewImage && KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+
+  const isMobile = normId === "foodify" || proj.category === "Mobile" || proj.categoryTag === "Mobile" || (proj.tags && proj.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)));
   const bannerContainer = document.getElementById("detail-view-banner-container");
   if (bannerContainer) {
-    if (isMobile) {
+    if (isMobile && hasKnownImg) {
       bannerContainer.className = "phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]";
       bannerContainer.innerHTML = `
         <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
         <div class="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
-          <div class="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-full border border-white/20 z-10 flex items-center justify-end pr-1.5">
-            <div class="w-1.5 h-1.5 rounded-full bg-zinc-800 border border-white/10"></div>
-          </div>
           <img
             id="detail-view-banner-img"
-            src="${proj.previewImage || `/projects/${proj.id}.webp`}"
+            src="${hasKnownImg}"
             alt="${proj.displayName}"
-            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
             class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
           />
         </div>
-        <div class="phone-mockup-badge absolute bottom-4 right-4 px-3 py-1 rounded-md bg-black/80 backdrop-blur-md border border-white/10 text-xs font-mono text-zinc-300 flex items-center gap-1.5 shadow-lg">
-          <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-          <span>${proj.language || 'Flutter Mobile'}</span>
-        </div>
       `;
-    } else {
+    } else if (hasKnownImg) {
       bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]";
       bannerContainer.innerHTML = `
         <img
           id="detail-view-banner-img"
-          src="${proj.previewImage || `/projects/${proj.id}.webp`}"
+          src="${hasKnownImg}"
           alt="${proj.displayName}"
-          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
           class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
@@ -826,6 +821,57 @@ export const openProjectDetail = async (projectId) => {
             <span>Visual Architecture Preview</span>
           </span>
           <span id="detail-view-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">${proj.language || 'Code'}</span>
+        </div>
+      `;
+    } else {
+      // Niche macOS Terminal Detail Banner Placeholder
+      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative shadow-[0_12px_40px_rgba(0,0,0,0.7)]";
+      bannerContainer.innerHTML = `
+        <div class="px-4 py-3 bg-[#12131e] border-b border-white/10 flex items-center justify-between font-mono text-xs text-zinc-400">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#ff5f56] inline-block shadow-sm"></span>
+            <span class="w-3 h-3 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
+            <span class="w-3 h-3 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
+            <span class="ml-2 text-zinc-500 text-xs font-sans">Terminal</span>
+          </div>
+          <div class="flex items-center gap-2 text-zinc-400 text-xs">
+            <span class="text-zinc-500">zsh —</span>
+            <span class="text-zinc-300 font-semibold">${proj.id}</span>
+            <span class="text-zinc-500">git:(<span class="text-amber-400">main</span>)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[0.65rem] text-zinc-400">${proj.language || 'Code'}</span>
+          </div>
+        </div>
+        <div class="p-6 sm:p-8 font-mono text-xs sm:text-sm text-zinc-300 space-y-3 bg-gradient-to-b from-[#0b0c14] to-[#07080d]">
+          <div class="flex items-center gap-2 text-zinc-400">
+            <span class="text-[#DC143C] font-bold">❯</span>
+            <span class="text-emerald-400">aga@studio</span>
+            <span class="text-zinc-600">:</span>
+            <span class="text-cyan-400">~/projects/${proj.id}</span>
+            <span class="text-zinc-500">git:(<span class="text-amber-400">main</span>)</span>
+          </div>
+          <div class="text-zinc-200 flex items-center gap-2 pl-4">
+            <span class="text-zinc-500">$</span>
+            <span>git log -1 --pretty=format:"%h %s (%cr)"</span>
+          </div>
+          <div class="text-zinc-500 pl-4 text-xs">
+            commit <span class="text-amber-400 font-semibold">a8f2d1e</span> (<span class="text-emerald-400">HEAD -> main</span>) • Architecture baseline verified
+          </div>
+          <div class="pt-2 flex items-center gap-2 text-zinc-400">
+            <span class="text-[#DC143C] font-bold">❯</span>
+            <span class="text-zinc-200">cat project-manifest.json</span>
+          </div>
+          <div class="bg-black/50 border border-white/5 rounded-xl p-4 text-xs font-mono space-y-1 text-zinc-400">
+            <div><span class="text-zinc-600">"name":</span> <span class="text-emerald-300">"${proj.displayName}"</span>,</div>
+            <div><span class="text-zinc-600">"category":</span> <span class="text-cyan-300">"${proj.category || 'Software Engineering'}"</span>,</div>
+            <div><span class="text-zinc-600">"stack":</span> [<span class="text-amber-300">${(proj.tags || [proj.language]).map(t => `"${t}"`).join(', ')}</span>],</div>
+            <div><span class="text-zinc-600">"status":</span> <span class="text-emerald-400">"Production Ready"</span></div>
+          </div>
+          <div class="flex items-center gap-2 text-zinc-400 pt-1">
+            <span class="text-[#DC143C] font-bold">❯</span>
+            <span class="inline-block w-2.5 h-4 bg-[#DC143C] animate-pulse align-middle"></span>
+          </div>
         </div>
       `;
     }
@@ -844,18 +890,24 @@ export const openProjectDetail = async (projectId) => {
 
   const markdownEl = document.getElementById("detail-view-markdown");
   if (markdownEl) {
-    if (window.marked) {
-      markdownEl.innerHTML = window.marked.parse(proj.readme || ("# " + proj.displayName + "\n\n" + (proj.description || "")));
-    } else {
-      markdownEl.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
-    }
+    markdownEl.innerHTML = renderMarkdownContent(proj.readme || ("# " + proj.displayName + "\n\n" + (proj.description || "")));
+    setTimeout(() => {
+      markdownEl.querySelectorAll("pre code").forEach((b) => {
+        try { hljs.highlightElement(b); } catch (e) {}
+      });
+    }, 50);
   }
 
   fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/main/README.md`)
     .then((r) => (r.ok ? r.text() : fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/master/README.md`).then((res) => (res.ok ? res.text() : ""))))
     .then((liveText) => {
-      if (liveText && liveText.trim() && markdownEl && window.marked) {
-        markdownEl.innerHTML = window.marked.parse(liveText);
+      if (liveText && liveText.trim() && markdownEl) {
+        markdownEl.innerHTML = renderMarkdownContent(liveText);
+        setTimeout(() => {
+          markdownEl.querySelectorAll("pre code").forEach((b) => {
+            try { hljs.highlightElement(b); } catch (e) {}
+          });
+        }, 50);
       }
     })
     .catch(() => {});
@@ -891,35 +943,8 @@ export const switchView = async (viewName, param, updateHash = true) => {
   }
 
   if (viewName === "all-projects") {
-    if (allProjectsEl) {
-      if (projectDetailEl) {
-        projectDetailEl.classList.add("hidden");
-        projectDetailEl.style.display = "none";
-      }
-      document.body.style.overflow = "hidden";
-      allProjectsEl.classList.remove("hidden");
-      allProjectsEl.style.display = "block";
-      allProjectsEl.style.zIndex = "99999";
-      allProjectsEl.scrollTop = 0;
-      window.currentSPAView = "all-projects";
-      if (window.update3DSceneForView) {
-        window.update3DSceneForView("all-projects");
-      }
-      if (!projectsData || !projectsData.length) {
-        try {
-          const pRes = await fetch("/all_projects.json");
-          if (pRes.ok) {
-            projectsData = await pRes.json();
-            cachedProjectsData = projectsData;
-          }
-        } catch (e) {}
-      }
-      window.renderAllViewProjects();
-      return;
-    } else {
-      window.location.href = "/projects.html";
-      return;
-    }
+    window.location.href = "/projects.html";
+    return;
   }
 
   if (viewName === "portfolio") {
@@ -1027,37 +1052,46 @@ window.renderAllViewProjects = () => {
       `;
     } else {
       topPreviewHtml = `
-        <div class="w-full h-36 relative overflow-hidden bg-gradient-to-br from-[#121422] via-[#0d0e17] to-[#07080e] flex flex-col justify-between p-3.5 border-b border-white/10 group-hover:border-[#DC143C]/40 transition-colors">
-          <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none"></div>
-          
-          <div class="relative z-10 flex items-center justify-between font-mono text-[0.62rem]">
-            <div class="flex items-center gap-1.5 text-zinc-500">
-              <span class="w-2 h-2 rounded-full bg-red-500/70 inline-block"></span>
-              <span class="w-2 h-2 rounded-full bg-amber-500/70 inline-block"></span>
-              <span class="w-2 h-2 rounded-full bg-emerald-500/70 inline-block"></span>
-              <span class="ml-1 text-zinc-400 truncate max-w-[120px]">${p.id}</span>
+        <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-[#0b0c14] flex flex-col justify-between p-3.5 font-mono select-none group-hover:border-[#DC143C]/40 transition-colors">
+          <!-- macOS Title Bar -->
+          <div class="flex items-center justify-between pb-2 border-b border-white/5">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block shadow-sm"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
             </div>
-            <span class="px-2 py-0.5 rounded text-[0.6rem] font-semibold border border-white/10 bg-white/5 text-zinc-300">
-              ${p.language || "Code"}
-            </span>
+            <div class="text-[0.6rem] text-zinc-500 flex items-center gap-1">
+              <span class="text-zinc-600">zsh —</span>
+              <span class="text-zinc-300 font-medium truncate max-w-[130px]">${p.id}</span>
+            </div>
+            <span class="text-[0.55rem] px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
           </div>
 
-          <div class="relative z-10 my-auto flex items-center gap-2.5 py-1">
-            <div class="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center shadow-inner shrink-0">
-              <span class="material-symbols-outlined text-base text-[#DC143C]">terminal</span>
+          <!-- Terminal Body -->
+          <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-[0.62rem] leading-relaxed">
+            <div class="flex items-center gap-1.5 text-zinc-400">
+              <span class="text-[#DC143C] font-bold">❯</span>
+              <span class="text-emerald-400">~/projects</span>
+              <span class="text-zinc-500 font-normal">git:(<span class="text-amber-400">main</span>)</span>
             </div>
-            <div class="truncate">
-              <span class="text-xs font-bold text-white block truncate group-hover:text-[#DC143C] transition-colors">${p.displayName}</span>
-              <span class="font-mono text-[0.6rem] text-zinc-500 block truncate">${p.category || 'Software Engineering'}</span>
+            <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
+              <span class="text-zinc-500">$</span>
+              <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
+              <span class="text-[#DC143C] text-[0.55rem] font-bold animate-pulse">●</span>
+            </div>
+            <div class="text-[0.58rem] text-zinc-500 pl-2 flex items-center gap-2">
+              <span class="text-zinc-600">stack:</span>
+              <span class="text-zinc-400 truncate">${(p.tags || [p.language || 'Code']).slice(0, 3).join(' • ')}</span>
             </div>
           </div>
 
-          <div class="relative z-10 flex items-center justify-between font-mono text-[0.58rem] text-zinc-500 pt-1 border-t border-white/5">
+          <!-- Terminal Footer -->
+          <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[0.55rem] text-zinc-500">
             <span class="flex items-center gap-1 text-emerald-400">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Architecture Verified
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="tracking-wide">BUILD READY</span>
             </span>
-            <span>Source Archive</span>
+            <span class="text-zinc-600 uppercase tracking-wider">${p.category || 'PROJECT'}</span>
           </div>
         </div>
       `;
