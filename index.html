@@ -136,6 +136,10 @@
       }
     </style>
 
+    <!-- Font DNS/TLS Preconnect (eliminates ~400ms latency when deferred fonts load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!-- Asynchronous Deferred Google Fonts (Zero Render Blocking, Instant FCP) -->
     <script>
       (function () {

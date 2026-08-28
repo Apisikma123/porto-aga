@@ -27,10 +27,14 @@ const loadNonCritical = () => {
 
   if (!isAuditBot) {
     import("./three-scene.js").then((m) => {
-      if (m && m.init3D) {
-        m.init3D();
-      } else if (m && m.initThreeEngine) {
-        m.initThreeEngine();
+      const initFn = m.init3D || m.initThreeEngine;
+      if (initFn) {
+        // Defer scene init to idle time — GPU warmup shouldn't compete with user interactions
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(() => initFn(), { timeout: 3000 });
+        } else {
+          setTimeout(() => initFn(), 100);
+        }
       }
     }).catch((err) => {
       console.warn("Three.js deferred load notice:", err);

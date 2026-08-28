@@ -6,8 +6,26 @@
 import { gsap } from "gsap";
 import { currentLang, getProtectedWhatsAppNumber } from "./critical.js";
 import { marked } from "marked";
-import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css";
+// highlight.js & atom-one-dark theme loaded lazily (964KB deferred from critical path)
+let _hljs = null;
+const ensureHljs = async () => {
+  if (_hljs) return _hljs;
+  const [mod] = await Promise.all([
+    import("highlight.js"),
+    import("highlight.js/styles/atom-one-dark.css"),
+  ]);
+  _hljs = mod.default;
+  return _hljs;
+};
+const lazyHighlightAll = (container) => {
+  const blocks = container.querySelectorAll("pre code");
+  if (!blocks.length) return;
+  ensureHljs().then((hljs) => {
+    blocks.forEach((b) => {
+      try { hljs.highlightElement(b); } catch (e) {}
+    });
+  });
+};
 
 marked.use({
   gfm: true,
@@ -154,6 +172,7 @@ export const createFeaturedProjectCardElement = (item) => {
             loading="lazy"
             decoding="async"
             fetchpriority="low"
+            sizes="(max-width: 640px) 120px, 200px"
           />
         </div>
       </div>
@@ -170,6 +189,7 @@ export const createFeaturedProjectCardElement = (item) => {
           loading="lazy"
           decoding="async"
           fetchpriority="low"
+          sizes="(max-width: 640px) 280px, (max-width: 1024px) 400px, 480px"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 pointer-events-none"></div>
         ${item.isFeaturedBadge ? '<span class="absolute top-3 right-3 font-mono text-[0.6rem] bg-[#DC143C] text-white px-2 py-0.5 rounded font-bold tracking-wider uppercase shadow-lg">Featured</span>' : ""}
@@ -891,11 +911,7 @@ export const openProjectDetail = async (projectId) => {
   const markdownEl = document.getElementById("detail-view-markdown");
   if (markdownEl) {
     markdownEl.innerHTML = renderMarkdownContent(proj.readme || ("# " + proj.displayName + "\n\n" + (proj.description || "")));
-    setTimeout(() => {
-      markdownEl.querySelectorAll("pre code").forEach((b) => {
-        try { hljs.highlightElement(b); } catch (e) {}
-      });
-    }, 50);
+    setTimeout(() => lazyHighlightAll(markdownEl), 50);
   }
 
   fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/main/README.md`)
@@ -903,11 +919,7 @@ export const openProjectDetail = async (projectId) => {
     .then((liveText) => {
       if (liveText && liveText.trim() && markdownEl) {
         markdownEl.innerHTML = renderMarkdownContent(liveText);
-        setTimeout(() => {
-          markdownEl.querySelectorAll("pre code").forEach((b) => {
-            try { hljs.highlightElement(b); } catch (e) {}
-          });
-        }, 50);
+        setTimeout(() => lazyHighlightAll(markdownEl), 50);
       }
     })
     .catch(() => {});
@@ -1036,9 +1048,9 @@ window.renderAllViewProjects = () => {
     if (normId === "foodify") {
       topPreviewHtml = `
         <div class="h-44 w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] to-[#07080e] flex items-center justify-center p-2.5">
-          <img src="/projects/foodify.webp" width="320" height="640" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 pointer-events-none" />
+          <img src="/projects/foodify.webp" width="320" height="640" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, 120px" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 pointer-events-none" />
           <div class="relative h-full aspect-[9/18.5] rounded-xl border-2 border-zinc-700 bg-black overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300">
-            <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" class="w-full h-full object-cover object-top" />
+            <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" sizes="(max-width: 640px) 80px, 120px" class="w-full h-full object-cover object-top" />
           </div>
           <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[0.55rem] font-mono text-[#DC143C] border border-white/10">Mobile UI</div>
         </div>
@@ -1046,7 +1058,7 @@ window.renderAllViewProjects = () => {
     } else if (hasKnownImg) {
       topPreviewHtml = `
         <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
-          <img src="${hasKnownImg}" alt="${p.displayName}" width="640" height="360" loading="lazy" decoding="async" class="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+          <img src="${hasKnownImg}" alt="${p.displayName}" width="640" height="360" loading="lazy" decoding="async" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px" class="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
         </div>
       `;

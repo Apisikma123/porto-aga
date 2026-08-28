@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { marked } from 'marked';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark.css';
+// highlight.js loaded lazily (deferred from critical path)
+let _hljs = null;
+const ensureHljs = async () => {
+  if (_hljs) return _hljs;
+  const [mod] = await Promise.all([
+    import('highlight.js'),
+    import('highlight.js/styles/atom-one-dark.css'),
+  ]);
+  _hljs = mod.default;
+  return _hljs;
+};
 
 marked.use({
   gfm: true,
@@ -101,11 +110,14 @@ export default function ProjectDetailApp() {
   useEffect(() => {
     if (project) {
       setTimeout(() => {
-        document.querySelectorAll('.markdown-body pre code').forEach((block) => {
-          try {
-            hljs.highlightElement(block);
-          } catch (e) {}
-        });
+        const blocks = document.querySelectorAll('.markdown-body pre code');
+        if (blocks.length) {
+          ensureHljs().then((hljs) => {
+            blocks.forEach((block) => {
+              try { hljs.highlightElement(block); } catch (e) {}
+            });
+          });
+        }
       }, 50);
     }
   }, [project?.readme, project?.id]);

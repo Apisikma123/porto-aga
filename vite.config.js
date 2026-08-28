@@ -42,6 +42,9 @@ export default defineConfig({
           if (id.includes('node_modules/gsap')) {
             return 'vendor-gsap';
           }
+          if (id.includes('node_modules/highlight.js') || id.includes('atom-one-dark')) {
+            return 'vendor-hljs';
+          }
         },
       },
     },
