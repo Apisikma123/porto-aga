@@ -835,31 +835,68 @@ window.__openProjectDetailImpl = openProjectDetail;
 
 export const switchView = async (viewName, param, updateHash = true) => {
   const projectDetailEl = document.getElementById("project-detail-view");
+  const allProjectsEl = document.getElementById("all-projects-view");
 
   if (viewName === "project") {
     if (projectDetailEl) {
+      if (allProjectsEl) {
+        allProjectsEl.classList.add("hidden");
+        allProjectsEl.style.display = "none";
+      }
       return openProjectDetail(param);
     } else {
       window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
       return;
     }
   }
+
   if (viewName === "all-projects") {
-    window.location.href = "/projects.html";
-    return;
+    if (allProjectsEl) {
+      if (projectDetailEl) {
+        projectDetailEl.classList.add("hidden");
+        projectDetailEl.style.display = "none";
+      }
+      document.body.style.overflow = "hidden";
+      allProjectsEl.classList.remove("hidden");
+      allProjectsEl.style.display = "block";
+      allProjectsEl.style.zIndex = "99999";
+      allProjectsEl.scrollTop = 0;
+      window.currentSPAView = "all-projects";
+      if (!projectsData || !projectsData.length) {
+        try {
+          const pRes = await fetch("/all_projects.json");
+          if (pRes.ok) {
+            projectsData = await pRes.json();
+            cachedProjectsData = projectsData;
+          }
+        } catch (e) {}
+      }
+      window.renderAllViewProjects();
+      return;
+    } else {
+      window.location.href = "/projects.html";
+      return;
+    }
   }
+
   if (viewName === "portfolio") {
     if (projectDetailEl) {
       projectDetailEl.classList.add("hidden");
       projectDetailEl.style.display = "none";
-      document.body.style.overflow = "auto";
-      window.currentSPAView = "portfolio";
-    } else if (window.location.pathname !== "/" && !window.location.pathname.endsWith("index.html")) {
-      window.location.href = "/";
+    }
+    if (allProjectsEl) {
+      allProjectsEl.classList.add("hidden");
+      allProjectsEl.style.display = "none";
+    }
+    document.body.style.overflow = "auto";
+    window.currentSPAView = "portfolio";
+    if (typeof param === "number") {
+      window.scrollToSection(param, true);
     }
   }
 };
 window.switchView = switchView;
+window.__switchViewImpl = switchView;
 
 window.setAllViewCategory = (category, btn) => {
   allViewActiveCategory = category;
