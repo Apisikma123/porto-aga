@@ -122,26 +122,26 @@ export const initThreeEngine = () => {
 
   const createGodRaysTexture = () => {
     const canvasEl = document.createElement("canvas");
-    canvasEl.width = 1024;
-    canvasEl.height = 1024;
+    canvasEl.width = 512;
+    canvasEl.height = 512;
     const ctx = canvasEl.getContext("2d");
-    const cx = 512;
-    const cy = 512;
+    const cx = 256;
+    const cy = 256;
 
-    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 512);
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 256);
     coreGrad.addColorStop(0, "rgba(255, 60, 40, 0.85)");
     coreGrad.addColorStop(0.15, "rgba(255, 30, 20, 0.55)");
     coreGrad.addColorStop(0.4, "rgba(230, 20, 10, 0.22)");
     coreGrad.addColorStop(0.7, "rgba(180, 0, 0, 0.08)");
     coreGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = coreGrad;
-    ctx.fillRect(0, 0, 1024, 1024);
+    ctx.fillRect(0, 0, 512, 512);
 
     const numRays = 24;
     for (let i = 0; i < numRays; i++) {
       const angle = (i / numRays) * Math.PI * 2;
       const rayWidth = (i % 3 === 0 ? 0.08 : i % 2 === 0 ? 0.045 : 0.025) * Math.PI;
-      const rayLength = 480 + ((i * 37) % 30);
+      const rayLength = 240 + ((i * 18) % 15);
 
       ctx.save();
       ctx.translate(cx, cy);
@@ -258,7 +258,7 @@ export const initThreeEngine = () => {
   bumpMap.colorSpace = THREE.NoColorSpace;
   bumpMap.flipY = false;
 
-  // 3. Deep GPU Warmup & Shader Pre-compilation
+  // 3. GPU Warmup & Shader Pre-compilation (Single efficient pass)
   const executeGPUWarmup = () => {
     if (warmupExecuted) return;
     warmupExecuted = true;
@@ -271,30 +271,11 @@ export const initThreeEngine = () => {
       if (renderer && scene && camera) {
         renderer.compile(scene, camera);
       }
-
-      if (tesseractGroup) {
-        const origTessPos = tesseractGroup.position.clone();
-        const origTessScale = tesseractGroup.scale.clone();
-        
-        renderer.render(scene, camera);
-        
-        tesseractGroup.position.set(isMobile ? 0 : -2.0, 0, 0.1);
-        renderer.render(scene, camera);
-
-        tesseractGroup.position.copy(origTessPos);
-        tesseractGroup.scale.copy(origTessScale);
-        renderer.render(scene, camera);
-      }
-
-      if (typeof ScrollTrigger !== "undefined") {
-        ScrollTrigger.refresh();
-      }
     } catch (err) {
       console.warn("GPU warmup notice:", err);
     }
   };
 
-  // Deep GPU warmup in background
   executeGPUWarmup();
 
   // Load /tesseract.glb with DRACOLoader & Dynamic Material Assignment

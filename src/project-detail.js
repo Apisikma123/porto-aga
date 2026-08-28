@@ -20,9 +20,9 @@ function activate3D() {
 
 function schedule3D() {
   if ("requestIdleCallback" in window) {
-    requestIdleCallback(() => activate3D(), { timeout: 1500 });
+    requestIdleCallback(() => activate3D(), { timeout: 4000 });
   } else {
-    setTimeout(activate3D, 500);
+    setTimeout(activate3D, 2000);
   }
 }
 
@@ -32,7 +32,7 @@ if (document.readyState === "complete") {
   window.addEventListener("load", schedule3D, { once: true });
 }
 
-["pointerdown", "touchstart", "wheel", "keydown"].forEach((event) => {
+["pointerdown", "touchstart", "wheel", "keydown", "scroll", "mousemove"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 
