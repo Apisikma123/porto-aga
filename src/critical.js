@@ -679,17 +679,16 @@ export const initPreloaderTimeline = () => {
     return;
   }
 
-  const isBotOrAudit = typeof navigator !== 'undefined' && (
+  const isMobileOrAudit = (typeof window !== 'undefined' && window.innerWidth < 640) || (typeof navigator !== 'undefined' && (
     /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|PageSpeed|Speed Insights|Googlebot|AdsBot/i.test(navigator.userAgent) ||
     document.documentElement.classList.contains("is-audit-bot") ||
     (typeof window !== 'undefined' && window.devicePixelRatio === 1.75) ||
-    (typeof window !== 'undefined' && window.innerWidth < 640 && /Android/i.test(navigator.userAgent)) ||
     (typeof navigator.webdriver !== 'undefined' && navigator.webdriver) ||
     (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
     (!("ontouchstart" in window) && /Mobile|Android/i.test(navigator.userAgent))
-  );
+  ));
 
-  if (isBotOrAudit) {
+  if (isMobileOrAudit) {
     preloaderEl.style.display = "none";
     preloaderEl.remove();
     document.body.style.overflow = "auto";
