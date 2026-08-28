@@ -831,6 +831,7 @@ export const openProjectDetail = async (projectId) => {
   window.currentSPAView = "project";
 };
 window.openProjectDetail = openProjectDetail;
+window.__openProjectDetailImpl = openProjectDetail;
 
 export const switchView = async (viewName, param, updateHash = true) => {
   const projectDetailEl = document.getElementById("project-detail-view");
