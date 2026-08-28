@@ -2104,6 +2104,47 @@ html[data-theme="light"] .pricing-tier-card button[onclick*="Kalkulator"]:hover 
   color: #dc143c !important;
 }
 
+/* Search Input & Category Filter Buttons in Light Mode */
+html[data-theme="light"] #search-input,
+html[data-theme="light"] #all-projects-search,
+html[data-theme="light"] input[type="text"] {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  color: #090a10 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+html[data-theme="light"] #search-input::placeholder,
+html[data-theme="light"] #all-projects-search::placeholder,
+html[data-theme="light"] input[type="text"]::placeholder {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] #search-input:focus,
+html[data-theme="light"] #all-projects-search:focus,
+html[data-theme="light"] input[type="text"]:focus {
+  background-color: #ffffff !important;
+  border-color: #dc143c !important;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.14) !important;
+}
+
+html[data-theme="light"] .filter-btn:not(.active) {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .filter-btn:not(.active):hover {
+  background-color: #ffffff !important;
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .filter-btn.active {
+  background-color: #dc143c !important;
+  border-color: #dc143c !important;
+  color: #ffffff !important;
+}
+
 /* Image Preview Overlay Floating Badges (Visual Architecture Preview, Language Badges) */
 #detail-view-banner-container [class*="bg-black"],
 #detail-view-banner-container [class*="bg-black"] *,
