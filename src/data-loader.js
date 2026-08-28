@@ -315,40 +315,6 @@ export const initProjectsCarousel = () => {
     },
     { passive: true }
   );
-
-  let isDown = false;
-  let startX = 0;
-  let scrollLeftStart = 0;
-
-  track.addEventListener("mousedown", (e) => {
-    if (e.button !== 0 || e.target.closest("button, a")) return;
-    isDown = true;
-    track.style.cursor = "grabbing";
-    track.style.userSelect = "none";
-    track.style.scrollSnapType = "none";
-    startX = e.pageX - track.offsetLeft;
-    scrollLeftStart = track.scrollLeft;
-  });
-
-  const onDragEnd = () => {
-    if (!isDown) return;
-    isDown = false;
-    track.style.cursor = "";
-    track.style.userSelect = "";
-    track.style.scrollSnapType = "x mandatory";
-    calculateActiveSlide();
-  };
-
-  window.addEventListener("mouseup", onDragEnd);
-  track.addEventListener("mouseleave", onDragEnd);
-
-  track.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - track.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    track.scrollLeft = scrollLeftStart - walk;
-  });
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -441,40 +407,6 @@ export const initPricingMarketingCarousel = () => {
     },
     { passive: true }
   );
-
-  let isDown = false;
-  let startX = 0;
-  let scrollLeftStart = 0;
-
-  track.addEventListener("mousedown", (e) => {
-    if (e.button !== 0 || e.target.closest("button, a")) return;
-    isDown = true;
-    track.style.cursor = "grabbing";
-    track.style.userSelect = "none";
-    track.style.scrollSnapType = "none";
-    startX = e.pageX - track.offsetLeft;
-    scrollLeftStart = track.scrollLeft;
-  });
-
-  const onDragEnd = () => {
-    if (!isDown) return;
-    isDown = false;
-    track.style.cursor = "";
-    track.style.userSelect = "";
-    track.style.scrollSnapType = "x mandatory";
-    calculateActiveSlide();
-  };
-
-  window.addEventListener("mouseup", onDragEnd);
-  track.addEventListener("mouseleave", onDragEnd);
-
-  track.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - track.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    track.scrollLeft = scrollLeftStart - walk;
-  });
 };
 
 // ═══════════════════════════════════════════════════════════
