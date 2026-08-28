@@ -633,25 +633,31 @@ export const initNavigationAndKeyboard = () => {
 
     if (!window.currentSPAView || window.currentSPAView === "portfolio") {
       const now = Date.now();
-      if (now - lastKeyTime < KEY_COOLDOWN) return;
 
       if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown") {
+        e.preventDefault();
+        if (now - lastKeyTime < KEY_COOLDOWN) return;
         if (currentSectionIndex < SECTION_IDS.length - 1) {
           lastKeyTime = now;
           scrollToSection(currentSectionIndex + 1);
         }
       } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp") {
+        e.preventDefault();
+        if (now - lastKeyTime < KEY_COOLDOWN) return;
         if (currentSectionIndex > 0) {
           lastKeyTime = now;
           scrollToSection(currentSectionIndex - 1);
         }
       } else if (e.key === "Home") {
+        e.preventDefault();
         lastKeyTime = now;
         scrollToSection(0);
       } else if (e.key === "End") {
+        e.preventDefault();
         lastKeyTime = now;
         scrollToSection(SECTION_IDS.length - 1);
       } else if (e.key.toLowerCase() === "k") {
+        e.preventDefault();
         lastKeyTime = now;
         scrollToSection(4); // 05 Pricing
       } else if (currentSectionIndex === 3) {

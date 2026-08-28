@@ -547,35 +547,7 @@
       aria-label="Section Navigation"
       class="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
     >
-      <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
-        <p class="eyebrow text-zinc-500 text-[0.6rem] tracking-[0.3em]" data-i18n="sidebarHeader">On this page</p>
-        <div class="flex items-center gap-1">
-          <button
-            type="button"
-            id="nav-arrow-prev"
-            onclick="if(window.goToPrevSection){ window.goToPrevSection(); }"
-            class="w-6 h-6 rounded flex items-center justify-center border border-white/10 bg-white/[0.04] text-zinc-400 hover:text-white hover:border-[#DC143C]/60 hover:bg-[#DC143C]/20 transition-all cursor-pointer shadow-sm active:scale-95"
-            aria-label="Previous Section"
-            title="Ke Section Sebelumnya (W / ↑)"
-          >
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="18 15 12 9 6 15"></polyline>
-            </svg>
-          </button>
-          <button
-            type="button"
-            id="nav-arrow-next"
-            onclick="if(window.goToNextSection){ window.goToNextSection(); }"
-            class="w-6 h-6 rounded flex items-center justify-center border border-white/10 bg-white/[0.04] text-zinc-400 hover:text-white hover:border-[#DC143C]/60 hover:bg-[#DC143C]/20 transition-all cursor-pointer shadow-sm active:scale-95"
-            aria-label="Next Section"
-            title="Ke Section Berikutnya (S / ↓)"
-          >
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <p class="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]" data-i18n="sidebarHeader">On this page</p>
       <ul class="space-y-3" id="side-nav">
         <li>
           <button type="button" class="side-nav-item active group flex items-center text-left py-1" data-index="0">
