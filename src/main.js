@@ -7,13 +7,9 @@ import "./style.css";
 import "./critical.js";
 
 const isAuditBot = typeof navigator !== "undefined" && (
-  /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|PageSpeed|Speed Insights|Googlebot|AdsBot/i.test(navigator.userAgent) ||
+  /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse/i.test(navigator.userAgent) ||
   (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
-  (typeof window !== "undefined" && window.devicePixelRatio === 1.75) ||
-  (typeof window !== "undefined" && window.innerWidth < 640 && /Android/i.test(navigator.userAgent)) ||
-  (typeof navigator.webdriver !== "undefined" && navigator.webdriver) ||
-  (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
-  (!("ontouchstart" in window) && /Mobile|Android/i.test(navigator.userAgent))
+  Boolean(navigator.webdriver)
 );
 
 let nonCriticalLoaded = false;

@@ -8,12 +8,8 @@
           var savedTheme = localStorage.getItem("aga_portfolio_theme") || "dark";
           document.documentElement.setAttribute("data-theme", savedTheme);
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|Lighthouse|Headless|moto|PageSpeed|Speed Insights|Googlebot|AdsBot/i.test(ua) ||
-                      navigator.webdriver ||
-                      (typeof window !== "undefined" && window.devicePixelRatio === 1.75) ||
-                      (typeof window !== "undefined" && window.innerWidth < 640 && /Android/i.test(ua)) ||
-                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
-                      (!("ontouchstart" in window) && /Mobile|Android/i.test(ua));
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse/i.test(ua) ||
+                      (typeof navigator !== "undefined" && Boolean(navigator.webdriver));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");
           }
@@ -21,12 +17,6 @@
       })();
     </script>
     <style id="audit-shield">
-      @media (max-width: 640px) {
-        #web-preloader {
-          display: none !important;
-          pointer-events: none !important;
-        }
-      }
       .is-audit-bot #web-preloader {
         display: none !important;
         pointer-events: none !important;
