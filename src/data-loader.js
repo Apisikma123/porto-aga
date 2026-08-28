@@ -803,7 +803,7 @@ export const initSPAViews = async () => {
   handleHashRoute();
 };
 
-window.switchView = async (viewName, param, updateHash = true) => {
+export const switchView = async (viewName, param, updateHash = true) => {
   const projectDetailEl = document.getElementById("project-detail-view");
   const allProjectsEl = document.getElementById("all-projects-view");
 
@@ -825,7 +825,8 @@ window.switchView = async (viewName, param, updateHash = true) => {
   }
 
   if (viewName === "portfolio") {
-    const activeOverlay = [projectDetailEl, allProjectsEl].find((el) => !el.classList.contains("hidden"));
+    document.body.style.overflow = "auto";
+    const activeOverlay = [projectDetailEl, allProjectsEl].find((el) => !el.classList.contains("hidden") || el.style.display === "block");
     if (activeOverlay) {
       gsap.to(activeOverlay, {
         opacity: 0,
@@ -835,6 +836,7 @@ window.switchView = async (viewName, param, updateHash = true) => {
         ease: "power2.inOut",
         onComplete: () => {
           activeOverlay.classList.add("hidden");
+          activeOverlay.style.display = "none";
           gsap.set(activeOverlay, { clearProps: "all" });
         }
       });
@@ -1110,7 +1112,10 @@ window.switchView = async (viewName, param, updateHash = true) => {
       });
     }
 
+    document.body.style.overflow = "hidden";
     projectDetailEl.classList.remove("hidden");
+    projectDetailEl.style.display = "block";
+    projectDetailEl.style.zIndex = "99999";
     projectDetailEl.scrollTop = 0;
 
     gsap.fromTo(
@@ -1128,8 +1133,12 @@ window.switchView = async (viewName, param, updateHash = true) => {
       );
     }
   } else if (viewName === "all-projects") {
+    document.body.style.overflow = "hidden";
     projectDetailEl.classList.add("hidden");
+    projectDetailEl.style.display = "none";
     allProjectsEl.classList.remove("hidden");
+    allProjectsEl.style.display = "block";
+    allProjectsEl.style.zIndex = "99999";
     allProjectsEl.scrollTop = 0;
 
     if (updateHash) {
@@ -2301,6 +2310,9 @@ window.renderPricingOnLangChange = (lang) => {
   window.goToPricingStep(pricingState.step);
   updatePricingUI();
 };
+
+window.switchView = switchView;
+window.__switchViewImpl = switchView;
 
 // ═══════════════════════════════════════════════════════════
 // MASTER DATA INITIALIZATION

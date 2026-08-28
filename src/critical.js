@@ -417,6 +417,26 @@ export const setLanguage = (lang, animate = true) => {
 };
 window.setLanguage = setLanguage;
 
+window.switchView = async (viewName, param, updateHash = true) => {
+  if (window.__switchViewImpl) {
+    return window.__switchViewImpl(viewName, param, updateHash);
+  }
+  try {
+    const m = await import("./data-loader.js");
+    if (m && m.switchView) {
+      return m.switchView(viewName, param, updateHash);
+    }
+  } catch (e) {
+    console.warn("switchView fallback navigation:", e);
+  }
+
+  if (viewName === "project" && param) {
+    window.location.href = "/project.html?id=" + encodeURIComponent(param);
+  } else if (viewName === "all-projects") {
+    window.location.href = "/projects.html";
+  }
+};
+
 // ═══════════════════════════════════════════════════════════
 // 2. LOCKED FULL-PAGE AUTO-SNAP ENGINE & NAVIGATION CONTROLS
 // ═══════════════════════════════════════════════════════════
