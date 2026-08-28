@@ -1043,17 +1043,7 @@ html[data-theme="light"] button[onclick*="switchView('portfolio')"]:hover span {
   color: #ffffff !important;
 }
 
-/* Dynamic Hover Color Transitions for Elements with hover:bg-[#DC143C] */
-html[data-theme="light"] button:hover[class*="hover:bg-[#DC143C]"],
-html[data-theme="light"] a:hover[class*="hover:bg-[#DC143C]"] {
-  background-color: #DC143C !important;
-  color: #ffffff !important;
-}
 
-html[data-theme="light"] button:hover[class*="hover:bg-[#DC143C]"] *,
-html[data-theme="light"] a:hover[class*="hover:bg-[#DC143C]"] * {
-  color: #ffffff !important;
-}
 
 html[data-theme="light"] .text-zinc-100,
 html[data-theme="light"] .text-zinc-200,
