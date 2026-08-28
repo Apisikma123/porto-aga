@@ -2086,24 +2086,24 @@
 
         const preloaderTl = gsap.timeline({
           onComplete: () => {
-            setTimeout(triggerLaunch, 120);
+            setTimeout(triggerLaunch, 50);
           }
         });
         preloaderTl
           .to(progressTracker, {
-            val: PRELOADER_STAGES[0].pct, duration: 0.35, ease: "power1.out",
+            val: PRELOADER_STAGES[0].pct, duration: 0.18, ease: "power1.out",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
           })
           .to(progressTracker, {
-            val: PRELOADER_STAGES[1].pct, duration: 0.40, ease: "sine.inOut",
+            val: PRELOADER_STAGES[1].pct, duration: 0.22, ease: "sine.inOut",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
           })
           .to(progressTracker, {
-            val: PRELOADER_STAGES[2].pct, duration: 0.35, ease: "sine.inOut",
+            val: PRELOADER_STAGES[2].pct, duration: 0.18, ease: "sine.inOut",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
           })
           .to(progressTracker, {
-            val: 100, duration: 0.30, ease: "power2.out",
+            val: 100, duration: 0.15, ease: "power2.out",
             onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
           });
       };

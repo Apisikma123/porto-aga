@@ -872,31 +872,31 @@ export const initPreloaderTimeline = () => {
 
   const tl = gsap.timeline({
     onComplete: () => {
-      setTimeout(triggerLaunch, 120);
+      setTimeout(triggerLaunch, 50);
     },
   });
 
   tl.to(progressTracker, {
     val: PRELOADER_STAGES[0].pct,
-    duration: 0.35,
+    duration: 0.18,
     ease: "power1.out",
     onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
   })
     .to(progressTracker, {
       val: PRELOADER_STAGES[1].pct,
-      duration: 0.40,
+      duration: 0.22,
       ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[2].pct,
-      duration: 0.35,
+      duration: 0.18,
       ease: "sine.inOut",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
     })
     .to(progressTracker, {
       val: PRELOADER_STAGES[3].pct,
-      duration: 0.30,
+      duration: 0.15,
       ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });

@@ -133,6 +133,7 @@ export const createFeaturedProjectCardElement = (item) => {
             height="${item.imgHeight}"
             loading="lazy"
             decoding="async"
+            fetchpriority="low"
           />
         </div>
         <div class="absolute bottom-2 right-2.5 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-white/10 text-[0.55rem] font-mono text-zinc-300 flex items-center gap-1">
@@ -152,6 +153,7 @@ export const createFeaturedProjectCardElement = (item) => {
           height="${item.imgHeight}"
           loading="lazy"
           decoding="async"
+          fetchpriority="low"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 pointer-events-none"></div>
         ${item.isFeaturedBadge ? '<span class="absolute top-3 right-3 font-mono text-[0.6rem] bg-[#DC143C] text-white px-2 py-0.5 rounded font-bold tracking-wider uppercase shadow-lg">Featured</span>' : ""}
@@ -664,7 +666,7 @@ export const initGitHubRepos = async () => {
 // ═══════════════════════════════════════════════════════════
 // 7. LIVE GITHUB ACTIVITY HEATMAP MATRIX (Official Apisikma123 Telemetry)
 // ═══════════════════════════════════════════════════════════
-export const initActivityHeatmap = async () => {
+export const initActivityHeatmap = () => {
   const container = document.getElementById("heatmap-cells");
   const countEl = document.getElementById("total-contributions-count");
   const yearRangeEl = document.getElementById("activity-year-range");
@@ -674,72 +676,91 @@ export const initActivityHeatmap = async () => {
     const currentY = new Date().getFullYear();
     yearRangeEl.textContent = `${currentY - 1} – ${currentY}`;
   }
-  const isLight = document.documentElement.getAttribute("data-theme") === "light";
-  const COLOR_LEVELS = isLight
-    ? [
-        "#cbd5e1", // level 0
-        "#fecdd3", // level 1
-        "#fb7185", // level 2
-        "#e11d48", // level 3
-        "#be123c", // level 4
-      ]
-    : [
-        "#181920", // level 0
-        "#4a141e", // level 1
-        "#7c182a", // level 2
-        "#b81432", // level 3
-        "#ff2b54", // level 4
-      ];
 
-  try {
-    const data = cachedContributionsData || (await fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)));
-    if (!data) throw new Error("Local contributions.json not found");
+  let heatmapLoaded = false;
+  const loadHeatmapData = async () => {
+    if (heatmapLoaded) return;
+    heatmapLoaded = true;
 
-    const totalStr = data.total || (data.totalContributions ? data.totalContributions.toLocaleString() : "9,907");
-    if (countEl) countEl.textContent = `${totalStr}+ Contributions`;
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+    const COLOR_LEVELS = isLight
+      ? [
+          "#cbd5e1", // level 0
+          "#fecdd3", // level 1
+          "#fb7185", // level 2
+          "#e11d48", // level 3
+          "#be123c", // level 4
+        ]
+      : [
+          "#181920", // level 0
+          "#4a141e", // level 1
+          "#7c182a", // level 2
+          "#b81432", // level 3
+          "#ff2b54", // level 4
+        ];
 
-    const rawList = data.contributions || data.days || [];
-    const days = rawList.slice(-371);
-    container.innerHTML = "";
+    try {
+      const data = cachedContributionsData || (await fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)));
+      if (!data) throw new Error("Local contributions.json not found");
 
-    const fragment = document.createDocumentFragment();
-    days.forEach((d) => {
-      const cell = document.createElement("div");
-      const lvl = d.level !== undefined ? d.level : (d.count > 15 ? 4 : d.count > 8 ? 3 : d.count > 3 ? 2 : d.count > 0 ? 1 : 0);
-      const bg = COLOR_LEVELS[lvl] || COLOR_LEVELS[0];
-      cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer relative group/cell";
-      cell.style.backgroundColor = bg;
-      if (lvl === 4 && !isLight) {
-        cell.style.boxShadow = "0 0 8px rgba(255, 43, 84, 0.75)";
-      } else if (lvl >= 3 && isLight) {
-        cell.style.boxShadow = "0 0 4px rgba(225, 29, 72, 0.35)";
+      const totalStr = data.total || (data.totalContributions ? data.totalContributions.toLocaleString() : "9,907");
+      if (countEl) countEl.textContent = `${totalStr}+ Contributions`;
+
+      const rawList = data.contributions || data.days || [];
+      const days = rawList.slice(-371);
+      container.innerHTML = "";
+
+      const fragment = document.createDocumentFragment();
+      days.forEach((d) => {
+        const cell = document.createElement("div");
+        const lvl = d.level !== undefined ? d.level : (d.count > 15 ? 4 : d.count > 8 ? 3 : d.count > 3 ? 2 : d.count > 0 ? 1 : 0);
+        const bg = COLOR_LEVELS[lvl] || COLOR_LEVELS[0];
+        cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer relative group/cell";
+        cell.style.backgroundColor = bg;
+        if (lvl === 4 && !isLight) {
+          cell.style.boxShadow = "0 0 8px rgba(255, 43, 84, 0.75)";
+        } else if (lvl >= 3 && isLight) {
+          cell.style.boxShadow = "0 0 4px rgba(225, 29, 72, 0.35)";
+        }
+        cell.setAttribute("title", d.tooltip || `${d.date}: ${d.count} contributions`);
+        fragment.appendChild(cell);
+      });
+      container.appendChild(fragment);
+    } catch (e) {
+      if (countEl) countEl.textContent = "9,907+ Contributions";
+
+      container.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      const totalDays = 371;
+      for (let i = 0; i < totalDays; i++) {
+        const cell = document.createElement("div");
+        const rand = Math.random();
+        let lvl = 0;
+        if (rand > 0.4) lvl = 1;
+        if (rand > 0.65) lvl = 2;
+        if (rand > 0.85) lvl = 3;
+        if (rand > 0.95) lvl = 4;
+        cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer relative";
+        cell.style.backgroundColor = COLOR_LEVELS[lvl];
+        fragment.appendChild(cell);
       }
-      cell.setAttribute("title", d.tooltip || `${d.date}: ${d.count} contributions`);
-      fragment.appendChild(cell);
-    });
-    container.appendChild(fragment);
-  } catch (e) {
-    console.warn("Falling back to rich simulated 9,907+ contribution density", e);
-    if (countEl) countEl.textContent = "9,907+ Contributions";
-
-    container.innerHTML = "";
-    const fragment = document.createDocumentFragment();
-    const totalDays = 371;
-    for (let i = 0; i < totalDays; i++) {
-      const cell = document.createElement("div");
-      const rand = Math.random();
-      let lvl = 0;
-      if (rand > 0.4) lvl = 1;
-      if (rand > 0.65) lvl = 2;
-      if (rand > 0.85) lvl = 3;
-      if (rand > 0.95) lvl = 4;
-
-      const bg = COLOR_LEVELS[lvl];
-      cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer";
-      cell.style.backgroundColor = bg;
-      fragment.appendChild(cell);
+      container.appendChild(fragment);
     }
-    container.appendChild(fragment);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect();
+          loadHeatmapData();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    observer.observe(container);
+  } else {
+    setTimeout(loadHeatmapData, 2000);
   }
 };
 window.renderActivityHeatmap = initActivityHeatmap;
@@ -755,15 +776,6 @@ window.currentSPAView = "portfolio";
 export const initSPAViews = async () => {
   if (cachedProjectsData && cachedProjectsData.length) {
     projectsData = cachedProjectsData;
-  } else {
-    try {
-      const res = await fetch("/all_projects.json");
-      if (res.ok) {
-        projectsData = await res.json();
-      }
-    } catch (e) {
-      console.warn("Failed to preload all_projects.json", e);
-    }
   }
 
   // Handle ESC key -> Return to Portfolio Section 04
