@@ -1,7 +1,4 @@
-/* ═══════════════════════════════════════════════════════════
-   critical.js — Instant FCP Shell, Navigation, i18n & Theme Engine
-   Muhammad Aga Putra | Frontend Software Engineer & System Architect
-   ═══════════════════════════════════════════════════════════ */
+import { gsap } from "gsap";
 
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
@@ -744,18 +741,19 @@ export const initPreloaderTimeline = () => {
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
     frameCount++;
 
-    if (flameNozzle && flameNozzle.isConnected) {
-      const rect = flameNozzle.getBoundingClientRect();
+    const targetEl = rocketCenter || flameNozzle;
+    if (targetEl && targetEl.isConnected) {
+      const rect = targetEl.getBoundingClientRect();
       if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const liveX = rect.left + rect.width / 2;
-        const liveY = rect.bottom - (launchTriggered ? 14 : 6);
+        const liveY = rect.bottom - (launchTriggered ? 16 : 6);
 
         const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
         for (let i = 0; i < spawnCount; i++) {
           smokeParticles.push({
-            x: liveX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
-            y: liveY + (Math.random() - 0.5) * 4,
-            vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
+            x: liveX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
+            y: liveY + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
             vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
             radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
             growth: launchTriggered ? 0.9 : 0.45,
