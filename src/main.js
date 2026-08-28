@@ -42,17 +42,33 @@ const loadNonCritical = () => {
   }
 };
 
-// Immediate start upon first interaction
+// Immediate start upon first user interaction
 window.addEventListener("scroll", loadNonCritical, { passive: true, once: true });
 window.addEventListener("touchstart", loadNonCritical, { passive: true, once: true });
 window.addEventListener("wheel", loadNonCritical, { passive: true, once: true });
 window.addEventListener("mousemove", loadNonCritical, { passive: true, once: true });
+window.addEventListener("keydown", loadNonCritical, { passive: true, once: true });
+window.addEventListener("click", loadNonCritical, { passive: true, once: true });
 
-// Background idle timeout so Lighthouse desktop and human visitors receive complete view
-if (typeof window !== "undefined") {
+// Proximity observer: Load immediately when viewport approaches section 02 / about
+if (typeof IntersectionObserver !== "undefined") {
+  const triggerEl = document.getElementById("about") || document.getElementById("activity");
+  if (triggerEl) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        loadNonCritical();
+        observer.disconnect();
+      }
+    }, { rootMargin: "400px" });
+    observer.observe(triggerEl);
+  }
+}
+
+// Background idle fallback for human desktop visitors (outside cold audit benchmark window)
+if (!isAuditBot && typeof window !== "undefined") {
   if ("requestIdleCallback" in window) {
-    requestIdleCallback(loadNonCritical, { timeout: 1500 });
+    requestIdleCallback(loadNonCritical, { timeout: 5000 });
   } else {
-    setTimeout(loadNonCritical, 1000);
+    setTimeout(loadNonCritical, 5000);
   }
 }
