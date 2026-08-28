@@ -189,21 +189,21 @@ export const createFeaturedProjectCardElement = (item) => {
       <button
         type="button"
         onclick="window.switchView('project', '${item.id}')"
-        class="relative z-20 rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white border border-[#DC143C]/30 px-3 py-1.5 transition-all flex items-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95"
+        class="relative z-20 rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white border border-[#DC143C]/30 px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none"
       >
-        <span class="material-symbols-outlined text-xs">article</span>
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         <span data-i18n="btnReadReadme">Overview Singkat</span>
-        <span class="material-symbols-outlined text-xs">arrow_forward</span>
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </button>
       <a
         href="${item.repoUrl}"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Buka repository GitHub untuk proyek ${item.titleFallback}"
-        class="relative z-20 text-zinc-400 hover:text-white flex items-center gap-1 transition-colors group-hover:text-[#DC143C] touch-manipulation py-1.5 px-2.5"
+        class="relative z-20 text-zinc-400 hover:text-white inline-flex items-center justify-center gap-1.5 transition-colors group-hover:text-[#DC143C] touch-manipulation py-1.5 px-2.5 border border-transparent leading-none"
       >
         <span>Repository</span>
-        <span class="material-symbols-outlined text-xs">arrow_outward</span>
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </a>
     </div>
   `;

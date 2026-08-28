@@ -673,12 +673,15 @@
           </p>
 
           <div class="flex flex-wrap items-center gap-4">
-            <button type="button" onclick="window.scrollToSection(1)" class="btn-crimson rounded-lg px-7 py-3.5 cursor-pointer text-xs font-mono uppercase tracking-wider" data-i18n="btnExploreAbout">
-              About Me
+            <button type="button" onclick="window.scrollToSection(1)" class="btn-crimson rounded-lg px-7 py-3.5 inline-flex items-center justify-center cursor-pointer text-xs font-mono uppercase tracking-wider leading-none" data-i18n="btnExploreAbout">
+              <span>About Me</span>
             </button>
-            <button type="button" onclick="window.scrollToSection(4)" class="btn-glass rounded-lg px-6 py-3.5 flex items-center gap-2 cursor-pointer text-xs font-mono uppercase tracking-wider">
+            <button type="button" onclick="window.scrollToSection(4)" class="btn-glass rounded-lg px-6 py-3.5 inline-flex items-center justify-center gap-2 cursor-pointer text-xs font-mono uppercase tracking-wider leading-none">
               <span data-i18n="btnInitiate">Let's Talk</span>
-              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </button>
           </div>
 
@@ -822,8 +825,12 @@
               <!-- Metrics & Legend Footer -->
               <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/10 font-mono text-xs text-zinc-400">
                 <div class="flex items-center gap-5 text-[0.72rem]">
-                  <span class="flex items-center gap-1.5 text-zinc-300">
-                    <span class="material-symbols-outlined text-[#DC143C] text-sm">commit</span>
+                  <span class="inline-flex items-center gap-2 text-zinc-300 leading-none">
+                    <svg class="w-3.5 h-3.5 text-[#DC143C] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="4"></circle>
+                      <line x1="1.05" y1="12" x2="7" y2="12"></line>
+                      <line x1="17.01" y1="12" x2="22.96" y2="12"></line>
+                    </svg>
                     <span>GitHub: <strong>@Apisikma123</strong></span>
                   </span>
                   <span class="hidden md:inline-block text-zinc-600">/</span>
@@ -852,7 +859,7 @@
         class="relative flex flex-col justify-center min-h-[100svh] px-4 sm:px-6 md:px-10 pt-16 sm:pt-20 pb-20 sm:pb-28 max-w-6xl mx-auto"
       >
         <div class="section-content spatial-text-3d w-full relative z-10 my-auto" data-reveal>
-          <header class="mb-3 sm:mb-4 flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-4">
+          <header class="mb-3 sm:mb-4 flex flex-col md:flex-row md:items-center justify-between gap-2 sm:gap-4">
             <div>
               <p class="eyebrow mb-1.5" data-i18n="projectsEyebrow">
                 <span class="mr-3 tabular-nums text-zinc-500">04</span>Featured Projects &amp; Works
@@ -863,37 +870,37 @@
             </div>
 
             <div class="flex items-center gap-3 self-start md:self-auto flex-wrap">
-              <!-- Carousel Navigation Controls -->
-              <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-lg p-1">
+              <!-- 2. Minimalist Slider Controls & Live Repo Indicator -->
+              <div class="flex items-center border border-white/10 rounded-lg bg-zinc-950/60 p-1">
                 <button
                   type="button"
                   id="carousel-prev-btn"
                   onclick="window.slideProjectsCarousel(-1)"
                   aria-label="Previous Project"
-                  class="w-8 h-8 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-8 h-8 rounded inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
                 >
-                  <span class="material-symbols-outlined text-base">chevron_left</span>
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <span id="carousel-counter" class="font-mono text-xs text-zinc-400 px-2 select-none tabular-nums font-semibold">1 / 5</span>
+                <span id="carousel-counter" class="font-mono text-xs text-zinc-400 px-2 select-none tabular-nums font-semibold leading-none">1 / 5</span>
                 <button
                   type="button"
                   id="carousel-next-btn"
                   onclick="window.slideProjectsCarousel(1)"
                   aria-label="Next Project"
-                  class="w-8 h-8 rounded flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-8 h-8 rounded inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
                 >
-                  <span class="material-symbols-outlined text-base">chevron_right</span>
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
               </div>
 
               <button
                 type="button"
                 onclick="window.switchView('all-projects')"
-                class="rounded-lg bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-4 py-2 flex items-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation"
+                class="rounded-lg bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-4 py-2 inline-flex items-center justify-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation leading-none"
               >
-                <span class="material-symbols-outlined text-sm">grid_view</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span data-i18n="exploreAllProjects">Semua Karya (17)</span>
-                <span class="material-symbols-outlined text-xs group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </button>
             </div>
           </header>
@@ -1172,9 +1179,9 @@
               target="_blank"
               rel="noopener noreferrer"
               data-tilt="true"
-              class="btn-crimson rounded-lg px-8 py-4 flex items-center gap-3 w-full sm:w-auto justify-center text-xs font-mono uppercase tracking-wider cursor-pointer"
+              class="btn-crimson rounded-lg px-8 py-4 inline-flex items-center justify-center gap-2.5 w-full sm:w-auto text-xs font-mono uppercase tracking-wider cursor-pointer leading-none"
             >
-              <span class="material-symbols-outlined text-base">mail</span>
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               <span data-i18n="btnStartConv">Start Conversation</span>
             </a>
             <a
@@ -1182,9 +1189,9 @@
               href="#"
               onclick="window.openProtectedWhatsApp(event, 'Hello Aga, I am interested in discussing a project collaboration.'); return false;"
               data-tilt="true"
-              class="btn-glass rounded-lg px-8 py-4 flex items-center gap-2 w-full sm:w-auto justify-center text-xs font-mono uppercase tracking-wider cursor-pointer"
+              class="btn-glass rounded-lg px-8 py-4 inline-flex items-center justify-center gap-2.5 w-full sm:w-auto text-xs font-mono uppercase tracking-wider cursor-pointer leading-none"
             >
-              <span class="material-symbols-outlined text-base">chat</span>
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               <span>WhatsApp / Contact Direct</span>
             </a>
           </div>
