@@ -1,3 +1,5 @@
+import { gsap } from "gsap";
+
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
 export let currentSectionIndex = 0;
@@ -780,7 +782,14 @@ export const initPreloaderTimeline = () => {
   smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
   if (rocketCenter) {
-    rocketCenter.style.animation = "rocketHover 1.4s ease-in-out infinite alternate";
+    floatTween = gsap.to(rocketCenter, {
+      y: -10,
+      rotation: 1.5,
+      duration: 1.4,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
   }
 
   const headerEl = document.getElementById("preloader-header");
@@ -791,52 +800,51 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    if (rocketCenter) {
-      rocketCenter.style.animation = "none";
-    }
+    if (floatTween) floatTween.kill();
 
     preloaderEl.style.pointerEvents = "none";
 
-    // CSS Hardware-Accelerated Transitions for Smooth Launch
+    const launchTl = gsap.timeline({
+      onComplete: () => {
+        if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+        window.removeEventListener("resize", resizeCanvas);
+        preloaderEl.style.display = "none";
+        preloaderEl.remove();
+        document.body.style.overflow = "auto";
+      },
+    });
+
+    // Hanya latar backdrop, header, footer & teks yang fade — Roket & Asap tetap 100% solid
     if (textGroup) {
-      textGroup.style.transition = "opacity 0.45s ease-out, transform 0.45s ease-out";
-      textGroup.style.opacity = "0";
-      textGroup.style.transform = "translateY(-20px)";
+      launchTl.to(textGroup, { opacity: 0, y: -20, duration: 0.5, ease: "power2.out" }, 0);
     }
     if (headerEl) {
-      headerEl.style.transition = "opacity 0.45s ease-out, transform 0.45s ease-out";
-      headerEl.style.opacity = "0";
-      headerEl.style.transform = "translateY(-15px)";
+      launchTl.to(headerEl, { opacity: 0, y: -15, duration: 0.5, ease: "power2.out" }, 0);
     }
     if (footerEl) {
-      footerEl.style.transition = "opacity 0.45s ease-out, transform 0.45s ease-out";
-      footerEl.style.opacity = "0";
-      footerEl.style.transform = "translateY(15px)";
+      launchTl.to(footerEl, { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 0);
     }
     if (backdropEl) {
-      backdropEl.style.transition = "opacity 1.1s ease-in-out";
-      backdropEl.style.opacity = "0";
+      launchTl.to(backdropEl, { opacity: 0, duration: 1.25, ease: "power2.inOut" }, 0.05);
     }
+    // Fade out sisa kepulan asap secara mulus agar tidak hilang mendadak
     if (smokeCanvas) {
-      setTimeout(() => {
-        smokeCanvas.style.transition = "opacity 0.85s ease-out";
-        smokeCanvas.style.opacity = "0";
-      }, 500);
-    }
-    if (rocketCenter) {
-      rocketCenter.style.transition = "transform 1.35s cubic-bezier(0.7, 0, 0.3, 1)";
-      rocketCenter.style.transform = `translate3d(0, -${window.innerHeight + 350}px, 0) scale(1.12)`;
+      launchTl.to(smokeCanvas, { opacity: 0, duration: 0.95, ease: "power2.out" }, 0.85);
     }
 
-    setTimeout(() => {
-      if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
-      window.removeEventListener("resize", resizeCanvas);
-      preloaderEl.style.display = "none";
-      preloaderEl.remove();
-      document.body.style.overflow = "auto";
-    }, 1300);
+    // Roket meluncur ke atas secara mulus dan anggun (60fps, 100% solid opacity)
+    if (rocketCenter) {
+      launchTl.to(rocketCenter, {
+        y: -window.innerHeight - 350,
+        scale: 1.12,
+        rotation: 0,
+        duration: 1.35,
+        ease: "power3.in",
+      }, 0.05);
+    }
   };
 
+  const progressTracker = { val: 0 };
   const updateDisplay = (pct, text) => {
     const roundPct = Math.round(pct);
     if (barEl) barEl.style.width = `${roundPct}%`;
@@ -844,32 +852,41 @@ export const initPreloaderTimeline = () => {
     if (statusEl && text) statusEl.textContent = text;
   };
 
-  // High-Precision Zero-Dependency Progress Animation (750ms Smooth Glide)
-  const startTime = performance.now();
-  const totalDuration = 700;
-  const animateProgress = (now) => {
-    const elapsed = now - startTime;
-    const progress = Math.min(1, elapsed / totalDuration);
-    const currentVal = Math.round(progress * 100);
-    let stageText = PRELOADER_STAGES[0].text;
-    if (currentVal >= 89) stageText = PRELOADER_STAGES[3].text;
-    else if (currentVal >= 70) stageText = PRELOADER_STAGES[2].text;
-    else if (currentVal >= 35) stageText = PRELOADER_STAGES[1].text;
+  const tl = gsap.timeline({
+    onComplete: () => {
+      setTimeout(triggerLaunch, 50);
+    },
+  });
 
-    updateDisplay(currentVal, stageText);
+  tl.to(progressTracker, {
+    val: PRELOADER_STAGES[0].pct,
+    duration: 0.18,
+    ease: "power1.out",
+    onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
+  })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[1].pct,
+      duration: 0.22,
+      ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[2].pct,
+      duration: 0.18,
+      ease: "sine.inOut",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
+    })
+    .to(progressTracker, {
+      val: PRELOADER_STAGES[3].pct,
+      duration: 0.15,
+      ease: "power2.out",
+      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
+    });
 
-    if (progress < 1) {
-      requestAnimationFrame(animateProgress);
-    } else {
-      setTimeout(triggerLaunch, 40);
-    }
-  };
-  requestAnimationFrame(animateProgress);
-
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1.8s max
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 2.5s max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 1800);
+  }, 2500);
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -889,15 +906,16 @@ export const initPageTransitionLinks = () => {
 
     if (isInternalPage) {
       e.preventDefault();
-      const targetEls = document.querySelectorAll("#portfolio-view, header, #side-nav, footer");
-      targetEls.forEach((el) => {
-        el.style.transition = "opacity 0.25s ease-out, transform 0.25s ease-out";
-        el.style.opacity = "0";
-        el.style.transform = "translate3d(0, -18px, 0) scale(0.98)";
+      gsap.to("#portfolio-view, header, #side-nav, footer", {
+        opacity: 0,
+        y: -22,
+        scale: 0.98,
+        duration: 0.28,
+        ease: "power2.inOut",
+        onComplete: () => {
+          window.location.href = href;
+        }
       });
-      setTimeout(() => {
-        window.location.href = href;
-      }, 250);
     }
   });
 };
