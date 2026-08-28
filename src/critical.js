@@ -417,8 +417,6 @@ window.setLanguage = setLanguage;
 let isAnimating = false;
 let lastScrollTime = 0;
 const WHEEL_COOLDOWN = 800;
-let scrollTween = null;
-
 export const scrollToSection = (index, immediate = false) => {
   if (window.currentSPAView && window.currentSPAView !== "portfolio") {
     if (window.switchView) window.switchView("portfolio", index);
@@ -439,32 +437,20 @@ export const scrollToSection = (index, immediate = false) => {
   const targetY = Math.round(targetEl.getBoundingClientRect().top + startY);
 
   if (immediate) {
-    if (scrollTween) scrollTween.kill();
     window.scrollTo(0, targetY);
     isAnimating = false;
     return;
   }
 
-  if (scrollTween) scrollTween.kill();
-  const obj = { y: startY };
-
-  scrollTween = gsap.to(obj, {
-    y: targetY,
-    duration: 0.65,
-    ease: "power2.out",
-    overwrite: "auto",
-    onUpdate: () => {
-      window.scrollTo(0, obj.y);
-    },
-    onComplete: () => {
-      window.scrollTo(0, targetY);
-      scrollTween = null;
-      lastScrollTime = Date.now();
-      setTimeout(() => {
-        isAnimating = false;
-      }, 150);
-    },
+  window.scrollTo({
+    top: targetY,
+    behavior: "smooth"
   });
+
+  setTimeout(() => {
+    isAnimating = false;
+    lastScrollTime = Date.now();
+  }, 500);
 };
 window.scrollToSection = scrollToSection;
 
