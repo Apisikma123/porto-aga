@@ -922,12 +922,27 @@ export const initPageTransitionLinks = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // GLOBAL VELVETY 3D TILT ENGINE (EVENT DELEGATION + SPRING LERP)
 // ═══════════════════════════════════════════════════════════
 export const initGlobalCardTilt = () => {
   if (typeof window === "undefined" || !window.matchMedia("(pointer: fine)").matches) return;
 
-  const CARD_SELECTOR = ".carousel-card, .pricing-carousel-card, #activity-standalone-card, .activity-standalone-card, .spatial-card, .glass-card, .project-card, .pricing-card, [data-tilt]";
+  const CARD_SELECTOR = `
+    [data-tilt],
+    .carousel-card,
+    .pricing-carousel-card,
+    #activity-standalone-card,
+    .activity-standalone-card,
+    .spatial-card,
+    .glass-card,
+    .project-card,
+    .pricing-card,
+    #pricing-cards-track > a,
+    #projects-carousel-track > div,
+    #contact a.btn-crimson,
+    #contact a.btn-glass
+  `;
 
   let activeCard = null;
   let cachedRect = null;
@@ -937,9 +952,11 @@ export const initGlobalCardTilt = () => {
   let currentRotY = 0;
   let targetScale = 1;
   let currentScale = 1;
+  let targetTranslateY = 0;
+  let currentTranslateY = 0;
   let rafId = null;
 
-  const maxTilt = 8.0; // Luxury expressive tilt
+  const maxTilt = 9.0; // Expressive luxury 3D tilt
 
   const updateTiltPhysics = () => {
     if (!activeCard) {
@@ -950,16 +967,41 @@ export const initGlobalCardTilt = () => {
     currentRotX += (targetRotX - currentRotX) * 0.12;
     currentRotY += (targetRotY - currentRotY) * 0.12;
     currentScale += (targetScale - currentScale) * 0.12;
+    currentTranslateY += (targetTranslateY - currentTranslateY) * 0.12;
 
-    activeCard.style.transform = `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`;
+    activeCard.style.setProperty(
+      "transform",
+      `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateY(${currentTranslateY.toFixed(2)}px) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`,
+      "important"
+    );
 
-    const diff = Math.abs(targetRotX - currentRotX) + Math.abs(targetRotY - currentRotY) + Math.abs(targetScale - currentScale);
+    const diff =
+      Math.abs(targetRotX - currentRotX) +
+      Math.abs(targetRotY - currentRotY) +
+      Math.abs(targetScale - currentScale) +
+      Math.abs(targetTranslateY - currentTranslateY);
 
     if (activeCard && (targetScale > 1 || diff > 0.01)) {
       rafId = requestAnimationFrame(updateTiltPhysics);
     } else if (activeCard) {
-      activeCard.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
-      activeCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+      activeCard.style.setProperty(
+        "transition",
+        "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
+        "important"
+      );
+      activeCard.style.setProperty(
+        "transform",
+        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)",
+        "important"
+      );
+      const cardToReset = activeCard;
+      setTimeout(() => {
+        if (activeCard !== cardToReset) {
+          cardToReset.style.removeProperty("transition");
+          cardToReset.style.removeProperty("transform");
+          cardToReset.style.removeProperty("will-change");
+        }
+      }, 600);
       activeCard = null;
       cachedRect = null;
       rafId = null;
@@ -972,16 +1014,18 @@ export const initGlobalCardTilt = () => {
     if (card && (!card.closest("article") && card.id !== "detail-view-article" && !card.closest("#side-nav") && !card.closest("nav"))) {
       if (activeCard !== card) {
         if (activeCard) {
-          activeCard.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
-          activeCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+          activeCard.style.setProperty("transition", "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)", "important");
+          activeCard.style.setProperty("transform", "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)", "important");
         }
         activeCard = card;
-        activeCard.style.transition = "none";
-        activeCard.style.willChange = "transform";
+        activeCard.style.setProperty("transition", "none", "important");
+        activeCard.style.setProperty("will-change", "transform", "important");
+        activeCard.style.setProperty("transform-style", "preserve-3d", "important");
         cachedRect = activeCard.getBoundingClientRect();
         currentRotX = 0;
         currentRotY = 0;
         currentScale = 1;
+        currentTranslateY = 0;
       }
 
       if (!cachedRect) cachedRect = activeCard.getBoundingClientRect();
@@ -992,13 +1036,15 @@ export const initGlobalCardTilt = () => {
 
       targetRotX = -normY * maxTilt;
       targetRotY = normX * maxTilt;
-      targetScale = 1.025;
+      targetScale = 1.03;
+      targetTranslateY = -6;
 
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     } else if (activeCard) {
       targetRotX = 0;
       targetRotY = 0;
       targetScale = 1;
+      targetTranslateY = 0;
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     }
   }, { passive: true });
@@ -1008,6 +1054,7 @@ export const initGlobalCardTilt = () => {
       targetRotX = 0;
       targetRotY = 0;
       targetScale = 1;
+      targetTranslateY = 0;
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     }
   }, { passive: true });

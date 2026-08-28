@@ -117,6 +117,7 @@ export const FEATURED_PROJECTS = [
 export const createFeaturedProjectCardElement = (item) => {
   const card = document.createElement("div");
   card.className = "carousel-card glass-card spatial-card rounded-2xl overflow-hidden group flex flex-col justify-between shrink-0";
+  card.dataset.tilt = "true";
 
   let mediaHtml = "";
   if (item.isPhoneMockup) {
