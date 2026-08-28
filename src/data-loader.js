@@ -536,19 +536,19 @@ export const initGitHubRepos = async () => {
             <button
               type="button"
               onclick="window.switchView('project', '${repoId}')"
-              class="text-[#DC143C] hover:text-white transition-colors flex items-center gap-1 font-semibold cursor-pointer"
+              class="text-[#DC143C] hover:text-white transition-colors inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer leading-none"
             >
               <span>${currentLang === "en" ? "Quick Overview" : "Overview Singkat"}</span>
-              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
             <a
               href="${repo.html_url || 'https://github.com/Apisikma123/' + repoId}"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-zinc-400 hover:text-white transition-colors flex items-center gap-0.5"
+              class="text-zinc-400 hover:text-white transition-colors inline-flex items-center justify-center"
               title="GitHub Source"
             >
-              <span class="material-symbols-outlined text-xs">code</span>
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
             </a>
           </div>
         </div>
@@ -1318,13 +1318,13 @@ window.renderAllViewProjects = () => {
         <button
           type="button"
           onclick="window.switchView('project', '${p.id}');"
-          class="rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3 py-1.5 text-[0.68rem] font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+          class="rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3 py-1.5 text-[0.68rem] font-semibold transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer leading-none"
         >
           <span>${currentLang === "en" ? "Quick Overview" : "Overview Singkat"}</span>
-          <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
-        <a href="${p.html_url}" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white p-1 hover:text-[#DC143C] transition-colors" title="Source Code">
-          <span class="material-symbols-outlined text-sm">code</span>
+        <a href="${p.html_url}" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white p-1 hover:text-[#DC143C] transition-colors inline-flex items-center justify-center" title="Source Code">
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
         </a>
       </div>
     `;
