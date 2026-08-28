@@ -86,6 +86,9 @@
     <!-- Tailwind CSS Engine -->
     <link rel="stylesheet" href="/src/style.css" />
 
+    <!-- Bundled Markdown & Highlight.js Engine -->
+    <script type="module" src="/src/project-detail.js"></script>
+
     <!-- Structured Data JSON-LD (CollectionPage & ItemList) -->
     <script type="application/ld+json">
     {
@@ -485,12 +488,12 @@
 
         filtered.forEach(p => {
           const card = document.createElement('div');
-          card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-[#DC143C]/50 transition-all duration-300 hover:-translate-y-1';
+          card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-white/20';
           
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
 
           card.innerHTML = `
-            <div onclick="window.location.href='/project.html?id=${p.id}'" class="cursor-pointer">
+            <div onclick="openProjectModal('${p.id}')" class="cursor-pointer" title="${dict.readReadme} - ${p.displayName}">
               <!-- Image Banner or Header -->
               <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
                 <img
@@ -537,13 +540,14 @@
 
             <!-- Card Bottom Actions -->
             <div class="p-5 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-3">
-              <a
-                href="/project.html?id=${p.id}"
-                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2.5 px-3 text-center transition-all inline-flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group"
+              <button
+                type="button"
+                onclick="openProjectModal('${p.id}')"
+                class="flex-1 rounded-md bg-white/5 hover:bg-[#DC143C] text-zinc-200 hover:text-white py-2.5 px-3 text-center transition-all inline-flex items-center justify-center gap-1.5 font-semibold text-[0.68rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
               >
                 <span>${dict.readReadme}</span>
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
+              </button>
 
               <a
                 href="${p.html_url}"
@@ -561,6 +565,113 @@
         });
       }
 
+      let currentModalProject = null;
+
+      function openProjectModal(projectId) {
+        const proj = allProjects.find(p => p.id === projectId || p.name === projectId) || {
+          id: projectId,
+          displayName: projectId.toUpperCase(),
+          category: "Software Engineering",
+          tags: ["Code"],
+          description: "Open source project by Muhammad Aga Putra.",
+          html_url: "https://github.com/Apisikma123/" + projectId,
+          language: "Code",
+          previewImage: "/projects/foodify.webp"
+        };
+        currentModalProject = proj;
+
+        const modal = document.getElementById('project-detail-modal');
+        if (!modal) return;
+
+        document.getElementById('modal-eyebrow').textContent = (proj.category || 'CASE STUDY').toUpperCase() + ' · OVERVIEW';
+        document.getElementById('modal-lang-badge').textContent = proj.language || 'Code';
+        document.getElementById('modal-title').textContent = proj.displayName;
+        document.getElementById('modal-desc').textContent = currentLang === 'en' && proj.descriptionEn ? proj.descriptionEn : proj.description;
+        document.getElementById('modal-github-link').href = proj.html_url;
+        document.getElementById('modal-repo-name').textContent = proj.id;
+        document.getElementById('modal-side-tech').textContent = (proj.tags || [proj.language]).slice(0, 3).join(', ');
+        document.getElementById('modal-clone-label').textContent = `git clone ${proj.html_url}.git`;
+        document.getElementById('modal-banner-img').src = proj.previewImage;
+        document.getElementById('modal-banner-badge').textContent = proj.language || 'Code';
+
+        // Tags
+        const tagsContainer = document.getElementById('modal-tags');
+        tagsContainer.innerHTML = '';
+        (proj.tags || [proj.language]).forEach(t => {
+          const span = document.createElement('span');
+          span.className = 'font-mono text-xs text-zinc-300 bg-white/5 border border-white/10 px-3 py-1 rounded-md';
+          span.textContent = t;
+          tagsContainer.appendChild(span);
+        });
+
+        // WhatsApp Project Inquiry Link
+        const waBtn = document.getElementById('modal-wa-btn');
+        if (waBtn) {
+          const waText = currentLang === 'en'
+            ? `Hello Aga, I am interested in discussing your project "${proj.displayName}" or software collaboration.`
+            : `Halo Aga, saya tertarik untuk diskusi proyek "${proj.displayName}" atau kolaborasi software.`;
+          const num = typeof atob === 'function' ? atob('NjI4NTE2OTA4NDEzNg==') : '6285169084136';
+          waBtn.href = `https://wa.me/${num}?text=${encodeURIComponent(waText)}`;
+        }
+
+        // Markdown README
+        const renderMarkdown = (content) => {
+          const out = document.getElementById('modal-markdown');
+          if (window.marked) {
+            try {
+              out.innerHTML = window.marked.parse(content || ('# ' + proj.displayName + '\n\n' + (proj.description || '')));
+            } catch (e) {
+              out.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${content || proj.description}</div>`;
+            }
+          } else {
+            out.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${content || proj.description}</div>`;
+          }
+        };
+
+        renderMarkdown(proj.readme || ('# ' + proj.displayName + '\n\n' + (proj.description || '')));
+
+        // Fetch live readme from GitHub if needed
+        fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/main/README.md`)
+          .then(res => res.ok ? res.text() : fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/master/README.md`).then(r => r.ok ? r.text() : ''))
+          .then(liveText => {
+            if (liveText && liveText.trim() && liveText !== proj.readme) {
+              proj.readme = liveText;
+              renderMarkdown(liveText);
+            }
+          })
+          .catch(() => {});
+
+        document.body.style.overflow = 'hidden';
+        modal.classList.remove('hidden');
+        modal.scrollTop = 0;
+        history.replaceState(null, '', '#project/' + proj.id);
+      }
+
+      function closeProjectModal() {
+        const modal = document.getElementById('project-detail-modal');
+        if (modal) {
+          modal.classList.add('hidden');
+        }
+        document.body.style.overflow = 'auto';
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+
+      function copyModalCloneCommand() {
+        if (!currentModalProject) return;
+        const text = `git clone ${currentModalProject.html_url}.git`;
+        navigator.clipboard.writeText(text);
+        const label = document.getElementById('modal-clone-label');
+        if (label) {
+          const orig = label.textContent;
+          label.textContent = 'Tersalin!';
+          setTimeout(() => { label.textContent = orig; }, 2000);
+        }
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeProjectModal();
+      });
+
       function updateThemeIcon(theme) {
         const icon = document.getElementById('theme-icon');
         const sunSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
@@ -576,7 +687,167 @@
       }
       updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
-      document.addEventListener('DOMContentLoaded', init);
+      document.addEventListener('DOMContentLoaded', () => {
+        init().then(() => {
+          if (window.location.hash.startsWith('#project/')) {
+            const id = window.location.hash.replace('#project/', '');
+            if (id) setTimeout(() => openProjectModal(id), 150);
+          }
+        });
+      });
     </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 5. MODAL OVERLAY IN FRONT: DETAIL PROJECT VIEWER             -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div id="project-detail-modal" class="fixed inset-0 z-50 overflow-y-auto bg-[#040509]/95 backdrop-blur-2xl pt-16 sm:pt-20 pb-24 hidden">
+      <div class="max-w-5xl mx-auto px-5 sm:px-8 md:px-10">
+        
+        <!-- Top Action / Close Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
+          <button
+            type="button"
+            onclick="closeProjectModal()"
+            class="inline-flex items-center justify-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider cursor-pointer group leading-none px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10"
+          >
+            <svg class="w-4 h-4 shrink-0 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Tutup / Kembali ke Katalog</span>
+          </button>
+
+          <div class="flex items-center gap-2.5">
+            <a
+              id="modal-github-link"
+              href="https://github.com/Apisikma123"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] border border-transparent text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] leading-none touch-manipulation active:scale-95 group"
+            >
+              <span>Buka di GitHub</span>
+              <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Top Visual Preview Banner -->
+        <div id="modal-banner-container" class="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+          <img
+            id="modal-banner-img"
+            src=""
+            alt="Project Preview"
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
+          <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
+            <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+              <span>Visual Architecture Preview</span>
+            </span>
+            <span id="modal-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">Code</span>
+          </div>
+        </div>
+
+        <!-- Project Hero Header -->
+        <div class="mb-10 pb-8 border-b border-white/10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+            <span id="modal-eyebrow" class="eyebrow text-xs text-[#DC143C]">CASE STUDY</span>
+            <span class="text-zinc-600">/</span>
+            <span id="modal-lang-badge" class="font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md">Code</span>
+          </div>
+
+          <h1 id="modal-title" class="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
+            Title
+          </h1>
+
+          <p id="modal-desc" class="text-sm sm:text-base md:text-lg text-zinc-400 font-light max-w-3xl leading-relaxed mb-6">
+            Description
+          </p>
+
+          <div id="modal-tags" class="flex flex-wrap gap-2 font-mono text-xs">
+            <!-- Dynamic tags -->
+          </div>
+        </div>
+
+        <!-- 2 Column Layout: Markdown Article + Specs Sidebar -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          
+          <!-- Left Column: Rendered Markdown -->
+          <article class="lg:col-span-8 glass-card rounded-2xl p-6 sm:p-10 border border-white/10 relative">
+            <div class="flex items-center justify-between pb-6 mb-6 border-b border-white/10 font-mono text-xs text-zinc-400">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm text-[#DC143C]">description</span>
+                <span class="font-semibold text-zinc-200 uppercase tracking-wider">README.md</span>
+              </div>
+              <span class="text-zinc-500">Apisikma123 / <span id="modal-repo-name" class="text-zinc-300 font-medium">project</span></span>
+            </div>
+
+            <div id="modal-markdown" class="markdown-body">
+              <!-- Rendered Markdown -->
+            </div>
+          </article>
+
+          <!-- Right Column: Sidebar Specs -->
+          <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24 font-mono text-xs">
+            <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
+              <span class="eyebrow text-zinc-500 text-[0.62rem] block">REPOSITORY TELEMETRY</span>
+              
+              <div class="space-y-1">
+                <span class="text-zinc-500 text-[0.62rem]">AUTHOR</span>
+                <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="text-zinc-200 hover:text-[#DC143C] block font-medium">Muhammad Aga Putra (@Apisikma123) ↗</a>
+              </div>
+
+              <div class="space-y-1 pt-2 border-t border-white/5">
+                <span class="text-zinc-500 text-[0.62rem]">TECH STACK</span>
+                <span id="modal-side-tech" class="text-zinc-300 block">Flutter, Dart</span>
+              </div>
+
+              <div class="space-y-1 pt-2 border-t border-white/5">
+                <span class="text-zinc-500 text-[0.62rem]">STATUS</span>
+                <span class="text-emerald-400 flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Public Open Source</span>
+                </span>
+              </div>
+
+              <div class="pt-3 border-t border-white/10">
+                <button
+                  type="button"
+                  id="modal-clone-btn"
+                  onclick="copyModalCloneCommand()"
+                  class="w-full rounded-md bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
+                >
+                  <span id="modal-clone-label" class="truncate mr-2 font-mono">git clone ...</span>
+                  <span class="material-symbols-outlined text-xs text-zinc-400 shrink-0">content_copy</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- WhatsApp Project Discussion CTA -->
+            <div class="glass-card rounded-xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
+              <h4 class="font-sans font-bold text-sm text-white">Tertarik dengan Proyek Ini?</h4>
+              <p class="font-sans text-xs text-zinc-400 leading-relaxed font-light">
+                Konsultasikan kebutuhan implementasi fitur, arsitektur serupa, atau custom build.
+              </p>
+              <a
+                id="modal-wa-btn"
+                href="https://wa.me/6285169084136"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-crimson rounded-lg py-2.5 px-4 w-full block font-mono text-[0.68rem] uppercase tracking-wider font-semibold"
+              >
+                Diskusi via WhatsApp
+              </a>
+            </div>
+          </aside>
+
+        </div>
+
+      </div>
+    </div>
   </body>
 </html>
