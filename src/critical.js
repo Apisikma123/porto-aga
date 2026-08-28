@@ -939,7 +939,7 @@ export const initPageTransitionLinks = () => {
 };
 
 // ═══════════════════════════════════════════════════════════
-// GLOBAL VELVETY 3D TILT ENGINE (EVENT DELEGATION + SPRING LERP)
+// GLOBAL VELVETY 3D TILT ENGINE (ZERO CLIPPING + ZERO EDGE JITTER)
 // ═══════════════════════════════════════════════════════════
 export const initGlobalCardTilt = () => {
   if (typeof window === "undefined") return;
@@ -966,13 +966,9 @@ export const initGlobalCardTilt = () => {
   let targetRotY = 0;
   let currentRotX = 0;
   let currentRotY = 0;
-  let targetScale = 1;
-  let currentScale = 1;
-  let targetTranslateY = 0;
-  let currentTranslateY = 0;
   let rafId = null;
 
-  const maxTilt = 10.0; // Rich expressive 3D perspective tilt
+  const maxTilt = 6.5; // Controlled, elegant, unclipped tilt angle
 
   const updateTiltPhysics = () => {
     if (!activeCard) {
@@ -980,34 +976,28 @@ export const initGlobalCardTilt = () => {
       return;
     }
 
-    currentRotX += (targetRotX - currentRotX) * 0.14;
-    currentRotY += (targetRotY - currentRotY) * 0.14;
-    currentScale += (targetScale - currentScale) * 0.14;
-    currentTranslateY += (targetTranslateY - currentTranslateY) * 0.14;
+    currentRotX += (targetRotX - currentRotX) * 0.12;
+    currentRotY += (targetRotY - currentRotY) * 0.12;
 
     activeCard.style.setProperty(
       "transform",
-      `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateY(${currentTranslateY.toFixed(2)}px) translateZ(12px) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`,
+      `perspective(800px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`,
       "important"
     );
 
-    const diff =
-      Math.abs(targetRotX - currentRotX) +
-      Math.abs(targetRotY - currentRotY) +
-      Math.abs(targetScale - currentScale) +
-      Math.abs(targetTranslateY - currentTranslateY);
+    const diff = Math.abs(targetRotX - currentRotX) + Math.abs(targetRotY - currentRotY);
 
-    if (activeCard && (targetScale > 1 || diff > 0.01)) {
+    if (activeCard && (Math.abs(targetRotX) > 0.05 || Math.abs(targetRotY) > 0.05 || diff > 0.01)) {
       rafId = requestAnimationFrame(updateTiltPhysics);
     } else if (activeCard) {
       activeCard.style.setProperty(
         "transition",
-        "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
+        "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
         "important"
       );
       activeCard.style.setProperty(
         "transform",
-        "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px) scale3d(1, 1, 1)",
+        "perspective(800px) rotateX(0deg) rotateY(0deg)",
         "important"
       );
       const cardToReset = activeCard;
@@ -1017,7 +1007,7 @@ export const initGlobalCardTilt = () => {
           cardToReset.style.removeProperty("transform");
           cardToReset.style.removeProperty("will-change");
         }
-      }, 600);
+      }, 500);
       activeCard = null;
       cachedRect = null;
       rafId = null;
@@ -1027,13 +1017,35 @@ export const initGlobalCardTilt = () => {
   const handlePointer = (e) => {
     if (e.pointerType === "touch") return;
 
+    // 1. Hysteresis check: keep current activeCard locked if pointer is within a generous buffer zone around it (completely eliminates edge flicker)
+    if (activeCard && cachedRect) {
+      const isWithinHysteresis = (
+        e.clientX >= cachedRect.left - 20 &&
+        e.clientX <= cachedRect.right + 20 &&
+        e.clientY >= cachedRect.top - 20 &&
+        e.clientY <= cachedRect.bottom + 20
+      );
+
+      if (isWithinHysteresis) {
+        const normX = Math.max(-1, Math.min(1, ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1));
+        const normY = Math.max(-1, Math.min(1, ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1));
+
+        targetRotX = -normY * maxTilt;
+        targetRotY = normX * maxTilt;
+
+        if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
+        return;
+      }
+    }
+
+    // 2. Look for new card
     const card = e.target && e.target.closest ? e.target.closest(CARD_SELECTOR) : null;
 
     if (card && (!card.closest("article") && card.id !== "detail-view-article" && !card.closest("#side-nav") && !card.closest("nav"))) {
       if (activeCard !== card) {
         if (activeCard) {
-          activeCard.style.setProperty("transition", "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)", "important");
-          activeCard.style.setProperty("transform", "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) translateZ(0px) scale3d(1, 1, 1)", "important");
+          activeCard.style.setProperty("transition", "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)", "important");
+          activeCard.style.setProperty("transform", "perspective(800px) rotateX(0deg) rotateY(0deg)", "important");
         }
         activeCard = card;
         activeCard.style.setProperty("transition", "none", "important");
@@ -1042,27 +1054,21 @@ export const initGlobalCardTilt = () => {
         cachedRect = activeCard.getBoundingClientRect();
         currentRotX = 0;
         currentRotY = 0;
-        currentScale = 1;
-        currentTranslateY = 0;
       }
 
       if (!cachedRect) cachedRect = activeCard.getBoundingClientRect();
       if (cachedRect.width === 0 || cachedRect.height === 0) return;
 
-      const normX = ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1;
-      const normY = ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1;
+      const normX = Math.max(-1, Math.min(1, ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1));
+      const normY = Math.max(-1, Math.min(1, ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1));
 
       targetRotX = -normY * maxTilt;
       targetRotY = normX * maxTilt;
-      targetScale = 1.035;
-      targetTranslateY = -6;
 
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     } else if (activeCard) {
       targetRotX = 0;
       targetRotY = 0;
-      targetScale = 1;
-      targetTranslateY = 0;
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     }
   };
@@ -1074,8 +1080,6 @@ export const initGlobalCardTilt = () => {
     if (activeCard) {
       targetRotX = 0;
       targetRotY = 0;
-      targetScale = 1;
-      targetTranslateY = 0;
       if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
     }
   }, { passive: true });
