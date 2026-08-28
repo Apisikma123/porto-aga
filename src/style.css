@@ -2059,6 +2059,51 @@ html[data-theme="light"] #carousel-next-btn:hover {
   color: #0f172a !important;
 }
 
+/* Pricing Page Core Commission Tier Cards */
+.pricing-tier-card {
+  background-color: #18181d;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] .pricing-tier-card {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06) !important;
+}
+
+html[data-theme="light"] .pricing-tier-card.border-\[\#FF0044\] {
+  border-color: #dc143c !important;
+  box-shadow: 0 12px 35px rgba(220, 20, 60, 0.18) !important;
+}
+
+html[data-theme="light"] .pricing-tier-card h3 {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-tier-card p {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .pricing-tier-card .font-mono div {
+  color: #090a10 !important;
+}
+
+html[data-theme="light"] .pricing-tier-card ul {
+  border-top-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] .pricing-tier-card ul li {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .pricing-tier-card button[onclick*="Kalkulator"] {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .pricing-tier-card button[onclick*="Kalkulator"]:hover {
+  color: #dc143c !important;
+}
+
 /* Image Preview Overlay Floating Badges (Visual Architecture Preview, Language Badges) */
 #detail-view-banner-container [class*="bg-black"],
 #detail-view-banner-container [class*="bg-black"] *,
