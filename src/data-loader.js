@@ -188,7 +188,9 @@ export const createFeaturedProjectCardElement = (item) => {
     <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
       <button
         type="button"
-        onclick="window.switchView('project', '${item.id}')"
+        onclick="window.openProjectDetail('${item.id}')"
+        data-project-id="${item.id}"
+        data-view="project"
         class="relative z-20 rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white border border-[#DC143C]/30 px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none"
       >
         <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>

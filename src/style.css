@@ -2039,6 +2039,26 @@ html[data-theme="light"] #all-projects-view {
   color: #090a10 !important;
 }
 
+html[data-theme="light"] #carousel-counter-container {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] #carousel-counter {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] #carousel-prev-btn,
+html[data-theme="light"] #carousel-next-btn {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] #carousel-prev-btn:hover,
+html[data-theme="light"] #carousel-next-btn:hover {
+  background-color: rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
 /* Image Preview Overlay Floating Badges (Visual Architecture Preview, Language Badges) */
 #detail-view-banner-container [class*="bg-black"],
 #detail-view-banner-container [class*="bg-black"] *,

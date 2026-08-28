@@ -437,24 +437,47 @@ window.switchView = async (viewName, param, updateHash = true) => {
   }
 };
 
+export const openProjectDetail = (projectId) => {
+  if (window.switchView) {
+    window.switchView("project", projectId);
+  } else {
+    window.location.href = "/project.html?id=" + encodeURIComponent(projectId);
+  }
+};
+window.openProjectDetail = openProjectDetail;
+
 // Global Click Delegation (Capture Phase) - Guarantees clicks work inside 3D transformed containers
 if (typeof document !== "undefined") {
   document.addEventListener(
     "click",
     (e) => {
-      const btn = e.target && e.target.closest ? e.target.closest("button, a, [onclick*='switchView'], [data-open-project]") : null;
+      const btn = e.target && e.target.closest ? e.target.closest("button, a, [data-project-id], [onclick*='switchView'], [onclick*='openProjectDetail']") : null;
       if (!btn) return;
 
-      const onclickAttr = btn.getAttribute("onclick") || "";
-      const match = onclickAttr.match(/switchView\(\s*['"]([^'"]+)['"]\s*(?:,\s*['"]?([^'")]*)['"]?)?/);
-      if (match) {
+      const projectId = btn.getAttribute("data-project-id");
+      if (projectId) {
         e.preventDefault();
         e.stopPropagation();
-        const viewName = match[1];
-        const rawParam = match[2];
-        const param = rawParam && rawParam.trim() ? rawParam.trim() : null;
-        if (window.switchView) {
-          window.switchView(viewName, param);
+        if (window.openProjectDetail) {
+          window.openProjectDetail(projectId);
+        } else if (window.switchView) {
+          window.switchView("project", projectId);
+        } else {
+          window.location.href = "/project.html?id=" + encodeURIComponent(projectId);
+        }
+        return;
+      }
+
+      const onclickAttr = btn.getAttribute("onclick") || "";
+      if (onclickAttr.includes("openProjectDetail")) {
+        const m = onclickAttr.match(/openProjectDetail\(\s*['"]([^'"]+)['"]\s*\)/);
+        if (m && m[1]) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (window.openProjectDetail) {
+            window.openProjectDetail(m[1]);
+          }
+          return;
         }
       }
     },
