@@ -845,6 +845,10 @@ export const initPreloaderTimeline = () => {
     if (backdropEl) {
       launchTl.to(backdropEl, { opacity: 0, duration: 1.25, ease: "power2.inOut" }, 0.05);
     }
+    // Fade out sisa kepulan asap secara mulus agar tidak hilang mendadak
+    if (smokeCanvas) {
+      launchTl.to(smokeCanvas, { opacity: 0, duration: 0.95, ease: "power2.out" }, 0.85);
+    }
 
     // Roket meluncur ke atas secara mulus dan anggun (60fps, 100% solid opacity)
     if (rocketCenter) {
