@@ -26,7 +26,7 @@ export const PRICING_CONFIG = {
         "Mobile & Desktop Responsive",
         "Tombol CTA WhatsApp Langsung",
         "Formulir Kontak / Inquiry Dasar",
-        "Gratis Setup Hosting & Deployment"
+        "Panduan Deploy & Handover Source Code"
       ],
       excludedId: [
         "Animasi 3D kompleks",
