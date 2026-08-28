@@ -167,7 +167,7 @@ export const createFeaturedProjectCardElement = (item) => {
     .join("\n                    ");
 
   card.innerHTML = `
-    <div>
+    <a href="/project.html?id=${encodeURIComponent(item.id)}" class="block cursor-pointer" title="Buka Detail Proyek ${item.titleFallback}">
       ${mediaHtml}
       <div class="p-4 sm:p-5">
         <div class="flex justify-between items-center mb-1.5">
@@ -184,9 +184,15 @@ export const createFeaturedProjectCardElement = (item) => {
           ${tagsHtml}
         </div>
       </div>
-    </div>
-    <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem]">
-      <span class="text-zinc-500 font-mono text-[0.62rem] uppercase tracking-wider">GitHub Source</span>
+    </a>
+    <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
+      <a
+        href="/project.html?id=${encodeURIComponent(item.id)}"
+        class="relative z-20 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors"
+      >
+        <span>Detail &amp; Arsitektur</span>
+        <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
       <a
         href="${item.repoUrl}"
         target="_blank"
@@ -194,7 +200,7 @@ export const createFeaturedProjectCardElement = (item) => {
         aria-label="Buka repository GitHub untuk proyek ${item.titleFallback}"
         class="relative z-20 rounded bg-white/5 hover:bg-[#DC143C] text-zinc-300 hover:text-white border border-white/10 hover:border-transparent px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none group"
       >
-        <span>Lihat Repositori</span>
+        <span>GitHub</span>
         <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </a>
     </div>
