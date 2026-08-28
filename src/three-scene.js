@@ -640,18 +640,18 @@ export const initThreeEngine = () => {
   const updateThreeTheme = (theme, animate = true) => {
     const isLight = theme === "light";
     const targetFogColor = new THREE.Color(isLight ? 0xe2e8f2 : 0x040509);
-    const targetAmbient = new THREE.Color(isLight ? 0xeef2f8 : 0x181e32);
-    const targetAmbientIntensity = isLight ? 2.8 : 1.3;
+    const targetAmbient = new THREE.Color(isLight ? 0xffffff : 0x181e32);
+    const targetAmbientIntensity = isLight ? 3.2 : 1.3;
     const targetKeyLight = new THREE.Color(isLight ? 0xffffff : 0xfff8f0);
-    const targetKeyIntensity = isLight ? 3.8 : 3.2;
-    const targetCrimsonFill = new THREE.Color(isLight ? 0xdc143c : 0xff1828);
-    const targetFillIntensity = isLight ? 3.0 : 2.6;
-    const targetBackLight = new THREE.Color(isLight ? 0x94a3b8 : 0x3870ff);
-    const targetBackIntensity = isLight ? 1.8 : 2.0;
-    const targetShardColor = new THREE.Color(isLight ? 0xe2e8f0 : 0x121420);
-    const targetShardEmissive = new THREE.Color(isLight ? 0xffe4e8 : 0x30050c);
-    const targetPolyColor = new THREE.Color(isLight ? 0xe8ecf2 : 0x181822);
-    const targetRing1Color = new THREE.Color(isLight ? 0x94a3b8 : 0x2b2d38);
+    const targetKeyIntensity = isLight ? 4.2 : 3.2;
+    const targetCrimsonFill = new THREE.Color(0xdc143c);
+    const targetFillIntensity = isLight ? 3.6 : 2.6;
+    const targetBackLight = new THREE.Color(isLight ? 0x64748b : 0x3870ff);
+    const targetBackIntensity = isLight ? 2.4 : 2.0;
+    const targetShardColor = new THREE.Color(isLight ? 0x0f172a : 0x121420);
+    const targetShardEmissive = new THREE.Color(isLight ? 0xdc143c : 0x30050c);
+    const targetPolyColor = new THREE.Color(isLight ? 0x0f172a : 0x181822);
+    const targetRing1Color = new THREE.Color(isLight ? 0xdc143c : 0x2b2d38);
 
     if (!animate) {
       if (scene.fog) scene.fog.color.copy(targetFogColor);

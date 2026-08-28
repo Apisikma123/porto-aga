@@ -1335,19 +1335,19 @@ html[data-theme="light"] .markdown-body blockquote {
   border-left-color: #DC143C !important;
 }
 
-/* Glassmorphic Project Detail View & All Projects View (Ensures 3D canvas is visible through translucent glass in both themes) */
+/* Transparent Project Detail View & All Projects View (Ensures 3D canvas is 100% visible) */
 #project-detail-view,
 #all-projects-view {
-  background: rgba(4, 5, 9, 0.75) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  background: rgba(4, 5, 9, 0.25) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
 }
 
 html[data-theme="light"] #project-detail-view,
 html[data-theme="light"] #all-projects-view {
-  background: rgba(248, 250, 252, 0.65) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  background: rgba(248, 250, 252, 0.15) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
 }
 
 /* Light Theme Card Preview & Mockup Fix */

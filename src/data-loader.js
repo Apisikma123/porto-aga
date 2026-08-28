@@ -866,6 +866,9 @@ export const openProjectDetail = async (projectId) => {
   projectDetailEl.style.zIndex = "99999";
   projectDetailEl.scrollTop = 0;
   window.currentSPAView = "project";
+  if (window.update3DSceneForView) {
+    window.update3DSceneForView("project");
+  }
 };
 window.openProjectDetail = openProjectDetail;
 window.__openProjectDetailImpl = openProjectDetail;
@@ -899,6 +902,9 @@ export const switchView = async (viewName, param, updateHash = true) => {
       allProjectsEl.style.zIndex = "99999";
       allProjectsEl.scrollTop = 0;
       window.currentSPAView = "all-projects";
+      if (window.update3DSceneForView) {
+        window.update3DSceneForView("all-projects");
+      }
       if (!projectsData || !projectsData.length) {
         try {
           const pRes = await fetch("/all_projects.json");
@@ -927,6 +933,9 @@ export const switchView = async (viewName, param, updateHash = true) => {
     }
     document.body.style.overflow = "auto";
     window.currentSPAView = "portfolio";
+    if (window.update3DSceneForView) {
+      window.update3DSceneForView("portfolio");
+    }
     if (typeof param === "number") {
       window.scrollToSection(param, true);
     }
