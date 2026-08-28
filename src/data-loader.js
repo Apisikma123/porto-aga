@@ -785,13 +785,50 @@ export const openProjectDetail = async (projectId) => {
   if (repoNameEl) repoNameEl.textContent = proj.id;
   if (sideLangEl) sideLangEl.textContent = (proj.tags || [proj.language]).slice(0, 3).join(", ");
 
-  const bannerImg = document.getElementById("detail-view-banner-img");
-  if (bannerImg) {
-    bannerImg.src = proj.previewImage || `/projects/${proj.id}.webp`;
-  }
-  const bannerBadge = document.getElementById("detail-view-banner-badge");
-  if (bannerBadge) {
-    bannerBadge.textContent = proj.language || "Code";
+  const isMobile = proj.category === "Mobile" || proj.categoryTag === "Mobile" || proj.id === "foodify" || (proj.tags && proj.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)));
+  const bannerContainer = document.getElementById("detail-view-banner-container");
+  if (bannerContainer) {
+    if (isMobile) {
+      bannerContainer.className = "phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]";
+      bannerContainer.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
+        <div class="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-full border border-white/20 z-10 flex items-center justify-end pr-1.5">
+            <div class="w-1.5 h-1.5 rounded-full bg-zinc-800 border border-white/10"></div>
+          </div>
+          <img
+            id="detail-view-banner-img"
+            src="${proj.previewImage || `/projects/${proj.id}.webp`}"
+            alt="${proj.displayName}"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
+            class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
+          />
+        </div>
+        <div class="phone-mockup-badge absolute bottom-4 right-4 px-3 py-1 rounded-md bg-black/80 backdrop-blur-md border border-white/10 text-xs font-mono text-zinc-300 flex items-center gap-1.5 shadow-lg">
+          <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+          <span>${proj.language || 'Flutter Mobile'}</span>
+        </div>
+      `;
+    } else {
+      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]";
+      bannerContainer.innerHTML = `
+        <img
+          id="detail-view-banner-img"
+          src="${proj.previewImage || `/projects/${proj.id}.webp`}"
+          alt="${proj.displayName}"
+          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
+          class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
+        <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
+          <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+            <span>Visual Architecture Preview</span>
+          </span>
+          <span id="detail-view-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">${proj.language || 'Code'}</span>
+        </div>
+      `;
+    }
   }
 
   const tagsContainer = document.getElementById("detail-view-tags");

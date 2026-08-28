@@ -325,26 +325,50 @@ export default function ProjectDetailApp() {
           </div>
         ) : (
           <div>
-            {/* Visual Preview Banner */}
-            <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-              <img
-                src={project.previewImage || `/projects/${project.id}.webp`}
-                alt={`${project.displayName} Preview`}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';
-                }}
-                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
-                <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-                  <span>{dict.preview}</span>
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">{project.language || 'Code'}</span>
+            {/* Visual Preview Banner (iPhone Mockup if Mobile, wide landscape if web) */}
+            {project.category === 'Mobile' || project.categoryTag === 'Mobile' || project.id === 'foodify' || (project.tags && project.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t))) ? (
+              <div className="phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
+                <div className="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 w-14 h-3.5 bg-black rounded-full border border-white/20 z-10 flex items-center justify-end pr-1.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-800 border border-white/10"></div>
+                  </div>
+                  <img
+                    src={project.previewImage || `/projects/${project.id}.webp`}
+                    alt={`${project.displayName} Preview`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';
+                    }}
+                    className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
+                  />
+                </div>
+                <div className="phone-mockup-badge absolute bottom-4 right-4 px-3 py-1 rounded-md bg-black/80 backdrop-blur-md border border-white/10 text-xs font-mono text-zinc-300 flex items-center gap-1.5 shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+                  <span>{project.language || 'Flutter Mobile'}</span>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                <img
+                  src={project.previewImage || `/projects/${project.id}.webp`}
+                  alt={`${project.displayName} Preview`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';
+                  }}
+                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
+                  <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
+                    <span>{dict.preview}</span>
+                  </span>
+                  <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">{project.language || 'Code'}</span>
+                </div>
+              </div>
+            )}
 
             {/* Hero Header */}
             <div className="border-b border-white/10 pb-10 mb-12">
