@@ -245,6 +245,19 @@
     -webkit-backface-visibility: hidden;
   }
 
+  .glass-card a,
+  .glass-card button,
+  .carousel-card a,
+  .carousel-card button,
+  .spatial-card a,
+  .spatial-card button {
+    position: relative;
+    z-index: 40 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    transform: translateZ(25px);
+  }
+
   .glass-card:hover,
   .tesseract-card:hover,
   .carousel-card:hover,

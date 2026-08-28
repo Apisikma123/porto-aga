@@ -167,14 +167,14 @@ export const createFeaturedProjectCardElement = (item) => {
     .join("\n                    ");
 
   card.innerHTML = `
-    <a href="/project.html?id=${encodeURIComponent(item.id)}" class="block cursor-pointer" title="Buka Detail Proyek ${item.titleFallback}">
+    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="Overview Singkat - ${item.titleFallback}">
       ${mediaHtml}
       <div class="p-4 sm:p-5">
         <div class="flex justify-between items-center mb-1.5">
           <span class="eyebrow text-[0.6rem]" data-i18n="${item.tagI18n}">${item.tagFallback}</span>
           <span class="font-mono text-[0.65rem] text-[#DC143C] font-semibold" data-i18n="${item.statusI18n}">${item.statusFallback}</span>
         </div>
-        <h3 class="font-bold text-base text-white group-hover:text-[#DC143C] transition-colors mb-1.5" data-i18n="${item.titleI18n}">
+        <h3 class="font-bold text-base text-white group-hover/card-body:text-[#DC143C] transition-colors mb-1.5" data-i18n="${item.titleI18n}">
           ${item.titleFallback}
         </h3>
         <p class="text-xs text-zinc-400 font-light leading-relaxed mb-2.5 line-clamp-2" data-i18n="${item.descI18n}">
@@ -184,21 +184,23 @@ export const createFeaturedProjectCardElement = (item) => {
           ${tagsHtml}
         </div>
       </div>
-    </a>
+    </div>
     <div class="px-4 sm:px-5 pb-3.5 pt-2.5 flex items-center justify-between border-t border-white/5 font-mono text-[0.68rem] gap-2">
-      <a
-        href="/project.html?id=${encodeURIComponent(item.id)}"
-        class="relative z-20 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors"
+      <button
+        type="button"
+        onclick="window.openProjectDetail('${item.id}')"
+        class="relative z-30 text-[#DC143C] hover:text-white inline-flex items-center gap-1.5 font-semibold group leading-none transition-colors cursor-pointer py-1.5 px-2 rounded hover:bg-white/5"
+        title="Overview Singkat - ${item.titleFallback}"
       >
-        <span>Detail &amp; Arsitektur</span>
+        <span>Overview Singkat</span>
         <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
+      </button>
       <a
         href="${item.repoUrl}"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Buka repository GitHub untuk proyek ${item.titleFallback}"
-        class="relative z-20 rounded bg-white/5 hover:bg-[#DC143C] text-zinc-300 hover:text-white border border-white/10 hover:border-transparent px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none group"
+        class="relative z-30 rounded bg-white/5 hover:bg-[#DC143C] text-zinc-300 hover:text-white border border-white/10 hover:border-transparent px-3 py-1.5 transition-all inline-flex items-center justify-center gap-1.5 font-semibold cursor-pointer touch-manipulation active:scale-95 leading-none group"
       >
         <span>GitHub</span>
         <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
@@ -780,7 +782,7 @@ export const initSPAViews = async () => {
     const hash = window.location.hash;
     if (hash.startsWith("#project/")) {
       const id = hash.replace("#project/", "");
-      window.location.href = "/project.html?id=" + encodeURIComponent(id);
+      openProjectDetail(id);
     }
   };
 
@@ -790,22 +792,141 @@ export const initSPAViews = async () => {
   }
 };
 
-export const switchView = async (viewName, param, updateHash = true) => {
-  if (viewName === "project") {
-    window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
+export const openProjectDetail = async (projectId) => {
+  const projectDetailEl = document.getElementById("project-detail-view");
+  if (!projectDetailEl) {
+    window.location.href = "/project.html?id=" + encodeURIComponent(projectId || "foodify");
     return;
+  }
+
+  if (!projectsData || !projectsData.length) {
+    try {
+      const pRes = await fetch("/all_projects.json");
+      if (pRes.ok) {
+        projectsData = await pRes.json();
+        cachedProjectsData = projectsData;
+      }
+    } catch (e) {}
+  }
+
+  const pid = projectId || "foodify";
+  const featuredMatch = FEATURED_PROJECTS.find(
+    (p) => p.id.toLowerCase() === pid.toLowerCase()
+  );
+  const proj = (projectsData && projectsData.find(
+    (p) =>
+      p.id.toLowerCase() === pid.toLowerCase() ||
+      (p.name && p.name.toLowerCase() === pid.toLowerCase())
+  )) || (featuredMatch ? {
+    id: featuredMatch.id,
+    displayName: featuredMatch.titleFallback,
+    category: featuredMatch.tagFallback,
+    tags: featuredMatch.tags,
+    description: featuredMatch.descFallback,
+    html_url: featuredMatch.repoUrl,
+    language: featuredMatch.tags[0] || "Code",
+    readme: `# ${featuredMatch.titleFallback}\n\n${featuredMatch.descFallback}\n\n- **GitHub:** [${featuredMatch.repoUrl}](${featuredMatch.repoUrl})`
+  } : {
+    id: pid,
+    displayName: pid.toUpperCase(),
+    category: "Software Engineering",
+    tags: ["Code"],
+    description: "Open source software project by Muhammad Aga Putra.",
+    html_url: "https://github.com/Apisikma123/" + pid,
+    language: "Code",
+    readme: "# " + pid.toUpperCase() + "\n\nDocumentation repository for " + pid + "."
+  });
+
+  const eyebrowEl = document.getElementById("detail-view-eyebrow");
+  const langEl = document.getElementById("detail-view-lang");
+  const titleEl = document.getElementById("detail-view-title");
+  const descEl = document.getElementById("detail-view-desc");
+  const githubLink = document.getElementById("detail-view-github-link");
+  const repoNameEl = document.getElementById("detail-view-repo-name");
+  const sideLangEl = document.getElementById("detail-view-side-lang");
+
+  if (eyebrowEl) eyebrowEl.textContent = (proj.category || "CASE STUDY").toUpperCase() + " · OVERVIEW";
+  if (langEl) langEl.textContent = proj.language || "Code";
+  if (titleEl) titleEl.textContent = proj.displayName;
+  if (descEl) descEl.textContent = currentLang === "en" && proj.descriptionEn ? proj.descriptionEn : proj.description;
+  if (githubLink) githubLink.href = proj.html_url;
+  if (repoNameEl) repoNameEl.textContent = proj.id;
+  if (sideLangEl) sideLangEl.textContent = (proj.tags || [proj.language]).slice(0, 3).join(", ");
+
+  const bannerImg = document.getElementById("detail-view-banner-img");
+  if (bannerImg) {
+    bannerImg.src = proj.previewImage || `/projects/${proj.id}.webp`;
+  }
+  const bannerBadge = document.getElementById("detail-view-banner-badge");
+  if (bannerBadge) {
+    bannerBadge.textContent = proj.language || "Code";
+  }
+
+  const tagsContainer = document.getElementById("detail-view-tags");
+  if (tagsContainer) {
+    tagsContainer.innerHTML = "";
+    (proj.tags || [proj.language]).forEach((t) => {
+      const span = document.createElement("span");
+      span.className = "font-mono text-xs text-zinc-300 bg-white/5 border border-white/10 px-3 py-1 rounded-md";
+      span.textContent = t;
+      tagsContainer.appendChild(span);
+    });
+  }
+
+  const markdownEl = document.getElementById("detail-view-markdown");
+  if (markdownEl) {
+    if (window.marked) {
+      markdownEl.innerHTML = window.marked.parse(proj.readme || ("# " + proj.displayName + "\n\n" + (proj.description || "")));
+    } else {
+      markdownEl.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${proj.readme || proj.description}</div>`;
+    }
+  }
+
+  fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/main/README.md`)
+    .then((r) => (r.ok ? r.text() : fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/master/README.md`).then((res) => (res.ok ? res.text() : ""))))
+    .then((liveText) => {
+      if (liveText && liveText.trim() && markdownEl && window.marked) {
+        markdownEl.innerHTML = window.marked.parse(liveText);
+      }
+    })
+    .catch(() => {});
+
+  document.body.style.overflow = "hidden";
+  projectDetailEl.classList.remove("hidden");
+  projectDetailEl.style.display = "block";
+  projectDetailEl.style.zIndex = "99999";
+  projectDetailEl.scrollTop = 0;
+  window.currentSPAView = "project";
+};
+window.openProjectDetail = openProjectDetail;
+
+export const switchView = async (viewName, param, updateHash = true) => {
+  const projectDetailEl = document.getElementById("project-detail-view");
+
+  if (viewName === "project") {
+    if (projectDetailEl) {
+      return openProjectDetail(param);
+    } else {
+      window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
+      return;
+    }
   }
   if (viewName === "all-projects") {
     window.location.href = "/projects.html";
     return;
   }
   if (viewName === "portfolio") {
-    if (window.location.pathname !== "/" && !window.location.pathname.endsWith("index.html")) {
+    if (projectDetailEl) {
+      projectDetailEl.classList.add("hidden");
+      projectDetailEl.style.display = "none";
+      document.body.style.overflow = "auto";
+      window.currentSPAView = "portfolio";
+    } else if (window.location.pathname !== "/" && !window.location.pathname.endsWith("index.html")) {
       window.location.href = "/";
-      return;
     }
   }
 };
+window.switchView = switchView;
 
 window.setAllViewCategory = (category, btn) => {
   allViewActiveCategory = category;

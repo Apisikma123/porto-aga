@@ -418,21 +418,35 @@ export const setLanguage = (lang, animate = true) => {
 window.setLanguage = setLanguage;
 
 window.switchView = async (viewName, param, updateHash = true) => {
+  const projectDetailEl = document.getElementById("project-detail-view");
   if (viewName === "project") {
-    window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
-    return;
+    if (window.openProjectDetail && window.openProjectDetail !== openProjectDetail) {
+      return window.openProjectDetail(param);
+    }
+    if (!projectDetailEl) {
+      window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
+      return;
+    }
   }
   if (viewName === "all-projects") {
     window.location.href = "/projects.html";
     return;
   }
-  if (window.__switchViewImpl) {
-    return window.__switchViewImpl(viewName, param, updateHash);
+  if (viewName === "portfolio") {
+    if (projectDetailEl) {
+      projectDetailEl.classList.add("hidden");
+      projectDetailEl.style.display = "none";
+      document.body.style.overflow = "auto";
+      window.currentSPAView = "portfolio";
+    }
   }
 };
 
 export const openProjectDetail = (projectId) => {
-  window.location.href = "/project.html?id=" + encodeURIComponent(projectId || "foodify");
+  const projectDetailEl = document.getElementById("project-detail-view");
+  if (!projectDetailEl) {
+    window.location.href = "/project.html?id=" + encodeURIComponent(projectId || "foodify");
+  }
 };
 window.openProjectDetail = openProjectDetail;
 
