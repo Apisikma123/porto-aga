@@ -116,7 +116,7 @@ export default function ProjectDetailApp() {
   const dict = {
     id: {
       back: 'Portofolio 3D',
-      allProjects: 'Semua Karya (17)',
+      allProjects: 'Projects (04)',
       loading: 'Memuat dokumentasi proyek…',
       notFound: 'Proyek Tidak Ditemukan',
       notFoundDesc: 'Repositori yang Anda cari tidak ditemukan atau telah dipindahkan.',
@@ -136,7 +136,7 @@ export default function ProjectDetailApp() {
     },
     en: {
       back: '3D Portfolio',
-      allProjects: 'All Works (17)',
+      allProjects: 'Projects (04)',
       loading: 'Loading project documentation…',
       notFound: 'Project Not Found',
       notFoundDesc: 'The repository you are looking for was not found or has been moved.',
@@ -167,98 +167,145 @@ export default function ProjectDetailApp() {
 
   return (
     <div className="relative min-h-screen flex flex-col justify-between text-zinc-100 selection:bg-[#DC143C]/40">
-      {/* 1. Header */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#090a10]/80 backdrop-blur-xl px-6 md:px-12 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <a
-            href="/"
-            className="inline-flex items-center justify-center gap-2 text-zinc-400 hover:text-white transition-colors group font-mono text-xs uppercase tracking-wider leading-none"
-          >
-            <svg
-              className="w-3.5 h-3.5 shrink-0 group-hover:-translate-x-1 transition-transform"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            <span>{dict.back}</span>
-          </a>
+      
+      {/* 1. TOP FLOATING NAVIGATION BAR (Matches Homepage & Pricing) */}
+      <header className="fixed top-0 inset-x-0 z-40 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 flex justify-between items-center pointer-events-none">
+        <a
+          href="/#start"
+          className="pointer-events-auto eyebrow text-zinc-200 hover:text-white transition-colors duration-300 font-bold cursor-pointer flex items-center gap-2"
+          style={{ letterSpacing: '0.3em' }}
+        >
+          <span className="text-[#DC143C]">◆</span> AGA STUDIO
+        </a>
 
-          <a
-            href="/projects.html"
-            className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider leading-none"
-          >
-            <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-            <span>{dict.allProjects}</span>
-          </a>
+        {/* Center Navigation Pill */}
+        <nav className="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
+          <a href="/#start" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Start</a>
+          <a href="/#about" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">About</a>
+          <a href="/#activity" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Activity</a>
+          <a href="/projects.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
+          <a href="/pricing.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Studio</a>
+          <a href="/#contact" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
+          <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Colophon</a>
+        </nav>
 
-          <div className="flex items-center gap-3">
+        {/* Right Actions: Theme Toggle + Language Switcher + Pricing Button */}
+        <div className="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
+            aria-label="Toggle Theme"
+          >
+            {theme === 'light' ? (
+              <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+              </svg>
+            )}
+          </button>
+
+          <div className="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg font-mono text-xs">
             <button
               type="button"
-              onClick={toggleTheme}
-              className="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
-              aria-label="Toggle Theme"
+              className={`px-2 py-1 rounded transition-colors ${lang === 'en' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
+              onClick={() => switchLanguage('en')}
             >
-              {theme === 'light' ? (
-                <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="4"></circle>
-                  <path d="M12 2v2"></path>
-                  <path d="M12 20v2"></path>
-                  <path d="m4.93 4.93 1.41 1.41"></path>
-                  <path d="m17.66 17.66 1.41 1.41"></path>
-                  <path d="M2 12h2"></path>
-                  <path d="M20 12h2"></path>
-                  <path d="m6.34 17.66-1.41 1.41"></path>
-                  <path d="m19.07 4.93-1.41 1.41"></path>
-                </svg>
-              )}
+              EN
             </button>
-
-            <div className="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 p-1 shadow-lg font-mono text-xs">
-              <button
-                type="button"
-                className={`px-2 py-1 rounded transition-colors ${lang === 'en' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
-                onClick={() => switchLanguage('en')}
-              >
-                EN
-              </button>
-              <button
-                type="button"
-                className={`px-2 py-1 rounded transition-colors ${lang === 'id' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
-                onClick={() => switchLanguage('id')}
-              >
-                ID
-              </button>
-            </div>
-
-            <a
-              href="/pricing.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+            <button
+              type="button"
+              className={`px-2 py-1 rounded transition-colors ${lang === 'id' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
+              onClick={() => switchLanguage('id')}
             >
-              <span>Estimasi Harga ↗</span>
-            </a>
+              ID
+            </button>
           </div>
+
+          <a
+            href="/pricing.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden sm:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+          >
+            <span className="material-symbols-outlined text-xs">calculate</span>
+            <span>Estimasi Harga ↗</span>
+          </a>
         </div>
       </header>
 
-      {/* 2. Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-6 md:px-12 py-12 relative z-10">
+      {/* 2. CLICKABLE VERTICAL NUMERIC SIDEBAR (Stays on No 4) */}
+      <aside
+        aria-label="Section Navigation"
+        className="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
+      >
+        <p className="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]">On this page</p>
+        <ul className="space-y-3" id="side-nav">
+          <li>
+            <a href="/#start" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">01</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Start</span>
+            </a>
+          </li>
+          <li>
+            <a href="/#about" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">02</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">About</span>
+            </a>
+          </li>
+          <li>
+            <a href="/#activity" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">03</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Activity</span>
+            </a>
+          </li>
+          <li>
+            <a href="/projects.html" className="side-nav-item active group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-[#DC143C] font-bold mr-2 tabular-nums">04</span>
+              <span className="side-nav-line mr-3 h-px w-6 bg-[#DC143C]"></span>
+              <span className="side-nav-label text-[0.78rem] font-bold tracking-wide text-[#DC143C]">Projects</span>
+            </a>
+          </li>
+          <li>
+            <a href="/pricing.html" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Studio</span>
+            </a>
+          </li>
+          <li>
+            <a href="/#contact" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Contact</span>
+            </a>
+          </li>
+          <li>
+            <a href="/#footer" className="side-nav-item group flex items-center text-left py-1">
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
+              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Colophon</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      {/* 3. MAIN PROJECT CASE STUDY CONTAINER */}
+      <main className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-24 sm:pt-28 pb-16">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center gap-4 text-center">
             <div className="w-10 h-10 border-2 border-[#DC143C] border-t-transparent rounded-full animate-spin"></div>
@@ -462,14 +509,14 @@ export default function ProjectDetailApp() {
         )}
       </main>
 
-      {/* 3. Footer */}
-      <footer className="border-t border-white/10 py-8 px-6 md:px-12 bg-[#090a10]/80 backdrop-blur-xl font-mono text-xs text-zinc-500 relative z-10">
+      {/* 4. FOOTER */}
+      <footer className="border-t border-white/10 py-8 px-6 md:px-12 bg-zinc-950/80 backdrop-blur-xl font-mono text-xs text-zinc-500 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © {new Date().getFullYear()}
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
-            <a href="/" className="hover:text-white transition-colors">
+            <a href="/#start" className="hover:text-white transition-colors">
               {dict.back}
             </a>
             <a href="/projects.html" className="text-[#DC143C] hover:text-white transition-colors">

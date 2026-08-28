@@ -59,17 +59,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="msapplication-TileColor" content="#040509" />
     <meta name="theme-color" content="#040509" />
 
     <!-- Google Fonts & Material Symbols (Non-blocking async load) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
-    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
@@ -89,7 +83,7 @@
     <!-- Bundled Markdown & Highlight.js Engine -->
     <script type="module" src="/src/project-detail.js"></script>
 
-    <!-- Structured Data JSON-LD (CollectionPage & ItemList) -->
+    <!-- Structured Data JSON-LD -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -105,103 +99,164 @@
     }
     </script>
   </head>
-  <body class="font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between">
+  <body class="bg-transparent text-zinc-100 font-sans antialiased selection:bg-[#DC143C]/40 min-h-screen flex flex-col justify-between relative">
     
-    <!-- Dynamic 3D WebGL Canvas Background -->
-    <canvas id="webgl-canvas" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></canvas>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 1. FIXED 3D MULTI-OBJECT THREE.JS CANVAS                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <canvas id="webgl-canvas" class="fixed inset-0 z-0 w-full h-full pointer-events-none"></canvas>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 1. TOP HEADER & NAVIGATION                                -->
+    <!-- 2. TOP FLOATING NAVIGATION BAR (Matches Homepage & Pricing) -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <header class="sticky top-0 z-40 border-b border-white/10 bg-[#090a10]/80 backdrop-blur-xl px-6 md:px-12 py-4">
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        
-        <!-- Left: Back to 3D Portfolio -->
-        <a
-          href="/"
-          class="flex items-center gap-2.5 text-zinc-400 hover:text-white transition-colors group font-mono text-xs uppercase tracking-wider"
+    <header class="fixed top-0 inset-x-0 z-40 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 flex justify-between items-center pointer-events-none">
+      <a
+        href="/#start"
+        class="pointer-events-auto eyebrow text-zinc-200 hover:text-white transition-colors duration-300 font-bold cursor-pointer flex items-center gap-2"
+        style="letter-spacing: 0.3em;"
+      >
+        <span class="text-[#DC143C]">◆</span> AGA STUDIO
+      </a>
+
+      <!-- Center Navigation Pill (Consistent Across All Pages) -->
+      <nav class="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
+        <a href="/#start" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Start</a>
+        <a href="/#about" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">About</a>
+        <a href="/#activity" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Activity</a>
+        <a href="/projects.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
+        <a href="/pricing.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Studio</a>
+        <a href="/#contact" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
+        <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Colophon</a>
+      </nav>
+
+      <!-- Right Actions: Theme Toggle + Language Switcher + Contact Button -->
+      <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
+        <!-- Theme Mode Toggle -->
+        <button
+          type="button"
+          id="theme-toggle-btn"
+          onclick="toggleTheme()"
+          class="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
+          aria-label="Toggle Theme"
+          title="Toggle Light/Dark Theme"
         >
-          <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
-          <span id="label-back">Portofolio 3D</span>
+          <span id="theme-icon" class="flex items-center justify-center pointer-events-none">
+            <svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+          </span>
+        </button>
+
+        <!-- Bilingual Toggle (EN | ID) -->
+        <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg">
+          <button type="button" id="btn-lang-en" class="lang-btn cursor-pointer" onclick="switchLanguage('en')">EN</button>
+          <button type="button" id="btn-lang-id" class="lang-btn active cursor-pointer" onclick="switchLanguage('id')">ID</button>
+        </div>
+
+        <a
+          href="/pricing.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden sm:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
+        >
+          <span class="material-symbols-outlined text-xs">calculate</span>
+          <span>Estimasi Harga ↗</span>
         </a>
-
-        <!-- Center: Branding -->
-        <div class="font-mono text-xs font-semibold text-white tracking-widest hidden sm:block">
-          AGA PUTRA <span class="text-[#DC143C]">/</span> REPOSITORY DIRECTORY
-        </div>
-
-        <!-- Right: Actions -->
-        <div class="flex items-center gap-3">
-          <!-- Theme Mode Toggle -->
-          <button
-            id="theme-toggle-btn"
-            type="button"
-            onclick="toggleTheme()"
-            class="flex items-center justify-center p-0 w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-[#DC143C]/50 transition-all duration-300 shadow-lg cursor-pointer shrink-0"
-            aria-label="Toggle Theme"
-            title="Toggle Light/Dark Theme"
-          >
-            <span id="theme-icon" class="flex items-center justify-center pointer-events-none">
-              <svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </svg>
-            </span>
-          </button>
-
-          <!-- Language Switcher -->
-          <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 p-1 shadow-lg font-mono text-xs">
-            <button type="button" id="btn-lang-en" class="lang-btn" onclick="switchLanguage('en')">EN</button>
-            <button type="button" id="btn-lang-id" class="lang-btn active" onclick="switchLanguage('id')">ID</button>
-          </div>
-
-          <!-- Pricing Configurator Link -->
-          <a
-            href="/pricing.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="rounded-lg border border-[#DC143C]/40 bg-[#DC143C]/10 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3.5 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.25)]"
-            title="Buka Kalkulator Web 3D di Tab Baru"
-          >
-            <span class="material-symbols-outlined text-xs">calculate</span>
-            <span id="label-pricing-btn">Estimasi Harga ↗</span>
-          </a>
-
-          <!-- GitHub Profile -->
-          <a
-            href="https://github.com/Apisikma123"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white px-4 py-2 font-mono text-[0.68rem] uppercase tracking-wider font-semibold transition-all hidden md:flex items-center gap-1.5 shadow-[0_0_15px_rgba(220,20,60,0.35)]"
-          >
-            <span>GitHub Profile</span>
-            <span class="material-symbols-outlined text-xs">arrow_outward</span>
-          </a>
-        </div>
-
       </div>
     </header>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 2. HERO & DIRECTORY SEARCH / FILTERS                       -->
+    <!-- 3. CLICKABLE VERTICAL NUMERIC SIDEBAR (Stays on No 4)     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-12 py-12">
+    <aside
+      aria-label="Section Navigation"
+      class="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
+    >
+      <p class="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]">On this page</p>
+      <ul class="space-y-3" id="side-nav">
+        <li>
+          <a href="/#start" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">01</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Start</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#about" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">02</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">About</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#activity" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">03</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Activity</span>
+          </a>
+        </li>
+        <li>
+          <a href="/projects.html" class="side-nav-item active group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-[#DC143C] font-bold mr-2 tabular-nums">04</span>
+            <span class="side-nav-line mr-3 h-px w-6 bg-[#DC143C]"></span>
+            <span class="side-nav-label text-[0.78rem] font-bold tracking-wide text-[#DC143C]">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="/pricing.html" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Studio</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#contact" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Contact</span>
+          </a>
+        </li>
+        <li>
+          <a href="/#footer" class="side-nav-item group flex items-center text-left py-1">
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
+            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Colophon</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- 4. MAIN PROJECTS DIRECTORY CONTAINER                        -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-24 sm:pt-28 pb-16">
       
       <!-- Directory Header -->
-      <div class="border-b border-white/10 pb-10 mb-10">
-        <p class="eyebrow text-[#DC143C] mb-3" id="label-eyebrow">04 // KATALOG KARYA LENGKAP</p>
+      <div class="border-b border-white/10 pb-8 mb-8">
+        <div class="flex items-center justify-between gap-4 mb-3">
+          <p class="eyebrow text-[#DC143C]" id="label-eyebrow">04 // KATALOG KARYA LENGKAP</p>
+          <a
+            href="/"
+            class="inline-flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider"
+          >
+            <span class="material-symbols-outlined text-xs">arrow_back</span>
+            <span>Portofolio 3D</span>
+          </a>
+        </div>
+
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4" id="label-title">
           Semua Karya &amp; Repositori.
         </h1>
-        <p class="body-copy max-w-2xl text-base sm:text-lg mb-8" id="label-desc">
-          Eksplorasi seluruh proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123).
+        <p class="body-copy max-w-2xl text-base sm:text-lg mb-8 text-zinc-400 font-light leading-relaxed" id="label-desc">
+          Eksplorasi seluruh 17 proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123).
         </p>
 
         <!-- Search Bar + Category Filters -->
@@ -216,67 +271,64 @@
             <input
               type="text"
               id="search-input"
-              placeholder="Cari proyek atau teknologi (Flutter, Laravel, PWA...)"
+              placeholder="Cari proyek (Flutter, Laravel, PWA...)"
               oninput="handleSearch(this.value)"
-              class="w-full rounded-lg bg-white/[0.04] border border-white/10 focus:border-[#DC143C]/60 focus:bg-white/[0.08] focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 transition-all leading-none"
+              class="w-full rounded-lg bg-zinc-950/60 backdrop-blur-md border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 leading-none transition-colors"
             />
           </div>
 
-          <!-- Category Filter Pills -->
-          <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 font-mono text-xs" id="category-filters">
-            <button type="button" class="filter-btn active cursor-pointer px-3.5 py-2 rounded-lg bg-white/10 text-white font-medium transition-colors" onclick="setCategory('all', this)">Semua (17)</button>
-            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Fullstack', this)">Fullstack</button>
-            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Mobile', this)">Mobile</button>
-            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Frontend', this)">Frontend / PWA</button>
-            <button type="button" class="filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="setCategory('Tools', this)">Tools &amp; Java</button>
+          <!-- Category Pill Filters -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 font-mono text-xs" id="category-filter-container">
+            <button type="button" class="category-btn active" onclick="setCategory('all', this)" id="cat-all">Semua (17)</button>
+            <button type="button" class="category-btn" onclick="setCategory('Fullstack', this)" id="cat-fullstack">Fullstack</button>
+            <button type="button" class="category-btn" onclick="setCategory('Mobile', this)" id="cat-mobile">Mobile</button>
+            <button type="button" class="category-btn" onclick="setCategory('Frontend', this)" id="cat-frontend">Frontend</button>
+            <button type="button" class="category-btn" onclick="setCategory('Tools', this)" id="cat-tools">Tools &amp; Java</button>
           </div>
 
         </div>
+
       </div>
 
-      <!-- Results Count & Active Filter Indicator -->
-      <div class="flex items-center justify-between pb-6 font-mono text-xs text-zinc-400">
-        <div>
-          <span id="showing-count" class="text-zinc-200 font-semibold">17</span> <span id="label-projects-found">proyek ditemukan</span>
-        </div>
-        <span class="text-zinc-600 font-mono text-[0.68rem]">KLIK KARTU UNTUK LIHAT OVERVIEW LENGKAP</span>
+      <!-- Loading State -->
+      <div id="loading-state" class="py-24 text-center">
+        <div class="inline-block w-8 h-8 border-2 border-[#DC143C] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="font-mono text-xs text-zinc-400">Memuat database repositori…</p>
       </div>
 
-      <!-- Projects Grid -->
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden py-24 text-center">
+        <span class="material-symbols-outlined text-4xl text-zinc-600 mb-2">search_off</span>
+        <h3 class="text-lg font-bold text-white mb-1" id="label-empty-title">Tidak ada proyek yang cocok</h3>
+        <p class="text-xs text-zinc-400 font-light" id="label-empty-desc">Coba gunakan kata kunci pencarian yang berbeda.</p>
+      </div>
+
+      <!-- Projects Grid (3 Columns) -->
       <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        <!-- Dynamically rendered project cards -->
-      </div>
-
-      <!-- Empty Search State -->
-      <div id="empty-search" class="hidden py-24 text-center">
-        <span class="material-symbols-outlined text-4xl text-zinc-600 mb-2 block">search_off</span>
-        <h3 class="text-lg font-bold text-white mb-1">Tidak Ada Proyek yang Cocok</h3>
-        <p class="text-xs text-zinc-400">Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.</p>
+        <!-- Dynamically rendered by renderProjects() -->
       </div>
 
     </main>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 3. FOOTER                                                  -->
+    <!-- 5. FOOTER                                                  -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <footer class="border-t border-white/10 py-8 px-6 md:px-12 bg-[#090a10] font-mono text-xs text-zinc-500">
+    <footer class="border-t border-white/10 py-8 px-6 md:px-12 bg-zinc-950/80 backdrop-blur-xl font-mono text-xs text-zinc-500 relative z-10">
       <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <span class="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
-          <a href="/" class="hover:text-white transition-colors">Portofolio 3D</a>
-          <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Semua Karya</a>
+          <a href="/#start" class="hover:text-white transition-colors">Start</a>
+          <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Projects (04)</a>
           <a href="/pricing.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Estimasi Harga ↗</a>
-          <a href="https://skfb.ly/oU9t8" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Dark Tesseract by Chaitanya Krishnan on Sketchfab">3D Model Credit ↗</a>
-          <a href="https://scfo.de/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="Design Inspired by scale & form">scfo.de ↗</a>
           <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
         </div>
       </div>
     </footer>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 4. LOGIC SCRIPT                                            -->
+    <!-- 6. PROJECTS CATALOG SCRIPT ENGINE                          -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <script>
       let currentLang = localStorage.getItem('porto_lang') || 'id';
@@ -288,32 +340,26 @@
 
       const I18N = {
         id: {
-          back: "Portofolio 3D",
           eyebrow: "04 // KATALOG KARYA LENGKAP",
           title: "Semua Karya & Repositori.",
-          desc: "Eksplorasi seluruh proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan repositori open-source oleh Muhammad Aga Putra (@Apisikma123).",
-          placeholder: "Cari proyek atau teknologi (Flutter, Laravel, PWA...)",
-          found: "proyek ditemukan",
-          clickNotice: "KLIK KARTU UNTUK LIHAT OVERVIEW LENGKAP",
-          readReadme: "Overview Singkat",
-          viewGithub: "Source Code",
-          emptyTitle: "Tidak Ada Proyek yang Cocok",
-          emptyDesc: "Coba gunakan kata kunci pencarian lain atau pilih kategori Semua.",
-          featuredTag: "Unggulan"
+          desc: "Eksplorasi seluruh 17 proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan open-source code oleh Muhammad Aga Putra (@Apisikma123).",
+          catAll: "Semua (17)",
+          readReadme: "Detail Proyek",
+          emptyTitle: "Tidak ada proyek yang cocok",
+          emptyDesc: "Coba gunakan kata kunci pencarian yang berbeda.",
+          featuredTag: "Unggulan",
+          searchPlaceholder: "Cari proyek (Flutter, Laravel, PWA...)"
         },
         en: {
-          back: "3D Portfolio",
           eyebrow: "04 // COMPLETE WORKS CATALOG",
           title: "All Works & Repositories.",
-          desc: "Explore all software projects, web systems architecture, mobile applications, and open-source repositories by Muhammad Aga Putra (@Apisikma123).",
-          placeholder: "Search projects or technology (Flutter, Laravel, PWA...)",
-          found: "projects found",
-          clickNotice: "CLICK CARD FOR FULL OVERVIEW",
-          readReadme: "Quick Overview",
-          viewGithub: "Source Code",
-          emptyTitle: "No Matching Projects Found",
-          emptyDesc: "Try using different keywords or select the All category.",
-          featuredTag: "Featured"
+          desc: "Explore all 17 software engineering systems, web architectures, mobile applications, and open-source code by Muhammad Aga Putra (@Apisikma123).",
+          catAll: "All (17)",
+          readReadme: "Project Details",
+          emptyTitle: "No projects matched",
+          emptyDesc: "Try a different search keyword or category filter.",
+          featuredTag: "Featured",
+          searchPlaceholder: "Search projects (Flutter, Laravel, PWA...)"
         }
       };
 
@@ -325,12 +371,13 @@
         document.getElementById('btn-lang-id').classList.toggle('active', lang === 'id');
 
         const dict = I18N[lang];
-        document.getElementById('label-back').textContent = dict.back;
         document.getElementById('label-eyebrow').textContent = dict.eyebrow;
         document.getElementById('label-title').textContent = dict.title;
         document.getElementById('label-desc').textContent = dict.desc;
-        document.getElementById('search-input').placeholder = dict.placeholder;
-        document.getElementById('label-projects-found').textContent = dict.found;
+        document.getElementById('cat-all').textContent = dict.catAll;
+        document.getElementById('label-empty-title').textContent = dict.emptyTitle;
+        document.getElementById('label-empty-desc').textContent = dict.emptyDesc;
+        document.getElementById('search-input').placeholder = dict.searchPlaceholder;
 
         renderProjects();
       }
@@ -338,126 +385,37 @@
       async function init() {
         switchLanguage(currentLang);
 
-        // 1. Instant render from local cache or static json (0ms delay)
         try {
-          const cached = localStorage.getItem('cached_github_projects_v2');
-          if (cached) {
-            allProjects = JSON.parse(cached);
-            renderProjects();
-          }
-        } catch (e) {}
-
-        if (!allProjects || !allProjects.length) {
-          try {
-            const res = await fetch('/all_projects.json');
-            if (res.ok) {
-              allProjects = await res.json();
-              renderProjects();
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-
-        // 2. Real-time Live GitHub API Telemetry & Auto-Sync
-        try {
-          const res = await fetch('https://api.github.com/users/Apisikma123/repos?sort=updated&per_page=100');
+          const res = await fetch('/all_projects.json');
           if (res.ok) {
-            const liveRepos = await res.json();
-            if (Array.isArray(liveRepos) && liveRepos.length) {
-              if (!allProjects) allProjects = [];
-
-              liveRepos.forEach(lr => {
-                if (!lr.name) return;
-                const matched = allProjects.find(p => (p.id || p.name || '').toLowerCase() === lr.name.toLowerCase());
-                if (matched) {
-                  matched.stargazers_count = lr.stargazers_count;
-                  matched.forks_count = lr.forks_count;
-                  matched.updated_at = lr.updated_at;
-                  matched.html_url = lr.html_url;
-                  if (lr.description) {
-                    matched.description = lr.description;
-                    matched.descriptionEn = lr.description;
-                  }
-                  if (lr.language) matched.language = lr.language;
-                  if (Array.isArray(lr.topics) && lr.topics.length) {
-                    matched.tags = Array.from(new Set([...(matched.tags || []), ...lr.topics]));
-                  }
-                } else {
-                  // Auto-append newly created repository from GitHub
-                  const cleanName = lr.name
-                    .replace(/[-_]/g, ' ')
-                    .split(' ')
-                    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                    .join(' ');
-                  allProjects.push({
-                    id: lr.name,
-                    displayName: cleanName,
-                    category: lr.language === 'Dart' ? 'mobile' : (['PHP', 'TypeScript', 'JavaScript', 'Python'].includes(lr.language) ? 'fullstack' : 'frontend'),
-                    categoryTag: lr.language === 'Dart' ? 'Mobile' : (['PHP', 'TypeScript', 'JavaScript', 'Python'].includes(lr.language) ? 'Fullstack' : 'Frontend'),
-                    description: lr.description || `Public GitHub repository ${cleanName} by Muhammad Aga Putra.`,
-                    descriptionEn: lr.description || `Public GitHub repository ${cleanName} by Muhammad Aga Putra.`,
-                    language: lr.language || 'Code',
-                    tags: [lr.language, ...(lr.topics || [])].filter(Boolean),
-                    previewImage: `/projects/${lr.name}.webp`,
-                    featured: false,
-                    stargazers_count: lr.stargazers_count || 0,
-                    forks_count: lr.forks_count || 0,
-                    updated_at: lr.updated_at,
-                    html_url: lr.html_url,
-                    hasLiveRepo: true
-                  });
-                }
-              });
-
-              // Re-sort
-              allProjects.sort((a, b) => {
-                if (a.featured && !b.featured) return -1;
-                if (!a.featured && b.featured) return 1;
-                return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
-              });
-
-              try {
-                localStorage.setItem('cached_github_projects_v2', JSON.stringify(allProjects));
-              } catch (e) {}
-
-              // Update All Projects label count in filter
-              const allFilterBtn = document.querySelector('.filter-btn');
-              if (allFilterBtn && activeCategory === 'all') {
-                allFilterBtn.textContent = `${currentLang === 'en' ? 'All' : 'Semua'} (${allProjects.length})`;
-              }
-
-              renderProjects();
-            }
+            allProjects = await res.json();
           }
-        } catch (err) {
-          console.debug('GitHub API auto-sync Notice:', err);
+        } catch (e) {
+          console.warn('all_projects.json error:', e);
         }
+
+        document.getElementById('loading-state').classList.add('hidden');
+        renderProjects();
+      }
+
+      function handleSearch(query) {
+        searchQuery = query.toLowerCase().trim();
+        renderProjects();
       }
 
       function setCategory(cat, btn) {
         activeCategory = cat;
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-white/10', 'text-white');
-          b.classList.add('bg-white/[0.03]', 'text-zinc-400');
-        });
-        btn.classList.add('bg-white/10', 'text-white');
-        btn.classList.remove('bg-white/[0.03]', 'text-zinc-400');
-        renderProjects();
-      }
-
-      function handleSearch(val) {
-        searchQuery = val.trim().toLowerCase();
+        document.querySelectorAll('#category-filter-container .category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         renderProjects();
       }
 
       function renderProjects() {
         const grid = document.getElementById('projects-grid');
-        const emptyState = document.getElementById('empty-search');
+        const emptyState = document.getElementById('empty-state');
         grid.innerHTML = '';
 
         const filtered = allProjects.filter(p => {
-          // Category filter
           if (activeCategory !== 'all') {
             if (activeCategory === 'Tools') {
               if (p.categoryTag !== 'Tools' && p.categoryTag !== 'Backend' && p.language !== 'Java') return false;
@@ -466,19 +424,17 @@
             }
           }
 
-          // Search query filter
           if (searchQuery) {
             const matchName = p.displayName.toLowerCase().includes(searchQuery);
             const matchId = p.id.toLowerCase().includes(searchQuery);
             const matchDesc = (p.description || '').toLowerCase().includes(searchQuery);
+            const matchLang = (p.language || '').toLowerCase().includes(searchQuery);
             const matchTags = (p.tags || []).some(t => t.toLowerCase().includes(searchQuery));
-            if (!matchName && !matchId && !matchDesc && !matchTags) return false;
+            if (!matchName && !matchId && !matchDesc && !matchLang && !matchTags) return false;
           }
 
           return true;
         });
-
-        document.getElementById('showing-count').textContent = filtered.length;
 
         if (filtered.length === 0) {
           emptyState.classList.remove('hidden');
@@ -500,7 +456,7 @@
               <!-- Image Banner or Header -->
               <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
                 <img
-                  src="${p.previewImage}"
+                  src="${p.previewImage || `/projects/${p.id}.webp`}"
                   alt="${p.displayName}"
                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop';"
                   class="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
@@ -515,14 +471,14 @@
                 ` : ''}
 
                 <span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-zinc-300 font-mono text-[0.62rem] px-2 py-0.5 rounded border border-white/10">
-                  ${p.language}
+                  ${p.language || 'Code'}
                 </span>
               </div>
 
               <!-- Card Body -->
               <div class="p-6">
                 <div class="flex justify-between items-center mb-2">
-                  <span class="eyebrow text-[0.6rem] text-zinc-400">${p.category.toUpperCase()}</span>
+                  <span class="eyebrow text-[0.6rem] text-zinc-400">${(p.category || 'SOFTWARE').toUpperCase()}</span>
                   <span class="font-mono text-[0.65rem] text-zinc-500">@Apisikma123</span>
                 </div>
 
@@ -567,122 +523,6 @@
         });
       }
 
-      let currentModalProject = null;
-
-      function openProjectModal(projectId) {
-        const proj = allProjects.find(p => p.id === projectId || p.name === projectId) || {
-          id: projectId,
-          displayName: projectId.toUpperCase(),
-          category: "Software Engineering",
-          tags: ["Code"],
-          description: "Open source project by Muhammad Aga Putra.",
-          html_url: "https://github.com/Apisikma123/" + projectId,
-          language: "Code",
-          previewImage: "/projects/foodify.webp"
-        };
-        currentModalProject = proj;
-
-        const modal = document.getElementById('project-detail-modal');
-        if (!modal) return;
-
-        document.getElementById('modal-eyebrow').textContent = (proj.category || 'CASE STUDY').toUpperCase() + ' · OVERVIEW';
-        document.getElementById('modal-lang-badge').textContent = proj.language || 'Code';
-        document.getElementById('modal-title').textContent = proj.displayName;
-        document.getElementById('modal-desc').textContent = currentLang === 'en' && proj.descriptionEn ? proj.descriptionEn : proj.description;
-        document.getElementById('modal-github-link').href = proj.html_url;
-        document.getElementById('modal-repo-name').textContent = proj.id;
-        document.getElementById('modal-side-tech').textContent = (proj.tags || [proj.language]).slice(0, 3).join(', ');
-        document.getElementById('modal-clone-label').textContent = `git clone ${proj.html_url}.git`;
-        document.getElementById('modal-banner-img').src = proj.previewImage;
-        document.getElementById('modal-banner-badge').textContent = proj.language || 'Code';
-
-        // Tags
-        const tagsContainer = document.getElementById('modal-tags');
-        tagsContainer.innerHTML = '';
-        (proj.tags || [proj.language]).forEach(t => {
-          const span = document.createElement('span');
-          span.className = 'font-mono text-xs text-zinc-300 bg-white/5 border border-white/10 px-3 py-1 rounded-md';
-          span.textContent = t;
-          tagsContainer.appendChild(span);
-        });
-
-        // WhatsApp Project Inquiry Link
-        const waBtn = document.getElementById('modal-wa-btn');
-        if (waBtn) {
-          const waText = currentLang === 'en'
-            ? `Hello Aga, I am interested in discussing your project "${proj.displayName}" or software collaboration.`
-            : `Halo Aga, saya tertarik untuk diskusi proyek "${proj.displayName}" atau kolaborasi software.`;
-          const num = typeof atob === 'function' ? atob('NjI4NTE2OTA4NDEzNg==') : '6285169084136';
-          waBtn.href = `https://wa.me/${num}?text=${encodeURIComponent(waText)}`;
-        }
-
-        // Markdown README
-        const renderMarkdown = (content) => {
-          const out = document.getElementById('modal-markdown');
-          if (window.marked) {
-            try {
-              out.innerHTML = window.marked.parse(content || ('# ' + proj.displayName + '\n\n' + (proj.description || '')));
-            } catch (e) {
-              out.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${content || proj.description}</div>`;
-            }
-          } else {
-            out.innerHTML = `<div class="font-sans text-sm text-zinc-300 whitespace-pre-line leading-relaxed">${content || proj.description}</div>`;
-          }
-        };
-
-        renderMarkdown(proj.readme || ('# ' + proj.displayName + '\n\n' + (proj.description || '')));
-
-        // Fetch live readme from GitHub if needed
-        fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/main/README.md`)
-          .then(res => res.ok ? res.text() : fetch(`https://raw.githubusercontent.com/Apisikma123/${proj.id}/master/README.md`).then(r => r.ok ? r.text() : ''))
-          .then(liveText => {
-            if (liveText && liveText.trim() && liveText !== proj.readme) {
-              proj.readme = liveText;
-              renderMarkdown(liveText);
-            }
-          })
-          .catch(() => {});
-
-        document.body.style.overflow = 'hidden';
-        modal.classList.remove('hidden');
-        modal.style.display = 'block';
-        modal.style.zIndex = '99999';
-        modal.scrollTop = 0;
-        history.replaceState(null, '', '#project/' + proj.id);
-      }
-
-      function closeProjectModal() {
-        const modal = document.getElementById('project-detail-modal');
-        if (modal) {
-          modal.classList.add('hidden');
-          modal.style.display = 'none';
-        }
-        document.body.style.overflow = 'auto';
-        history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
-
-      function copyModalCloneCommand() {
-        if (!currentModalProject) return;
-        const text = `git clone ${currentModalProject.html_url}.git`;
-        navigator.clipboard.writeText(text);
-        const label = document.getElementById('modal-clone-label');
-        if (label) {
-          const orig = label.textContent;
-          label.textContent = 'Tersalin!';
-          setTimeout(() => { label.textContent = orig; }, 2000);
-        }
-      }
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeProjectModal();
-      });
-
-      function updateThemeIcon(theme) {
-        const icon = document.getElementById('theme-icon');
-        const sunSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-        const moonSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-        if (icon) icon.innerHTML = theme === 'light' ? moonSvg : sunSvg;
-      }
       function toggleTheme() {
         const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
@@ -690,169 +530,16 @@
         localStorage.setItem('aga_portfolio_theme', next);
         updateThemeIcon(next);
       }
+
+      function updateThemeIcon(theme) {
+        const icon = document.getElementById('theme-icon');
+        const sunSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
+        const moonSvg = `<svg class="w-4 h-4 sm:w-[17px] sm:h-[17px] block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+        if (icon) icon.innerHTML = theme === 'light' ? moonSvg : sunSvg;
+      }
       updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
-      document.addEventListener('DOMContentLoaded', () => {
-        init().then(() => {
-          if (window.location.hash.startsWith('#project/')) {
-            const id = window.location.hash.replace('#project/', '');
-            if (id) setTimeout(() => openProjectModal(id), 150);
-          }
-        });
-      });
+      document.addEventListener('DOMContentLoaded', init);
     </script>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 5. MODAL OVERLAY IN FRONT: DETAIL PROJECT VIEWER             -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div id="project-detail-modal" class="fixed inset-0 z-50 overflow-y-auto bg-[#040509]/95 backdrop-blur-2xl pt-16 sm:pt-20 pb-24 hidden">
-      <div class="max-w-5xl mx-auto px-5 sm:px-8 md:px-10">
-        
-        <!-- Top Action / Close Bar -->
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
-          <button
-            type="button"
-            onclick="closeProjectModal()"
-            class="inline-flex items-center justify-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono text-xs uppercase tracking-wider cursor-pointer group leading-none px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10"
-          >
-            <svg class="w-4 h-4 shrink-0 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            <span>Tutup / Kembali ke Katalog</span>
-          </button>
-
-          <div class="flex items-center gap-2.5">
-            <a
-              id="modal-github-link"
-              href="https://github.com/Apisikma123"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] border border-transparent text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] leading-none touch-manipulation active:scale-95 group"
-            >
-              <span>Buka di GitHub</span>
-              <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <!-- Top Visual Preview Banner -->
-        <div id="modal-banner-container" class="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-          <img
-            id="modal-banner-img"
-            src=""
-            alt="Project Preview"
-            loading="lazy"
-            decoding="async"
-            class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
-          <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
-            <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-              <span>Visual Architecture Preview</span>
-            </span>
-            <span id="modal-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">Code</span>
-          </div>
-        </div>
-
-        <!-- Project Hero Header -->
-        <div class="mb-10 pb-8 border-b border-white/10">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-            <span id="modal-eyebrow" class="eyebrow text-xs text-[#DC143C]">CASE STUDY</span>
-            <span class="text-zinc-600">/</span>
-            <span id="modal-lang-badge" class="font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md">Code</span>
-          </div>
-
-          <h1 id="modal-title" class="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
-            Title
-          </h1>
-
-          <p id="modal-desc" class="text-sm sm:text-base md:text-lg text-zinc-400 font-light max-w-3xl leading-relaxed mb-6">
-            Description
-          </p>
-
-          <div id="modal-tags" class="flex flex-wrap gap-2 font-mono text-xs">
-            <!-- Dynamic tags -->
-          </div>
-        </div>
-
-        <!-- 2 Column Layout: Markdown Article + Specs Sidebar -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
-          <!-- Left Column: Rendered Markdown -->
-          <article class="lg:col-span-8 glass-card rounded-2xl p-6 sm:p-10 border border-white/10 relative">
-            <div class="flex items-center justify-between pb-6 mb-6 border-b border-white/10 font-mono text-xs text-zinc-400">
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-sm text-[#DC143C]">description</span>
-                <span class="font-semibold text-zinc-200 uppercase tracking-wider">README.md</span>
-              </div>
-              <span class="text-zinc-500">Apisikma123 / <span id="modal-repo-name" class="text-zinc-300 font-medium">project</span></span>
-            </div>
-
-            <div id="modal-markdown" class="markdown-body">
-              <!-- Rendered Markdown -->
-            </div>
-          </article>
-
-          <!-- Right Column: Sidebar Specs -->
-          <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24 font-mono text-xs">
-            <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
-              <span class="eyebrow text-zinc-500 text-[0.62rem] block">REPOSITORY TELEMETRY</span>
-              
-              <div class="space-y-1">
-                <span class="text-zinc-500 text-[0.62rem]">AUTHOR</span>
-                <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="text-zinc-200 hover:text-[#DC143C] block font-medium">Muhammad Aga Putra (@Apisikma123) ↗</a>
-              </div>
-
-              <div class="space-y-1 pt-2 border-t border-white/5">
-                <span class="text-zinc-500 text-[0.62rem]">TECH STACK</span>
-                <span id="modal-side-tech" class="text-zinc-300 block">Flutter, Dart</span>
-              </div>
-
-              <div class="space-y-1 pt-2 border-t border-white/5">
-                <span class="text-zinc-500 text-[0.62rem]">STATUS</span>
-                <span class="text-emerald-400 flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>Public Open Source</span>
-                </span>
-              </div>
-
-              <div class="pt-3 border-t border-white/10">
-                <button
-                  type="button"
-                  id="modal-clone-btn"
-                  onclick="copyModalCloneCommand()"
-                  class="w-full rounded-md bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
-                >
-                  <span id="modal-clone-label" class="truncate mr-2 font-mono">git clone ...</span>
-                  <span class="material-symbols-outlined text-xs text-zinc-400 shrink-0">content_copy</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- WhatsApp Project Discussion CTA -->
-            <div class="glass-card rounded-xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
-              <h4 class="font-sans font-bold text-sm text-white">Tertarik dengan Proyek Ini?</h4>
-              <p class="font-sans text-xs text-zinc-400 leading-relaxed font-light">
-                Konsultasikan kebutuhan implementasi fitur, arsitektur serupa, atau custom build.
-              </p>
-              <a
-                id="modal-wa-btn"
-                href="https://wa.me/6285169084136"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-crimson rounded-lg py-2.5 px-4 w-full block font-mono text-[0.68rem] uppercase tracking-wider font-semibold"
-              >
-                Diskusi via WhatsApp
-              </a>
-            </div>
-          </aside>
-
-        </div>
-
-      </div>
-    </div>
   </body>
 </html>
