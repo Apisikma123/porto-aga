@@ -809,7 +809,14 @@ export const switchView = async (viewName, param, updateHash = true) => {
   const projectDetailEl = document.getElementById("project-detail-view");
   const allProjectsEl = document.getElementById("all-projects-view");
 
-  if (!projectDetailEl || !allProjectsEl) return;
+  if (!projectDetailEl || !allProjectsEl) {
+    if (viewName === "project") {
+      window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
+    } else if (viewName === "all-projects") {
+      window.location.href = "/projects.html";
+    }
+    return;
+  }
 
   if ((!projectsData || !projectsData.length) && (viewName === "project" || viewName === "all-projects")) {
     try {
