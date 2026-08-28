@@ -921,6 +921,99 @@ export const initPageTransitionLinks = () => {
   });
 };
 
+// ═══════════════════════════════════════════════════════════
+// GLOBAL VELVETY 3D TILT ENGINE (EVENT DELEGATION + SPRING LERP)
+// ═══════════════════════════════════════════════════════════
+export const initGlobalCardTilt = () => {
+  if (typeof window === "undefined" || !window.matchMedia("(pointer: fine)").matches) return;
+
+  const CARD_SELECTOR = ".carousel-card, .pricing-carousel-card, #activity-standalone-card, .activity-standalone-card, .spatial-card, .glass-card, .project-card, .pricing-card, [data-tilt]";
+
+  let activeCard = null;
+  let cachedRect = null;
+  let targetRotX = 0;
+  let targetRotY = 0;
+  let currentRotX = 0;
+  let currentRotY = 0;
+  let targetScale = 1;
+  let currentScale = 1;
+  let rafId = null;
+
+  const maxTilt = 8.0; // Luxury expressive tilt
+
+  const updateTiltPhysics = () => {
+    if (!activeCard) {
+      rafId = null;
+      return;
+    }
+
+    currentRotX += (targetRotX - currentRotX) * 0.12;
+    currentRotY += (targetRotY - currentRotY) * 0.12;
+    currentScale += (targetScale - currentScale) * 0.12;
+
+    activeCard.style.transform = `perspective(1000px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) scale3d(${currentScale.toFixed(3)}, ${currentScale.toFixed(3)}, ${currentScale.toFixed(3)})`;
+
+    const diff = Math.abs(targetRotX - currentRotX) + Math.abs(targetRotY - currentRotY) + Math.abs(targetScale - currentScale);
+
+    if (activeCard && (targetScale > 1 || diff > 0.01)) {
+      rafId = requestAnimationFrame(updateTiltPhysics);
+    } else if (activeCard) {
+      activeCard.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+      activeCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+      activeCard = null;
+      cachedRect = null;
+      rafId = null;
+    }
+  };
+
+  document.addEventListener("pointermove", (e) => {
+    const card = e.target.closest(CARD_SELECTOR);
+
+    if (card && (!card.closest("article") && card.id !== "detail-view-article" && !card.closest("#side-nav") && !card.closest("nav"))) {
+      if (activeCard !== card) {
+        if (activeCard) {
+          activeCard.style.transition = "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+          activeCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+        }
+        activeCard = card;
+        activeCard.style.transition = "none";
+        activeCard.style.willChange = "transform";
+        cachedRect = activeCard.getBoundingClientRect();
+        currentRotX = 0;
+        currentRotY = 0;
+        currentScale = 1;
+      }
+
+      if (!cachedRect) cachedRect = activeCard.getBoundingClientRect();
+      if (cachedRect.width === 0 || cachedRect.height === 0) return;
+
+      const normX = ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1;
+      const normY = ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1;
+
+      targetRotX = -normY * maxTilt;
+      targetRotY = normX * maxTilt;
+      targetScale = 1.025;
+
+      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
+    } else if (activeCard) {
+      targetRotX = 0;
+      targetRotY = 0;
+      targetScale = 1;
+      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
+    }
+  }, { passive: true });
+
+  document.addEventListener("pointerleave", () => {
+    if (activeCard) {
+      targetRotX = 0;
+      targetRotY = 0;
+      targetScale = 1;
+      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
+    }
+  }, { passive: true });
+};
+window.initGlobalCardTilt = initGlobalCardTilt;
+
 // ─── Initial Execution for Critical Shell ───
 document.documentElement.setAttribute("data-theme", currentTheme);
 document.documentElement.setAttribute("lang", currentLang);
@@ -935,6 +1028,7 @@ export const initCritical = () => {
   initPreloaderTimeline();
   initNavigationAndKeyboard();
   initPageTransitionLinks();
+  initGlobalCardTilt();
 };
 
 if (document.readyState === "loading") {
