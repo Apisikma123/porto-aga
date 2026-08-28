@@ -896,6 +896,11 @@ export const initPreloaderTimeline = () => {
       ease: "power2.out",
       onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
     });
+
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1.8s max
+  setTimeout(() => {
+    if (!launchTriggered) triggerLaunch();
+  }, 1800);
 };
 
 // ═══════════════════════════════════════════════════════════

@@ -48,11 +48,11 @@ window.addEventListener("touchstart", loadNonCritical, { passive: true, once: tr
 window.addEventListener("wheel", loadNonCritical, { passive: true, once: true });
 window.addEventListener("mousemove", loadNonCritical, { passive: true, once: true });
 
-// For human desktop visitors, idle timeout after 4s
-if (!isAuditBot) {
+// Background idle timeout so Lighthouse desktop and human visitors receive complete view
+if (typeof window !== "undefined") {
   if ("requestIdleCallback" in window) {
-    requestIdleCallback(loadNonCritical, { timeout: 4000 });
+    requestIdleCallback(loadNonCritical, { timeout: 1500 });
   } else {
-    window.addEventListener("load", () => setTimeout(loadNonCritical, 3000));
+    setTimeout(loadNonCritical, 1000);
   }
 }
