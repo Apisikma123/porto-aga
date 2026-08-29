@@ -1069,7 +1069,7 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const totalDuration = 700; // 700ms smooth ramp up
+  const totalDuration = 1100; // 1.1s majestic loading experience
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -1088,7 +1088,7 @@ export const initPreloaderTimeline = () => {
     if (progress < 1) {
       requestAnimationFrame(animStep);
     } else {
-      setTimeout(triggerLaunch, 40);
+      setTimeout(triggerLaunch, 80);
     }
   };
 
