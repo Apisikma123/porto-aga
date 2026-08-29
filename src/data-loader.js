@@ -151,39 +151,20 @@ export const FEATURED_PROJECTS = [
   },
 ];
 
-export const createFeaturedProjectCardElement = (item) => {
+export const createFeaturedProjectCardElement = (item, idx) => {
   const card = document.createElement("div");
-  card.className = "carousel-card glass-card spatial-card rounded-2xl overflow-hidden group flex flex-col justify-between shrink-0";
+  card.className = "carousel-card glass-card spatial-card w-full shrink-0 basis-full min-w-full flex flex-col justify-between rounded-2xl border border-white/10 bg-zinc-950/85 overflow-hidden select-none cursor-default";
   card.dataset.tilt = "true";
+  card.dataset.slideIndex = idx;
 
   let mediaHtml = "";
   if (item.isPhoneMockup) {
     mediaHtml = `
-      <div class="phone-mockup-banner aspect-[16/8.5] max-h-[175px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-2.5">
+      <div class="aspect-[21/9] sm:aspect-[21/8.5] max-h-[260px] sm:max-h-[300px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center">
         <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-xl opacity-60 pointer-events-none"></div>
-        <div class="relative h-full aspect-[9/18.5] rounded-xl sm:rounded-[16px] border-2 border-zinc-700/80 bg-black overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.85)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
-          <div class="absolute top-1 left-1/2 -translate-x-1/2 w-7 h-1.5 bg-black rounded-full border border-white/20 z-10"></div>
-          <img
-            alt="${item.imgAlt}"
-            class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
-            src="${item.imgSrc}"
-            width="${item.imgWidth}"
-            height="${item.imgHeight}"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-            draggable="false"
-            sizes="(max-width: 640px) 120px, 200px"
-          />
-        </div>
-      </div>
-    `;
-  } else {
-    mediaHtml = `
-      <div class="aspect-[16/8.5] max-h-[175px] w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
         <img
           alt="${item.imgAlt}"
-          class="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 pointer-events-none"
+          class="relative z-10 h-full w-auto max-h-[230px] sm:max-h-[270px] max-w-[200px] object-contain py-2 opacity-95 pointer-events-none"
           src="${item.imgSrc}"
           width="${item.imgWidth}"
           height="${item.imgHeight}"
@@ -191,33 +172,52 @@ export const createFeaturedProjectCardElement = (item) => {
           decoding="async"
           fetchpriority="low"
           draggable="false"
-          sizes="(max-width: 640px) 280px, (max-width: 1024px) 400px, 480px"
+          sizes="(max-width: 640px) 140px, 220px"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
+        ${item.isFeaturedBadge ? '<span class="absolute top-3.5 right-3.5 font-mono text-xs bg-[#DC143C] text-white px-2.5 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
+      </div>
+    `;
+  } else {
+    mediaHtml = `
+      <div class="aspect-[21/9] sm:aspect-[21/8.5] max-h-[260px] sm:max-h-[300px] w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
+        <img
+          alt="${item.imgAlt}"
+          class="w-full h-full object-cover object-top opacity-90 pointer-events-none"
+          src="${item.imgSrc}"
+          width="${item.imgWidth}"
+          height="${item.imgHeight}"
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+          draggable="false"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 900px"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 pointer-events-none"></div>
-        ${item.isFeaturedBadge ? '<span class="absolute top-3 right-3 font-mono text-[0.6rem] bg-[#DC143C] text-white px-2 py-0.5 rounded font-bold tracking-wider uppercase shadow-lg">Featured</span>' : ""}
+        ${item.isFeaturedBadge ? '<span class="absolute top-3.5 right-3.5 font-mono text-xs bg-[#DC143C] text-white px-2.5 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
       </div>
     `;
   }
 
   const tagsHtml = item.tags
-    .map((tag) => `<span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10">${tag}</span>`)
+    .map((tag) => `<span class="px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/10">${tag}</span>`)
     .join("\n                    ");
 
   card.innerHTML = `
-    <div onclick="window.openProjectDetail('${item.id}')" class="block cursor-pointer group/card-body" title="${item.titleFallback}">
+    <div class="block select-none">
       ${mediaHtml}
-      <div class="p-4 sm:p-5">
-        <div class="flex justify-between items-center mb-1.5">
-          <span class="eyebrow text-[0.6rem]" data-i18n="${item.tagI18n}">${item.tagFallback}</span>
-          <span class="font-mono text-[0.65rem] text-[#DC143C] font-semibold" data-i18n="${item.statusI18n}">${item.statusFallback}</span>
+      <div class="p-5 sm:p-6 md:p-7">
+        <div class="flex justify-between items-center mb-2">
+          <span class="eyebrow text-xs text-[#FF385C]" data-i18n="${item.tagI18n}">${item.tagFallback}</span>
+          <span class="font-mono text-xs text-[#FF385C] font-semibold" data-i18n="${item.statusI18n}">${item.statusFallback}</span>
         </div>
-        <h3 class="font-bold text-base text-white group-hover/card-body:text-[#DC143C] transition-colors mb-1.5" data-i18n="${item.titleI18n}">
+        <h3 class="font-bold text-lg sm:text-xl md:text-2xl text-white mb-2 line-clamp-1" data-i18n="${item.titleI18n}">
           ${item.titleFallback}
         </h3>
-        <p class="text-xs text-zinc-400 font-light leading-relaxed mb-2.5 line-clamp-2" data-i18n="${item.descI18n}">
+        <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4 max-w-xl" style="max-width: 60ch;" data-i18n="${item.descI18n}">
           ${item.descFallback}
         </p>
-        <div class="flex gap-1.5 flex-wrap font-mono text-[0.62rem] text-zinc-400">
+        <div class="flex gap-2 flex-wrap font-mono text-xs text-zinc-400">
           ${tagsHtml}
         </div>
       </div>
@@ -233,21 +233,18 @@ export const renderFeaturedProjectsCarousel = () => {
 
   track.innerHTML = "";
   const fragment = document.createDocumentFragment();
-  FEATURED_PROJECTS.forEach((item) => {
-    fragment.appendChild(createFeaturedProjectCardElement(item));
+  FEATURED_PROJECTS.forEach((item, idx) => {
+    fragment.appendChild(createFeaturedProjectCardElement(item, idx));
   });
   track.appendChild(fragment);
 
-  if (window.enableDragToScroll) {
-    window.enableDragToScroll(track);
-  }
-
-  updateCarouselUI(currentProjectSlide);
+  updateCarouselUI(currentProjectSlide, true);
 };
 window.renderFeaturedProjectsCarousel = renderFeaturedProjectsCarousel;
 
+let slideTimeout = null;
 
-export const updateCarouselUI = (index) => {
+export const updateCarouselUI = (index, immediate = false) => {
   const track = document.getElementById("projects-carousel-track");
   const cards = track ? track.querySelectorAll(".carousel-card") : [];
   const total = cards.length || TOTAL_PROJECT_SLIDES;
@@ -261,11 +258,35 @@ export const updateCarouselUI = (index) => {
   const dots = document.querySelectorAll("#carousel-dots-container .carousel-dot");
   dots.forEach((dot, idx) => {
     if (idx === currentProjectSlide) {
-      dot.classList.add("active", "w-7", "bg-[#DC143C]");
-      dot.classList.remove("w-2", "bg-white/20");
+      dot.classList.add("active", "bg-[#DC143C]", "opacity-100");
+      dot.classList.remove("bg-white/20", "opacity-40");
     } else {
-      dot.classList.remove("active", "w-7", "bg-[#DC143C]");
-      dot.classList.add("w-2", "bg-white/20");
+      dot.classList.remove("active", "bg-[#DC143C]", "opacity-100");
+      dot.classList.add("bg-white/20", "opacity-40");
+    }
+  });
+
+  if (track) {
+    if (immediate) {
+      track.classList.remove("is-sliding");
+      track.style.transform = `translateX(-${currentProjectSlide * 100}%)`;
+    } else {
+      track.classList.add("is-sliding");
+      track.style.transform = `translateX(-${currentProjectSlide * 100}%)`;
+      if (slideTimeout) clearTimeout(slideTimeout);
+      slideTimeout = setTimeout(() => {
+        track.classList.remove("is-sliding");
+      }, 550);
+    }
+  }
+
+  cards.forEach((c, idx) => {
+    const isActive = idx === currentProjectSlide;
+    c.setAttribute("aria-hidden", isActive ? "false" : "true");
+    if (isActive) {
+      c.removeAttribute("inert");
+    } else {
+      c.setAttribute("inert", "");
     }
   });
 };
@@ -274,21 +295,13 @@ window.slideProjectsCarousel = (direction) => {
   const track = document.getElementById("projects-carousel-track");
   const cards = track ? track.querySelectorAll(".carousel-card") : [];
   const total = cards.length || TOTAL_PROJECT_SLIDES;
-  const nextSlide = Math.max(0, Math.min(total - 1, currentProjectSlide + direction));
+  let nextSlide = currentProjectSlide + direction;
+  if (nextSlide >= total) nextSlide = 0;
+  if (nextSlide < 0) nextSlide = total - 1;
   window.goToProjectSlide(nextSlide);
 };
 
 window.goToProjectSlide = (index) => {
-  const track = document.getElementById("projects-carousel-track");
-  const cards = track ? track.querySelectorAll(".carousel-card") : [];
-  if (track && cards[index]) {
-    const targetCard = cards[index];
-    const targetLeft = targetCard.offsetLeft - track.offsetLeft - (track.clientWidth - targetCard.offsetWidth) / 2;
-    track.scrollTo({
-      left: Math.max(0, targetLeft),
-      behavior: "smooth",
-    });
-  }
   updateCarouselUI(index);
 };
 
@@ -300,38 +313,26 @@ export const initProjectsCarousel = () => {
     renderFeaturedProjectsCarousel();
   }
 
-  let isTicking = false;
-  const calculateActiveSlide = () => {
-    const cards = track.querySelectorAll(".carousel-card");
-    if (!cards.length) {
-      isTicking = false;
-      return;
-    }
-    let closestIndex = 0;
-    let minDiff = Infinity;
-    const currentCenter = track.scrollLeft + track.clientWidth / 2;
-
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
-      const diff = Math.abs(currentCenter - cardCenter);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestIndex = idx;
-      }
-    });
-
-    if (closestIndex !== currentProjectSlide) {
-      updateCarouselUI(closestIndex);
-    }
-    isTicking = false;
-  };
-
+  // Touch swipe support on slider
+  let touchStartX = 0;
+  let touchEndX = 0;
   track.addEventListener(
-    "scroll",
-    () => {
-      if (!isTicking) {
-        requestAnimationFrame(calculateActiveSlide);
-        isTicking = true;
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      track.classList.add("is-sliding");
+    },
+    { passive: true }
+  );
+  track.addEventListener(
+    "touchend",
+    (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        window.slideProjectsCarousel(diff > 0 ? 1 : -1);
+      } else {
+        track.classList.remove("is-sliding");
       }
     },
     { passive: true }
@@ -357,11 +358,11 @@ export const updatePricingCarouselUI = (index) => {
   const dots = document.querySelectorAll("#pricing-carousel-dots .pricing-dot");
   dots.forEach((dot, idx) => {
     if (idx === currentPricingSlide) {
-      dot.classList.add("active", "w-6", "bg-[#DC143C]");
-      dot.classList.remove("w-2", "bg-white/20");
+      dot.classList.add("active", "bg-[#DC143C]", "opacity-100");
+      dot.classList.remove("bg-white/20", "opacity-40");
     } else {
-      dot.classList.remove("active", "w-6", "bg-[#DC143C]");
-      dot.classList.add("w-2", "bg-white/20");
+      dot.classList.remove("active", "bg-[#DC143C]", "opacity-100");
+      dot.classList.add("bg-white/20", "opacity-40");
     }
   });
 };
@@ -645,7 +646,7 @@ export const initActivityHeatmap = () => {
           "#4a141e", // level 1
           "#7c182a", // level 2
           "#b81432", // level 3
-          "#ff2b54", // level 4
+          "#dc143c", // level 4
         ];
 
     try {
@@ -664,13 +665,8 @@ export const initActivityHeatmap = () => {
         const cell = document.createElement("div");
         const lvl = d.level !== undefined ? d.level : (d.count > 15 ? 4 : d.count > 8 ? 3 : d.count > 3 ? 2 : d.count > 0 ? 1 : 0);
         const bg = COLOR_LEVELS[lvl] || COLOR_LEVELS[0];
-        cell.className = "w-2.5 h-2.5 rounded-sm transition-all duration-200 hover:scale-125 cursor-pointer relative group/cell";
+        cell.className = "w-2.5 h-2.5 rounded-sm transition-colors duration-200 cursor-pointer relative group/cell";
         cell.style.backgroundColor = bg;
-        if (lvl === 4 && !isLight) {
-          cell.style.boxShadow = "0 0 8px rgba(255, 43, 84, 0.75)";
-        } else if (lvl >= 3 && isLight) {
-          cell.style.boxShadow = "0 0 4px rgba(225, 29, 72, 0.35)";
-        }
         cell.setAttribute("title", d.tooltip || `${d.date}: ${d.count} contributions`);
         fragment.appendChild(cell);
       });
@@ -827,26 +823,26 @@ export const openProjectDetail = async (projectId) => {
   const bannerContainer = document.getElementById("detail-view-banner-container");
   if (bannerContainer) {
     if (isMobile && hasKnownImg) {
-      bannerContainer.className = "phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]";
+      bannerContainer.className = "phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 min-h-[340px] max-h-[440px]";
       bannerContainer.innerHTML = `
         <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
-        <div class="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
+        <div class="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-2 border-zinc-800 bg-black overflow-hidden group-hover:border-[#DC143C]/70 transition-colors duration-300">
           <img
             id="detail-view-banner-img"
             src="${hasKnownImg}"
             alt="${proj.displayName}"
-            class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
+            class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity duration-300"
           />
         </div>
       `;
     } else if (hasKnownImg) {
-      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]";
+      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group";
       bannerContainer.innerHTML = `
         <img
           id="detail-view-banner-img"
           src="${hasKnownImg}"
           alt="${proj.displayName}"
-          class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity duration-300"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
         <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
@@ -859,7 +855,7 @@ export const openProjectDetail = async (projectId) => {
       `;
     } else {
       // Niche macOS Terminal Detail Banner Placeholder
-      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative shadow-[0_12px_40px_rgba(0,0,0,0.7)]";
+      bannerContainer.className = "mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative shadow-md";
       bannerContainer.innerHTML = `
         <div class="px-4 py-3 bg-[#12131e] border-b border-white/10 flex items-center justify-between font-mono text-xs text-zinc-400">
           <div class="flex items-center gap-2">
@@ -1053,7 +1049,7 @@ window.renderAllViewProjects = () => {
 
   filtered.forEach((p) => {
     const card = document.createElement("div");
-    card.className = "glass-card rounded-2xl border border-white/10 overflow-hidden transition-all flex flex-col justify-between group hover:border-[#DC143C]/40 hover:-translate-y-1 duration-300";
+    card.className = "project-catalog-card rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden transition-all flex flex-col justify-between group hover:border-[#DC143C]/40 hover:-translate-y-1 duration-300";
     
     const normId = p.id.toLowerCase();
     const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
@@ -1061,24 +1057,22 @@ window.renderAllViewProjects = () => {
     let topPreviewHtml = "";
     if (normId === "foodify") {
       topPreviewHtml = `
-        <div class="h-44 w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] to-[#07080e] flex items-center justify-center p-2.5">
-          <img src="/projects/foodify.webp" width="320" height="640" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, 120px" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 pointer-events-none" />
-          <div class="relative h-full aspect-[9/18.5] rounded-xl border-2 border-zinc-700 bg-black overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300">
-            <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" sizes="(max-width: 640px) 80px, 120px" class="w-full h-full object-cover object-top" />
-          </div>
-          <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[0.55rem] font-mono text-[#DC143C] border border-white/10">Mobile UI</div>
+        <div class="aspect-video w-full overflow-hidden relative flex items-center justify-center bg-gradient-to-b from-[#141724] to-[#07080e]">
+          <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, 120px" class="h-full w-auto max-h-[160px] object-contain py-2 opacity-95 group-hover:opacity-100 transition-opacity duration-300" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
+          <span class="absolute bottom-3 right-3 bg-black/80 text-zinc-300 font-mono text-xs px-2 py-0.5 rounded border border-white/10">Flutter</span>
         </div>
       `;
     } else if (hasKnownImg) {
       topPreviewHtml = `
-        <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
-          <img src="${hasKnownImg}" alt="${p.displayName}" width="640" height="360" loading="lazy" decoding="async" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px" class="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+        <div class="aspect-video w-full overflow-hidden relative">
+          <img src="${hasKnownImg}" alt="${p.displayName}" width="640" height="360" loading="lazy" decoding="async" sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px" class="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
         </div>
       `;
     } else {
       topPreviewHtml = `
-        <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-[#0b0c14] flex flex-col justify-between p-3.5 font-mono select-none group-hover:border-[#DC143C]/40 transition-colors">
+        <div class="aspect-video w-full overflow-hidden relative flex flex-col justify-between p-3.5 font-mono select-none">
           <!-- macOS Title Bar -->
           <div class="flex items-center justify-between pb-2 border-b border-white/5">
             <div class="flex items-center gap-1.5">
@@ -1086,15 +1080,15 @@ window.renderAllViewProjects = () => {
               <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
             </div>
-            <div class="text-[0.6rem] text-zinc-500 flex items-center gap-1">
+            <div class="text-xs text-zinc-500 flex items-center gap-1">
               <span class="text-zinc-600">zsh —</span>
               <span class="text-zinc-300 font-medium truncate max-w-[130px]">${p.id}</span>
             </div>
-            <span class="text-[0.55rem] px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
           </div>
 
           <!-- Terminal Body -->
-          <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-[0.62rem] leading-relaxed">
+          <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-xs leading-relaxed">
             <div class="flex items-center gap-1.5 text-zinc-400">
               <span class="text-[#DC143C] font-bold">❯</span>
               <span class="text-emerald-400">~/projects</span>
@@ -1103,16 +1097,16 @@ window.renderAllViewProjects = () => {
             <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
               <span class="text-zinc-500">$</span>
               <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
-              <span class="text-[#DC143C] text-[0.55rem] font-bold animate-pulse">●</span>
+              <span class="text-[#DC143C] text-xs font-bold animate-pulse">●</span>
             </div>
-            <div class="text-[0.58rem] text-zinc-500 pl-2 flex items-center gap-2">
+            <div class="text-xs text-zinc-500 pl-2 flex items-center gap-2">
               <span class="text-zinc-600">stack:</span>
               <span class="text-zinc-400 truncate">${(p.tags || [p.language || 'Code']).slice(0, 3).join(' • ')}</span>
             </div>
           </div>
 
           <!-- Terminal Footer -->
-          <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[0.55rem] text-zinc-500">
+          <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
             <span class="flex items-center gap-1 text-emerald-400">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
               <span class="tracking-wide">BUILD READY</span>
@@ -1127,13 +1121,13 @@ window.renderAllViewProjects = () => {
       <div>
         ${topPreviewHtml}
         <div class="p-5">
-          <div class="flex items-center justify-between gap-2 mb-2 font-mono text-[0.65rem] text-zinc-500">
+          <div class="flex items-center justify-between gap-2 mb-2 font-mono text-xs text-zinc-500">
             <span class="text-[#DC143C] font-semibold">${(p.category || "PROJECT").toUpperCase()}</span>
             <span>${p.language || "Code"}</span>
           </div>
-          <h4 class="font-bold text-sm text-white group-hover:text-[#DC143C] transition-colors mb-1.5 line-clamp-1">
+          <h2 class="font-bold text-base text-white group-hover:text-[#DC143C] transition-colors mb-1.5 line-clamp-1">
             ${p.displayName}
-          </h4>
+          </h2>
           <p class="text-xs text-zinc-400 font-light leading-relaxed mb-4 line-clamp-2">
             ${currentLang === "en" && p.descriptionEn ? p.descriptionEn : p.description}
           </p>
@@ -1143,7 +1137,7 @@ window.renderAllViewProjects = () => {
         <button
           type="button"
           onclick="window.switchView('project', '${p.id}');"
-          class="rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3 py-1.5 text-[0.68rem] font-semibold transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer leading-none"
+          class="rounded bg-[#DC143C]/15 hover:bg-[#DC143C] text-[#DC143C] hover:text-white px-3 py-1.5 text-xs font-semibold transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer leading-none"
         >
           <span>${currentLang === "en" ? "Quick Overview" : "Overview Singkat"}</span>
           <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -1579,13 +1573,13 @@ export const renderPricingTypeCards = () => {
             <h4 class="text-sm font-semibold ${isSelected ? "text-white" : "text-zinc-200"} truncate">${currentLang === "en" ? wt.nameEn : wt.nameId}</h4>
             <span class="font-mono text-[0.65rem] font-semibold shrink-0 ${isSelected ? "text-[#DC143C]" : "text-zinc-400"}">${priceDisplay}</span>
           </div>
-          <p class="text-[0.68rem] ${isSelected ? "text-zinc-300" : "text-zinc-500"} leading-relaxed">${currentLang === "en" ? wt.descEn : wt.descId}</p>
+          <p class="text-xs ${isSelected ? "text-zinc-300" : "text-zinc-400"} leading-relaxed">${currentLang === "en" ? wt.descEn : wt.descId}</p>
         </div>
       </div>
       ${isSelected ? `
       <div class="mt-3 pt-3 border-t border-white/5">
-        <p class="text-[0.6rem] text-zinc-500 uppercase tracking-wider font-mono mb-1">${currentLang === "en" ? "Included" : "Termasuk"}</p>
-        <p class="text-[0.65rem] text-zinc-400 leading-relaxed">${currentLang === "en" ? wt.includedEn : wt.includedId}</p>
+        <p class="text-[0.65rem] text-zinc-500 uppercase tracking-wider font-mono mb-1">${currentLang === "en" ? "Included" : "Termasuk"}</p>
+        <p class="text-xs text-zinc-300 leading-relaxed">${currentLang === "en" ? wt.includedEn : wt.includedId}</p>
       </div>` : ""}
     `;
     grid.appendChild(card);
@@ -1905,11 +1899,11 @@ export const updatePricingUI = () => {
 
   if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
     const po = PRICING_CONFIG.pageOptions[wt.id][pricingState.pageOption];
-    if (po) h += `<p class="text-[0.68rem] text-zinc-400 mb-1">${currentLang === "en" ? po.labelEn : po.labelId}</p>`;
+    if (po) h += `<p class="text-xs text-zinc-400 mb-1">${currentLang === "en" ? po.labelEn : po.labelId}</p>`;
   }
 
   const dl = PRICING_CONFIG.designLevels.find((d) => d.id === pricingState.designLevel);
-  if (dl) h += `<p class="text-[0.68rem] text-zinc-400 mb-2">${currentLang === "en" ? dl.nameEn : dl.nameId}</p>`;
+  if (dl) h += `<p class="text-xs text-zinc-400 mb-2">${currentLang === "en" ? dl.nameEn : dl.nameId}</p>`;
 
   if (pricingState.selectedAddons.size > 0) {
     h += `<div class="flex flex-wrap gap-1 mt-2">`;
@@ -2105,7 +2099,7 @@ window.goToPricingStep = (step) => {
     const el = document.getElementById(`pricing-step-indicator-${i}`);
     if (el) {
       if (i === step) {
-        el.className = "py-1.5 px-2 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all shadow-[0_0_15px_rgba(220,20,60,0.3)] cursor-pointer truncate";
+        el.className = "py-1.5 px-2 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all cursor-pointer truncate";
       } else if (i < step) {
         el.className = "py-1.5 px-2 rounded-lg border border-white/10 bg-white/[0.04] text-zinc-200 text-center transition-all hover:text-white cursor-pointer truncate";
       } else {

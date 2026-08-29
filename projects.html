@@ -116,7 +116,7 @@
       </a>
 
       <!-- Center Navigation Pill (Consistent Across All Pages) -->
-      <nav class="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
+      <nav class="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-md transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
         <a href="/#start" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Start</a>
         <a href="/#about" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">About</a>
         <a href="/#activity" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Activity</a>
@@ -136,7 +136,7 @@
 
         <a
           href="/#contact"
-          class="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-300 transition-all duration-300 hover:border-[#DC143C]/60 hover:text-white hover:bg-[#DC143C]/10 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
+          class="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-200 hover:text-white transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
         >
           <span>Let's Talk</span>
         </a>
@@ -150,7 +150,7 @@
       aria-label="Section Navigation"
       class="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
     >
-      <p class="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]">On this page</p>
+      <p class="eyebrow mb-5 text-zinc-400 text-[0.65rem] tracking-wider font-semibold">On this page</p>
       <ul class="space-y-3" id="side-nav">
         <li>
           <a href="/#start" class="side-nav-item group flex items-center text-left py-1">
@@ -267,7 +267,7 @@
       <!-- Empty State -->
       <div id="empty-state" class="hidden py-24 text-center">
         <span class="material-symbols-outlined text-4xl text-zinc-600 mb-2">search_off</span>
-        <h3 class="text-lg font-bold text-white mb-1" id="label-empty-title">Tidak ada proyek yang cocok</h3>
+        <h2 class="text-lg font-bold text-white mb-1" id="label-empty-title">Tidak ada proyek yang cocok</h2>
         <p class="text-xs text-zinc-400 font-light" id="label-empty-desc">Coba gunakan kata kunci pencarian yang berbeda.</p>
       </div>
 
@@ -286,7 +286,7 @@
         <div>
           <span class="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
         </div>
-        <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs">
           <a href="/#start" class="hover:text-white transition-colors">Start</a>
           <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Projects (04)</a>
           <a href="/pricing.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Estimasi Harga ↗</a>
@@ -423,7 +423,7 @@
 
         filtered.forEach(p => {
           const card = document.createElement('div');
-          card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-white/20';
+          card.className = 'project-catalog-card group rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-[#DC143C]/40 hover:shadow-md';
           
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
           const normId = (p.id || '').toLowerCase();
@@ -432,30 +432,33 @@
           let bannerHtml = '';
           if (normId === 'foodify') {
             bannerHtml = `
-              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] to-[#07080e] flex items-center justify-center p-2.5">
-                <img src="/projects/foodify.webp" width="320" height="640" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 pointer-events-none" />
-                <div class="relative h-full aspect-[9/18.5] rounded-xl border-2 border-zinc-700 bg-black overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300">
-                  <img src="/projects/foodify.webp" alt="${p.displayName}" width="320" height="640" loading="lazy" decoding="async" class="w-full h-full object-cover object-top" />
-                </div>
-                <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 text-[0.55rem] font-mono text-[#DC143C] border border-white/10">Mobile UI</div>
+              <div class="aspect-video w-full overflow-hidden relative flex items-center justify-center bg-gradient-to-b from-[#141724] to-[#07080e]">
+                <img src="/projects/foodify.webp" alt="FOODIFY" width="320" height="640" loading="lazy" decoding="async" class="h-full w-auto max-h-[160px] object-contain py-2 opacity-95 group-hover:opacity-100 transition-opacity duration-300" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
+                <span class="absolute top-3 left-3 bg-[#DC143C] text-white font-mono text-xs uppercase font-bold tracking-wider px-2.5 py-0.5 rounded shadow-sm">
+                  ${dict.featuredTag}
+                </span>
+                <span class="absolute bottom-3 right-3 bg-black/80 text-zinc-300 font-mono text-xs px-2 py-0.5 rounded border border-white/10">
+                  Flutter
+                </span>
               </div>
             `;
           } else if (hasKnownImg) {
             bannerHtml = `
-              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
+              <div class="aspect-video w-full overflow-hidden relative">
                 <img
                   src="${hasKnownImg}"
                   alt="${p.displayName}"
-                  class="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  class="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity duration-300"
                   loading="lazy"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 pointer-events-none"></div>
                 ${p.featured ? `
-                  <span class="absolute top-3 left-3 bg-[#DC143C] text-white font-mono text-[0.62rem] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded shadow-lg">
+                  <span class="absolute top-3 left-3 bg-[#DC143C] text-white font-mono text-xs uppercase font-bold tracking-wider px-2.5 py-0.5 rounded shadow-sm">
                     ${dict.featuredTag}
                   </span>
                 ` : ''}
-                <span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-zinc-300 font-mono text-[0.62rem] px-2 py-0.5 rounded border border-white/10">
+                <span class="absolute bottom-3 right-3 bg-black/80 text-zinc-300 font-mono text-xs px-2 py-0.5 rounded border border-white/10">
                   ${p.language || 'Code'}
                 </span>
               </div>
@@ -463,7 +466,7 @@
           } else {
             // Niche macOS Terminal Mockup Placeholder
             bannerHtml = `
-              <div class="aspect-video w-full overflow-hidden relative border-b border-white/10 bg-[#0b0c14] flex flex-col justify-between p-3.5 font-mono select-none group-hover:border-[#DC143C]/40 transition-colors">
+              <div class="aspect-video w-full overflow-hidden relative flex flex-col justify-between p-3.5 font-mono select-none">
                 <!-- macOS Title Bar -->
                 <div class="flex items-center justify-between pb-2 border-b border-white/5">
                   <div class="flex items-center gap-1.5">
@@ -471,15 +474,15 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
                   </div>
-                  <div class="text-[0.6rem] text-zinc-500 flex items-center gap-1">
+                  <div class="text-xs text-zinc-500 flex items-center gap-1">
                     <span class="text-zinc-600">zsh —</span>
                     <span class="text-zinc-300 font-medium truncate max-w-[130px]">${p.id}</span>
                   </div>
-                  <span class="text-[0.55rem] px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/10 font-mono">${p.language || 'Code'}</span>
                 </div>
 
                 <!-- Terminal Body -->
-                <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-[0.62rem] leading-relaxed">
+                <div class="flex-1 py-2 flex flex-col justify-center gap-1 text-xs leading-relaxed">
                   <div class="flex items-center gap-1.5 text-zinc-400">
                     <span class="text-[#DC143C] font-bold">❯</span>
                     <span class="text-emerald-400">~/projects</span>
@@ -488,16 +491,16 @@
                   <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
                     <span class="text-zinc-500">$</span>
                     <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
-                    <span class="text-[#DC143C] text-[0.55rem] font-bold animate-pulse">●</span>
+                    <span class="text-[#DC143C] text-xs font-bold animate-pulse">●</span>
                   </div>
-                  <div class="text-[0.58rem] text-zinc-500 pl-2 flex items-center gap-2">
+                  <div class="text-xs text-zinc-500 pl-2 flex items-center gap-2">
                     <span class="text-zinc-600">stack:</span>
                     <span class="text-zinc-400 truncate">${(p.tags || [p.language || 'Code']).slice(0, 3).join(' • ')}</span>
                   </div>
                 </div>
 
                 <!-- Terminal Footer -->
-                <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[0.55rem] text-zinc-500">
+                <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
                   <span class="flex items-center gap-1 text-emerald-400">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     <span class="tracking-wide">BUILD READY</span>
@@ -513,22 +516,22 @@
               ${bannerHtml}
 
               <!-- Card Body -->
-              <div class="p-6">
+              <div class="p-5 sm:p-6">
                 <div class="flex justify-between items-center mb-2">
-                  <span class="eyebrow text-[0.6rem] text-zinc-400">${(p.category || 'SOFTWARE').toUpperCase()}</span>
-                  <span class="font-mono text-[0.65rem] text-zinc-500">@Apisikma123</span>
+                  <span class="eyebrow text-xs text-[#FF385C]">${(p.category || 'SOFTWARE').toUpperCase()}</span>
+                  <span class="font-mono text-xs text-zinc-400">@Apisikma123</span>
                 </div>
 
-                <h3 class="font-bold text-base text-white group-hover:text-[#DC143C] transition-colors mb-2 line-clamp-1">
+                <h2 class="font-bold text-base text-white group-hover:text-[#FF385C] transition-colors mb-2 line-clamp-1">
                   ${p.displayName}
-                </h3>
+                </h2>
 
-                <p class="text-xs text-zinc-400 font-light leading-relaxed mb-4 line-clamp-3">
+                <p class="text-xs text-zinc-300 font-light leading-relaxed mb-4 line-clamp-3">
                   ${desc}
                 </p>
 
                 <!-- Tags -->
-                <div class="flex gap-1.5 flex-wrap font-mono text-[0.65rem] text-zinc-400">
+                <div class="flex gap-1.5 flex-wrap font-mono text-xs text-zinc-400">
                   ${(p.tags || [p.language]).slice(0, 3).map(t => `<span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">${t}</span>`).join('')}
                 </div>
               </div>
@@ -538,7 +541,7 @@
             <div class="p-4 pt-3 border-t border-white/5 flex items-center justify-between font-mono text-xs gap-2.5">
               <a
                 href="/project.html?id=${p.id}"
-                class="flex-1 h-9 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-200 hover:text-white px-3.5 transition-all inline-flex items-center justify-center gap-2 font-semibold text-[0.7rem] uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
+                class="flex-1 h-9 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-200 hover:text-white px-3.5 transition-all inline-flex items-center justify-center gap-2 font-semibold text-xs uppercase tracking-wider touch-manipulation active:scale-95 leading-none group cursor-pointer"
               >
                 <span>${dict.readReadme}</span>
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>

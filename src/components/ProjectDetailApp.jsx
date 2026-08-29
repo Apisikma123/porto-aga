@@ -201,36 +201,36 @@ export default function ProjectDetailApp() {
       <header className="fixed top-0 inset-x-0 z-40 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 flex justify-between items-center pointer-events-none">
         <a
           href="/#start"
-          className="pointer-events-auto eyebrow text-zinc-200 hover:text-white transition-colors duration-300 font-bold cursor-pointer flex items-center gap-2"
-          style={{ letterSpacing: '0.3em' }}
+          className="pointer-events-auto eyebrow text-zinc-100 hover:text-white transition-colors duration-300 font-bold cursor-pointer flex items-center gap-2"
+          style={{ letterSpacing: '0.12em' }}
         >
           <span className="text-[#DC143C]">◆</span> AGA STUDIO
         </a>
 
         {/* Center Navigation Pill */}
-        <nav className="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
-          <a href="/#start" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Start</a>
-          <a href="/#about" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">About</a>
-          <a href="/#activity" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Activity</a>
+        <nav className="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-md transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
+          <a href="/#start" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Start</a>
+          <a href="/#about" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">About</a>
+          <a href="/#activity" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Activity</a>
           <a href="/projects.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
-          <a href="/pricing.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Studio</a>
-          <a href="/#contact" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
-          <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Footer</a>
+          <a href="/pricing.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Studio</a>
+          <a href="/#contact" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Contact</a>
+          <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Footer</a>
         </nav>
 
         {/* Right Actions: Language Switcher + Contact Button */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
-          <div className="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg font-mono text-xs">
+          <div className="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-md font-mono text-xs">
             <button
               type="button"
-              className={`px-2 py-1 rounded transition-colors ${lang === 'en' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
+              className={`px-2 py-1 rounded transition-colors ${lang === 'en' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-300 hover:text-white'}`}
               onClick={() => switchLanguage('en')}
             >
               EN
             </button>
             <button
               type="button"
-              className={`px-2 py-1 rounded transition-colors ${lang === 'id' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-400 hover:text-white'}`}
+              className={`px-2 py-1 rounded transition-colors ${lang === 'id' ? 'bg-[#DC143C] text-white font-bold' : 'text-zinc-300 hover:text-white'}`}
               onClick={() => switchLanguage('id')}
             >
               ID
@@ -239,7 +239,7 @@ export default function ProjectDetailApp() {
 
           <a
             href="/#contact"
-            className="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-300 transition-all duration-300 hover:border-[#DC143C]/60 hover:text-white hover:bg-[#DC143C]/10 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)] cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
+            className="rounded-lg border border-white/15 bg-white/[0.04] backdrop-blur-md px-3.5 sm:px-4 py-2 eyebrow text-[0.62rem] text-zinc-200 hover:text-white transition-all duration-300 hover:border-[#DC143C]/60 hover:bg-[#DC143C]/10 cursor-pointer hidden sm:flex items-center gap-1.5 leading-none"
           >
             <span>Let's Talk</span>
           </a>
@@ -251,13 +251,13 @@ export default function ProjectDetailApp() {
         aria-label="Section Navigation"
         className="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
       >
-        <p className="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]">On this page</p>
+        <p className="eyebrow mb-5 text-zinc-400 text-[0.65rem] tracking-wider font-semibold">On this page</p>
         <ul className="space-y-3" id="side-nav">
           <li>
             <a href="/#start" className="side-nav-item group flex items-center text-left py-1">
-              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">01</span>
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-400 group-hover:text-white mr-2 tabular-nums">01</span>
               <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Start</span>
+              <span className="side-nav-label text-[0.78rem] font-medium tracking-wide text-zinc-300 group-hover:text-white transition-colors duration-300">Start</span>
             </a>
           </li>
           <li>
@@ -359,7 +359,7 @@ export default function ProjectDetailApp() {
                     href={project.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-[0_0_15px_rgba(220,20,60,0.35)] leading-none touch-manipulation active:scale-95 group"
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-sm leading-none touch-manipulation active:scale-95 group"
                   >
                     <span>GitHub</span>
                     <svg className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -385,13 +385,13 @@ export default function ProjectDetailApp() {
 
               if (normId === 'foodify' || (hasKnownImg && (project.category === 'Mobile' || project.categoryTag === 'Mobile' || (project.tags && project.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)))))) {
                 return (
-                  <div className="phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.6)] min-h-[340px] max-h-[440px]">
+                  <div className="phone-mockup-banner mb-8 rounded-2xl overflow-hidden relative border border-white/10 glass-card bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center p-6 sm:p-8 min-h-[340px] max-h-[440px]">
                     <div className="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-2xl opacity-60 pointer-events-none"></div>
-                    <div className="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-4 border-zinc-800 bg-black overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] group-hover:border-[#DC143C]/70 group-hover:scale-105 transition-all duration-500">
+                    <div className="relative h-64 sm:h-80 aspect-[9/18.5] rounded-[24px] sm:rounded-[32px] border-2 border-zinc-800 bg-black overflow-hidden group-hover:border-[#DC143C]/70 transition-colors duration-300">
                       <img
                         src={hasKnownImg || `/projects/${project.id}.webp`}
                         alt={`${project.displayName} Preview`}
-                        className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-all duration-500"
+                        className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity duration-300"
                       />
                     </div>
                   </div>
@@ -400,11 +400,11 @@ export default function ProjectDetailApp() {
 
               if (hasKnownImg) {
                 return (
-                  <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                  <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group">
                     <img
                       src={hasKnownImg}
                       alt={`${project.displayName} Preview`}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
                     <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
@@ -420,7 +420,7 @@ export default function ProjectDetailApp() {
 
               // Niche macOS Terminal Banner Placeholder
               return (
-                <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative shadow-[0_12px_40px_rgba(0,0,0,0.7)] select-none">
+                <div className="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card bg-[#0b0c14] relative select-none">
                   {/* macOS Title Bar */}
                   <div className="px-4 py-3 bg-[#12131e] border-b border-white/10 flex items-center justify-between font-mono text-xs text-zinc-400">
                     <div className="flex items-center gap-2">
@@ -493,7 +493,7 @@ export default function ProjectDetailApp() {
                 {project.displayName}
               </h1>
 
-              <p className="text-base sm:text-lg text-zinc-400 font-light max-w-3xl leading-relaxed mb-8">
+              <p className="text-base sm:text-lg text-zinc-300 font-light max-w-3xl leading-relaxed mb-8">
                 {lang === 'en' && project.descriptionEn ? project.descriptionEn : project.description}
               </p>
 
@@ -549,7 +549,7 @@ export default function ProjectDetailApp() {
               {/* Right Column: Sidebar */}
               <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-28 font-mono text-xs">
                 <div className="glass-card rounded-2xl p-5 border border-white/10 space-y-3">
-                  <span className="eyebrow text-zinc-500 text-[0.62rem] block">{dict.telemetry}</span>
+                  <h2 className="eyebrow text-zinc-400 text-[0.62rem] font-semibold block">{dict.telemetry}</h2>
 
                   <div className="space-y-1">
                     <span className="text-zinc-500 text-[0.62rem]">{dict.author}</span>
@@ -589,8 +589,8 @@ export default function ProjectDetailApp() {
 
                 {/* WhatsApp Project CTA */}
                 <div className="glass-card rounded-2xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-3">
-                  <h4 className="font-sans font-bold text-sm text-white">{dict.discussTitle}</h4>
-                  <p className="font-sans text-xs text-zinc-400 font-light leading-relaxed">{dict.discussDesc}</p>
+                  <h2 className="font-sans font-bold text-sm text-white">{dict.discussTitle}</h2>
+                  <p className="font-sans text-xs text-zinc-300 font-light leading-relaxed">{dict.discussDesc}</p>
                   <a
                     href={`https://wa.me/${waNum}?text=${waText}`}
                     target="_blank"
@@ -605,7 +605,7 @@ export default function ProjectDetailApp() {
                 {otherProjects.length > 0 && (
                   <div className="glass-card rounded-2xl p-5 border border-white/10 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="eyebrow text-zinc-500 text-[0.62rem]">{dict.otherProj}</span>
+                      <h2 className="eyebrow text-zinc-400 text-[0.62rem] font-semibold">{dict.otherProj}</h2>
                       <a href="/projects.html" className="text-[#DC143C] hover:text-white text-[0.62rem] uppercase">
                         {dict.allProjects} ↗
                       </a>

@@ -12,9 +12,10 @@
 
   --color-crimson: #DC143C;
   --color-crimson-hover: #b01030;
-  --color-crimson-glow: rgba(220, 20, 60, 0.45);
   --color-bone: #f4f4f5;
   --color-ink: #090a10;
+
+  --animate-bounce: initial;
 }
 
 @layer base {
@@ -115,8 +116,9 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
     font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
-    width: 1.1em;
-    height: 1.1em;
+    width: 1em;
+    height: 1em;
+    font-size: inherit;
     overflow: visible;
     vertical-align: middle;
     text-align: center;
@@ -142,30 +144,31 @@
 }
 
 @layer components {
-  /* Typography Classes (scfo.de Style) */
-  .eyebrow {
+  /* Typography Classes (Editorial Restraint & High Legibility) */
+  .eyebrow,
+  p.eyebrow,
+  span.eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #DC143C;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #FF385C !important;
   }
 
   .display-title {
     font-family: var(--font-sans);
     font-weight: 800;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
     color: #f4f4f5;
   }
 
   .body-copy {
     font-family: var(--font-sans);
-    font-weight: 300;
-    font-size: 0.95rem;
-    line-height: 1.75;
-    color: #a1a1aa;
+    font-weight: 400;
+    font-size: 0.935rem;
+    line-height: 1.65;
+    color: #d4d4d8;
   }
 
   /* Spatial 3D Text Container in Sync with Camera */
@@ -186,7 +189,7 @@
       transform: translateY(0px);
     }
     50% {
-      transform: translateY(-8px);
+      transform: translateY(-6px);
     }
   }
 
@@ -200,9 +203,9 @@
   }
 
   .heatmap-cell:hover {
-    transform: scale(1.5);
+    transform: scale(1.3);
     z-index: 30;
-    filter: brightness(1.4) drop-shadow(0 0 8px rgba(255, 45, 85, 0.9));
+    filter: brightness(1.25);
   }
 
   /* Infinite Background Marquee (Anti-Collision Masking from Sidebar) */
@@ -215,7 +218,7 @@
     white-space: nowrap;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.08;
+    opacity: 0.06;
     user-select: none;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 240px, rgba(0,0,0,0.9) 380px, rgba(0,0,0,0.9) 82%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, transparent 240px, rgba(0,0,0,0.9) 380px, rgba(0,0,0,0.9) 82%, transparent 100%);
@@ -227,10 +230,8 @@
     font-family: var(--font-sans);
     font-weight: 900;
     font-size: clamp(5rem, 14vw, 14rem);
-    text-transform: uppercase;
     letter-spacing: 0.04em;
-    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.7);
-    color: transparent;
+    color: rgba(255, 255, 255, 0.35);
   }
 
   /* Spatial 3D Perspective Wrapper */
@@ -241,22 +242,22 @@
 
   .spatial-card {
     transform-style: preserve-3d;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.25s ease;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
 
-  /* Luxury High-Contrast Glassmorphism Cards */
+  /* Clean High-Contrast Cards (Flat, Precise, Non-Floating) */
   .glass-card,
   .tesseract-card,
   .carousel-card,
   .repo-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(16, 17, 24, 0.8);
+    background: rgba(13, 14, 20, 0.95);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.25s ease, background 0.25s ease;
     transform-style: preserve-3d;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -280,8 +281,8 @@
   .carousel-card:hover,
   .repo-card:hover {
     border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(18, 20, 28, 0.85);
-    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6);
+    background: rgba(18, 20, 28, 0.98);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   @media (pointer: fine) {
@@ -300,63 +301,63 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Activity Standalone Card Styling */
+  /* Activity Standalone Card (Flat, Structured) */
   .activity-standalone-card {
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(14, 15, 22, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(12, 13, 18, 0.95);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(220, 20, 60, 0.10);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
 
-  /* Luxury Crimson CTA Button */
+  /* Crimson CTA Button (Clean, Non-Glowing) */
   .btn-crimson {
     background-color: #DC143C;
     color: #ffffff;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     border-radius: 0.75rem;
-    box-shadow: 0 0 25px rgba(220, 20, 60, 0.4);
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
   .btn-crimson:hover {
     background-color: #b01030;
-    box-shadow: 0 0 35px rgba(220, 20, 60, 0.65), 0 0 10px rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-1px);
   }
 
-  /* Secondary Editorial Glass Button */
+  /* Secondary Glass Button (Clean, Non-Glowing) */
   .btn-glass {
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: #e4e4e7;
+    color: #f4f4f5;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     border-radius: 0.75rem;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
   .btn-glass:hover {
-    border-color: rgba(220, 20, 60, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
     color: #ffffff;
-    background: rgba(220, 20, 60, 0.08);
-    box-shadow: 0 0 25px rgba(220, 20, 60, 0.25);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
   }
 
-  /* Unified Global Back Button (Left-Aligned Glass Card Model - DESIGN.md) */
+  /* Unified Global Back Button */
   .btn-back {
     display: inline-flex !important;
     align-items: center !important;
@@ -364,28 +365,25 @@
     gap: 0.5rem !important;
     padding: 0.5rem 1rem !important;
     border-radius: 0.75rem !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
     color: #d4d4d8 !important;
     font-family: var(--font-mono) !important;
-    font-size: 0.72rem !important;
+    font-size: 0.78rem !important;
     font-weight: 500 !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
+    letter-spacing: normal !important;
     line-height: 1 !important;
     cursor: pointer !important;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
     touch-action: manipulation !important;
     text-decoration: none !important;
   }
 
   .btn-back:hover {
-    background: #DC143C !important;
-    border-color: transparent !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
-    box-shadow: 0 0 20px rgba(220, 20, 60, 0.4) !important;
-    transform: translateX(-2px) scale(1.02) !important;
   }
 
   .btn-back svg,
@@ -440,7 +438,6 @@
   .lang-btn.active {
     background-color: #DC143C;
     color: #ffffff;
-    box-shadow: 0 0 12px rgba(220, 20, 60, 0.5);
   }
 
   .lang-btn:not(.active) {
@@ -451,25 +448,52 @@
     color: #ffffff;
   }
 
+  /* Universal Precision Centering for Material Symbols */
+  .material-symbols-outlined {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    vertical-align: middle;
+    text-align: center;
+    user-select: none;
+    font-feature-settings: 'liga';
+  }
+
   /* Side Nav Clickable Item with Shield Protection */
   .side-nav-item {
     cursor: pointer;
     background: transparent;
     border: none;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
   }
 
   .side-nav-line {
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+    width: 1.5rem !important;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    transform: scaleX(0.6667);
+    transform-origin: left center;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+    will-change: transform;
   }
 
   .side-nav-num {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .side-nav-label {
+    white-space: nowrap;
+    transition: color 0.2s ease, font-weight 0.2s ease;
   }
 
   .side-nav-item.active .side-nav-line {
-    width: 2.2rem !important;
+    transform: scaleX(1) !important;
     background-color: #DC143C !important;
   }
 
@@ -481,7 +505,6 @@
   .side-nav-item.active .side-nav-label {
     color: #ffffff !important;
     font-weight: 600 !important;
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
   }
 
   aside[aria-label="Section Navigation"],
@@ -490,24 +513,26 @@
     text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
   }
 
-  /* Editorial Interactive Link */
+  /* Editorial Interactive Link (Zero-Reflow Transform Transition) */
   .editorial-link {
     position: relative;
     display: inline-block;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
   }
   .editorial-link::after {
     content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
-    width: 0%;
+    width: 100%;
     height: 1.5px;
     background-color: #DC143C;
-    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.25s ease;
   }
   .editorial-link:hover::after {
-    width: 100%;
+    transform: scaleX(1);
   }
 
   /* Repo card entrance */
@@ -714,27 +739,41 @@
   scrollbar-width: none;
 }
 
-.carousel-card {
-  flex: 0 0 calc(50% - 0.75rem);
-  scroll-snap-align: start;
-  min-width: 320px;
+#projects-slider-frame {
+  overflow: hidden !important;
+  contain: paint !important;
+  clip-path: inset(0 round 1rem) !important;
 }
 
-@media (max-width: 768px) {
-  .carousel-card {
-    flex: 0 0 calc(100% - 1rem);
-    min-width: 260px;
-  }
+.carousel-card {
+  width: 100%;
+  flex: 0 0 100%;
+  min-width: 100%;
+  contain: paint;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-card[aria-hidden="true"] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carousel-card[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#projects-carousel-track.is-sliding .carousel-card {
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .pricing-carousel-card {
-  scroll-snap-align: center;
-}
-
-@media (min-width: 768px) {
-  .pricing-carousel-card {
-    scroll-snap-align: none;
-  }
+  height: 100%;
+  align-self: stretch;
+  overflow: visible;
 }
 
 
@@ -760,7 +799,6 @@
 .pricing-type-card.selected {
   border-color: rgba(220, 20, 60, 0.5);
   background: rgba(220, 20, 60, 0.06);
-  box-shadow: 0 0 20px rgba(220, 20, 60, 0.1);
 }
 
 /* Option Card (Pages, Design) */
@@ -823,10 +861,10 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .pricing-btn-next:hover:not(:disabled) {
@@ -844,12 +882,12 @@
   background: #DC143C;
   border-color: #DC143C;
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(220, 20, 60, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .pricing-btn-next.pricing-btn-wa:hover {
   background: #b01030;
-  box-shadow: 0 0 25px rgba(220, 20, 60, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .pricing-btn-back {
@@ -867,7 +905,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   user-select: none;
 }
 
@@ -875,8 +913,6 @@
   color: #ffffff;
   background: rgba(255, 255, 255, 0.09);
   border-color: rgba(220, 20, 60, 0.5);
-  box-shadow: 0 0 15px rgba(220, 20, 60, 0.15);
-  transform: translateX(-2px);
 }
 
 
@@ -888,11 +924,20 @@
    ═══════════════════════════════════════════════════════════ */
 
 #project-detail-view,
-#project-detail-modal,
-#all-projects-view {
-  background-color: transparent !important;
+#project-detail-modal {
+  background-color: rgba(4, 5, 9, 0.97) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
   color: #f1f5f9 !important;
-  z-index: 50 !important;
+  z-index: 99999 !important;
+}
+
+#all-projects-view {
+  background-color: rgba(4, 5, 9, 0.97) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  color: #f1f5f9 !important;
+  z-index: 99999 !important;
 }
 
 /* Pricing Page Core Commission Tier Cards */
@@ -924,11 +969,17 @@
 @media (max-width: 767px) {
   #pricing {
     min-height: 100svh;
-    padding-top: 4rem !important;
-    padding-bottom: 1.25rem !important;
+    padding-top: 5rem !important;
+    padding-bottom: 3rem !important;
   }
   #pricing .pricing-carousel-card {
-    max-height: 240px;
+    min-height: auto;
+  }
+  .carousel-card {
+    border-radius: 1rem !important;
+  }
+  .activity-standalone-card {
+    padding: 1rem !important;
   }
 }
 
