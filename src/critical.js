@@ -943,19 +943,22 @@ export const initPreloaderTimeline = () => {
       if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 16 : 6);
-        const spawnCount = launchTriggered ? 5 : (frameCount % 2 === 0 ? 2 : 1);
-        for (let i = 0; i < spawnCount; i++) {
-          smokeParticles.push({
-            x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-            y: nozzleY + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-            vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
-            radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
-            growth: launchTriggered ? 0.9 : 0.45,
-            maxRadius: launchTriggered ? 80 : 36,
-            alpha: launchTriggered ? 0.8 : 0.5,
-            decay: launchTriggered ? 0.02 : 0.012,
-          });
+        const shouldSpawn = launchTriggered || (frameCount % 3 === 0);
+        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 40 : 18)) {
+          const spawnCount = launchTriggered ? 3 : 1;
+          for (let i = 0; i < spawnCount; i++) {
+            smokeParticles.push({
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
+              y: nozzleY + (Math.random() - 0.5) * 3,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+              vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
+              radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
+              growth: launchTriggered ? 0.9 : 0.45,
+              maxRadius: launchTriggered ? 80 : 36,
+              alpha: launchTriggered ? 0.8 : 0.5,
+              decay: launchTriggered ? 0.03 : 0.016,
+            });
+          }
         }
       }
     }
@@ -972,17 +975,10 @@ export const initPreloaderTimeline = () => {
         continue;
       }
 
-      smokeCtx.save();
-      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
-      grad.addColorStop(0.35, `rgba(240, 243, 255, ${p.alpha * 0.6})`);
-      grad.addColorStop(0.7, `rgba(220, 230, 255, ${p.alpha * 0.25})`);
-      grad.addColorStop(1, `rgba(200, 215, 255, 0)`);
-      smokeCtx.fillStyle = grad;
       smokeCtx.beginPath();
       smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      smokeCtx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.45})`;
       smokeCtx.fill();
-      smokeCtx.restore();
     }
 
     smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
