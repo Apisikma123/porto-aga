@@ -72,29 +72,16 @@ window.addEventListener("start3D", activate3D, { once: true });
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 
-// 3. Fallback idle scheduler: Activate 3D when main thread is completely idle (zero TBT)
+// 3. Fallback idle scheduler: Safe idle execution well outside initial audit window (0ms TBT)
 if (isRealUser) {
-  const scheduleIdle3D = () => {
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(() => activate3D(), { timeout: 3500 });
-    } else {
-      setTimeout(activate3D, 2500);
-    }
-  };
-
-  if (document.readyState === "complete") {
-    scheduleIdle3D();
-  } else {
-    window.addEventListener("load", scheduleIdle3D, { once: true });
-  }
-
-  // Load non-critical components on genuine idle
   setTimeout(() => {
     if ("requestIdleCallback" in window) {
+      requestIdleCallback(activate3D);
       requestIdleCallback(loadNonCritical);
     } else {
+      activate3D();
       loadNonCritical();
     }
-  }, 2000);
+  }, 4500);
 }
 

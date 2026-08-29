@@ -1286,8 +1286,10 @@ export const initCritical = () => {
   initNavigationAndKeyboard();
   initGlobalCardTilt();
 
-  // GSAP and UI init
-  setLanguage(currentLang, false);
+  // Language init (only parse DOM if user preferred non-English language)
+  if (currentLang !== "en") {
+    setLanguage(currentLang, false);
+  }
   initPreloaderTimeline();
   initPageTransitionLinks();
 };
