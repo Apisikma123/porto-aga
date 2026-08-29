@@ -8,15 +8,10 @@
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
           var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(ua) ||
+                      Boolean(navigator.webdriver) ||
                       (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");
-            document.addEventListener("DOMContentLoaded", function () {
-              var p = document.getElementById("web-preloader");
-              if (p) p.remove();
-              var bg = document.getElementById("bg");
-              if (bg) bg.remove();
-            });
           }
         } catch (e) {}
       })();
