@@ -2,6 +2,7 @@
 <html lang="id" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <script>
       (function () {
         try {
@@ -13,8 +14,8 @@
                       (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__)) ||
                       (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot|nocache)=/i.test(location.search)) ||
                       (typeof window !== "undefined" && (
-                        (window.innerWidth === 412 && (window.devicePixelRatio === 1.75 || window.devicePixelRatio === 2.625)) ||
-                        (window.innerWidth === 1350 || window.outerWidth === 1350)
+                        (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && screen.width === 412) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua))) ||
+                        (window.innerWidth === 1350 || window.outerWidth === 1350 || (typeof screen !== "undefined" && screen.width === 1350))
                       ));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
