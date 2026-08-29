@@ -52,16 +52,14 @@ function activate3D() {
   if (initialized3D) return;
   initialized3D = true;
 
-  if (isRealUser) {
-    import("./three-scene.js").then((m) => {
-      const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
-      if (typeof initFn === "function") {
-        initFn();
-      }
-    }).catch((err) => {
-      console.warn("Three.js deferred load notice:", err);
-    });
-  }
+  import("./three-scene.js").then((m) => {
+    const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
+    if (typeof initFn === "function") {
+      initFn();
+    }
+  }).catch((err) => {
+    console.warn("Three.js deferred load notice:", err);
+  });
 }
 
 // 1. Listen for rocket blast-off event (reveals 3D smoothly as preloader dissolves)

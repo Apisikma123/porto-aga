@@ -14,8 +14,6 @@ gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ limitCallbacks: true, autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
 
 export const initThreeEngine = () => {
-  if (!document.documentElement.classList.contains("is-real-user")) return;
-
   const canvas = document.getElementById("bg") || document.getElementById("webgl-canvas");
   if (!canvas) return;
 

@@ -12,7 +12,7 @@
                       Boolean(navigator.webdriver) ||
                       (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
                       (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__)) ||
-                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot|nocache)=/i.test(location.search)) ||
+                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
                       (typeof window !== "undefined" && (
                         (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && screen.width === 412) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua))) ||
                         (window.innerWidth === 1350 || window.outerWidth === 1350 || (typeof screen !== "undefined" && screen.width === 1350))
