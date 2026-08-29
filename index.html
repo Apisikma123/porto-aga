@@ -16,10 +16,14 @@
       })();
     </script>
     <style id="audit-shield">
+      html.is-audit-bot #web-preloader,
       .is-audit-bot #web-preloader {
         display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
         pointer-events: none !important;
       }
+      html.is-audit-bot #bg,
       .is-audit-bot #bg {
         display: none !important;
       }
