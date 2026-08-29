@@ -205,38 +205,38 @@
         0% {
           transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
         }
-        18% {
-          transform: translate3d(0, 14px, 0) scale(0.96, 1.04) rotate(0.5deg);
+        15% {
+          transform: translate3d(0, 16px, 0) scale(0.96, 1.04) rotate(0.5deg);
         }
         100% {
-          transform: translate3d(0, -150vh, 0) scale(1.18) rotate(0deg);
+          transform: translate3d(0, -150vh, 0) scale(1.15) rotate(0deg);
         }
       }
       .preloader-launching #preloader-rocket-center {
-        animation: rocketBlastOff 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: rocketBlastOff 1.25s cubic-bezier(0.25, 0.9, 0.3, 1) forwards !important;
         will-change: transform;
       }
       .preloader-launching #preloader-backdrop {
-        transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: opacity 1.05s cubic-bezier(0.2, 0.8, 0.25, 1);
         opacity: 0 !important;
       }
       .preloader-launching #preloader-header {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         opacity: 0 !important;
         transform: translateY(-15px) !important;
       }
       .preloader-launching #preloader-footer {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         opacity: 0 !important;
         transform: translateY(15px) !important;
       }
       .preloader-launching #preloader-text-group {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         opacity: 0 !important;
         transform: translateY(-15px) !important;
       }
       .preloader-launching #preloader-smoke-canvas {
-        transition: opacity 0.6s ease-out 0.15s;
+        transition: opacity 0.9s ease-out 0.2s;
         opacity: 0 !important;
       }
     </style>

@@ -1039,7 +1039,7 @@ export const initPreloaderTimeline = () => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 750);
+    }, 1250);
   };
 
   const updateDisplay = (pct, text) => {
@@ -1050,7 +1050,7 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const totalDuration = 450; // Smooth, snappy count
+  const totalDuration = 700; // Relaxed, luxurious count
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -1069,16 +1069,16 @@ export const initPreloaderTimeline = () => {
     if (progress < 1) {
       requestAnimationFrame(animStep);
     } else {
-      setTimeout(triggerLaunch, 80);
+      setTimeout(triggerLaunch, 120);
     }
   };
 
   requestAnimationFrame(animStep);
 
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1400ms max
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 2400ms max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 1400);
+  }, 2400);
 };
 
 // ═══════════════════════════════════════════════════════════
