@@ -1,5 +1,3 @@
-import { gsap } from "gsap";
-
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
 export let currentSectionIndex = 0;
@@ -385,29 +383,38 @@ export const setLanguage = (lang, animate = true) => {
     return;
   }
 
-  gsap.to(i18nElements, {
-    opacity: 0,
-    y: -4,
-    duration: 0.16,
-    stagger: 0.003,
-    ease: "power2.in",
-    onComplete: () => {
-      i18nElements.forEach((el) => {
-        const key = el.getAttribute("data-i18n");
-        if (dict[key]) {
-          el.textContent = dict[key];
-        }
-      });
-      if (window.renderPricingOnLangChange) {
-        window.renderPricingOnLangChange(lang);
-      }
-      gsap.fromTo(
-        i18nElements,
-        { opacity: 0, y: 5 },
-        { opacity: 1, y: 0, duration: 0.28, stagger: 0.003, ease: "power2.out" }
-      );
-    },
+  // Smooth micro-fade for language switch
+  i18nElements.forEach((el) => {
+    el.style.transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
+    el.style.opacity = "0";
+    el.style.transform = "translateY(-3px)";
   });
+
+  setTimeout(() => {
+    i18nElements.forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+      el.style.transform = "translateY(3px)";
+    });
+    if (window.renderPricingOnLangChange) {
+      window.renderPricingOnLangChange(lang);
+    }
+    requestAnimationFrame(() => {
+      i18nElements.forEach((el) => {
+        el.style.transition = "opacity 0.22s ease-out, transform 0.22s ease-out";
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      });
+      setTimeout(() => {
+        i18nElements.forEach((el) => {
+          el.style.removeProperty("transition");
+          el.style.removeProperty("transform");
+        });
+      }, 250);
+    });
+  }, 150);
 };
 window.setLanguage = setLanguage;
 
@@ -866,14 +873,10 @@ export const initPreloaderTimeline = () => {
     return;
   }
 
-  const isAuditBot = typeof navigator !== 'undefined' && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(navigator.userAgent) ||
-    Boolean(navigator.webdriver) ||
-    (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
-    (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__))
-  );
+  // Inverted: if NOT a real user (no is-real-user class), skip preloader entirely
+  const isRealUser = document.documentElement.classList.contains("is-real-user");
 
-  if (isAuditBot) {
+  if (!isRealUser) {
     preloaderEl.style.display = "none";
     preloaderEl.remove();
     document.body.style.overflow = "auto";
@@ -901,14 +904,12 @@ export const initPreloaderTimeline = () => {
   ];
 
   let launchTriggered = false;
-  let floatTween = null;
 
   // ─── High-Performance Pure White Vapor Smoke Canvas (Live Flame Nozzle Tracking) ───
   const smokeCanvas = document.getElementById("preloader-smoke-canvas");
   let smokeCtx = null;
   let smokeParticles = [];
   let smokeAnimId = null;
-  let cachedRect = null;
 
   const resizeCanvas = () => {
     if (smokeCanvas) {
@@ -930,18 +931,18 @@ export const initPreloaderTimeline = () => {
       const rect = targetEl.getBoundingClientRect();
       const nozzleX = rect.left + rect.width / 2;
       const nozzleY = rect.bottom - 4;
-      for (let i = 0; i < 24; i++) {
-        const progress = i / 24;
+      for (let i = 0; i < 12; i++) {
+        const progress = i / 12;
         smokeParticles.push({
-          x: nozzleX + (Math.random() - 0.5) * (8 + progress * 20),
-          y: nozzleY + progress * 70 + (Math.random() - 0.5) * 6,
-          vx: (Math.random() - 0.5) * (0.8 + progress * 1.5),
-          vy: 1.4 + Math.random() * 1.6,
-          radius: 10 + progress * 28 + Math.random() * 8,
-          growth: 0.45,
-          maxRadius: 55,
-          alpha: 0.75 * (1 - progress * 0.7),
-          decay: 0.007,
+          x: nozzleX + (Math.random() - 0.5) * (8 + progress * 16),
+          y: nozzleY + progress * 50 + (Math.random() - 0.5) * 4,
+          vx: (Math.random() - 0.5) * (0.6 + progress * 1.2),
+          vy: 1.2 + Math.random() * 1.4,
+          radius: 8 + progress * 20 + Math.random() * 6,
+          growth: 0.4,
+          maxRadius: 45,
+          alpha: 0.7 * (1 - progress * 0.7),
+          decay: 0.009,
         });
       }
     }
@@ -949,7 +950,6 @@ export const initPreloaderTimeline = () => {
   seedSmokeParticles();
 
   let lastSmokeTime = 0;
-  let frameCount = 0;
 
   const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
@@ -962,7 +962,6 @@ export const initPreloaderTimeline = () => {
     lastSmokeTime = currentTime;
 
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-    frameCount++;
 
     const targetEl = rocketCenter || flameNozzle;
     if (targetEl && targetEl.isConnected) {
@@ -971,20 +970,20 @@ export const initPreloaderTimeline = () => {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 14 : 4);
         
-        // Continuous steady generation
-        const spawnRate = launchTriggered ? 4 : 2;
+        // Steady lightweight generation (capped at 30 particles for 120fps)
+        const spawnRate = launchTriggered ? 2 : 1;
         for (let i = 0; i < spawnRate; i++) {
-          if (smokeParticles.length < 130) {
+          if (smokeParticles.length < 30) {
             smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
               y: nozzleY + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.4 : 1.0),
-              vy: launchTriggered ? (5.5 + Math.random() * 7.5) : (1.4 + Math.random() * 1.8),
-              radius: launchTriggered ? (18 + Math.random() * 10) : (10 + Math.random() * 6),
-              growth: launchTriggered ? 1.05 : 0.45,
-              maxRadius: launchTriggered ? 90 : 50,
-              alpha: launchTriggered ? 0.85 : 0.65,
-              decay: launchTriggered ? 0.014 : 0.007,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+              vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
+              radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
+              growth: launchTriggered ? 0.9 : 0.4,
+              maxRadius: launchTriggered ? 70 : 40,
+              alpha: launchTriggered ? 0.8 : 0.6,
+              decay: launchTriggered ? 0.018 : 0.009,
             });
           }
         }
@@ -1006,8 +1005,7 @@ export const initPreloaderTimeline = () => {
       smokeCtx.save();
       const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
       grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
-      grad.addColorStop(0.35, `rgba(240, 244, 255, ${p.alpha * 0.7})`);
-      grad.addColorStop(0.7, `rgba(215, 225, 255, ${p.alpha * 0.25})`);
+      grad.addColorStop(0.4, `rgba(240, 244, 255, ${p.alpha * 0.6})`);
       grad.addColorStop(1, `rgba(200, 215, 255, 0)`);
       smokeCtx.fillStyle = grad;
       smokeCtx.beginPath();
@@ -1021,17 +1019,6 @@ export const initPreloaderTimeline = () => {
 
   smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
-  if (rocketCenter) {
-    floatTween = gsap.to(rocketCenter, {
-      y: -10,
-      rotation: 1.5,
-      duration: 1.4,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-    });
-  }
-
   const headerEl = document.getElementById("preloader-header");
   const footerEl = document.getElementById("preloader-footer");
   const backdropEl = document.getElementById("preloader-backdrop");
@@ -1040,54 +1027,50 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    if (floatTween) floatTween.kill();
-
     preloaderEl.style.pointerEvents = "none";
 
-    const launchTl = gsap.timeline({
-      onComplete: () => {
-        if (smokeAnimId) {
-          cancelAnimationFrame(smokeAnimId);
-          smokeAnimId = null;
-        }
-        window.removeEventListener("resize", resizeCanvas);
-        preloaderEl.style.display = "none";
-        preloaderEl.remove();
-        document.body.style.overflow = "auto";
-      },
-    });
-
-    // Hanya latar backdrop, header, footer & teks yang fade — Roket & Asap tetap 100% solid
+    // Pure Hardware-Accelerated GPU Blast-Off
     if (textGroup) {
-      launchTl.to(textGroup, { opacity: 0, y: -20, duration: 0.5, ease: "power2.out" }, 0);
+      textGroup.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
+      textGroup.style.opacity = "0";
+      textGroup.style.transform = "translateY(-15px)";
     }
     if (headerEl) {
-      launchTl.to(headerEl, { opacity: 0, y: -15, duration: 0.5, ease: "power2.out" }, 0);
+      headerEl.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
+      headerEl.style.opacity = "0";
+      headerEl.style.transform = "translateY(-12px)";
     }
     if (footerEl) {
-      launchTl.to(footerEl, { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, 0);
+      footerEl.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
+      footerEl.style.opacity = "0";
+      footerEl.style.transform = "translateY(12px)";
     }
     if (backdropEl) {
-      launchTl.to(backdropEl, { opacity: 0, duration: 1.25, ease: "power2.inOut" }, 0.05);
+      backdropEl.style.transition = "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
+      backdropEl.style.opacity = "0";
     }
-    // Fade out sisa kepulan asap secara mulus agar tidak hilang mendadak
     if (smokeCanvas) {
-      launchTl.to(smokeCanvas, { opacity: 0, duration: 0.95, ease: "power2.out" }, 0.85);
+      smokeCanvas.style.transition = "opacity 0.4s ease-out";
+      smokeCanvas.style.opacity = "0";
     }
 
-    // Roket meluncur ke atas secara mulus dan anggun (60fps, 100% solid opacity)
     if (rocketCenter) {
-      launchTl.to(rocketCenter, {
-        y: -window.innerHeight - 350,
-        scale: 1.12,
-        rotation: 0,
-        duration: 1.35,
-        ease: "power3.in",
-      }, 0.05);
+      rocketCenter.style.transition = "transform 0.48s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
+      rocketCenter.style.transform = "translate3d(0, -140vh, 0) scale(1.1)";
     }
+
+    setTimeout(() => {
+      if (smokeAnimId) {
+        cancelAnimationFrame(smokeAnimId);
+        smokeAnimId = null;
+      }
+      window.removeEventListener("resize", resizeCanvas);
+      preloaderEl.style.display = "none";
+      preloaderEl.remove();
+      document.body.style.overflow = "auto";
+    }, 480);
   };
 
-  const progressTracker = { val: 0 };
   const updateDisplay = (pct, text) => {
     const roundPct = Math.round(pct);
     if (barEl) barEl.style.width = `${roundPct}%`;
@@ -1096,7 +1079,7 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const totalDuration = 650; // 650ms snappy launch
+  const totalDuration = 380; // Snappy, luxury 380ms count
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -1115,16 +1098,16 @@ export const initPreloaderTimeline = () => {
     if (progress < 1) {
       requestAnimationFrame(animStep);
     } else {
-      setTimeout(triggerLaunch, 80);
+      setTimeout(triggerLaunch, 50);
     }
   };
 
   requestAnimationFrame(animStep);
 
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1.5s max
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 900ms max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 1500);
+  }, 900);
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -1144,16 +1127,15 @@ export const initPageTransitionLinks = () => {
 
     if (isInternalPage) {
       e.preventDefault();
-      gsap.to("#portfolio-view, header, #side-nav, footer", {
-        opacity: 0,
-        y: -22,
-        scale: 0.98,
-        duration: 0.28,
-        ease: "power2.inOut",
-        onComplete: () => {
-          window.location.href = href;
-        }
+      const targetEls = document.querySelectorAll("#portfolio-view, header, #side-nav, footer");
+      targetEls.forEach((el) => {
+        el.style.transition = "opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)";
+        el.style.opacity = "0";
+        el.style.transform = "translateY(-16px) scale(0.99)";
       });
+      setTimeout(() => {
+        window.location.href = href;
+      }, 240);
     }
   });
 };

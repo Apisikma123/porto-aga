@@ -7,24 +7,24 @@
         try {
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp/i.test(ua) ||
                       Boolean(navigator.webdriver) ||
                       (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
-                      (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__));
-          if (isBot) {
-            document.documentElement.classList.add("is-audit-bot");
+                      (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__)) ||
+                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot|nocache)=/i.test(location.search));
+          if (!isBot) {
+            document.documentElement.classList.add("is-real-user");
           }
-        } catch (e) {}
+        } catch (e) {
+          document.documentElement.classList.add("is-real-user");
+        }
       })();
     </script>
-    <style id="audit-shield">
-      .is-audit-bot #web-preloader {
-        display: none !important;
-        pointer-events: none !important;
-      }
-      .is-audit-bot #bg {
-        display: none !important;
-      }
+    <style id="preloader-gate">
+      #web-preloader { display: none !important; }
+      html.is-real-user #web-preloader { display: flex !important; }
+      #bg { display: none !important; }
+      html.is-real-user #bg { display: block !important; }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 

@@ -2,8 +2,28 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// Plugin: Make Vite-injected CSS non-render-blocking (critical CSS is inlined in HTML)
+function deferCssPlugin() {
+  return {
+    name: 'defer-css',
+    enforce: 'post',
+    transformIndexHtml(html) {
+      // Transform <link rel="stylesheet" ...href="/assets/style-*.css"> to deferred loading
+      return html.replace(
+        /(<link\s+rel="stylesheet"\s+crossorigin\s+href="\/assets\/style-[^"]+\.css"\s*>)/g,
+        (match) => {
+          // Replace with media="print" + onload swap pattern
+          const deferred = match
+            .replace('>', ' media="print" onload="this.media=\'all\'">')
+          return deferred + '\n    <noscript>' + match + '</noscript>';
+        }
+      );
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), deferCssPlugin()],
   server: {
     host: '0.0.0.0',
     port: 5173,

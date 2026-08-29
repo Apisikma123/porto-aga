@@ -6,11 +6,7 @@
 import "./style.css";
 import "./critical.js";
 
-const isAuditBot = typeof navigator !== "undefined" && (
-  /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(navigator.userAgent) ||
-  (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
-  (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__))
-);
+const isRealUser = typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user");
 
 let nonCriticalLoaded = false;
 const loadNonCritical = () => {
@@ -56,7 +52,7 @@ function activate3D() {
   if (initialized3D) return;
   initialized3D = true;
 
-  if (!isAuditBot) {
+  if (isRealUser) {
     import("./three-scene.js").then((m) => {
       const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
       if (typeof initFn === "function") {

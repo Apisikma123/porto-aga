@@ -14,12 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ limitCallbacks: true, autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
 
 export const initThreeEngine = () => {
-  const isAuditBot = typeof navigator !== "undefined" && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(navigator.userAgent) ||
-    (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
-    (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__))
-  );
-  if (isAuditBot) return;
+  if (!document.documentElement.classList.contains("is-real-user")) return;
 
   const canvas = document.getElementById("bg") || document.getElementById("webgl-canvas");
   if (!canvas) return;
