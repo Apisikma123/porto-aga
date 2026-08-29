@@ -53,11 +53,12 @@ export const initThreeEngine = () => {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.30;
 
-  // ─── RoomEnvironment & PMREMGenerator for PBR Reflections ───
-  const pmremGenerator = new THREE.PMREMGenerator(renderer);
-  pmremGenerator.compileEquirectangularShader();
-  scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
-  pmremGenerator.dispose();
+  // ─── RoomEnvironment for Radiant PBR Reflections ───
+  try {
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+    pmremGenerator.dispose();
+  } catch (e) {}
 
   // ─── Premium Deep Space Studio Lighting Rig ───
   const ambientLight = new THREE.AmbientLight(0x181e32, 1.3);
@@ -115,26 +116,26 @@ export const initThreeEngine = () => {
 
   const createGodRaysTexture = () => {
     const canvasEl = document.createElement("canvas");
-    canvasEl.width = 512;
-    canvasEl.height = 512;
+    canvasEl.width = 128;
+    canvasEl.height = 128;
     const ctx = canvasEl.getContext("2d");
-    const cx = 256;
-    const cy = 256;
+    const cx = 64;
+    const cy = 64;
 
-    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 256);
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 64);
     coreGrad.addColorStop(0, "rgba(255, 60, 40, 0.85)");
     coreGrad.addColorStop(0.15, "rgba(255, 30, 20, 0.55)");
     coreGrad.addColorStop(0.4, "rgba(230, 20, 10, 0.22)");
     coreGrad.addColorStop(0.7, "rgba(180, 0, 0, 0.08)");
     coreGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = coreGrad;
-    ctx.fillRect(0, 0, 512, 512);
+    ctx.fillRect(0, 0, 128, 128);
 
-    const numRays = 24;
+    const numRays = 8;
     for (let i = 0; i < numRays; i++) {
       const angle = (i / numRays) * Math.PI * 2;
-      const rayWidth = (i % 3 === 0 ? 0.08 : i % 2 === 0 ? 0.045 : 0.025) * Math.PI;
-      const rayLength = 240 + ((i * 18) % 15);
+      const rayWidth = (i % 2 === 0 ? 0.06 : 0.035) * Math.PI;
+      const rayLength = 60;
 
       ctx.save();
       ctx.translate(cx, cy);
@@ -156,8 +157,9 @@ export const initThreeEngine = () => {
     }
 
     const tex = new THREE.CanvasTexture(canvasEl);
-    tex.generateMipmaps = true;
-    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.generateMipmaps = false;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
     return tex;
   };
 

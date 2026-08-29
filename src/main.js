@@ -52,13 +52,15 @@ function activate3D() {
   if (initialized3D) return;
   initialized3D = true;
 
-  import("./three-scene.js").then((m) => {
-    const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
-    if (typeof initFn === "function") {
-      initFn();
-    }
-  }).catch((err) => {
-    console.warn("Three.js deferred load notice:", err);
+  requestAnimationFrame(() => {
+    import("./three-scene.js").then((m) => {
+      const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
+      if (typeof initFn === "function") {
+        initFn();
+      }
+    }).catch((err) => {
+      console.warn("Three.js deferred load notice:", err);
+    });
   });
 }
 
@@ -70,16 +72,13 @@ window.addEventListener("start3D", activate3D, { once: true });
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 
-// 3. Fallback idle scheduler: Safe idle execution well outside initial audit window (0ms TBT)
-if (isRealUser) {
-  setTimeout(() => {
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(activate3D);
-      requestIdleCallback(loadNonCritical);
-    } else {
-      activate3D();
-      loadNonCritical();
-    }
-  }, 4500);
-}
+// 3. Fallback: Guaranteed 3D activation when preloader finishes (~2.2s)
+setTimeout(() => {
+  activate3D();
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(loadNonCritical);
+  } else {
+    loadNonCritical();
+  }
+}, 2200);
 
