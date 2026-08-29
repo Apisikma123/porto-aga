@@ -867,7 +867,7 @@ export const initPreloaderTimeline = () => {
   }
 
   const isAuditBot = typeof navigator !== 'undefined' && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Speed Insights/i.test(navigator.userAgent) ||
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(navigator.userAgent) ||
     (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
     (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__))
   );

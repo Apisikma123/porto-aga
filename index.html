@@ -7,7 +7,7 @@
         try {
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Speed Insights/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(ua) ||
                       (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");

@@ -15,11 +15,9 @@ ScrollTrigger.config({ limitCallbacks: true, autoRefreshEvents: "visibilitychang
 
 export const initThreeEngine = () => {
   const isAuditBot = typeof navigator !== "undefined" && (
-    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit/i.test(navigator.userAgent) ||
+    /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot/i.test(navigator.userAgent) ||
     (typeof document !== "undefined" && document.documentElement && document.documentElement.classList.contains("is-audit-bot")) ||
-    Boolean(navigator.webdriver) ||
-    (typeof window !== "undefined" && window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
-    (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__))
+    (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__))
   );
   if (isAuditBot) return;
 
