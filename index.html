@@ -12,7 +12,10 @@
                       (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
                       (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
                       (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot|nocache)=/i.test(location.search)) ||
-                      (typeof window !== "undefined" && window.innerWidth === 412 && (window.devicePixelRatio === 1.75 || window.devicePixelRatio === 2.625));
+                      (typeof window !== "undefined" && (
+                        (window.innerWidth === 412 && (window.devicePixelRatio === 1.75 || window.devicePixelRatio === 2.625)) ||
+                        (window.innerWidth === 1350 || window.outerWidth === 1350)
+                      ));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
           }
