@@ -924,38 +924,40 @@ export const initPreloaderTimeline = () => {
     window.addEventListener("resize", resizeCanvas, { passive: true });
   }
 
-  let frameCount = 0;
-  const renderSmokeCanvas = () => {
+  let lastSmokeTime = performance.now();
+
+  const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
       if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
       return;
     }
+
+    const dt = Math.min(32, (now - lastSmokeTime) || 16) / 16.666;
+    lastSmokeTime = now;
+
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
     frameCount++;
 
     const targetEl = rocketCenter || flameNozzle;
     if (targetEl && targetEl.isConnected) {
-      if (frameCount % 2 === 0 || launchTriggered) {
-        cachedRect = targetEl.getBoundingClientRect();
-      }
-      const rect = cachedRect || targetEl.getBoundingClientRect();
-      if (rect && rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 16 : 6);
-        const shouldSpawn = launchTriggered || (frameCount % 2 === 0);
-        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 50 : 25)) {
-          const spawnCount = launchTriggered ? 5 : 2;
+        const spawnCount = launchTriggered ? 4 : (frameCount % 2 === 0 ? 2 : 1);
+        
+        if (smokeParticles.length < (launchTriggered ? 60 : 30)) {
           for (let i = 0; i < spawnCount; i++) {
             smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
-              y: nozzleY + (Math.random() - 0.5) * 4,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
+              y: nozzleY + (Math.random() - 0.5) * 3,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
               vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
-              radius: launchTriggered ? (16 + Math.random() * 14) : (10 + Math.random() * 8),
-              growth: launchTriggered ? 0.95 : 0.55,
-              maxRadius: launchTriggered ? 85 : 42,
-              alpha: launchTriggered ? 0.85 : 0.6,
-              decay: launchTriggered ? 0.022 : 0.012,
+              radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
+              growth: launchTriggered ? 0.9 : 0.45,
+              maxRadius: launchTriggered ? 80 : 36,
+              alpha: launchTriggered ? 0.8 : 0.5,
+              decay: launchTriggered ? 0.02 : 0.012,
             });
           }
         }
@@ -964,10 +966,10 @@ export const initPreloaderTimeline = () => {
 
     for (let i = smokeParticles.length - 1; i >= 0; i--) {
       const p = smokeParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.radius = Math.min(p.maxRadius, p.radius + p.growth);
-      p.alpha -= p.decay;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
+      p.alpha -= p.decay * dt;
 
       if (p.alpha <= 0 || p.y > window.innerHeight + 50) {
         smokeParticles.splice(i, 1);
