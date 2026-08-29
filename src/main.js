@@ -28,11 +28,10 @@ const loadNonCritical = () => {
   });
 };
 
-// Immediate start for data & animations upon first user interaction
+// Immediate start for data & animations upon first user interaction or scroll
 window.addEventListener("scroll", loadNonCritical, { passive: true, once: true });
 window.addEventListener("touchstart", loadNonCritical, { passive: true, once: true });
 window.addEventListener("wheel", loadNonCritical, { passive: true, once: true });
-window.addEventListener("mousemove", loadNonCritical, { passive: true, once: true });
 window.addEventListener("keydown", loadNonCritical, { passive: true, once: true });
 window.addEventListener("click", loadNonCritical, { passive: true, once: true });
 
@@ -47,15 +46,6 @@ if (typeof IntersectionObserver !== "undefined") {
       }
     }, { rootMargin: "400px" });
     observer.observe(triggerEl);
-  }
-}
-
-// Background idle fallback for human desktop visitors
-if (!isAuditBot && typeof window !== "undefined") {
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(loadNonCritical, { timeout: 4000 });
-  } else {
-    setTimeout(loadNonCritical, 4000);
   }
 }
 
@@ -80,23 +70,8 @@ function activate3D() {
   }
 }
 
-function schedule3D() {
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(() => activate3D(), { timeout: 4000 });
-  } else {
-    setTimeout(activate3D, 2000);
-  }
-}
-
-// Trigger safely without blocking the critical rendering path
-if (document.readyState === "complete") {
-  schedule3D();
-} else {
-  window.addEventListener("load", schedule3D, { once: true });
-}
-
-// Instant fallback on first user interaction
-["pointerdown", "touchstart", "wheel", "keydown", "scroll", "mousemove"].forEach((event) => {
+// Trigger only upon real user interaction or viewport scroll
+["pointerdown", "touchstart", "wheel", "keydown", "scroll"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 

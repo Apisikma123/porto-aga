@@ -909,6 +909,7 @@ export const initPreloaderTimeline = () => {
   let smokeCtx = null;
   let smokeParticles = [];
   let smokeAnimId = null;
+  let cachedRect = null;
 
   const resizeCanvas = () => {
     if (smokeCanvas) {
@@ -934,13 +935,16 @@ export const initPreloaderTimeline = () => {
 
     const targetEl = rocketCenter || flameNozzle;
     if (targetEl && targetEl.isConnected) {
-      const rect = targetEl.getBoundingClientRect();
-      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+      if (frameCount % 3 === 0 || launchTriggered) {
+        cachedRect = targetEl.getBoundingClientRect();
+      }
+      const rect = cachedRect || targetEl.getBoundingClientRect();
+      if (rect && rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 16 : 6);
-        const shouldSpawn = launchTriggered || (frameCount % 3 === 0);
-        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 40 : 18)) {
-          const spawnCount = launchTriggered ? 3 : 1;
+        const shouldSpawn = launchTriggered || (frameCount % 4 === 0);
+        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 30 : 12)) {
+          const spawnCount = launchTriggered ? 2 : 1;
           for (let i = 0; i < spawnCount; i++) {
             smokeParticles.push({
               x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
