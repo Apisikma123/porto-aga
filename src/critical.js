@@ -1028,36 +1028,7 @@ export const initPreloaderTimeline = () => {
     launchTriggered = true;
 
     preloaderEl.style.pointerEvents = "none";
-
-    // Pure Hardware-Accelerated GPU Blast-Off
-    if (textGroup) {
-      textGroup.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
-      textGroup.style.opacity = "0";
-      textGroup.style.transform = "translateY(-15px)";
-    }
-    if (headerEl) {
-      headerEl.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
-      headerEl.style.opacity = "0";
-      headerEl.style.transform = "translateY(-12px)";
-    }
-    if (footerEl) {
-      footerEl.style.transition = "opacity 0.3s ease-out, transform 0.3s ease-out";
-      footerEl.style.opacity = "0";
-      footerEl.style.transform = "translateY(12px)";
-    }
-    if (backdropEl) {
-      backdropEl.style.transition = "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
-      backdropEl.style.opacity = "0";
-    }
-    if (smokeCanvas) {
-      smokeCanvas.style.transition = "opacity 0.4s ease-out";
-      smokeCanvas.style.opacity = "0";
-    }
-
-    if (rocketCenter) {
-      rocketCenter.style.transition = "transform 0.48s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
-      rocketCenter.style.transform = "translate3d(0, -140vh, 0) scale(1.1)";
-    }
+    preloaderEl.classList.add("preloader-launching");
 
     setTimeout(() => {
       if (smokeAnimId) {
@@ -1068,7 +1039,7 @@ export const initPreloaderTimeline = () => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 480);
+    }, 750);
   };
 
   const updateDisplay = (pct, text) => {
@@ -1079,7 +1050,7 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const totalDuration = 380; // Snappy, luxury 380ms count
+  const totalDuration = 450; // Smooth, snappy count
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -1098,16 +1069,16 @@ export const initPreloaderTimeline = () => {
     if (progress < 1) {
       requestAnimationFrame(animStep);
     } else {
-      setTimeout(triggerLaunch, 50);
+      setTimeout(triggerLaunch, 80);
     }
   };
 
   requestAnimationFrame(animStep);
 
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 900ms max
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1400ms max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 900);
+  }, 1400);
 };
 
 // ═══════════════════════════════════════════════════════════
