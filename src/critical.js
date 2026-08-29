@@ -924,7 +924,7 @@ export const initPreloaderTimeline = () => {
     window.addEventListener("resize", resizeCanvas, { passive: true });
   }
 
-  let lastSmokeTime = performance.now();
+  let lastSmokeTime = 0;
 
   const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
@@ -932,8 +932,9 @@ export const initPreloaderTimeline = () => {
       return;
     }
 
-    const dt = Math.min(32, (now - lastSmokeTime) || 16) / 16.666;
-    lastSmokeTime = now;
+    const currentTime = (typeof now === "number" && now > 0) ? now : performance.now();
+    const dt = lastSmokeTime > 0 ? Math.min(32, Math.max(8, currentTime - lastSmokeTime)) / 16.666 : 1.0;
+    lastSmokeTime = currentTime;
 
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
     frameCount++;
