@@ -1,7 +1,4 @@
-// GSAP deferred: starts fetching immediately but doesn't block module parse (~113KB saved from critical path)
-let gsap = { to: () => {}, fromTo: () => {}, timeline: () => ({ to: () => gsap._stubTl, add: () => gsap._stubTl }), _stubTl: {} };
-gsap._stubTl = gsap.timeline();
-const _gsapReady = import("gsap").then(m => { gsap = m.gsap; return gsap; });
+import { gsap } from "gsap";
 
 // 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
 export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
@@ -1287,12 +1284,10 @@ export const initCritical = () => {
   initNavigationAndKeyboard();
   initGlobalCardTilt();
 
-  // GSAP-dependent init: wait for dynamic import to resolve (almost always instant by DOMContentLoaded)
-  _gsapReady.then(() => {
-    setLanguage(currentLang, false);
-    initPreloaderTimeline();
-    initPageTransitionLinks();
-  });
+  // GSAP and UI init
+  setLanguage(currentLang, false);
+  initPreloaderTimeline();
+  initPageTransitionLinks();
 };
 
 if (document.readyState === "loading") {
