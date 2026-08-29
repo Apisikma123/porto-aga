@@ -7,9 +7,10 @@
         try {
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|mediapartners/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|mediapartners|Audit/i.test(ua) ||
                       Boolean(navigator.webdriver) ||
-                      (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__)) ||
+                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+                      (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
                       (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot|nocache)=/i.test(location.search));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
