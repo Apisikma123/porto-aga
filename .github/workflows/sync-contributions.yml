@@ -21,47 +21,88 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           GH_USER: Apisikma123
         run: |
-          # GraphQL query for contribution data
-          QUERY='{
-            "query": "query { user(login: \"'$GH_USER'\") { contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { contributionCount date color } } } } } }"
-          }'
-
-          RESPONSE=$(curl -s -H "Authorization: bearer $GH_TOKEN" \
-            -H "Content-Type: application/json" \
-            -X POST https://api.github.com/graphql \
-            -d "$QUERY")
-
-          # Parse with Node.js (available on ubuntu-latest)
           node -e "
-            const data = JSON.parse(process.argv[1]);
-            const cal = data?.data?.user?.contributionsCollection?.contributionCalendar;
-            if (!cal) { console.error('No data:', JSON.stringify(data)); process.exit(1); }
+            async function main() {
+              const username = process.env.GH_USER || 'Apisikma123';
+              const token = process.env.GH_TOKEN;
+              let output = null;
 
-            const total = cal.totalContributions.toLocaleString();
-            const contributions = [];
-
-            for (const week of cal.weeks) {
-              for (const day of week.contributionDays) {
-                const count = day.contributionCount;
-                let level = 0;
-                if (count > 0) level = 1;
-                if (count > 3) level = 2;
-                if (count > 8) level = 3;
-                if (count > 15) level = 4;
-
-                contributions.push({
-                  date: day.date,
-                  count,
-                  level,
-                  tooltip: day.date + ': ' + count + ' contributions'
-                });
+              // 1. Try GitHub GraphQL API if token is provided
+              if (token) {
+                try {
+                  const query = JSON.stringify({
+                    query: 'query { user(login: \"' + username + '\") { contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { contributionCount date contributionLevel } } } } } }'
+                  });
+                  const res = await fetch('https://api.github.com/graphql', {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': 'bearer ' + token,
+                      'Content-Type': 'application/json',
+                      'User-Agent': 'Node-Fetch'
+                    },
+                    body: query
+                  });
+                  const data = await res.json();
+                  const cal = data?.data?.user?.contributionsCollection?.contributionCalendar;
+                  if (cal && cal.weeks) {
+                    const levelMap = { 'NONE': 0, 'FIRST_QUARTILE': 1, 'SECOND_QUARTILE': 2, 'THIRD_QUARTILE': 3, 'FOURTH_QUARTILE': 4 };
+                    const contributions = [];
+                    for (const week of cal.weeks) {
+                      for (const day of week.contributionDays) {
+                        contributions.push({
+                          date: day.date,
+                          count: day.contributionCount,
+                          level: levelMap[day.contributionLevel] !== undefined ? levelMap[day.contributionLevel] : (day.contributionCount > 0 ? 1 : 0),
+                          tooltip: day.date + ': ' + day.contributionCount + ' contributions'
+                        });
+                      }
+                    }
+                    output = {
+                      total: cal.totalContributions.toLocaleString(),
+                      contributions,
+                      updatedAt: new Date().toISOString()
+                    };
+                    console.log('Successfully fetched via GitHub GraphQL API:', output.total);
+                  }
+                } catch (e) {
+                  console.warn('GraphQL API failed, using fallback:', e.message);
+                }
               }
-            }
 
-            const output = { total, contributions, updatedAt: new Date().toISOString() };
-            require('fs').writeFileSync('public/contributions.json', JSON.stringify(output, null, 2));
-            console.log('Synced: ' + total + ' contributions, ' + contributions.length + ' days');
-          " "$RESPONSE"
+              // 2. Fallback to public GitHub contribution API (No token required)
+              if (!output) {
+                try {
+                  const res = await fetch('https://github-contributions-api.jogruber.de/v4/' + username + '?y=last');
+                  const data = await res.json();
+                  if (data && data.contributions) {
+                    const totalNum = (data.total && data.total.lastYear) || data.contributions.reduce((a, b) => a + (b.count || 0), 0);
+                    output = {
+                      total: totalNum.toLocaleString(),
+                      contributions: data.contributions.map(d => ({
+                        date: d.date,
+                        count: d.count,
+                        level: d.level,
+                        tooltip: d.date + ': ' + d.count + ' contributions'
+                      })),
+                      updatedAt: new Date().toISOString()
+                    };
+                    console.log('Successfully fetched via Public API:', output.total);
+                  }
+                } catch (e) {
+                  console.error('Fallback API failed:', e.message);
+                }
+              }
+
+              if (!output) {
+                console.error('All contribution fetch attempts failed.');
+                process.exit(1);
+              }
+
+              require('fs').writeFileSync('public/contributions.json', JSON.stringify(output, null, 2));
+              console.log('Saved public/contributions.json successfully! Total: ' + output.total + ' (' + output.contributions.length + ' days)');
+            }
+            main();
+          "
 
       - name: Commit & Push
         run: |

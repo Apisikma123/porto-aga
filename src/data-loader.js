@@ -643,36 +643,85 @@ export const initActivityHeatmap = () => {
         ]
       : [
           "#181920", // level 0
-          "#4a141e", // level 1
-          "#7c182a", // level 2
-          "#b81432", // level 3
-          "#dc143c", // level 4
+          "#4a141e", // level 1 (subtle wine burgundy)
+          "#7c182a", // level 2 (medium crimson)
+          "#b81432", // level 3 (vibrant crimson)
+          "#dc143c", // level 4 (bright glowing crimson)
         ];
 
     try {
       const data = cachedContributionsData || (await fetch("/contributions.json").then((r) => (r.ok ? r.json() : null)));
       if (!data) throw new Error("Local contributions.json not found");
 
-      const totalStr = data.total || (data.totalContributions ? data.totalContributions.toLocaleString() : "9,907");
+      const totalStr = data.total || (data.totalContributions ? data.totalContributions.toLocaleString() : "10,020");
       if (countEl) countEl.textContent = `${totalStr}+ Contributions`;
 
       const rawList = data.contributions || data.days || [];
       const days = rawList.slice(-371);
-      container.innerHTML = "";
 
+      // 1. Dynamic Year Range
+      if (yearRangeEl && days.length > 0) {
+        const startY = new Date(days[0].date).getUTCFullYear();
+        const endY = new Date(days[days.length - 1].date).getUTCFullYear();
+        yearRangeEl.textContent = startY === endY ? `${startY}` : `${startY} – ${endY}`;
+      }
+
+      // 2. Dynamic 53-Week Month Header aligned with grid columns
+      const monthsEl = document.getElementById("heatmap-months");
+      if (monthsEl && days.length > 0) {
+        const isEn = document.documentElement.getAttribute("lang") === "en";
+        const MONTH_NAMES = isEn
+          ? ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+          : ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+        monthsEl.innerHTML = "";
+        const totalWeeks = Math.ceil(days.length / 7);
+        monthsEl.style.display = "grid";
+        monthsEl.style.gridTemplateColumns = `repeat(${totalWeeks}, minmax(0, 1fr))`;
+        monthsEl.style.gap = "3.5px";
+
+        let lastMonth = -1;
+        let lastWeekLabeled = -4;
+
+        for (let w = 0; w < totalWeeks; w++) {
+          const dayIdx = w * 7;
+          if (dayIdx >= days.length) break;
+          const date = new Date(days[dayIdx].date);
+          const m = date.getUTCMonth();
+          if (m !== lastMonth && (w - lastWeekLabeled) >= 2) {
+            lastMonth = m;
+            lastWeekLabeled = w;
+            const span = document.createElement("span");
+            span.textContent = MONTH_NAMES[m];
+            span.style.gridColumnStart = `${w + 1}`;
+            span.className = "text-[0.65rem] sm:text-xs text-zinc-400 font-mono text-left block pointer-events-none whitespace-nowrap";
+            monthsEl.appendChild(span);
+          }
+        }
+      }
+
+      // 3. Populate Heatmap Cells
+      container.innerHTML = "";
       const fragment = document.createDocumentFragment();
       days.forEach((d) => {
         const cell = document.createElement("div");
-        const lvl = d.level !== undefined ? d.level : (d.count > 15 ? 4 : d.count > 8 ? 3 : d.count > 3 ? 2 : d.count > 0 ? 1 : 0);
+        const lvl = (typeof d.level === "number" && d.level >= 0 && d.level <= 4)
+          ? d.level
+          : (d.count > 100 ? 4 : d.count > 50 ? 3 : d.count > 15 ? 2 : d.count > 0 ? 1 : 0);
         const bg = COLOR_LEVELS[lvl] || COLOR_LEVELS[0];
-        cell.className = "w-2.5 h-2.5 rounded-sm transition-colors duration-200 cursor-pointer relative group/cell";
+        cell.className = "w-2.5 h-2.5 rounded-sm transition-colors duration-200 cursor-pointer relative group/cell hover:scale-125 hover:z-10";
         cell.style.backgroundColor = bg;
         cell.setAttribute("title", d.tooltip || `${d.date}: ${d.count} contributions`);
         fragment.appendChild(cell);
       });
       container.appendChild(fragment);
+
+      const scrollWrapper = document.getElementById("activity-heatmap-scroll");
+      if (scrollWrapper && window.enableDragToScroll) {
+        window.enableDragToScroll(scrollWrapper);
+      }
     } catch (e) {
-      if (countEl) countEl.textContent = "9,907+ Contributions";
+      if (countEl) countEl.textContent = "10,020+ Contributions";
 
       container.innerHTML = "";
       const fragment = document.createDocumentFragment();

@@ -893,23 +893,24 @@
               <!-- Matrix Scroll Container with Exact Month Labels & Day Labels -->
               <div class="overflow-x-auto pb-3 -mx-2 px-2 select-none" id="activity-heatmap-scroll">
                 <div class="min-w-[720px]">
-                  <!-- Month Labels -->
-                  <div id="heatmap-months" class="grid grid-flow-col auto-cols-fr font-mono text-xs text-zinc-300 font-medium pl-9 mb-2.5">
-                    <span data-i18n="monthJan">Jan</span><span data-i18n="monthFeb">Feb</span><span data-i18n="monthMar">Mar</span><span data-i18n="monthApr">Apr</span><span data-i18n="monthMay">May</span><span data-i18n="monthJun">Jun</span>
-                    <span data-i18n="monthJul">Jul</span><span data-i18n="monthAug">Aug</span><span data-i18n="monthSep">Sep</span><span data-i18n="monthOct">Oct</span><span data-i18n="monthNov">Nov</span><span data-i18n="monthDec">Dec</span>
-                  </div>
-
-                  <!-- Grid Container with Day Labels (Mon, Wed, Fri) -->
                   <div class="flex gap-3 items-start">
-                    <div id="heatmap-days" class="flex flex-col justify-between font-mono text-xs text-zinc-300 h-[98px] py-0.5 w-6 text-left font-semibold">
+                    <!-- Day Labels (Mon, Wed, Fri aligned with grid rows) -->
+                    <div id="heatmap-days" class="flex flex-col justify-between font-mono text-xs text-zinc-400 h-[92px] pt-6 pb-0.5 w-6 text-left font-semibold shrink-0">
                       <span data-i18n="dayMon">Mon</span>
                       <span data-i18n="dayWed">Wed</span>
                       <span data-i18n="dayFri">Fri</span>
                     </div>
 
-                    <!-- Heatmap Cells (53 Weeks x 7 Days) -->
-                    <div id="heatmap-cells" class="grid grid-flow-col grid-rows-7 gap-[3.5px] flex-1">
-                      <!-- Populated dynamically with live real-time GitHub activity data -->
+                    <div class="flex-1 min-w-0">
+                      <!-- Dynamic 53-Week Month Labels (populated based on real date columns) -->
+                      <div id="heatmap-months" class="font-mono text-xs text-zinc-400 font-medium mb-2 h-4 relative">
+                        <!-- Populated dynamically matching exact month starting columns -->
+                      </div>
+
+                      <!-- Heatmap Cells (53 Weeks x 7 Days) -->
+                      <div id="heatmap-cells" class="grid grid-flow-col grid-rows-7 gap-[3.5px]">
+                        <!-- Populated dynamically with live real-time GitHub activity data -->
+                      </div>
                     </div>
                   </div>
                 </div>
