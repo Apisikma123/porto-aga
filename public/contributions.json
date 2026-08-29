@@ -1,2225 +1,2232 @@
 {
-  "total": "9,907",
+  "total": "10,019",
   "contributions": [
     {
-      "date": "2025-08-17",
-      "level": 1,
-      "count": 1,
-      "tooltip": "1 contribution on August 17th."
-    },
-    {
-      "date": "2025-08-18",
-      "level": 1,
-      "count": 14,
-      "tooltip": "14 contributions on August 18th."
-    },
-    {
-      "date": "2025-08-19",
-      "level": 1,
-      "count": 9,
-      "tooltip": "9 contributions on August 19th."
-    },
-    {
-      "date": "2025-08-20",
-      "level": 1,
-      "count": 13,
-      "tooltip": "13 contributions on August 20th."
-    },
-    {
-      "date": "2025-08-21",
-      "level": 1,
-      "count": 10,
-      "tooltip": "10 contributions on August 21st."
-    },
-    {
-      "date": "2025-08-22",
-      "level": 1,
-      "count": 11,
-      "tooltip": "11 contributions on August 22nd."
-    },
-    {
-      "date": "2025-08-23",
-      "level": 0,
-      "count": 0,
-      "tooltip": "No contributions on August 23rd."
-    },
-    {
       "date": "2025-08-24",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on August 24th."
+      "level": 1,
+      "tooltip": "2025-08-24: 2 contributions"
     },
     {
       "date": "2025-08-25",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on August 25th."
+      "level": 3,
+      "tooltip": "2025-08-25: 14 contributions"
     },
     {
       "date": "2025-08-26",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on August 26th."
+      "level": 3,
+      "tooltip": "2025-08-26: 12 contributions"
     },
     {
       "date": "2025-08-27",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on August 27th."
+      "level": 3,
+      "tooltip": "2025-08-27: 12 contributions"
     },
     {
       "date": "2025-08-28",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on August 28th."
+      "level": 3,
+      "tooltip": "2025-08-28: 14 contributions"
     },
     {
       "date": "2025-08-29",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on August 29th."
+      "level": 3,
+      "tooltip": "2025-08-29: 15 contributions"
     },
     {
       "date": "2025-08-30",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on August 30th."
+      "level": 1,
+      "tooltip": "2025-08-30: 1 contributions"
     },
     {
       "date": "2025-08-31",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on August 31st."
+      "level": 1,
+      "tooltip": "2025-08-31: 3 contributions"
     },
     {
       "date": "2025-09-01",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on September 1st."
+      "level": 3,
+      "tooltip": "2025-09-01: 9 contributions"
     },
     {
       "date": "2025-09-02",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on September 2nd."
+      "level": 2,
+      "tooltip": "2025-09-02: 7 contributions"
     },
     {
       "date": "2025-09-03",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on September 3rd."
+      "level": 3,
+      "tooltip": "2025-09-03: 13 contributions"
     },
     {
       "date": "2025-09-04",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on September 4th."
+      "level": 3,
+      "tooltip": "2025-09-04: 12 contributions"
     },
     {
       "date": "2025-09-05",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on September 5th."
+      "level": 3,
+      "tooltip": "2025-09-05: 11 contributions"
     },
     {
       "date": "2025-09-06",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on September 6th."
+      "level": 1,
+      "tooltip": "2025-09-06: 2 contributions"
     },
     {
       "date": "2025-09-07",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on September 7th."
+      "level": 1,
+      "tooltip": "2025-09-07: 1 contributions"
     },
     {
       "date": "2025-09-08",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on September 8th."
+      "level": 3,
+      "tooltip": "2025-09-08: 14 contributions"
     },
     {
       "date": "2025-09-09",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on September 9th."
+      "level": 3,
+      "tooltip": "2025-09-09: 13 contributions"
     },
     {
       "date": "2025-09-10",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on September 10th."
+      "level": 3,
+      "tooltip": "2025-09-10: 15 contributions"
     },
     {
       "date": "2025-09-11",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on September 11th."
+      "level": 3,
+      "tooltip": "2025-09-11: 15 contributions"
     },
     {
       "date": "2025-09-12",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on September 12th."
+      "level": 3,
+      "tooltip": "2025-09-12: 13 contributions"
     },
     {
       "date": "2025-09-13",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on September 13th."
+      "level": 0,
+      "tooltip": "2025-09-13: 0 contributions"
     },
     {
       "date": "2025-09-14",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on September 14th."
+      "level": 0,
+      "tooltip": "2025-09-14: 0 contributions"
     },
     {
       "date": "2025-09-15",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on September 15th."
+      "level": 3,
+      "tooltip": "2025-09-15: 12 contributions"
     },
     {
       "date": "2025-09-16",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on September 16th."
+      "level": 3,
+      "tooltip": "2025-09-16: 15 contributions"
     },
     {
       "date": "2025-09-17",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on September 17th."
+      "level": 3,
+      "tooltip": "2025-09-17: 10 contributions"
     },
     {
       "date": "2025-09-18",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on September 18th."
+      "level": 3,
+      "tooltip": "2025-09-18: 15 contributions"
     },
     {
       "date": "2025-09-19",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on September 19th."
+      "level": 3,
+      "tooltip": "2025-09-19: 10 contributions"
     },
     {
       "date": "2025-09-20",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on September 20th."
+      "level": 1,
+      "tooltip": "2025-09-20: 3 contributions"
     },
     {
       "date": "2025-09-21",
-      "level": 1,
       "count": 4,
-      "tooltip": "4 contributions on September 21st."
+      "level": 2,
+      "tooltip": "2025-09-21: 4 contributions"
     },
     {
       "date": "2025-09-22",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on September 22nd."
+      "level": 2,
+      "tooltip": "2025-09-22: 8 contributions"
     },
     {
       "date": "2025-09-23",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on September 23rd."
+      "level": 3,
+      "tooltip": "2025-09-23: 14 contributions"
     },
     {
       "date": "2025-09-24",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on September 24th."
+      "level": 3,
+      "tooltip": "2025-09-24: 11 contributions"
     },
     {
       "date": "2025-09-25",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on September 25th."
+      "level": 4,
+      "tooltip": "2025-09-25: 19 contributions"
     },
     {
       "date": "2025-09-26",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on September 26th."
+      "level": 4,
+      "tooltip": "2025-09-26: 18 contributions"
     },
     {
       "date": "2025-09-27",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on September 27th."
+      "level": 1,
+      "tooltip": "2025-09-27: 2 contributions"
     },
     {
       "date": "2025-09-28",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on September 28th."
+      "level": 0,
+      "tooltip": "2025-09-28: 0 contributions"
     },
     {
       "date": "2025-09-29",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on September 29th."
+      "level": 4,
+      "tooltip": "2025-09-29: 18 contributions"
     },
     {
       "date": "2025-09-30",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on September 30th."
+      "level": 3,
+      "tooltip": "2025-09-30: 13 contributions"
     },
     {
       "date": "2025-10-01",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on October 1st."
+      "level": 4,
+      "tooltip": "2025-10-01: 17 contributions"
     },
     {
       "date": "2025-10-02",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on October 2nd."
+      "level": 3,
+      "tooltip": "2025-10-02: 13 contributions"
     },
     {
       "date": "2025-10-03",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on October 3rd."
+      "level": 4,
+      "tooltip": "2025-10-03: 19 contributions"
     },
     {
       "date": "2025-10-04",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on October 4th."
+      "level": 1,
+      "tooltip": "2025-10-04: 1 contributions"
     },
     {
       "date": "2025-10-05",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on October 5th."
+      "level": 1,
+      "tooltip": "2025-10-05: 2 contributions"
     },
     {
       "date": "2025-10-06",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on October 6th."
+      "level": 4,
+      "tooltip": "2025-10-06: 16 contributions"
     },
     {
       "date": "2025-10-07",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on October 7th."
+      "level": 4,
+      "tooltip": "2025-10-07: 20 contributions"
     },
     {
       "date": "2025-10-08",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on October 8th."
+      "level": 3,
+      "tooltip": "2025-10-08: 12 contributions"
     },
     {
       "date": "2025-10-09",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on October 9th."
+      "level": 4,
+      "tooltip": "2025-10-09: 20 contributions"
     },
     {
       "date": "2025-10-10",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on October 10th."
+      "level": 3,
+      "tooltip": "2025-10-10: 13 contributions"
     },
     {
       "date": "2025-10-11",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on October 11th."
+      "level": 1,
+      "tooltip": "2025-10-11: 3 contributions"
     },
     {
       "date": "2025-10-12",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on October 12th."
+      "level": 1,
+      "tooltip": "2025-10-12: 2 contributions"
     },
     {
       "date": "2025-10-13",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on October 13th."
+      "level": 4,
+      "tooltip": "2025-10-13: 19 contributions"
     },
     {
       "date": "2025-10-14",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on October 14th."
+      "level": 4,
+      "tooltip": "2025-10-14: 17 contributions"
     },
     {
       "date": "2025-10-15",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on October 15th."
+      "level": 4,
+      "tooltip": "2025-10-15: 19 contributions"
     },
     {
       "date": "2025-10-16",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on October 16th."
+      "level": 3,
+      "tooltip": "2025-10-16: 13 contributions"
     },
     {
       "date": "2025-10-17",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on October 17th."
+      "level": 3,
+      "tooltip": "2025-10-17: 14 contributions"
     },
     {
       "date": "2025-10-18",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on October 18th."
+      "level": 1,
+      "tooltip": "2025-10-18: 2 contributions"
     },
     {
       "date": "2025-10-19",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on October 19th."
+      "level": 1,
+      "tooltip": "2025-10-19: 3 contributions"
     },
     {
       "date": "2025-10-20",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on October 20th."
+      "level": 3,
+      "tooltip": "2025-10-20: 14 contributions"
     },
     {
       "date": "2025-10-21",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on October 21st."
+      "level": 4,
+      "tooltip": "2025-10-21: 19 contributions"
     },
     {
       "date": "2025-10-22",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on October 22nd."
+      "level": 3,
+      "tooltip": "2025-10-22: 10 contributions"
     },
     {
       "date": "2025-10-23",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on October 23rd."
+      "level": 4,
+      "tooltip": "2025-10-23: 20 contributions"
     },
     {
       "date": "2025-10-24",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on October 24th."
+      "level": 3,
+      "tooltip": "2025-10-24: 14 contributions"
     },
     {
       "date": "2025-10-25",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on October 25th."
+      "level": 1,
+      "tooltip": "2025-10-25: 3 contributions"
     },
     {
       "date": "2025-10-26",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on October 26th."
+      "level": 1,
+      "tooltip": "2025-10-26: 3 contributions"
     },
     {
       "date": "2025-10-27",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on October 27th."
+      "level": 4,
+      "tooltip": "2025-10-27: 19 contributions"
     },
     {
       "date": "2025-10-28",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on October 28th."
+      "level": 4,
+      "tooltip": "2025-10-28: 20 contributions"
     },
     {
       "date": "2025-10-29",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on October 29th."
+      "level": 2,
+      "tooltip": "2025-10-29: 7 contributions"
     },
     {
       "date": "2025-10-30",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on October 30th."
+      "level": 3,
+      "tooltip": "2025-10-30: 11 contributions"
     },
     {
       "date": "2025-10-31",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on October 31st."
+      "level": 4,
+      "tooltip": "2025-10-31: 20 contributions"
     },
     {
       "date": "2025-11-01",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on November 1st."
+      "level": 1,
+      "tooltip": "2025-11-01: 1 contributions"
     },
     {
       "date": "2025-11-02",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on November 2nd."
+      "level": 1,
+      "tooltip": "2025-11-02: 1 contributions"
     },
     {
       "date": "2025-11-03",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on November 3rd."
+      "level": 4,
+      "tooltip": "2025-11-03: 20 contributions"
     },
     {
       "date": "2025-11-04",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on November 4th."
+      "level": 3,
+      "tooltip": "2025-11-04: 10 contributions"
     },
     {
       "date": "2025-11-05",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on November 5th."
+      "level": 3,
+      "tooltip": "2025-11-05: 12 contributions"
     },
     {
       "date": "2025-11-06",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on November 6th."
+      "level": 3,
+      "tooltip": "2025-11-06: 10 contributions"
     },
     {
       "date": "2025-11-07",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on November 7th."
+      "level": 3,
+      "tooltip": "2025-11-07: 12 contributions"
     },
     {
       "date": "2025-11-08",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on November 8th."
+      "level": 1,
+      "tooltip": "2025-11-08: 2 contributions"
     },
     {
       "date": "2025-11-09",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on November 9th."
+      "level": 1,
+      "tooltip": "2025-11-09: 2 contributions"
     },
     {
       "date": "2025-11-10",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on November 10th."
+      "level": 4,
+      "tooltip": "2025-11-10: 20 contributions"
     },
     {
       "date": "2025-11-11",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on November 11th."
+      "level": 4,
+      "tooltip": "2025-11-11: 18 contributions"
     },
     {
       "date": "2025-11-12",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on November 12th."
+      "level": 4,
+      "tooltip": "2025-11-12: 17 contributions"
     },
     {
       "date": "2025-11-13",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on November 13th."
+      "level": 3,
+      "tooltip": "2025-11-13: 11 contributions"
     },
     {
       "date": "2025-11-14",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on November 14th."
+      "level": 4,
+      "tooltip": "2025-11-14: 16 contributions"
     },
     {
       "date": "2025-11-15",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on November 15th."
+      "level": 1,
+      "tooltip": "2025-11-15: 2 contributions"
     },
     {
       "date": "2025-11-16",
-      "level": 1,
       "count": 4,
-      "tooltip": "4 contributions on November 16th."
+      "level": 2,
+      "tooltip": "2025-11-16: 4 contributions"
     },
     {
       "date": "2025-11-17",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on November 17th."
+      "level": 3,
+      "tooltip": "2025-11-17: 14 contributions"
     },
     {
       "date": "2025-11-18",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on November 18th."
+      "level": 3,
+      "tooltip": "2025-11-18: 11 contributions"
     },
     {
       "date": "2025-11-19",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on November 19th."
+      "level": 3,
+      "tooltip": "2025-11-19: 12 contributions"
     },
     {
       "date": "2025-11-20",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on November 20th."
+      "level": 3,
+      "tooltip": "2025-11-20: 14 contributions"
     },
     {
       "date": "2025-11-21",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on November 21st."
+      "level": 3,
+      "tooltip": "2025-11-21: 10 contributions"
     },
     {
       "date": "2025-11-22",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on November 22nd."
+      "level": 1,
+      "tooltip": "2025-11-22: 2 contributions"
     },
     {
       "date": "2025-11-23",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on November 23rd."
+      "level": 0,
+      "tooltip": "2025-11-23: 0 contributions"
     },
     {
       "date": "2025-11-24",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on November 24th."
+      "level": 4,
+      "tooltip": "2025-11-24: 20 contributions"
     },
     {
       "date": "2025-11-25",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on November 25th."
+      "level": 3,
+      "tooltip": "2025-11-25: 12 contributions"
     },
     {
       "date": "2025-11-26",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on November 26th."
+      "level": 4,
+      "tooltip": "2025-11-26: 18 contributions"
     },
     {
       "date": "2025-11-27",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on November 27th."
+      "level": 4,
+      "tooltip": "2025-11-27: 19 contributions"
     },
     {
       "date": "2025-11-28",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on November 28th."
+      "level": 3,
+      "tooltip": "2025-11-28: 15 contributions"
     },
     {
       "date": "2025-11-29",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on November 29th."
+      "level": 1,
+      "tooltip": "2025-11-29: 3 contributions"
     },
     {
       "date": "2025-11-30",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on November 30th."
+      "level": 1,
+      "tooltip": "2025-11-30: 2 contributions"
     },
     {
       "date": "2025-12-01",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on December 1st."
+      "level": 4,
+      "tooltip": "2025-12-01: 17 contributions"
     },
     {
       "date": "2025-12-02",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on December 2nd."
+      "level": 3,
+      "tooltip": "2025-12-02: 10 contributions"
     },
     {
       "date": "2025-12-03",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on December 3rd."
+      "level": 3,
+      "tooltip": "2025-12-03: 14 contributions"
     },
     {
       "date": "2025-12-04",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on December 4th."
+      "level": 2,
+      "tooltip": "2025-12-04: 8 contributions"
     },
     {
       "date": "2025-12-05",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on December 5th."
+      "level": 3,
+      "tooltip": "2025-12-05: 14 contributions"
     },
     {
       "date": "2025-12-06",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on December 6th."
+      "level": 0,
+      "tooltip": "2025-12-06: 0 contributions"
     },
     {
       "date": "2025-12-07",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on December 7th."
+      "level": 1,
+      "tooltip": "2025-12-07: 3 contributions"
     },
     {
       "date": "2025-12-08",
-      "level": 1,
       "count": 5,
-      "tooltip": "5 contributions on December 8th."
+      "level": 2,
+      "tooltip": "2025-12-08: 5 contributions"
     },
     {
       "date": "2025-12-09",
-      "level": 1,
       "count": 22,
-      "tooltip": "22 contributions on December 9th."
+      "level": 4,
+      "tooltip": "2025-12-09: 22 contributions"
     },
     {
       "date": "2025-12-10",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on December 10th."
+      "level": 3,
+      "tooltip": "2025-12-10: 15 contributions"
     },
     {
       "date": "2025-12-11",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on December 11th."
+      "level": 4,
+      "tooltip": "2025-12-11: 20 contributions"
     },
     {
       "date": "2025-12-12",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on December 12th."
+      "level": 4,
+      "tooltip": "2025-12-12: 18 contributions"
     },
     {
       "date": "2025-12-13",
-      "level": 1,
       "count": 4,
-      "tooltip": "4 contributions on December 13th."
+      "level": 2,
+      "tooltip": "2025-12-13: 4 contributions"
     },
     {
       "date": "2025-12-14",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on December 14th."
+      "level": 1,
+      "tooltip": "2025-12-14: 2 contributions"
     },
     {
       "date": "2025-12-15",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on December 15th."
+      "level": 3,
+      "tooltip": "2025-12-15: 15 contributions"
     },
     {
       "date": "2025-12-16",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on December 16th."
+      "level": 3,
+      "tooltip": "2025-12-16: 15 contributions"
     },
     {
       "date": "2025-12-17",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on December 17th."
+      "level": 4,
+      "tooltip": "2025-12-17: 18 contributions"
     },
     {
       "date": "2025-12-18",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on December 18th."
+      "level": 2,
+      "tooltip": "2025-12-18: 7 contributions"
     },
     {
       "date": "2025-12-19",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on December 19th."
+      "level": 3,
+      "tooltip": "2025-12-19: 9 contributions"
     },
     {
       "date": "2025-12-20",
-      "level": 1,
       "count": 4,
-      "tooltip": "4 contributions on December 20th."
+      "level": 2,
+      "tooltip": "2025-12-20: 4 contributions"
     },
     {
       "date": "2025-12-21",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on December 21st."
+      "level": 1,
+      "tooltip": "2025-12-21: 2 contributions"
     },
     {
       "date": "2025-12-22",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on December 22nd."
+      "level": 3,
+      "tooltip": "2025-12-22: 15 contributions"
     },
     {
       "date": "2025-12-23",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on December 23rd."
+      "level": 3,
+      "tooltip": "2025-12-23: 12 contributions"
     },
     {
       "date": "2025-12-24",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on December 24th."
+      "level": 3,
+      "tooltip": "2025-12-24: 13 contributions"
     },
     {
       "date": "2025-12-25",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on December 25th."
+      "level": 3,
+      "tooltip": "2025-12-25: 13 contributions"
     },
     {
       "date": "2025-12-26",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on December 26th."
+      "level": 3,
+      "tooltip": "2025-12-26: 9 contributions"
     },
     {
       "date": "2025-12-27",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on December 27th."
+      "level": 1,
+      "tooltip": "2025-12-27: 2 contributions"
     },
     {
       "date": "2025-12-28",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on December 28th."
+      "level": 1,
+      "tooltip": "2025-12-28: 1 contributions"
     },
     {
       "date": "2025-12-29",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on December 29th."
+      "level": 4,
+      "tooltip": "2025-12-29: 17 contributions"
     },
     {
       "date": "2025-12-30",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on December 30th."
+      "level": 3,
+      "tooltip": "2025-12-30: 15 contributions"
     },
     {
       "date": "2025-12-31",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on December 31st."
+      "level": 4,
+      "tooltip": "2025-12-31: 19 contributions"
     },
     {
       "date": "2026-01-01",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on January 1st."
+      "level": 3,
+      "tooltip": "2026-01-01: 15 contributions"
     },
     {
       "date": "2026-01-02",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on January 2nd."
+      "level": 3,
+      "tooltip": "2026-01-02: 13 contributions"
     },
     {
       "date": "2026-01-03",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on January 3rd."
+      "level": 1,
+      "tooltip": "2026-01-03: 2 contributions"
     },
     {
       "date": "2026-01-04",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on January 4th."
+      "level": 1,
+      "tooltip": "2026-01-04: 3 contributions"
     },
     {
       "date": "2026-01-05",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on January 5th."
+      "level": 3,
+      "tooltip": "2026-01-05: 13 contributions"
     },
     {
       "date": "2026-01-06",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on January 6th."
+      "level": 4,
+      "tooltip": "2026-01-06: 19 contributions"
     },
     {
       "date": "2026-01-07",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on January 7th."
+      "level": 3,
+      "tooltip": "2026-01-07: 13 contributions"
     },
     {
       "date": "2026-01-08",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on January 8th."
+      "level": 3,
+      "tooltip": "2026-01-08: 13 contributions"
     },
     {
       "date": "2026-01-09",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on January 9th."
+      "level": 4,
+      "tooltip": "2026-01-09: 17 contributions"
     },
     {
       "date": "2026-01-10",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on January 10th."
+      "level": 0,
+      "tooltip": "2026-01-10: 0 contributions"
     },
     {
       "date": "2026-01-11",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on January 11th."
+      "level": 1,
+      "tooltip": "2026-01-11: 2 contributions"
     },
     {
       "date": "2026-01-12",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on January 12th."
+      "level": 4,
+      "tooltip": "2026-01-12: 17 contributions"
     },
     {
       "date": "2026-01-13",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on January 13th."
+      "level": 3,
+      "tooltip": "2026-01-13: 9 contributions"
     },
     {
       "date": "2026-01-14",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on January 14th."
+      "level": 3,
+      "tooltip": "2026-01-14: 15 contributions"
     },
     {
       "date": "2026-01-15",
-      "level": 1,
       "count": 19,
-      "tooltip": "19 contributions on January 15th."
+      "level": 4,
+      "tooltip": "2026-01-15: 19 contributions"
     },
     {
       "date": "2026-01-16",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on January 16th."
+      "level": 4,
+      "tooltip": "2026-01-16: 16 contributions"
     },
     {
       "date": "2026-01-17",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on January 17th."
+      "level": 1,
+      "tooltip": "2026-01-17: 2 contributions"
     },
     {
       "date": "2026-01-18",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on January 18th."
+      "level": 1,
+      "tooltip": "2026-01-18: 1 contributions"
     },
     {
       "date": "2026-01-19",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on January 19th."
+      "level": 3,
+      "tooltip": "2026-01-19: 13 contributions"
     },
     {
       "date": "2026-01-20",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on January 20th."
+      "level": 3,
+      "tooltip": "2026-01-20: 15 contributions"
     },
     {
       "date": "2026-01-21",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on January 21st."
+      "level": 4,
+      "tooltip": "2026-01-21: 17 contributions"
     },
     {
       "date": "2026-01-22",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on January 22nd."
+      "level": 3,
+      "tooltip": "2026-01-22: 15 contributions"
     },
     {
       "date": "2026-01-23",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on January 23rd."
+      "level": 3,
+      "tooltip": "2026-01-23: 15 contributions"
     },
     {
       "date": "2026-01-24",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on January 24th."
+      "level": 1,
+      "tooltip": "2026-01-24: 2 contributions"
     },
     {
       "date": "2026-01-25",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on January 25th."
+      "level": 0,
+      "tooltip": "2026-01-25: 0 contributions"
     },
     {
       "date": "2026-01-26",
-      "level": 1,
       "count": 20,
-      "tooltip": "20 contributions on January 26th."
+      "level": 4,
+      "tooltip": "2026-01-26: 20 contributions"
     },
     {
       "date": "2026-01-27",
-      "level": 1,
       "count": 24,
-      "tooltip": "24 contributions on January 27th."
+      "level": 4,
+      "tooltip": "2026-01-27: 24 contributions"
     },
     {
       "date": "2026-01-28",
-      "level": 1,
       "count": 31,
-      "tooltip": "31 contributions on January 28th."
+      "level": 4,
+      "tooltip": "2026-01-28: 31 contributions"
     },
     {
       "date": "2026-01-29",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on January 29th."
+      "level": 4,
+      "tooltip": "2026-01-29: 32 contributions"
     },
     {
       "date": "2026-01-30",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on January 30th."
+      "level": 4,
+      "tooltip": "2026-01-30: 32 contributions"
     },
     {
       "date": "2026-01-31",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on January 31st."
+      "level": 2,
+      "tooltip": "2026-01-31: 8 contributions"
     },
     {
       "date": "2026-02-01",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on February 1st."
+      "level": 3,
+      "tooltip": "2026-02-01: 10 contributions"
     },
     {
       "date": "2026-02-02",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on February 2nd."
+      "level": 4,
+      "tooltip": "2026-02-02: 32 contributions"
     },
     {
       "date": "2026-02-03",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on February 3rd."
+      "level": 4,
+      "tooltip": "2026-02-03: 28 contributions"
     },
     {
       "date": "2026-02-04",
-      "level": 1,
       "count": 33,
-      "tooltip": "33 contributions on February 4th."
+      "level": 4,
+      "tooltip": "2026-02-04: 33 contributions"
     },
     {
       "date": "2026-02-05",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on February 5th."
+      "level": 4,
+      "tooltip": "2026-02-05: 28 contributions"
     },
     {
       "date": "2026-02-06",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on February 6th."
+      "level": 4,
+      "tooltip": "2026-02-06: 28 contributions"
     },
     {
       "date": "2026-02-07",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on February 7th."
+      "level": 2,
+      "tooltip": "2026-02-07: 7 contributions"
     },
     {
       "date": "2026-02-08",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on February 8th."
+      "level": 2,
+      "tooltip": "2026-02-08: 8 contributions"
     },
     {
       "date": "2026-02-09",
-      "level": 2,
       "count": 35,
-      "tooltip": "35 contributions on February 9th."
+      "level": 4,
+      "tooltip": "2026-02-09: 35 contributions"
     },
     {
       "date": "2026-02-10",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on February 10th."
+      "level": 4,
+      "tooltip": "2026-02-10: 29 contributions"
     },
     {
       "date": "2026-02-11",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on February 11th."
+      "level": 4,
+      "tooltip": "2026-02-11: 29 contributions"
     },
     {
       "date": "2026-02-12",
-      "level": 1,
       "count": 25,
-      "tooltip": "25 contributions on February 12th."
+      "level": 4,
+      "tooltip": "2026-02-12: 25 contributions"
     },
     {
       "date": "2026-02-13",
-      "level": 1,
       "count": 27,
-      "tooltip": "27 contributions on February 13th."
+      "level": 4,
+      "tooltip": "2026-02-13: 27 contributions"
     },
     {
       "date": "2026-02-14",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on February 14th."
+      "level": 2,
+      "tooltip": "2026-02-14: 7 contributions"
     },
     {
       "date": "2026-02-15",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on February 15th."
+      "level": 3,
+      "tooltip": "2026-02-15: 9 contributions"
     },
     {
       "date": "2026-02-16",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on February 16th."
+      "level": 4,
+      "tooltip": "2026-02-16: 28 contributions"
     },
     {
       "date": "2026-02-17",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on February 17th."
+      "level": 4,
+      "tooltip": "2026-02-17: 29 contributions"
     },
     {
       "date": "2026-02-18",
-      "level": 1,
       "count": 34,
-      "tooltip": "34 contributions on February 18th."
+      "level": 4,
+      "tooltip": "2026-02-18: 34 contributions"
     },
     {
       "date": "2026-02-19",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on February 19th."
+      "level": 4,
+      "tooltip": "2026-02-19: 32 contributions"
     },
     {
       "date": "2026-02-20",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on February 20th."
+      "level": 4,
+      "tooltip": "2026-02-20: 29 contributions"
     },
     {
       "date": "2026-02-21",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on February 21st."
+      "level": 3,
+      "tooltip": "2026-02-21: 10 contributions"
     },
     {
       "date": "2026-02-22",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on February 22nd."
+      "level": 3,
+      "tooltip": "2026-02-22: 11 contributions"
     },
     {
       "date": "2026-02-23",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on February 23rd."
+      "level": 4,
+      "tooltip": "2026-02-23: 28 contributions"
     },
     {
       "date": "2026-02-24",
-      "level": 1,
       "count": 26,
-      "tooltip": "26 contributions on February 24th."
+      "level": 4,
+      "tooltip": "2026-02-24: 26 contributions"
     },
     {
       "date": "2026-02-25",
-      "level": 1,
       "count": 24,
-      "tooltip": "24 contributions on February 25th."
+      "level": 4,
+      "tooltip": "2026-02-25: 24 contributions"
     },
     {
       "date": "2026-02-26",
-      "level": 1,
       "count": 30,
-      "tooltip": "30 contributions on February 26th."
+      "level": 4,
+      "tooltip": "2026-02-26: 30 contributions"
     },
     {
       "date": "2026-02-27",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on February 27th."
+      "level": 4,
+      "tooltip": "2026-02-27: 29 contributions"
     },
     {
       "date": "2026-02-28",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on February 28th."
+      "level": 2,
+      "tooltip": "2026-02-28: 8 contributions"
     },
     {
       "date": "2026-03-01",
-      "level": 1,
       "count": 7,
-      "tooltip": "7 contributions on March 1st."
+      "level": 2,
+      "tooltip": "2026-03-01: 7 contributions"
     },
     {
       "date": "2026-03-02",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on March 2nd."
+      "level": 4,
+      "tooltip": "2026-03-02: 28 contributions"
     },
     {
       "date": "2026-03-03",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on March 3rd."
+      "level": 4,
+      "tooltip": "2026-03-03: 29 contributions"
     },
     {
       "date": "2026-03-04",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on March 4th."
+      "level": 4,
+      "tooltip": "2026-03-04: 32 contributions"
     },
     {
       "date": "2026-03-05",
-      "level": 2,
       "count": 35,
-      "tooltip": "35 contributions on March 5th."
+      "level": 4,
+      "tooltip": "2026-03-05: 35 contributions"
     },
     {
       "date": "2026-03-06",
-      "level": 1,
       "count": 27,
-      "tooltip": "27 contributions on March 6th."
+      "level": 4,
+      "tooltip": "2026-03-06: 27 contributions"
     },
     {
       "date": "2026-03-07",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 7th."
+      "level": 3,
+      "tooltip": "2026-03-07: 9 contributions"
     },
     {
       "date": "2026-03-08",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 8th."
+      "level": 3,
+      "tooltip": "2026-03-08: 9 contributions"
     },
     {
       "date": "2026-03-09",
-      "level": 1,
       "count": 33,
-      "tooltip": "33 contributions on March 9th."
+      "level": 4,
+      "tooltip": "2026-03-09: 33 contributions"
     },
     {
       "date": "2026-03-10",
-      "level": 1,
       "count": 33,
-      "tooltip": "33 contributions on March 10th."
+      "level": 4,
+      "tooltip": "2026-03-10: 33 contributions"
     },
     {
       "date": "2026-03-11",
-      "level": 1,
       "count": 29,
-      "tooltip": "29 contributions on March 11th."
+      "level": 4,
+      "tooltip": "2026-03-11: 29 contributions"
     },
     {
       "date": "2026-03-12",
-      "level": 1,
       "count": 27,
-      "tooltip": "27 contributions on March 12th."
+      "level": 4,
+      "tooltip": "2026-03-12: 27 contributions"
     },
     {
       "date": "2026-03-13",
-      "level": 1,
       "count": 33,
-      "tooltip": "33 contributions on March 13th."
+      "level": 4,
+      "tooltip": "2026-03-13: 33 contributions"
     },
     {
       "date": "2026-03-14",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 14th."
+      "level": 3,
+      "tooltip": "2026-03-14: 9 contributions"
     },
     {
       "date": "2026-03-15",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 15th."
+      "level": 3,
+      "tooltip": "2026-03-15: 9 contributions"
     },
     {
       "date": "2026-03-16",
-      "level": 1,
       "count": 32,
-      "tooltip": "32 contributions on March 16th."
+      "level": 4,
+      "tooltip": "2026-03-16: 32 contributions"
     },
     {
       "date": "2026-03-17",
-      "level": 1,
       "count": 23,
-      "tooltip": "23 contributions on March 17th."
+      "level": 4,
+      "tooltip": "2026-03-17: 23 contributions"
     },
     {
       "date": "2026-03-18",
-      "level": 1,
       "count": 24,
-      "tooltip": "24 contributions on March 18th."
+      "level": 4,
+      "tooltip": "2026-03-18: 24 contributions"
     },
     {
       "date": "2026-03-19",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on March 19th."
+      "level": 4,
+      "tooltip": "2026-03-19: 28 contributions"
     },
     {
       "date": "2026-03-20",
-      "level": 1,
       "count": 30,
-      "tooltip": "30 contributions on March 20th."
+      "level": 4,
+      "tooltip": "2026-03-20: 30 contributions"
     },
     {
       "date": "2026-03-21",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 21st."
+      "level": 3,
+      "tooltip": "2026-03-21: 9 contributions"
     },
     {
       "date": "2026-03-22",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 22nd."
+      "level": 3,
+      "tooltip": "2026-03-22: 9 contributions"
     },
     {
       "date": "2026-03-23",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on March 23rd."
+      "level": 4,
+      "tooltip": "2026-03-23: 28 contributions"
     },
     {
       "date": "2026-03-24",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on March 24th."
+      "level": 4,
+      "tooltip": "2026-03-24: 28 contributions"
     },
     {
       "date": "2026-03-25",
-      "level": 1,
       "count": 24,
-      "tooltip": "24 contributions on March 25th."
+      "level": 4,
+      "tooltip": "2026-03-25: 24 contributions"
     },
     {
       "date": "2026-03-26",
-      "level": 1,
       "count": 26,
-      "tooltip": "26 contributions on March 26th."
+      "level": 4,
+      "tooltip": "2026-03-26: 26 contributions"
     },
     {
       "date": "2026-03-27",
-      "level": 1,
       "count": 28,
-      "tooltip": "28 contributions on March 27th."
+      "level": 4,
+      "tooltip": "2026-03-27: 28 contributions"
     },
     {
       "date": "2026-03-28",
-      "level": 1,
       "count": 6,
-      "tooltip": "6 contributions on March 28th."
+      "level": 2,
+      "tooltip": "2026-03-28: 6 contributions"
     },
     {
       "date": "2026-03-29",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on March 29th."
+      "level": 3,
+      "tooltip": "2026-03-29: 9 contributions"
     },
     {
       "date": "2026-03-30",
-      "level": 1,
       "count": 31,
-      "tooltip": "31 contributions on March 30th."
+      "level": 4,
+      "tooltip": "2026-03-30: 31 contributions"
     },
     {
       "date": "2026-03-31",
-      "level": 2,
       "count": 45,
-      "tooltip": "45 contributions on March 31st."
+      "level": 4,
+      "tooltip": "2026-03-31: 45 contributions"
     },
     {
       "date": "2026-04-01",
-      "level": 1,
       "count": 34,
-      "tooltip": "34 contributions on April 1st."
+      "level": 4,
+      "tooltip": "2026-04-01: 34 contributions"
     },
     {
       "date": "2026-04-02",
-      "level": 2,
       "count": 47,
-      "tooltip": "47 contributions on April 2nd."
+      "level": 4,
+      "tooltip": "2026-04-02: 47 contributions"
     },
     {
       "date": "2026-04-03",
-      "level": 2,
       "count": 44,
-      "tooltip": "44 contributions on April 3rd."
+      "level": 4,
+      "tooltip": "2026-04-03: 44 contributions"
     },
     {
       "date": "2026-04-04",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on April 4th."
+      "level": 3,
+      "tooltip": "2026-04-04: 12 contributions"
     },
     {
       "date": "2026-04-05",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on April 5th."
+      "level": 3,
+      "tooltip": "2026-04-05: 13 contributions"
     },
     {
       "date": "2026-04-06",
-      "level": 2,
       "count": 43,
-      "tooltip": "43 contributions on April 6th."
+      "level": 4,
+      "tooltip": "2026-04-06: 43 contributions"
     },
     {
       "date": "2026-04-07",
-      "level": 2,
       "count": 42,
-      "tooltip": "42 contributions on April 7th."
+      "level": 4,
+      "tooltip": "2026-04-07: 42 contributions"
     },
     {
       "date": "2026-04-08",
-      "level": 2,
       "count": 39,
-      "tooltip": "39 contributions on April 8th."
+      "level": 4,
+      "tooltip": "2026-04-08: 39 contributions"
     },
     {
       "date": "2026-04-09",
-      "level": 2,
       "count": 49,
-      "tooltip": "49 contributions on April 9th."
+      "level": 4,
+      "tooltip": "2026-04-09: 49 contributions"
     },
     {
       "date": "2026-04-10",
-      "level": 2,
       "count": 37,
-      "tooltip": "37 contributions on April 10th."
+      "level": 4,
+      "tooltip": "2026-04-10: 37 contributions"
     },
     {
       "date": "2026-04-11",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on April 11th."
+      "level": 3,
+      "tooltip": "2026-04-11: 10 contributions"
     },
     {
       "date": "2026-04-12",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on April 12th."
+      "level": 3,
+      "tooltip": "2026-04-12: 12 contributions"
     },
     {
       "date": "2026-04-13",
-      "level": 2,
       "count": 38,
-      "tooltip": "38 contributions on April 13th."
+      "level": 4,
+      "tooltip": "2026-04-13: 38 contributions"
     },
     {
       "date": "2026-04-14",
-      "level": 2,
       "count": 46,
-      "tooltip": "46 contributions on April 14th."
+      "level": 4,
+      "tooltip": "2026-04-14: 46 contributions"
     },
     {
       "date": "2026-04-15",
-      "level": 1,
       "count": 34,
-      "tooltip": "34 contributions on April 15th."
+      "level": 4,
+      "tooltip": "2026-04-15: 34 contributions"
     },
     {
       "date": "2026-04-16",
-      "level": 2,
       "count": 46,
-      "tooltip": "46 contributions on April 16th."
+      "level": 4,
+      "tooltip": "2026-04-16: 46 contributions"
     },
     {
       "date": "2026-04-17",
-      "level": 2,
       "count": 45,
-      "tooltip": "45 contributions on April 17th."
+      "level": 4,
+      "tooltip": "2026-04-17: 45 contributions"
     },
     {
       "date": "2026-04-18",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on April 18th."
+      "level": 3,
+      "tooltip": "2026-04-18: 13 contributions"
     },
     {
       "date": "2026-04-19",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on April 19th."
+      "level": 4,
+      "tooltip": "2026-04-19: 17 contributions"
     },
     {
       "date": "2026-04-20",
-      "level": 2,
       "count": 38,
-      "tooltip": "38 contributions on April 20th."
+      "level": 4,
+      "tooltip": "2026-04-20: 38 contributions"
     },
     {
       "date": "2026-04-21",
-      "level": 2,
       "count": 42,
-      "tooltip": "42 contributions on April 21st."
+      "level": 4,
+      "tooltip": "2026-04-21: 42 contributions"
     },
     {
       "date": "2026-04-22",
-      "level": 2,
       "count": 44,
-      "tooltip": "44 contributions on April 22nd."
+      "level": 4,
+      "tooltip": "2026-04-22: 44 contributions"
     },
     {
       "date": "2026-04-23",
-      "level": 2,
       "count": 44,
-      "tooltip": "44 contributions on April 23rd."
+      "level": 4,
+      "tooltip": "2026-04-23: 44 contributions"
     },
     {
       "date": "2026-04-24",
-      "level": 2,
       "count": 41,
-      "tooltip": "41 contributions on April 24th."
+      "level": 4,
+      "tooltip": "2026-04-24: 41 contributions"
     },
     {
       "date": "2026-04-25",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on April 25th."
+      "level": 3,
+      "tooltip": "2026-04-25: 11 contributions"
     },
     {
       "date": "2026-04-26",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on April 26th."
+      "level": 3,
+      "tooltip": "2026-04-26: 14 contributions"
     },
     {
       "date": "2026-04-27",
-      "level": 2,
       "count": 36,
-      "tooltip": "36 contributions on April 27th."
+      "level": 4,
+      "tooltip": "2026-04-27: 36 contributions"
     },
     {
       "date": "2026-04-28",
-      "level": 2,
       "count": 45,
-      "tooltip": "45 contributions on April 28th."
+      "level": 4,
+      "tooltip": "2026-04-28: 45 contributions"
     },
     {
       "date": "2026-04-29",
-      "level": 2,
       "count": 39,
-      "tooltip": "39 contributions on April 29th."
+      "level": 4,
+      "tooltip": "2026-04-29: 39 contributions"
     },
     {
       "date": "2026-04-30",
-      "level": 2,
       "count": 41,
-      "tooltip": "41 contributions on April 30th."
+      "level": 4,
+      "tooltip": "2026-04-30: 41 contributions"
     },
     {
       "date": "2026-05-01",
-      "level": 2,
       "count": 44,
-      "tooltip": "44 contributions on May 1st."
+      "level": 4,
+      "tooltip": "2026-05-01: 44 contributions"
     },
     {
       "date": "2026-05-02",
-      "level": 1,
       "count": 10,
-      "tooltip": "10 contributions on May 2nd."
+      "level": 3,
+      "tooltip": "2026-05-02: 10 contributions"
     },
     {
       "date": "2026-05-03",
-      "level": 1,
       "count": 11,
-      "tooltip": "11 contributions on May 3rd."
+      "level": 3,
+      "tooltip": "2026-05-03: 11 contributions"
     },
     {
       "date": "2026-05-04",
-      "level": 2,
       "count": 36,
-      "tooltip": "36 contributions on May 4th."
+      "level": 4,
+      "tooltip": "2026-05-04: 36 contributions"
     },
     {
       "date": "2026-05-05",
-      "level": 2,
       "count": 39,
-      "tooltip": "39 contributions on May 5th."
+      "level": 4,
+      "tooltip": "2026-05-05: 39 contributions"
     },
     {
       "date": "2026-05-06",
-      "level": 2,
       "count": 46,
-      "tooltip": "46 contributions on May 6th."
+      "level": 4,
+      "tooltip": "2026-05-06: 46 contributions"
     },
     {
       "date": "2026-05-07",
-      "level": 2,
       "count": 41,
-      "tooltip": "41 contributions on May 7th."
+      "level": 4,
+      "tooltip": "2026-05-07: 41 contributions"
     },
     {
       "date": "2026-05-08",
-      "level": 2,
       "count": 43,
-      "tooltip": "43 contributions on May 8th."
+      "level": 4,
+      "tooltip": "2026-05-08: 43 contributions"
     },
     {
       "date": "2026-05-09",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on May 9th."
+      "level": 3,
+      "tooltip": "2026-05-09: 12 contributions"
     },
     {
       "date": "2026-05-10",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on May 10th."
+      "level": 3,
+      "tooltip": "2026-05-10: 12 contributions"
     },
     {
       "date": "2026-05-11",
-      "level": 2,
       "count": 43,
-      "tooltip": "43 contributions on May 11th."
+      "level": 4,
+      "tooltip": "2026-05-11: 43 contributions"
     },
     {
       "date": "2026-05-12",
-      "level": 2,
       "count": 49,
-      "tooltip": "49 contributions on May 12th."
+      "level": 4,
+      "tooltip": "2026-05-12: 49 contributions"
     },
     {
       "date": "2026-05-13",
-      "level": 2,
       "count": 43,
-      "tooltip": "43 contributions on May 13th."
+      "level": 4,
+      "tooltip": "2026-05-13: 43 contributions"
     },
     {
       "date": "2026-05-14",
-      "level": 2,
       "count": 38,
-      "tooltip": "38 contributions on May 14th."
+      "level": 4,
+      "tooltip": "2026-05-14: 38 contributions"
     },
     {
       "date": "2026-05-15",
-      "level": 2,
       "count": 44,
-      "tooltip": "44 contributions on May 15th."
+      "level": 4,
+      "tooltip": "2026-05-15: 44 contributions"
     },
     {
       "date": "2026-05-16",
-      "level": 1,
       "count": 9,
-      "tooltip": "9 contributions on May 16th."
+      "level": 3,
+      "tooltip": "2026-05-16: 9 contributions"
     },
     {
       "date": "2026-05-17",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on May 17th."
+      "level": 3,
+      "tooltip": "2026-05-17: 14 contributions"
     },
     {
       "date": "2026-05-18",
-      "level": 2,
       "count": 41,
-      "tooltip": "41 contributions on May 18th."
+      "level": 4,
+      "tooltip": "2026-05-18: 41 contributions"
     },
     {
       "date": "2026-05-19",
-      "level": 2,
       "count": 40,
-      "tooltip": "40 contributions on May 19th."
+      "level": 4,
+      "tooltip": "2026-05-19: 40 contributions"
     },
     {
       "date": "2026-05-20",
-      "level": 2,
       "count": 45,
-      "tooltip": "45 contributions on May 20th."
+      "level": 4,
+      "tooltip": "2026-05-20: 45 contributions"
     },
     {
       "date": "2026-05-21",
-      "level": 2,
       "count": 43,
-      "tooltip": "43 contributions on May 21st."
+      "level": 4,
+      "tooltip": "2026-05-21: 43 contributions"
     },
     {
       "date": "2026-05-22",
-      "level": 2,
       "count": 40,
-      "tooltip": "40 contributions on May 22nd."
+      "level": 4,
+      "tooltip": "2026-05-22: 40 contributions"
     },
     {
       "date": "2026-05-23",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on May 23rd."
+      "level": 3,
+      "tooltip": "2026-05-23: 14 contributions"
     },
     {
       "date": "2026-05-24",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on May 24th."
+      "level": 3,
+      "tooltip": "2026-05-24: 13 contributions"
     },
     {
       "date": "2026-05-25",
-      "level": 2,
       "count": 41,
-      "tooltip": "41 contributions on May 25th."
+      "level": 4,
+      "tooltip": "2026-05-25: 41 contributions"
     },
     {
       "date": "2026-05-26",
-      "level": 2,
       "count": 38,
-      "tooltip": "38 contributions on May 26th."
+      "level": 4,
+      "tooltip": "2026-05-26: 38 contributions"
     },
     {
       "date": "2026-05-27",
-      "level": 2,
       "count": 64,
-      "tooltip": "64 contributions on May 27th."
+      "level": 4,
+      "tooltip": "2026-05-27: 64 contributions"
     },
     {
       "date": "2026-05-28",
-      "level": 3,
       "count": 69,
-      "tooltip": "69 contributions on May 28th."
+      "level": 4,
+      "tooltip": "2026-05-28: 69 contributions"
     },
     {
       "date": "2026-05-29",
-      "level": 2,
       "count": 62,
-      "tooltip": "62 contributions on May 29th."
+      "level": 4,
+      "tooltip": "2026-05-29: 62 contributions"
     },
     {
       "date": "2026-05-30",
-      "level": 1,
       "count": 13,
-      "tooltip": "13 contributions on May 30th."
+      "level": 3,
+      "tooltip": "2026-05-30: 13 contributions"
     },
     {
       "date": "2026-05-31",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on May 31st."
+      "level": 4,
+      "tooltip": "2026-05-31: 16 contributions"
     },
     {
       "date": "2026-06-01",
-      "level": 3,
       "count": 70,
-      "tooltip": "70 contributions on June 1st."
+      "level": 4,
+      "tooltip": "2026-06-01: 70 contributions"
     },
     {
       "date": "2026-06-02",
-      "level": 2,
       "count": 67,
-      "tooltip": "67 contributions on June 2nd."
+      "level": 4,
+      "tooltip": "2026-06-02: 67 contributions"
     },
     {
       "date": "2026-06-03",
-      "level": 3,
       "count": 69,
-      "tooltip": "69 contributions on June 3rd."
+      "level": 4,
+      "tooltip": "2026-06-03: 69 contributions"
     },
     {
       "date": "2026-06-04",
-      "level": 3,
       "count": 71,
-      "tooltip": "71 contributions on June 4th."
+      "level": 4,
+      "tooltip": "2026-06-04: 71 contributions"
     },
     {
       "date": "2026-06-05",
-      "level": 2,
       "count": 62,
-      "tooltip": "62 contributions on June 5th."
+      "level": 4,
+      "tooltip": "2026-06-05: 62 contributions"
     },
     {
       "date": "2026-06-06",
-      "level": 1,
       "count": 15,
-      "tooltip": "15 contributions on June 6th."
+      "level": 3,
+      "tooltip": "2026-06-06: 15 contributions"
     },
     {
       "date": "2026-06-07",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on June 7th."
+      "level": 3,
+      "tooltip": "2026-06-07: 14 contributions"
     },
     {
       "date": "2026-06-08",
-      "level": 2,
       "count": 68,
-      "tooltip": "68 contributions on June 8th."
+      "level": 4,
+      "tooltip": "2026-06-08: 68 contributions"
     },
     {
       "date": "2026-06-09",
-      "level": 3,
       "count": 75,
-      "tooltip": "75 contributions on June 9th."
+      "level": 4,
+      "tooltip": "2026-06-09: 75 contributions"
     },
     {
       "date": "2026-06-10",
-      "level": 3,
       "count": 73,
-      "tooltip": "73 contributions on June 10th."
+      "level": 4,
+      "tooltip": "2026-06-10: 73 contributions"
     },
     {
       "date": "2026-06-11",
-      "level": 2,
       "count": 65,
-      "tooltip": "65 contributions on June 11th."
+      "level": 4,
+      "tooltip": "2026-06-11: 65 contributions"
     },
     {
       "date": "2026-06-12",
-      "level": 2,
       "count": 65,
-      "tooltip": "65 contributions on June 12th."
+      "level": 4,
+      "tooltip": "2026-06-12: 65 contributions"
     },
     {
       "date": "2026-06-13",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on June 13th."
+      "level": 3,
+      "tooltip": "2026-06-13: 12 contributions"
     },
     {
       "date": "2026-06-14",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on June 14th."
+      "level": 4,
+      "tooltip": "2026-06-14: 16 contributions"
     },
     {
       "date": "2026-06-15",
-      "level": 3,
       "count": 70,
-      "tooltip": "70 contributions on June 15th."
+      "level": 4,
+      "tooltip": "2026-06-15: 70 contributions"
     },
     {
       "date": "2026-06-16",
-      "level": 3,
       "count": 70,
-      "tooltip": "70 contributions on June 16th."
+      "level": 4,
+      "tooltip": "2026-06-16: 70 contributions"
     },
     {
       "date": "2026-06-17",
-      "level": 2,
       "count": 65,
-      "tooltip": "65 contributions on June 17th."
+      "level": 4,
+      "tooltip": "2026-06-17: 65 contributions"
     },
     {
       "date": "2026-06-18",
-      "level": 4,
       "count": 111,
-      "tooltip": "111 contributions on June 18th."
+      "level": 4,
+      "tooltip": "2026-06-18: 111 contributions"
     },
     {
       "date": "2026-06-19",
-      "level": 4,
       "count": 127,
-      "tooltip": "127 contributions on June 19th."
+      "level": 4,
+      "tooltip": "2026-06-19: 127 contributions"
     },
     {
       "date": "2026-06-20",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on June 20th."
+      "level": 4,
+      "tooltip": "2026-06-20: 16 contributions"
     },
     {
       "date": "2026-06-21",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on June 21st."
+      "level": 4,
+      "tooltip": "2026-06-21: 16 contributions"
     },
     {
       "date": "2026-06-22",
-      "level": 2,
       "count": 65,
-      "tooltip": "65 contributions on June 22nd."
+      "level": 4,
+      "tooltip": "2026-06-22: 65 contributions"
     },
     {
       "date": "2026-06-23",
-      "level": 4,
       "count": 107,
-      "tooltip": "107 contributions on June 23rd."
+      "level": 4,
+      "tooltip": "2026-06-23: 107 contributions"
     },
     {
       "date": "2026-06-24",
-      "level": 4,
       "count": 103,
-      "tooltip": "103 contributions on June 24th."
+      "level": 4,
+      "tooltip": "2026-06-24: 103 contributions"
     },
     {
       "date": "2026-06-25",
-      "level": 2,
       "count": 66,
-      "tooltip": "66 contributions on June 25th."
+      "level": 4,
+      "tooltip": "2026-06-25: 66 contributions"
     },
     {
       "date": "2026-06-26",
-      "level": 4,
       "count": 132,
-      "tooltip": "132 contributions on June 26th."
+      "level": 4,
+      "tooltip": "2026-06-26: 132 contributions"
     },
     {
       "date": "2026-06-27",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on June 27th."
+      "level": 3,
+      "tooltip": "2026-06-27: 14 contributions"
     },
     {
       "date": "2026-06-28",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on June 28th."
+      "level": 4,
+      "tooltip": "2026-06-28: 16 contributions"
     },
     {
       "date": "2026-06-29",
-      "level": 4,
       "count": 130,
-      "tooltip": "130 contributions on June 29th."
+      "level": 4,
+      "tooltip": "2026-06-29: 130 contributions"
     },
     {
       "date": "2026-06-30",
-      "level": 4,
       "count": 130,
-      "tooltip": "130 contributions on June 30th."
+      "level": 4,
+      "tooltip": "2026-06-30: 130 contributions"
     },
     {
       "date": "2026-07-01",
-      "level": 4,
       "count": 126,
-      "tooltip": "126 contributions on July 1st."
+      "level": 4,
+      "tooltip": "2026-07-01: 126 contributions"
     },
     {
       "date": "2026-07-02",
-      "level": 4,
       "count": 134,
-      "tooltip": "134 contributions on July 2nd."
+      "level": 4,
+      "tooltip": "2026-07-02: 134 contributions"
     },
     {
       "date": "2026-07-03",
-      "level": 4,
       "count": 135,
-      "tooltip": "135 contributions on July 3rd."
+      "level": 4,
+      "tooltip": "2026-07-03: 135 contributions"
     },
     {
       "date": "2026-07-04",
-      "level": 1,
       "count": 18,
-      "tooltip": "18 contributions on July 4th."
+      "level": 4,
+      "tooltip": "2026-07-04: 18 contributions"
     },
     {
       "date": "2026-07-05",
-      "level": 1,
       "count": 14,
-      "tooltip": "14 contributions on July 5th."
+      "level": 3,
+      "tooltip": "2026-07-05: 14 contributions"
     },
     {
       "date": "2026-07-06",
-      "level": 4,
       "count": 124,
-      "tooltip": "124 contributions on July 6th."
+      "level": 4,
+      "tooltip": "2026-07-06: 124 contributions"
     },
     {
       "date": "2026-07-07",
-      "level": 4,
       "count": 137,
-      "tooltip": "137 contributions on July 7th."
+      "level": 4,
+      "tooltip": "2026-07-07: 137 contributions"
     },
     {
       "date": "2026-07-08",
-      "level": 4,
       "count": 133,
-      "tooltip": "133 contributions on July 8th."
+      "level": 4,
+      "tooltip": "2026-07-08: 133 contributions"
     },
     {
       "date": "2026-07-09",
-      "level": 4,
       "count": 125,
-      "tooltip": "125 contributions on July 9th."
+      "level": 4,
+      "tooltip": "2026-07-09: 125 contributions"
     },
     {
       "date": "2026-07-10",
-      "level": 4,
       "count": 123,
-      "tooltip": "123 contributions on July 10th."
+      "level": 4,
+      "tooltip": "2026-07-10: 123 contributions"
     },
     {
       "date": "2026-07-11",
-      "level": 1,
       "count": 17,
-      "tooltip": "17 contributions on July 11th."
+      "level": 4,
+      "tooltip": "2026-07-11: 17 contributions"
     },
     {
       "date": "2026-07-12",
-      "level": 1,
       "count": 16,
-      "tooltip": "16 contributions on July 12th."
+      "level": 4,
+      "tooltip": "2026-07-12: 16 contributions"
     },
     {
       "date": "2026-07-13",
-      "level": 4,
       "count": 1143,
-      "tooltip": "1143 contributions on July 13th."
+      "level": 4,
+      "tooltip": "2026-07-13: 1143 contributions"
     },
     {
       "date": "2026-07-14",
-      "level": 3,
       "count": 102,
-      "tooltip": "102 contributions on July 14th."
+      "level": 4,
+      "tooltip": "2026-07-14: 102 contributions"
     },
     {
       "date": "2026-07-15",
-      "level": 4,
       "count": 105,
-      "tooltip": "105 contributions on July 15th."
+      "level": 4,
+      "tooltip": "2026-07-15: 105 contributions"
     },
     {
       "date": "2026-07-16",
-      "level": 2,
       "count": 59,
-      "tooltip": "59 contributions on July 16th."
+      "level": 4,
+      "tooltip": "2026-07-16: 59 contributions"
     },
     {
       "date": "2026-07-17",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on July 17th."
+      "level": 1,
+      "tooltip": "2026-07-17: 3 contributions"
     },
     {
       "date": "2026-07-18",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 18th."
+      "level": 0,
+      "tooltip": "2026-07-18: 0 contributions"
     },
     {
       "date": "2026-07-19",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 19th."
+      "level": 0,
+      "tooltip": "2026-07-19: 0 contributions"
     },
     {
       "date": "2026-07-20",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on July 20th."
+      "level": 1,
+      "tooltip": "2026-07-20: 2 contributions"
     },
     {
       "date": "2026-07-21",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 21st."
+      "level": 0,
+      "tooltip": "2026-07-21: 0 contributions"
     },
     {
       "date": "2026-07-22",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 22nd."
+      "level": 0,
+      "tooltip": "2026-07-22: 0 contributions"
     },
     {
       "date": "2026-07-23",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 23rd."
+      "level": 0,
+      "tooltip": "2026-07-23: 0 contributions"
     },
     {
       "date": "2026-07-24",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on July 24th."
+      "level": 1,
+      "tooltip": "2026-07-24: 3 contributions"
     },
     {
       "date": "2026-07-25",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 25th."
+      "level": 0,
+      "tooltip": "2026-07-25: 0 contributions"
     },
     {
       "date": "2026-07-26",
-      "level": 1,
       "count": 3,
-      "tooltip": "3 contributions on July 26th."
+      "level": 1,
+      "tooltip": "2026-07-26: 3 contributions"
     },
     {
       "date": "2026-07-27",
-      "level": 1,
       "count": 5,
-      "tooltip": "5 contributions on July 27th."
+      "level": 2,
+      "tooltip": "2026-07-27: 5 contributions"
     },
     {
       "date": "2026-07-28",
-      "level": 1,
       "count": 1,
-      "tooltip": "1 contribution on July 28th."
+      "level": 1,
+      "tooltip": "2026-07-28: 1 contributions"
     },
     {
       "date": "2026-07-29",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 29th."
+      "level": 0,
+      "tooltip": "2026-07-29: 0 contributions"
     },
     {
       "date": "2026-07-30",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 30th."
+      "level": 0,
+      "tooltip": "2026-07-30: 0 contributions"
     },
     {
       "date": "2026-07-31",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on July 31st."
+      "level": 0,
+      "tooltip": "2026-07-31: 0 contributions"
     },
     {
       "date": "2026-08-01",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 1st."
+      "level": 0,
+      "tooltip": "2026-08-01: 0 contributions"
     },
     {
       "date": "2026-08-02",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 2nd."
+      "level": 0,
+      "tooltip": "2026-08-02: 0 contributions"
     },
     {
       "date": "2026-08-03",
-      "level": 1,
       "count": 8,
-      "tooltip": "8 contributions on August 3rd."
+      "level": 2,
+      "tooltip": "2026-08-03: 8 contributions"
     },
     {
       "date": "2026-08-04",
-      "level": 1,
       "count": 2,
-      "tooltip": "2 contributions on August 4th."
+      "level": 1,
+      "tooltip": "2026-08-04: 2 contributions"
     },
     {
       "date": "2026-08-05",
-      "level": 1,
       "count": 5,
-      "tooltip": "5 contributions on August 5th."
+      "level": 2,
+      "tooltip": "2026-08-05: 5 contributions"
     },
     {
       "date": "2026-08-06",
-      "level": 1,
       "count": 4,
-      "tooltip": "4 contributions on August 6th."
+      "level": 2,
+      "tooltip": "2026-08-06: 4 contributions"
     },
     {
       "date": "2026-08-07",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 7th."
+      "level": 0,
+      "tooltip": "2026-08-07: 0 contributions"
     },
     {
       "date": "2026-08-08",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 8th."
+      "level": 0,
+      "tooltip": "2026-08-08: 0 contributions"
     },
     {
       "date": "2026-08-09",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 9th."
+      "level": 0,
+      "tooltip": "2026-08-09: 0 contributions"
     },
     {
       "date": "2026-08-10",
-      "level": 1,
       "count": 5,
-      "tooltip": "5 contributions on August 10th."
+      "level": 2,
+      "tooltip": "2026-08-10: 5 contributions"
     },
     {
       "date": "2026-08-11",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 11th."
+      "level": 0,
+      "tooltip": "2026-08-11: 0 contributions"
     },
     {
       "date": "2026-08-12",
-      "level": 1,
       "count": 6,
-      "tooltip": "6 contributions on August 12th."
+      "level": 2,
+      "tooltip": "2026-08-12: 6 contributions"
     },
     {
       "date": "2026-08-13",
-      "level": 1,
       "count": 12,
-      "tooltip": "12 contributions on August 13th."
+      "level": 3,
+      "tooltip": "2026-08-13: 12 contributions"
     },
     {
       "date": "2026-08-14",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 14th."
+      "level": 0,
+      "tooltip": "2026-08-14: 0 contributions"
     },
     {
       "date": "2026-08-15",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 15th."
+      "level": 0,
+      "tooltip": "2026-08-15: 0 contributions"
     },
     {
       "date": "2026-08-16",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 16th."
+      "level": 0,
+      "tooltip": "2026-08-16: 0 contributions"
     },
     {
       "date": "2026-08-17",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 17th."
+      "level": 0,
+      "tooltip": "2026-08-17: 0 contributions"
     },
     {
       "date": "2026-08-18",
-      "level": 1,
-      "count": 3,
-      "tooltip": "3 contributions on August 18th."
+      "count": 8,
+      "level": 2,
+      "tooltip": "2026-08-18: 8 contributions"
     },
     {
       "date": "2026-08-19",
-      "level": 0,
-      "count": 0,
-      "tooltip": "No contributions on August 19th."
+      "count": 1,
+      "level": 1,
+      "tooltip": "2026-08-19: 1 contributions"
     },
     {
       "date": "2026-08-20",
-      "level": 0,
       "count": 0,
-      "tooltip": "No contributions on August 20th."
+      "level": 0,
+      "tooltip": "2026-08-20: 0 contributions"
     },
     {
       "date": "2026-08-21",
+      "count": 31,
+      "level": 4,
+      "tooltip": "2026-08-21: 31 contributions"
+    },
+    {
+      "date": "2026-08-22",
+      "count": 3,
       "level": 1,
+      "tooltip": "2026-08-22: 3 contributions"
+    },
+    {
+      "date": "2026-08-23",
+      "count": 3,
+      "level": 1,
+      "tooltip": "2026-08-23: 3 contributions"
+    },
+    {
+      "date": "2026-08-24",
       "count": 9,
-      "tooltip": "9 contributions on August 21st."
+      "level": 3,
+      "tooltip": "2026-08-24: 9 contributions"
+    },
+    {
+      "date": "2026-08-25",
+      "count": 1,
+      "level": 1,
+      "tooltip": "2026-08-25: 1 contributions"
+    },
+    {
+      "date": "2026-08-26",
+      "count": 6,
+      "level": 2,
+      "tooltip": "2026-08-26: 6 contributions"
+    },
+    {
+      "date": "2026-08-27",
+      "count": 29,
+      "level": 4,
+      "tooltip": "2026-08-27: 29 contributions"
+    },
+    {
+      "date": "2026-08-28",
+      "count": 65,
+      "level": 4,
+      "tooltip": "2026-08-28: 65 contributions"
+    },
+    {
+      "date": "2026-08-29",
+      "count": 26,
+      "level": 4,
+      "tooltip": "2026-08-29: 26 contributions"
     }
-  ]
+  ],
+  "updatedAt": "2026-08-29T05:22:29.372Z"
 }
