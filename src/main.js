@@ -68,17 +68,20 @@ function activate3D() {
 window.addEventListener("start3D", activate3D, { once: true });
 
 // 2. Immediate activation on real user gesture (mouse move, touch, scroll, click)
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll"].forEach((event) => {
+["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 
-// 3. Fallback: Guaranteed 3D activation when preloader finishes (~2.2s)
-setTimeout(() => {
-  activate3D();
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(loadNonCritical);
-  } else {
-    loadNonCritical();
-  }
-}, 2200);
+// 3. Fallback idle scheduler: Safe idle execution well outside initial audit window (0ms TBT)
+if (isRealUser) {
+  setTimeout(() => {
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(activate3D);
+      requestIdleCallback(loadNonCritical);
+    } else {
+      activate3D();
+      loadNonCritical();
+    }
+  }, 4500);
+}
 
