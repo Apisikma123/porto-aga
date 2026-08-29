@@ -930,18 +930,18 @@ export const initPreloaderTimeline = () => {
     if (targetEl && targetEl.isConnected) {
       const rect = targetEl.getBoundingClientRect();
       const nozzleX = rect.left + rect.width / 2;
-      const nozzleY = rect.bottom - 4;
+      const nozzleY = rect.top + rect.height * 0.78;
       for (let i = 0; i < 12; i++) {
         const progress = i / 12;
         smokeParticles.push({
           x: nozzleX + (Math.random() - 0.5) * (8 + progress * 16),
-          y: nozzleY + progress * 50 + (Math.random() - 0.5) * 4,
+          y: nozzleY + progress * 35 + (Math.random() - 0.5) * 4,
           vx: (Math.random() - 0.5) * (0.6 + progress * 1.2),
           vy: 1.2 + Math.random() * 1.4,
-          radius: 8 + progress * 20 + Math.random() * 6,
+          radius: 8 + progress * 18 + Math.random() * 5,
           growth: 0.4,
           maxRadius: 45,
-          alpha: 0.7 * (1 - progress * 0.7),
+          alpha: 0.75 * (1 - progress * 0.7),
           decay: 0.009,
         });
       }
@@ -968,7 +968,7 @@ export const initPreloaderTimeline = () => {
       const rect = targetEl.getBoundingClientRect();
       if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
-        const nozzleY = rect.bottom - (launchTriggered ? 14 : 4);
+        const nozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
         
         // Steady lightweight generation (capped at 30 particles for 120fps)
         const spawnRate = launchTriggered ? 2 : 1;
