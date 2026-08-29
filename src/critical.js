@@ -922,6 +922,31 @@ export const initPreloaderTimeline = () => {
     window.addEventListener("resize", resizeCanvas, { passive: true });
   }
 
+  // Pre-seed initial smoke cloud so smoke is immediately visible & fully formed from frame 0
+  const seedSmokeParticles = () => {
+    const targetEl = rocketCenter || flameNozzle;
+    if (targetEl && targetEl.isConnected) {
+      const rect = targetEl.getBoundingClientRect();
+      const nozzleX = rect.left + rect.width / 2;
+      const nozzleY = rect.bottom - 4;
+      for (let i = 0; i < 24; i++) {
+        const progress = i / 24;
+        smokeParticles.push({
+          x: nozzleX + (Math.random() - 0.5) * (8 + progress * 20),
+          y: nozzleY + progress * 70 + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * (0.8 + progress * 1.5),
+          vy: 1.4 + Math.random() * 1.6,
+          radius: 10 + progress * 28 + Math.random() * 8,
+          growth: 0.45,
+          maxRadius: 55,
+          alpha: 0.75 * (1 - progress * 0.7),
+          decay: 0.007,
+        });
+      }
+    }
+  };
+  seedSmokeParticles();
+
   let lastSmokeTime = 0;
   let frameCount = 0;
 
@@ -945,10 +970,10 @@ export const initPreloaderTimeline = () => {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 14 : 4);
         
-        // Continuous smooth stream every frame
+        // Continuous steady generation
         const spawnRate = launchTriggered ? 4 : 2;
         for (let i = 0; i < spawnRate; i++) {
-          if (smokeParticles.length < 120) {
+          if (smokeParticles.length < 130) {
             smokeParticles.push({
               x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 16 : 8),
               y: nozzleY + (Math.random() - 0.5) * 2,
@@ -956,9 +981,9 @@ export const initPreloaderTimeline = () => {
               vy: launchTriggered ? (5.5 + Math.random() * 7.5) : (1.4 + Math.random() * 1.8),
               radius: launchTriggered ? (18 + Math.random() * 10) : (10 + Math.random() * 6),
               growth: launchTriggered ? 1.05 : 0.45,
-              maxRadius: launchTriggered ? 90 : 48,
+              maxRadius: launchTriggered ? 90 : 50,
               alpha: launchTriggered ? 0.85 : 0.65,
-              decay: launchTriggered ? 0.014 : 0.008,
+              decay: launchTriggered ? 0.014 : 0.007,
             });
           }
         }
