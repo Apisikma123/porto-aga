@@ -560,9 +560,9 @@ export const enableDragToScroll = (track) => {
     scrollLeft = track.scrollLeft;
     velX = 0;
 
-    track.style.cursor = "grabbing";
-    track.style.setProperty("scroll-behavior", "auto", "important");
-    track.style.setProperty("scroll-snap-type", "none", "important");
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp, { once: true });
+    window.addEventListener("pointercancel", onPointerUp, { once: true });
   };
 
   const onPointerMove = (e) => {
@@ -591,6 +591,7 @@ export const enableDragToScroll = (track) => {
   const onPointerUp = () => {
     if (!isDown) return;
     isDown = false;
+    window.removeEventListener("pointermove", onPointerMove);
 
     track.style.cursor = "grab";
 
@@ -620,9 +621,6 @@ export const enableDragToScroll = (track) => {
   };
 
   track.addEventListener("pointerdown", onPointerDown);
-  window.addEventListener("pointermove", onPointerMove, { passive: false });
-  window.addEventListener("pointerup", onPointerUp);
-  window.addEventListener("pointercancel", onPointerUp);
 
   // Suppress link click / modal open when user was dragging
   track.addEventListener(
@@ -1006,6 +1004,13 @@ export const initPreloaderTimeline = () => {
     launchTriggered = true;
 
     if (floatTween) floatTween.kill();
+    if (smokeAnimId) {
+      cancelAnimationFrame(smokeAnimId);
+      smokeAnimId = null;
+    }
+    if (smokeCtx && smokeCanvas) {
+      smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+    }
 
     preloaderEl.style.pointerEvents = "none";
 
@@ -1256,7 +1261,6 @@ export const initGlobalCardTilt = () => {
   };
 
   window.addEventListener("pointermove", handlePointer, { passive: true });
-  window.addEventListener("mousemove", handlePointer, { passive: true });
 
   window.addEventListener("pointerleave", () => {
     if (activeCard) {
