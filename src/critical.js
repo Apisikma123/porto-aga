@@ -1055,7 +1055,6 @@ export const initPreloaderTimeline = () => {
 
   const startProgressTime = performance.now();
   const totalDuration = 700; // Relaxed, luxurious count
-  let hasTriggeredEarly3D = false;
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -1063,14 +1062,6 @@ export const initPreloaderTimeline = () => {
     const progress = Math.min(1, elapsed / totalDuration);
     const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
     const currentPct = Math.round(easeProgress * 100);
-
-    // Warm up 3D engine in background while user watches rocket
-    if (progress > 0.35 && !hasTriggeredEarly3D) {
-      hasTriggeredEarly3D = true;
-      try {
-        window.dispatchEvent(new CustomEvent("start3D"));
-      } catch (e) {}
-    }
 
     let stageText = PRELOADER_STAGES[0].text;
     if (currentPct > 88) stageText = PRELOADER_STAGES[3].text;
