@@ -64,8 +64,23 @@ function activate3D() {
   }
 }
 
-// Trigger only upon real user interaction or viewport scroll
-["pointerdown", "touchstart", "wheel", "keydown", "scroll"].forEach((event) => {
+// Auto-activate 3D during preloader phase so it's already running when the hero appears
+if (isRealUser) {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(() => activate3D(), { timeout: 400 });
+  } else {
+    setTimeout(activate3D, 200);
+  }
+
+  // Also auto-load non-critical data (projects, activity) shortly after
+  setTimeout(loadNonCritical, 800);
+}
+
+// Listen for custom start3D event from preloader
+window.addEventListener("start3D", activate3D, { once: true });
+
+// Interaction triggers (instant fallback)
+["pointerdown", "touchstart", "wheel", "keydown", "scroll", "mousemove"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
 });
 
