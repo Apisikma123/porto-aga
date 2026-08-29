@@ -902,6 +902,8 @@ export const initPreloaderTimeline = () => {
   ];
 
   let launchTriggered = false;
+  let floatTween = null;
+
   // ─── High-Performance Pure White Vapor Smoke Canvas (Live Flame Nozzle Tracking) ───
   const smokeCanvas = document.getElementById("preloader-smoke-canvas");
   let smokeCtx = null;
@@ -933,27 +935,27 @@ export const initPreloaderTimeline = () => {
 
     const targetEl = rocketCenter || flameNozzle;
     if (targetEl && targetEl.isConnected) {
-      if (frameCount % 3 === 0 || launchTriggered) {
+      if (frameCount % 2 === 0 || launchTriggered) {
         cachedRect = targetEl.getBoundingClientRect();
       }
       const rect = cachedRect || targetEl.getBoundingClientRect();
       if (rect && rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 16 : 6);
-        const shouldSpawn = launchTriggered || (frameCount % 4 === 0);
-        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 30 : 12)) {
-          const spawnCount = launchTriggered ? 2 : 1;
+        const shouldSpawn = launchTriggered || (frameCount % 2 === 0);
+        if (shouldSpawn && smokeParticles.length < (launchTriggered ? 50 : 25)) {
+          const spawnCount = launchTriggered ? 5 : 2;
           for (let i = 0; i < spawnCount; i++) {
             smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-              y: nozzleY + (Math.random() - 0.5) * 3,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 14 : 8),
+              y: nozzleY + (Math.random() - 0.5) * 4,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.2 : 0.9),
               vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
-              radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
-              growth: launchTriggered ? 0.9 : 0.45,
-              maxRadius: launchTriggered ? 80 : 36,
-              alpha: launchTriggered ? 0.8 : 0.5,
-              decay: launchTriggered ? 0.03 : 0.016,
+              radius: launchTriggered ? (16 + Math.random() * 14) : (10 + Math.random() * 8),
+              growth: launchTriggered ? 0.95 : 0.55,
+              maxRadius: launchTriggered ? 85 : 42,
+              alpha: launchTriggered ? 0.85 : 0.6,
+              decay: launchTriggered ? 0.022 : 0.012,
             });
           }
         }
@@ -972,10 +974,17 @@ export const initPreloaderTimeline = () => {
         continue;
       }
 
+      smokeCtx.save();
+      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
+      grad.addColorStop(0.35, `rgba(240, 243, 255, ${p.alpha * 0.6})`);
+      grad.addColorStop(0.7, `rgba(220, 230, 255, ${p.alpha * 0.25})`);
+      grad.addColorStop(1, `rgba(200, 215, 255, 0)`);
+      smokeCtx.fillStyle = grad;
       smokeCtx.beginPath();
       smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      smokeCtx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.45})`;
       smokeCtx.fill();
+      smokeCtx.restore();
     }
 
     smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
@@ -984,7 +993,14 @@ export const initPreloaderTimeline = () => {
   smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
   if (rocketCenter) {
-    rocketCenter.style.animation = "rocketHover 1.4s ease-in-out infinite alternate";
+    floatTween = gsap.to(rocketCenter, {
+      y: -10,
+      rotation: 1.5,
+      duration: 1.4,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
   }
 
   const headerEl = document.getElementById("preloader-header");
@@ -995,20 +1011,16 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    if (rocketCenter) rocketCenter.style.animation = "none";
-    if (smokeAnimId) {
-      cancelAnimationFrame(smokeAnimId);
-      smokeAnimId = null;
-    }
-    if (smokeCtx && smokeCanvas) {
-      smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-    }
+    if (floatTween) floatTween.kill();
 
     preloaderEl.style.pointerEvents = "none";
 
     const launchTl = gsap.timeline({
       onComplete: () => {
-        if (smokeAnimId) cancelAnimationFrame(smokeAnimId);
+        if (smokeAnimId) {
+          cancelAnimationFrame(smokeAnimId);
+          smokeAnimId = null;
+        }
         window.removeEventListener("resize", resizeCanvas);
         preloaderEl.style.display = "none";
         preloaderEl.remove();
