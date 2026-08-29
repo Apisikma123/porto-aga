@@ -944,20 +944,20 @@ export const initPreloaderTimeline = () => {
       if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
         const nozzleX = rect.left + rect.width / 2;
         const nozzleY = rect.bottom - (launchTriggered ? 16 : 6);
-        const spawnCount = launchTriggered ? 4 : (frameCount % 2 === 0 ? 2 : 1);
+        const spawnCount = launchTriggered ? 6 : 3;
         
-        if (smokeParticles.length < (launchTriggered ? 60 : 30)) {
+        if (smokeParticles.length < (launchTriggered ? 90 : 45)) {
           for (let i = 0; i < spawnCount; i++) {
             smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-              y: nozzleY + (Math.random() - 0.5) * 3,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-              vy: launchTriggered ? (6.0 + Math.random() * 8.5) : (1.8 + Math.random() * 2.2),
-              radius: launchTriggered ? (16 + Math.random() * 12) : (8 + Math.random() * 6),
-              growth: launchTriggered ? 0.9 : 0.45,
-              maxRadius: launchTriggered ? 80 : 36,
-              alpha: launchTriggered ? 0.8 : 0.5,
-              decay: launchTriggered ? 0.02 : 0.012,
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 18 : 10),
+              y: nozzleY + (Math.random() - 0.5) * 4,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.5 : 1.2),
+              vy: launchTriggered ? (6.0 + Math.random() * 9.0) : (1.8 + Math.random() * 2.5),
+              radius: launchTriggered ? (22 + Math.random() * 16) : (14 + Math.random() * 10),
+              growth: launchTriggered ? 1.2 : 0.65,
+              maxRadius: launchTriggered ? 100 : 55,
+              alpha: launchTriggered ? 0.95 : 0.75,
+              decay: launchTriggered ? 0.018 : 0.010,
             });
           }
         }
@@ -971,17 +971,17 @@ export const initPreloaderTimeline = () => {
       p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
       p.alpha -= p.decay * dt;
 
-      if (p.alpha <= 0 || p.y > window.innerHeight + 50) {
+      if (p.alpha <= 0 || p.y > window.innerHeight + 60) {
         smokeParticles.splice(i, 1);
         continue;
       }
 
       smokeCtx.save();
       const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
-      grad.addColorStop(0.35, `rgba(240, 243, 255, ${p.alpha * 0.6})`);
-      grad.addColorStop(0.7, `rgba(220, 230, 255, ${p.alpha * 0.25})`);
-      grad.addColorStop(1, `rgba(200, 215, 255, 0)`);
+      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.98})`);
+      grad.addColorStop(0.3, `rgba(242, 246, 255, ${p.alpha * 0.85})`);
+      grad.addColorStop(0.65, `rgba(215, 228, 255, ${p.alpha * 0.45})`);
+      grad.addColorStop(1, `rgba(195, 215, 255, 0)`);
       smokeCtx.fillStyle = grad;
       smokeCtx.beginPath();
       smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
