@@ -923,6 +923,7 @@ export const initPreloaderTimeline = () => {
   }
 
   let lastSmokeTime = 0;
+  let frameCount = 0;
 
   const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
