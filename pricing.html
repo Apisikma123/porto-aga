@@ -57,15 +57,15 @@
         will-change: transform;
       }
       @keyframes rocketHover {
-        from { transform: translate3d(0, 0, 0) rotate(0deg); }
-        to { transform: translate3d(0, -10px, 0) rotate(1.5deg); }
+        from { transform: translate3d(0, -18px, 0) rotate(0deg); }
+        to { transform: translate3d(0, -30px, 0) rotate(1.5deg); }
       }
       @keyframes rocketBlastOff {
         0% {
-          transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+          transform: translate3d(0, -24px, 0) scale(1) rotate(0deg);
         }
         15% {
-          transform: translate3d(0, 16px, 0) scale(0.96, 1.04) rotate(0.5deg);
+          transform: translate3d(0, -8px, 0) scale(0.96, 1.04) rotate(0.5deg);
         }
         100% {
           transform: translate3d(0, -150vh, 0) scale(1.15) rotate(0deg);
@@ -413,7 +413,7 @@
       <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
         <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
-        <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu mb-4 sm:mb-6 pointer-events-none overflow-visible">
+        <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu -mt-4 sm:-mt-8 mb-6 sm:mb-10 pointer-events-none overflow-visible">
           <svg
             class="relative z-10 w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-md"
             viewBox="0 0 140 200"
@@ -484,6 +484,19 @@
                 <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
                 <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
               </linearGradient>
+
+              <!-- Astronaut Pilot Gradients -->
+              <linearGradient id="astronautHelmetGradPricing" x1="62" y1="52" x2="78" y2="68" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="60%" stop-color="#F1F5F9"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+              <linearGradient id="astronautVisorGradPricing" x1="64" y1="56" x2="76" y2="66" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38BDF8"/>
+                <stop offset="35%" stop-color="#0284C7"/>
+                <stop offset="70%" stop-color="#F59E0B"/>
+                <stop offset="100%" stop-color="#D97706"/>
+              </linearGradient>
             </defs>
 
             <!-- 1. JET FLAME EXHAUST — Pure space thruster plasma -->
@@ -527,22 +540,43 @@
               <path d="M68 76H70V112H68V76Z" fill="#FFFFFF" opacity="0.3"/>
 
               <!-- Cockpit Porthole Outer Chrome/Crimson Bevel Ring -->
-              <circle cx="70" cy="62" r="12" fill="#0F172A"/>
-              <circle cx="70" cy="62" r="11" fill="url(#noseconeGradPricing)"/>
-              <circle cx="70" cy="62" r="9" fill="#09090B"/>
+              <circle cx="70" cy="62" r="14" fill="#0F172A"/>
+              <circle cx="70" cy="62" r="13" fill="url(#noseconeGradPricing)"/>
+              <circle cx="70" cy="62" r="11" fill="#09090B"/>
 
-              <!-- Porthole Dark Blue/Obsidian Glass Sphere -->
-              <circle cx="70" cy="62" r="8" fill="#131318"/>
+              <!-- Porthole Interior Cabin -->
+              <circle cx="70" cy="62" r="10" fill="#0B0F19"/>
 
-              <!-- Glass Specular Glare (Apple Glass Effect) -->
-              <ellipse cx="67" cy="58" rx="4" ry="2.2" transform="rotate(-30 67 58)" fill="#FFFFFF" opacity="0.8"/>
-              <circle cx="73" cy="66" r="1.2" fill="#FFFFFF" opacity="0.45"/>
+              <!-- 3. ASTRONAUT PILOT (Clearly Visible Inside Cockpit) -->
+              <g id="astronaut-pilot-pricing">
+                <!-- Shoulders & Space Suit -->
+                <path d="M61 72C61 68.5 64.5 67 70 67C75.5 67 79 68.5 79 72V73H61V72Z" fill="url(#astronautHelmetGradPricing)"/>
+                <!-- Suit Collar / Red Mission Badge -->
+                <rect x="67.5" y="68.5" width="5" height="1.8" rx="0.6" fill="#DC143C"/>
+                <circle cx="65.5" cy="69.5" r="0.8" fill="#38BDF8"/>
+                
+                <!-- Astronaut Helmet Dome -->
+                <ellipse cx="70" cy="61" rx="8" ry="7.2" fill="url(#astronautHelmetGradPricing)"/>
+                <ellipse cx="70" cy="61" rx="8" ry="7.2" stroke="#94A3B8" stroke-width="0.5"/>
+                
+                <!-- Golden & Cyberpunk Holographic Visor -->
+                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" fill="url(#astronautVisorGradPricing)"/>
+                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" stroke="#0F172A" stroke-width="0.6"/>
+                
+                <!-- Visor Specular Apple Glossy Reflection Curve -->
+                <ellipse cx="68" cy="59.5" rx="2.8" ry="1.4" transform="rotate(-25 68 59.5)" fill="#FFFFFF" opacity="0.9"/>
+                <circle cx="73" cy="63.5" r="0.9" fill="#FFFFFF" opacity="0.6"/>
+              </g>
+
+              <!-- Porthole Outer Glass Sphere Overlay & Ambient Glow -->
+              <circle cx="70" cy="62" r="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+              <ellipse cx="66" cy="56" rx="4.5" ry="2" transform="rotate(-30 66 56)" fill="#FFFFFF" opacity="0.45"/>
             </g>
           </svg>
         </div>
 
         <!-- Monospace Counter & Status -->
-        <div id="preloader-text-group" class="flex flex-col items-center">
+        <div id="preloader-text-group" class="flex flex-col items-center mt-6 sm:mt-8">
           <div class="flex items-baseline justify-center gap-2 font-mono leading-none mb-2">
             <span id="preloader-percent" class="text-6xl sm:text-7xl md:text-8xl font-black text-white tracking-tight tabular-nums">00</span>
             <span class="text-2xl sm:text-3xl text-[#DC143C] font-semibold">%</span>
