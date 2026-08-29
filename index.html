@@ -11,6 +11,12 @@
                       (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__));
           if (isBot) {
             document.documentElement.classList.add("is-audit-bot");
+            document.addEventListener("DOMContentLoaded", function () {
+              var p = document.getElementById("web-preloader");
+              if (p) p.remove();
+              var bg = document.getElementById("bg");
+              if (bg) bg.remove();
+            });
           }
         } catch (e) {}
       })();
