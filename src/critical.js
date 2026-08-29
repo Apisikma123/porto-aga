@@ -1096,7 +1096,7 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const totalDuration = 1100; // 1.1s majestic loading experience
+  const totalDuration = 650; // 650ms snappy launch
 
   const animStep = (now) => {
     if (launchTriggered) return;
