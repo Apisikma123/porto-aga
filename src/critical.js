@@ -1057,41 +1057,36 @@ export const initPreloaderTimeline = () => {
     if (statusEl && text) statusEl.textContent = text;
   };
 
-  const tl = gsap.timeline({
-    onComplete: () => {
-      setTimeout(triggerLaunch, 50);
-    },
-  });
+  const startProgressTime = performance.now();
+  const totalDuration = 700; // 700ms smooth ramp up
 
-  tl.to(progressTracker, {
-    val: PRELOADER_STAGES[0].pct,
-    duration: 0.18,
-    ease: "power1.out",
-    onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[0].text),
-  })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[1].pct,
-      duration: 0.22,
-      ease: "sine.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[1].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[2].pct,
-      duration: 0.18,
-      ease: "sine.inOut",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[2].text),
-    })
-    .to(progressTracker, {
-      val: PRELOADER_STAGES[3].pct,
-      duration: 0.15,
-      ease: "power2.out",
-      onUpdate: () => updateDisplay(progressTracker.val, PRELOADER_STAGES[3].text),
-    });
+  const animStep = (now) => {
+    if (launchTriggered) return;
+    const elapsed = now - startProgressTime;
+    const progress = Math.min(1, elapsed / totalDuration);
+    const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+    const currentPct = Math.round(easeProgress * 100);
 
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 2.5s max
+    let stageText = PRELOADER_STAGES[0].text;
+    if (currentPct > 88) stageText = PRELOADER_STAGES[3].text;
+    else if (currentPct > 68) stageText = PRELOADER_STAGES[2].text;
+    else if (currentPct > 30) stageText = PRELOADER_STAGES[1].text;
+
+    updateDisplay(currentPct, stageText);
+
+    if (progress < 1) {
+      requestAnimationFrame(animStep);
+    } else {
+      setTimeout(triggerLaunch, 40);
+    }
+  };
+
+  requestAnimationFrame(animStep);
+
+  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 1.5s max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 2500);
+  }, 1500);
 };
 
 // ═══════════════════════════════════════════════════════════
