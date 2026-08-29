@@ -902,8 +902,6 @@ export const initPreloaderTimeline = () => {
   ];
 
   let launchTriggered = false;
-  let floatTween = null;
-
   // ─── High-Performance Pure White Vapor Smoke Canvas (Live Flame Nozzle Tracking) ───
   const smokeCanvas = document.getElementById("preloader-smoke-canvas");
   let smokeCtx = null;
@@ -986,14 +984,7 @@ export const initPreloaderTimeline = () => {
   smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
 
   if (rocketCenter) {
-    floatTween = gsap.to(rocketCenter, {
-      y: -10,
-      rotation: 1.5,
-      duration: 1.4,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-    });
+    rocketCenter.style.animation = "rocketHover 1.4s ease-in-out infinite alternate";
   }
 
   const headerEl = document.getElementById("preloader-header");
@@ -1004,7 +995,7 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    if (floatTween) floatTween.kill();
+    if (rocketCenter) rocketCenter.style.animation = "none";
     if (smokeAnimId) {
       cancelAnimationFrame(smokeAnimId);
       smokeAnimId = null;
