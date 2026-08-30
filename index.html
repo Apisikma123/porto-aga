@@ -171,9 +171,39 @@
         justify-content: space-between;
         overflow: hidden;
       }
+      #preloader-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-color: #040509 !important;
+        pointer-events: none;
+        will-change: opacity;
+      }
       #preloader-rocket-center {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         animation: rocketHover 1.4s ease-in-out infinite alternate;
         will-change: transform;
+      }
+      #preloader-rocket-center svg {
+        width: 112px;
+        height: 160px;
+        display: block;
+      }
+      @media (min-width: 640px) {
+        #preloader-rocket-center svg {
+          width: 128px;
+          height: 176px;
+        }
+      }
+      @media (min-width: 768px) {
+        #preloader-rocket-center svg {
+          width: 144px;
+          height: 208px;
+        }
       }
       #start {
         min-height: 100svh;
