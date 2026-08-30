@@ -1042,7 +1042,7 @@ export const initPreloaderTimeline = () => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 850);
+    }, 950);
   };
 
   const updateDisplay = (pct, text) => {
