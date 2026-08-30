@@ -963,33 +963,30 @@ export const initPreloaderTimeline = () => {
 
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
 
-    if (launchTriggered || !cachedNozzleX) {
-      const targetEl = rocketCenter || flameNozzle;
-      if (targetEl && targetEl.isConnected) {
-        const rect = targetEl.getBoundingClientRect();
-        cachedNozzleX = rect.left + rect.width / 2;
-        cachedNozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
-      }
-    }
-
-    const nozzleX = cachedNozzleX || (window.innerWidth / 2);
-    const nozzleY = cachedNozzleY || (window.innerHeight / 2 + 50);
-    
-    // Steady lightweight generation (capped at 25 particles for 120fps, 0 main-thread cost)
-    const spawnRate = launchTriggered ? 2 : 1;
-    for (let i = 0; i < spawnRate; i++) {
-      if (smokeParticles.length < 25) {
-        smokeParticles.push({
-          x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-          y: nozzleY + (Math.random() - 0.5) * 2,
-          vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-          vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
-          radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
-          growth: launchTriggered ? 0.9 : 0.4,
-          maxRadius: launchTriggered ? 70 : 40,
-          alpha: launchTriggered ? 0.8 : 0.6,
-          decay: launchTriggered ? 0.018 : 0.009,
-        });
+    const targetEl = rocketCenter || flameNozzle;
+    if (targetEl && targetEl.isConnected) {
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+        const nozzleX = rect.left + rect.width / 2;
+        const nozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
+        
+        // Steady lightweight generation (capped at 30 particles for 120fps)
+        const spawnRate = launchTriggered ? 2 : 1;
+        for (let i = 0; i < spawnRate; i++) {
+          if (smokeParticles.length < 30) {
+            smokeParticles.push({
+              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
+              y: nozzleY + (Math.random() - 0.5) * 2,
+              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+              vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
+              radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
+              growth: launchTriggered ? 0.9 : 0.4,
+              maxRadius: launchTriggered ? 70 : 40,
+              alpha: launchTriggered ? 0.8 : 0.6,
+              decay: launchTriggered ? 0.018 : 0.009,
+            });
+          }
+        }
       }
     }
 
