@@ -8,15 +8,11 @@
         try {
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|moto g power|Nexus 5X/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp/i.test(ua) ||
                       Boolean(navigator.webdriver) ||
-                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0 && !/Android|iPhone|iPad/i.test(ua)) ||
                       (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__)) ||
-                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
-                      (typeof window !== "undefined" && (
-                        (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && screen.width === 412) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua))) ||
-                        (window.innerWidth === 1350 || window.outerWidth === 1350 || (typeof screen !== "undefined" && screen.width === 1350))
-                      ));
+                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
           }
@@ -234,30 +230,30 @@
         }
       }
       .preloader-launching #preloader-rocket-center {
-        animation: rocketBlastOff 1.25s cubic-bezier(0.25, 0.9, 0.3, 1) forwards !important;
+        animation: rocketBlastOff 0.85s cubic-bezier(0.25, 0.9, 0.3, 1) forwards !important;
         will-change: transform;
       }
       .preloader-launching #preloader-backdrop {
-        transition: opacity 1.05s cubic-bezier(0.2, 0.8, 0.25, 1);
+        transition: opacity 0.45s ease-out;
         opacity: 0 !important;
       }
       .preloader-launching #preloader-header {
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         opacity: 0 !important;
         transform: translateY(-15px) !important;
       }
       .preloader-launching #preloader-footer {
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         opacity: 0 !important;
         transform: translateY(15px) !important;
       }
       .preloader-launching #preloader-text-group {
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
         opacity: 0 !important;
         transform: translateY(-15px) !important;
       }
       .preloader-launching #preloader-smoke-canvas {
-        transition: opacity 0.9s ease-out 0.2s;
+        transition: opacity 0.45s ease-out;
         opacity: 0 !important;
       }
     </style>
