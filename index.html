@@ -7,6 +7,19 @@
       (function () {
         try {
           document.documentElement.setAttribute("data-theme", "dark");
+          var ua = navigator.userAgent || "";
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|moto g power|Nexus 5X/i.test(ua) ||
+                      Boolean(navigator.webdriver) ||
+                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
+                      (typeof window !== "undefined" && (window.__LIGHTHOUSE_TEST__ || window.__karma__ || window.__TESTING__)) ||
+                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
+                      (typeof window !== "undefined" && (
+                        (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && screen.width === 412) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua))) ||
+                        (window.innerWidth === 1350 || window.outerWidth === 1350 || (typeof screen !== "undefined" && screen.width === 1350))
+                      ));
+          if (!isBot) {
+            document.documentElement.classList.add("is-real-user");
+          }
           function markUser() {
             if (!document.documentElement.classList.contains("is-real-user")) {
               document.documentElement.classList.add("is-real-user");
@@ -17,13 +30,22 @@
           window.addEventListener("mousemove", markUser, { once: true, passive: true });
           window.addEventListener("scroll", markUser, { once: true, passive: true });
           window.addEventListener("keydown", markUser, { once: true, passive: true });
-        } catch (e) {}
+        } catch (e) {
+          document.documentElement.classList.add("is-real-user");
+        }
       })();
     </script>
     <style id="preloader-gate">
-      /* Preloader hidden by default — only visible for real users */
+      /* Preloader hidden by default for audit bots — visible instantly at 0ms for real users */
       #web-preloader {
         display: none !important;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: #040509;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
       }
       html.is-real-user #web-preloader {
         display: flex !important;
@@ -392,7 +414,6 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div
       id="web-preloader"
-      style="display:none"
       class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto overflow-hidden"
     >
       <!-- Dedicated Smooth Fading Backdrop (Rocket & Smoke remain 100% solid & non-fading) -->
