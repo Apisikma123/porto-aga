@@ -7,20 +7,6 @@
       (function () {
         try {
           document.documentElement.setAttribute("data-theme", "dark");
-          var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|mediapartners|Audit|moto g power|Nexus 5X/i.test(ua) ||
-                      Boolean(navigator.webdriver) ||
-                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
-                      (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
-                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
-                      (typeof window !== "undefined" && (
-                        (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && screen.width === 412) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua))) ||
-                        (window.innerWidth === 1350 || window.outerWidth === 1350 || (typeof screen !== "undefined" && screen.width === 1350))
-                      ));
-          if (!isBot) {
-            document.documentElement.classList.add("is-real-user");
-          }
-          // Real human interaction guarantee
           function markUser() {
             if (!document.documentElement.classList.contains("is-real-user")) {
               document.documentElement.classList.add("is-real-user");
@@ -30,9 +16,8 @@
           window.addEventListener("pointerdown", markUser, { once: true, passive: true });
           window.addEventListener("mousemove", markUser, { once: true, passive: true });
           window.addEventListener("scroll", markUser, { once: true, passive: true });
-        } catch (e) {
-          document.documentElement.classList.add("is-real-user");
-        }
+          window.addEventListener("keydown", markUser, { once: true, passive: true });
+        } catch (e) {}
       })();
     </script>
     <style id="preloader-gate">
@@ -190,8 +175,7 @@
       }
       .eyebrow {
         font-family: var(--font-mono);
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.05em;
       }
       .body-copy {
         color: #a1a1aa;
@@ -621,11 +605,11 @@
 
       <!-- Bottom Progress Track -->
       <div id="preloader-footer" class="relative z-20 space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
-        <div class="w-full h-1 bg-white/10 relative overflow-hidden rounded-full preloader-track">
+        <div class="w-full h-1.5 bg-white/10 relative overflow-hidden rounded-full preloader-track shadow-inner">
           <div
             id="preloader-bar"
-            class="absolute inset-y-0 left-0 w-full bg-[#DC143C] rounded-full origin-left transform-gpu transition-transform duration-150 ease-out"
-            style="transform: scaleX(0);"
+            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu transition-transform duration-75 ease-out"
+            style="transform: scaleX(0); transform-origin: left center;"
           ></div>
         </div>
         <div class="flex justify-between items-center text-xs text-zinc-400 font-mono">
@@ -690,7 +674,7 @@
       aria-label="Section Navigation"
       class="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
     >
-      <p class="eyebrow mb-5 text-zinc-400 text-[0.65rem] tracking-wider font-semibold" data-i18n="sidebarHeader">On this page</p>
+      <div class="font-mono mb-5 text-zinc-400 text-xs tracking-wider font-semibold" data-i18n="sidebarHeader">On this page</div>
       <ul class="space-y-3" id="side-nav">
         <li>
           <button type="button" class="side-nav-item active group flex items-center text-left py-1" data-index="0">
@@ -752,15 +736,15 @@
       class="fixed bottom-8 left-6 xl:left-10 z-30 hidden lg:block pointer-events-none transition-all duration-300"
     >
       <div class="flex items-center gap-3 mb-2">
-        <p class="eyebrow text-zinc-500 text-[0.58rem] tracking-[0.25em]" data-i18n="navHint">Navigation</p>
+        <span class="font-mono text-zinc-500 text-xs tracking-[0.2em] uppercase font-semibold" data-i18n="navHint">Navigation</span>
       </div>
       <div class="flex items-center gap-4 text-zinc-500 font-mono text-[0.65rem]">
         <div class="flex items-center gap-1">
-          <kbd class="border border-white/15 px-1.5 py-0.5 rounded text-[0.6rem] text-zinc-400">W</kbd>
-          <kbd class="border border-white/15 px-1.5 py-0.5 rounded text-[0.6rem] text-zinc-400">S</kbd>
+          <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-400">W</kbd>
+          <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-400">S</kbd>
           <span class="text-zinc-600">/</span>
-          <kbd class="border border-white/15 px-1.5 py-0.5 rounded text-[0.6rem] text-zinc-400">↑</kbd>
-          <kbd class="border border-white/15 px-1.5 py-0.5 rounded text-[0.6rem] text-zinc-400">↓</kbd>
+          <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-400">↑</kbd>
+          <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-400">↓</kbd>
           <span class="ml-1.5 text-zinc-400" data-i18n="navScene">Lock Scene</span>
         </div>
       </div>
@@ -796,9 +780,11 @@
         class="relative flex min-h-[100svh] items-center px-5 sm:px-6 md:px-10 pt-24 sm:pt-28 pb-12 sm:pb-16 justify-start"
       >
         <div class="section-content spatial-text-3d w-full lg:w-7/12 max-w-xl text-left" data-reveal>
-          <p class="eyebrow mb-2 sm:mb-3 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="heroEyebrow">
-            <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">01</span>Frontend &amp; Web Developer
-          </p>
+          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+            <span class="tabular-nums text-zinc-400">01</span>
+            <span class="text-zinc-600">/</span>
+            <span data-i18n="heroEyebrow">Frontend &amp; Web Developer</span>
+          </div>
 
           <h1 class="hero-name display-title text-[clamp(2.2rem,4.8vw,4.4rem)] text-white mb-2 sm:mb-3">
             <span class="hero-line block font-light">Muhammad</span>
@@ -811,7 +797,7 @@
             Frontend Developer &amp; Software Engineer
           </p>
 
-          <p class="body-copy text-xs sm:text-sm md:text-base mb-5 sm:mb-7 leading-relaxed max-w-md" style="max-width: 50ch;" data-i18n="heroBio">
+          <p class="body-copy text-xs sm:text-sm md:text-base mb-5 sm:mb-7 leading-relaxed max-w-md break-words" style="max-width: 50ch;" data-i18n="heroBio">
             Building clean, high-performance web applications and interactive digital experiences with modern web technologies.
           </p>
 
@@ -854,49 +840,51 @@
         <div class="hidden lg:block lg:w-6/12 pointer-events-none" aria-hidden="true"></div>
 
         <div class="section-content spatial-text-3d w-full lg:w-6/12 max-w-lg relative z-10" data-reveal>
-          <p class="eyebrow mb-2 sm:mb-3 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="aboutEyebrow">
-            <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">02</span>Focus &amp; Tech Stack
-          </p>
+          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+            <span class="tabular-nums text-zinc-400">02</span>
+            <span class="text-zinc-600">/</span>
+            <span data-i18n="aboutEyebrow">Focus &amp; Tech Stack</span>
+          </div>
 
           <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.2rem,4.5vw,4.2rem)] text-white mb-2 sm:mb-4">
             <span class="block" data-i18n="aboutTitle1">Clean Code.</span>
             <span class="block font-light text-zinc-400" data-i18n="aboutTitle2">Modern Design.</span>
           </h2>
 
-          <p class="body-copy mb-4 sm:mb-6 text-xs sm:text-sm md:text-base leading-relaxed text-zinc-300 font-light max-w-md" style="max-width: 50ch;" data-i18n="aboutDesc">
+          <p class="body-copy mb-4 sm:mb-6 text-xs sm:text-sm md:text-base leading-relaxed text-zinc-300 font-light max-w-md break-words" style="max-width: 50ch;" data-i18n="aboutDesc">
             Passionate about creating responsive, high-performance websites and applications. Focused on user experience, clean architecture, and practical engineering.
           </p>
 
           <div class="space-y-px mt-3 sm:mt-6" role="list" aria-label="Focus areas">
             <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="eyebrow text-zinc-400 md:pt-1 text-xs">01 // UI/UX</span>
+              <span class="font-mono text-zinc-400 md:pt-1 text-xs">01 // UI/UX</span>
               <div>
                 <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus1Title">Frontend Development</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light" data-i18n="focus1Desc">Modern component architecture, reactive state management, and responsive interfaces.</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus1Desc">Modern component architecture, reactive state management, and responsive interfaces.</span>
               </div>
             </div>
 
             <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="eyebrow text-zinc-400 md:pt-1 text-xs">02 // 3D WEBGL</span>
+              <span class="font-mono text-zinc-400 md:pt-1 text-xs">02 // 3D WEBGL</span>
               <div>
                 <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus2Title">Interactive 3D Web</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light" data-i18n="focus2Desc">Immersive 3D experiences with Three.js, WebGL shaders, and smooth GSAP animations.</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus2Desc">Immersive 3D experiences with Three.js, WebGL shaders, and smooth GSAP animations.</span>
               </div>
             </div>
 
             <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="eyebrow text-zinc-400 md:pt-1 text-xs">03 // SYSTEMS</span>
+              <span class="font-mono text-zinc-400 md:pt-1 text-xs">03 // SYSTEMS</span>
               <div>
                 <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus3Title">Fullstack &amp; Backend API</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light" data-i18n="focus3Desc">Robust backend services with Laravel, Node.js, and database architecture.</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus3Desc">Robust backend services with Laravel, Node.js, and database architecture.</span>
               </div>
             </div>
 
             <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-b border-white/10 py-2 sm:py-3.5">
-              <span class="eyebrow text-zinc-400 md:pt-1 text-xs">04 // SPEED</span>
+              <span class="font-mono text-zinc-400 md:pt-1 text-xs">04 // SPEED</span>
               <div>
                 <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus4Title">Performance &amp; SEO</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light" data-i18n="focus4Desc">Fast load times, asset optimization, and Core Web Vitals refinement.</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus4Desc">Fast load times, asset optimization, and Core Web Vitals refinement.</span>
               </div>
             </div>
           </div>
@@ -906,17 +894,19 @@
       <!-- ─── SECTION 03: DEDICATED ACTIVITY SECTION (Full High-Definition Floating Card) ─── -->
       <section
         id="activity"
-        class="relative flex min-h-[100svh] items-center justify-center px-5 sm:px-6 md:px-10 pt-20 sm:pt-28 pb-16 sm:pb-20 max-w-6xl mx-auto"
+        class="relative flex min-h-[100svh] items-center justify-center px-5 sm:px-6 md:px-10 pt-20 sm:pt-28 pb-16 sm:pb-20 max-w-6xl mx-auto overflow-hidden"
       >
         <div class="section-content spatial-text-3d w-full" data-reveal>
           <header class="mb-3 sm:mb-4 md:mb-5 text-center max-w-2xl mx-auto">
-            <p class="eyebrow mb-2 sm:mb-3 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="activityEyebrow">
-              <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">03</span>GitHub Activity
-            </p>
+            <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+              <span class="tabular-nums text-zinc-400">03</span>
+              <span class="text-zinc-600">/</span>
+              <span data-i18n="activityEyebrow">GitHub Activity</span>
+            </div>
             <h2 class="display-title text-[clamp(1.8rem,3.4vw,3.2rem)] text-white">
               <span data-i18n="activityTitle1">Consistent Coding.</span> <span class="text-[#DC143C] font-light" data-i18n="activityTitle2">Every Day.</span>
             </h2>
-            <p class="body-copy mt-2 text-xs sm:text-sm md:text-base text-zinc-300 font-light" data-i18n="activityDesc">
+            <p class="body-copy mt-2 text-xs sm:text-sm md:text-base text-zinc-300 font-light break-words" data-i18n="activityDesc">
               Real-time contribution history and daily coding activity tracked directly from GitHub.
             </p>
           </header>
@@ -928,7 +918,7 @@
               <!-- Card Header -->
               <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-4 mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/10">
                 <div class="flex items-center gap-3">
-                  <span class="eyebrow tracking-[0.35em] text-white font-bold text-sm">ACTIVITY</span>
+                  <span class="font-mono tracking-[0.25em] text-white font-bold text-sm">ACTIVITY</span>
                   <span id="activity-year-range" class="font-mono text-xs text-zinc-400 bg-white/[0.04] border border-white/10 px-2.5 py-1 rounded-md">2025 – 2026</span>
                 </div>
                 <div class="flex items-center gap-3 font-mono text-xs text-zinc-300">
@@ -1000,22 +990,24 @@
       <!-- ─── SECTION 04: PROJECTS CAROUSEL (Horizontal Showcase) ─── -->
       <section
         id="projects"
-        class="relative flex flex-col justify-center min-h-[100svh] px-5 sm:px-6 md:px-10 pt-16 sm:pt-20 pb-16 sm:pb-24 max-w-6xl mx-auto"
+        class="relative flex flex-col justify-center min-h-[100svh] px-4 sm:px-6 md:px-10 pt-16 sm:pt-20 pb-12 sm:pb-20 max-w-6xl mx-auto overflow-hidden"
       >
         <div class="section-content spatial-text-3d w-full relative z-10 my-auto" data-reveal>
-          <header class="mb-3 sm:mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+          <header class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3.5 sm:gap-4">
             <div>
-              <p class="eyebrow mb-1.5 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="projectsEyebrow">
-                <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">04</span>Featured Projects &amp; Works
-              </p>
-              <h2 class="display-title text-[clamp(1.6rem,2.8vw,2.6rem)] text-white">
+              <div class="mb-1.5 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+                <span class="tabular-nums text-zinc-400">04</span>
+                <span class="text-zinc-600">/</span>
+                <span data-i18n="projectsEyebrow">Featured Projects &amp; Works</span>
+              </div>
+              <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] text-white">
                 <span data-i18n="projectsTitle1">Featured</span> <span class="italic font-light text-zinc-400" data-i18n="projectsTitle2">Works.</span>
               </h2>
             </div>
 
-            <div class="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto flex-wrap">
+            <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
               <!-- Minimalist Slider Controls -->
-              <div id="carousel-counter-container" class="flex items-center border border-white/10 rounded-xl bg-zinc-950/60 p-1">
+              <div id="carousel-counter-container" class="flex items-center border border-white/10 rounded-xl bg-zinc-950/80 backdrop-blur-md p-1 shadow-sm">
                 <button
                   type="button"
                   id="carousel-prev-btn"
@@ -1025,7 +1017,7 @@
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <span id="carousel-counter" class="font-mono text-xs text-zinc-400 px-2 select-none tabular-nums font-semibold leading-none">1 / 5</span>
+                <span id="carousel-counter" class="font-mono text-xs text-zinc-300 px-2.5 select-none tabular-nums font-semibold leading-none">1 / 5</span>
                 <button
                   type="button"
                   id="carousel-next-btn"
@@ -1039,7 +1031,7 @@
 
               <a
                 href="/projects.html"
-                class="rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-3.5 sm:px-4 py-2 inline-flex items-center justify-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation leading-none"
+                class="rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-3.5 sm:px-4 py-2.5 inline-flex items-center justify-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation leading-none shrink-0"
               >
                 <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span data-i18n="exploreAllProjects">Semua Karya (17)</span>
@@ -1052,34 +1044,33 @@
           <div id="projects-slider-frame" class="relative w-full max-w-4xl mx-auto overflow-hidden rounded-2xl">
             <div
               id="projects-carousel-track"
-              class="flex transition-transform duration-500 ease-out"
-              style="transform: translateX(0%);"
+              class="w-full relative overflow-hidden"
             >
               <!-- Dynamically populated with DocumentFragment by renderFeaturedProjectsCarousel() -->
             </div>
           </div>
 
           <!-- Carousel Quick Dots & Navigation Hint -->
-          <div class="flex items-center justify-between mt-4 sm:mt-6 pt-2">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 mt-4 sm:mt-6 pt-2">
             <div class="flex items-center gap-1.5" id="carousel-dots-container">
               <button type="button" onclick="window.goToProjectSlide(0)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 1: BKJ Group Indonesia">
-                <span class="carousel-dot active block w-5 h-1 rounded-full bg-[#DC143C] opacity-100 transition-opacity"></span>
+                <span class="carousel-dot active block w-6 h-1 rounded-full bg-[#DC143C] opacity-100 transition-all"></span>
               </button>
               <button type="button" onclick="window.goToProjectSlide(1)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 2: FOODIFY Delivery">
-                <span class="carousel-dot block w-5 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
               <button type="button" onclick="window.goToProjectSlide(2)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 3: Wilmar Buku">
-                <span class="carousel-dot block w-5 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
               <button type="button" onclick="window.goToProjectSlide(3)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 4: CINTA Counseling">
-                <span class="carousel-dot block w-5 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
               <button type="button" onclick="window.goToProjectSlide(4)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 5: Grow a Garden">
-                <span class="carousel-dot block w-5 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
             </div>
 
-            <div class="font-mono text-xs text-zinc-400 flex items-center gap-2">
+            <div class="font-mono text-xs text-zinc-400 flex items-center justify-center gap-2 text-center">
               <span class="material-symbols-outlined text-xs text-[#FF385C]">keyboard_keys</span>
               <span data-i18n="sliderHint">Tekan tombol [←] [→] untuk melihat karya</span>
             </div>
@@ -1088,7 +1079,6 @@
         </div>
       </section>
 
-      <!-- ─── SECTION 05: FREELANCE STUDIO / CLIENT SERVICES ─── -->
       <!-- ─── SECTION 05: FREELANCE STUDIO & SERVICES ─── -->
       <section
         id="pricing"
@@ -1098,16 +1088,18 @@
 
           <!-- Section Eyebrow & Title -->
           <div class="text-center max-w-xl mx-auto mb-1.5 sm:mb-4 md:mb-5">
-            <p class="eyebrow mb-1.5 sm:mb-2 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="studioEyebrow">
-              <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">05</span>Freelance Studio &amp; Services
-            </p>
+            <div class="mb-1.5 sm:mb-2 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+              <span class="tabular-nums text-zinc-400">05</span>
+              <span class="text-zinc-600">/</span>
+              <span data-i18n="studioEyebrow">Freelance Studio &amp; Services</span>
+            </div>
             <h2 class="display-title text-base sm:text-2xl md:text-3xl lg:text-[2.6rem] text-white tracking-tight leading-tight mb-0.5 sm:mb-2">
               <span class="font-light" data-i18n="studioTitle1">Also Available for</span>
               <span class="font-black text-white" data-i18n="studioTitle2">
                 Client Projects<span class="text-[#DC143C]">.</span>
               </span>
             </h2>
-            <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-300 font-light leading-relaxed max-w-lg mx-auto" style="max-width: 50ch;" data-i18n="studioDesc">
+            <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-300 font-light leading-relaxed max-w-lg mx-auto break-words" style="max-width: 50ch;" data-i18n="studioDesc">
               Selain engineering personal, saya juga menerima proyek freelance pembuatan website profesional — dari landing page hingga custom web app.
             </p>
           </div>
@@ -1116,8 +1108,7 @@
           <div class="relative w-full max-w-5xl mx-auto">
             <div
               id="pricing-cards-track"
-              class="flex md:grid md:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5 pb-2 pt-4 mb-2 md:mb-8 select-none overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar -mx-2 px-2 md:mx-0 md:px-0"
-              style="-webkit-overflow-scrolling: touch;"
+              class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5 pb-2 pt-4 mb-2 md:mb-8 select-none"
             >
 
               <!-- Card 1: Landing Page -->
@@ -1126,8 +1117,9 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 data-tilt="true"
-                class="pricing-carousel-card shrink-0 w-[85vw] sm:w-[340px] md:w-full snap-center self-stretch group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex flex-col justify-between cursor-pointer touch-manipulation"
+                class="pricing-carousel-card w-full group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex flex-col justify-between cursor-pointer touch-manipulation"
                 title="Landing Page"
+                aria-hidden="false"
               >
                 <div class="flex flex-col flex-1">
                   <div class="flex items-center justify-between mb-2 sm:mb-4">
@@ -1145,7 +1137,7 @@
                     </svg>
                   </div>
                   <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Landing Page</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1" style="max-width: 48ch;" data-i18n="studioCard1Desc">
+                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard1Desc">
                     Halaman promosi cepat untuk iklan campaign, lead generation, dan direct WhatsApp conversion.
                   </p>
                 </div>
@@ -1164,13 +1156,10 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 data-tilt="true"
-                class="pricing-carousel-card shrink-0 w-[85vw] sm:w-[340px] md:w-full snap-center self-stretch group relative rounded-2xl border border-[#DC143C]/50 bg-zinc-950/90 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C] hover:shadow-md flex flex-col justify-between ring-1 ring-[#DC143C]/30 cursor-pointer touch-manipulation"
+                class="pricing-carousel-card w-full group relative rounded-2xl border border-[#DC143C]/50 bg-zinc-950/90 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C] hover:shadow-md flex flex-col justify-between ring-1 ring-[#DC143C]/30 cursor-pointer touch-manipulation hidden md:flex"
                 title="Company Profile"
+                aria-hidden="true"
               >
-                <!-- Popular Badge (Raised to top border) -->
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 px-3 py-0.5 rounded-full bg-[#DC143C] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-sm whitespace-nowrap">
-                  POPULER
-                </div>
                 <div class="flex flex-col flex-1">
                   <div class="flex items-center justify-between mb-2 sm:mb-4">
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] transition-colors duration-200 shrink-0">
@@ -1188,13 +1177,16 @@
                         <path d="M8 14h.01"/>
                       </svg>
                     </div>
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#DC143C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
+                    <div class="flex items-center gap-2">
+                      <span class="px-2.5 py-0.5 rounded-full bg-[#DC143C] text-white font-mono text-[0.65rem] font-bold uppercase tracking-wider shadow-sm">POPULER</span>
+                      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#DC143C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </div>
                   </div>
                   <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Company Profile</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1" style="max-width: 48ch;" data-i18n="studioCard2Desc">
+                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard2Desc">
                     Website profil bisnis resmi untuk UMKM & corporate, multi-halaman dengan SEO Google ready.
                   </p>
                 </div>
@@ -1213,8 +1205,9 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 data-tilt="true"
-                class="pricing-carousel-card shrink-0 w-[85vw] sm:w-[340px] md:w-full snap-center self-stretch group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-md flex flex-col justify-between cursor-pointer touch-manipulation"
+                class="pricing-carousel-card w-full group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-md flex flex-col justify-between cursor-pointer touch-manipulation hidden md:flex"
                 title="Custom Web App"
+                aria-hidden="true"
               >
                 <div class="flex flex-col flex-1">
                   <div class="flex items-center justify-between mb-2 sm:mb-4">
@@ -1230,7 +1223,7 @@
                     </svg>
                   </div>
                   <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Custom Web App</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1" style="max-width: 48ch;" data-i18n="studioCard3Desc">
+                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard3Desc">
                     Fullstack web application, SaaS, dashboard admin, dan sistem informasi dengan API terintegrasi.
                   </p>
                 </div>
@@ -1296,7 +1289,7 @@
                 <p class="text-xs sm:text-sm md:text-base font-bold text-white leading-tight sm:leading-snug mb-0.5" data-i18n="studioCTATitle">
                   8 Paket Website + Kalkulator Biaya Interaktif
                 </p>
-                <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed max-w-xl" data-i18n="studioCTADesc">
+                <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed max-w-xl break-words" data-i18n="studioCTADesc">
                   Hitung estimasi biaya transparan, pilih fitur custom, dan kirim brief langsung via WhatsApp. Mulai Rp499K.
                 </p>
               </div>
@@ -1335,7 +1328,7 @@
           <div class="mt-3 sm:mt-6 flex items-center justify-center gap-2 text-zinc-400 font-mono text-xs tracking-normal">
             <span class="inline-block h-4 w-px animate-pulse bg-[#DC143C]"></span>
             <button type="button" onclick="window.scrollToSection(5)" class="hover:text-white transition-colors cursor-pointer tracking-normal">
-              Scroll / Contact [06]
+              Scroll / Contact
             </button>
           </div>
         </div>
@@ -1346,12 +1339,14 @@
       <!-- ─── SECTION 06: CONTACT (Initiation Dialogue) ─── -->
       <section
         id="contact"
-        class="relative flex flex-col justify-center min-h-[100svh] px-6 md:px-10 pt-28 pb-20 max-w-4xl mx-auto text-center"
+        class="relative flex flex-col justify-center min-h-[100svh] px-6 md:px-10 pt-28 pb-20 max-w-4xl mx-auto text-center overflow-hidden"
       >
         <div class="section-content spatial-text-3d my-auto py-4 sm:py-6" data-reveal>
-          <p class="eyebrow mb-4 font-mono text-xs font-semibold tracking-wider text-[#FF385C]" data-i18n="contactEyebrow">
-            <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">06</span>Contact &amp; Inquiries
-          </p>
+          <div class="mb-4 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+            <span class="tabular-nums text-zinc-400">06</span>
+            <span class="text-zinc-600">/</span>
+            <span data-i18n="contactEyebrow">Contact &amp; Inquiries</span>
+          </div>
 
           <h2 class="display-title text-[clamp(2rem,4.5vw,4.2rem)] text-white mb-3 sm:mb-4">
             <span class="block font-light" data-i18n="contactTitle1">Let's Build Something</span>
@@ -1360,7 +1355,7 @@
             </span>
           </h2>
 
-          <p class="body-copy max-w-md mx-auto text-xs sm:text-sm md:text-base mb-6 sm:mb-8 text-zinc-300 font-light" style="max-width: 50ch;" data-i18n="contactBio">
+          <p class="body-copy max-w-md mx-auto text-xs sm:text-sm md:text-base mb-6 sm:mb-8 text-zinc-300 font-light break-words" style="max-width: 50ch;" data-i18n="contactBio">
             Open to full-time engineering roles, freelance projects, and collaboration opportunities. Let's discuss your next project.
           </p>
 
@@ -1391,7 +1386,7 @@
           <!-- Pulsing Hint to Section 07 Footer -->
           <div class="mt-14 flex items-center justify-center gap-3 text-zinc-400 font-mono text-xs tracking-normal">
             <span class="inline-block h-6 w-px animate-pulse bg-[#DC143C]"></span>
-            <span data-i18n="scrollFooter">Scroll for details &amp; footer [07]</span>
+            <span data-i18n="scrollFooter">Scroll for details &amp; footer</span>
           </div>
         </div>
       </section>
@@ -1405,9 +1400,11 @@
         <div class="section-content spatial-text-3d w-full" data-reveal>
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-6 md:pb-8 border-b border-white/10">
             <div>
-              <p class="eyebrow mb-1 sm:mb-2 font-mono text-xs font-semibold" data-i18n="footerEyebrow">
-                <span class="mr-2 sm:mr-3 tabular-nums text-zinc-400">07</span>Footer &amp; Contact
-              </p>
+              <div class="mb-1 sm:mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+                <span class="tabular-nums text-zinc-400">07</span>
+                <span class="text-zinc-600">/</span>
+                <span data-i18n="footerEyebrow">Footer &amp; Contact</span>
+              </div>
               <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] text-white tracking-tight leading-none">
                 AGA PUTRA<span class="text-[#DC143C]">.</span>
               </h2>
@@ -1574,7 +1571,7 @@
 
           <!-- Curated SEO Referring Links Grid (Halaman Perujuk Googlebot) -->
           <div class="py-2.5 sm:py-3 border-b border-white/10 font-mono text-xs">
-            <span class="eyebrow text-xs text-[#FF385C] block mb-2.5 font-semibold">
+            <span class="font-mono text-xs text-[#FF385C] block mb-2.5 font-semibold">
               Web Studio &amp; Freelance Services (Referral Index)
             </span>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-zinc-300">
@@ -1599,24 +1596,22 @@
           <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
             <span class="text-zinc-200 font-medium">Muhammad Aga Putra</span>
             <span class="hidden sm:inline text-zinc-600">/</span>
-            <span data-i18n="footerRole">Frontend Developer © 2026</span>
+            <span class="text-zinc-400">Software Engineer &amp; Frontend Developer</span>
           </div>
 
-          <div class="flex items-center gap-4 sm:gap-6 text-zinc-300">
-            <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">
-              GitHub ↗
-            </a>
-            <a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=agaputra62@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:text-white transition-colors"
+          <div class="flex items-center gap-4 text-xs">
+            <span class="text-zinc-500">© <span id="footer-year">2026</span> Aga Putra</span>
+            <button
+              type="button"
+              onclick="window.scrollToSection(0)"
+              class="text-zinc-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
+              title="Kembali ke atas"
             >
-              Email ↗
-            </a>
-            <button type="button" onclick="window.scrollToSection(0)" class="hover:text-[#FF385C] transition-colors flex items-center gap-1 cursor-pointer group">
-              <span data-i18n="backToTop">Top</span>
-              <span class="material-symbols-outlined text-xs group-hover:-translate-y-0.5 transition-transform">arrow_upward</span>
+              <span>TOP</span>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
             </button>
           </div>
         </div>
@@ -1695,7 +1690,7 @@
           <div class="mb-10 pb-8 border-b border-white/10">
             <div class="flex items-center gap-3 mb-3">
               <span class="w-2.5 h-2.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-              <span id="detail-view-eyebrow" class="eyebrow text-xs text-[#DC143C]">FULLSTACK WEB · CASE STUDY</span>
+              <span id="detail-view-eyebrow" class="font-mono text-xs text-[#DC143C] font-semibold uppercase tracking-wider">FULLSTACK WEB · CASE STUDY</span>
               <span class="text-zinc-600">/</span>
               <span id="detail-view-lang" class="font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md">Laravel</span>
             </div>
@@ -1734,7 +1729,7 @@
             <!-- Right Column: Sidebar Specs -->
             <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-28 font-mono text-xs">
               <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
-                <h2 class="eyebrow text-zinc-400 text-[0.62rem] font-semibold block">REPOSITORY TELEMETRY</h2>
+                <h2 class="font-mono text-zinc-400 text-xs font-semibold block">REPOSITORY TELEMETRY</h2>
                 
                 <div class="space-y-1">
                   <span class="text-zinc-500 text-[0.62rem]">AUTHOR</span>
@@ -1770,7 +1765,7 @@
               <!-- Other Projects Quick Switcher -->
               <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
                 <div class="flex items-center justify-between">
-                  <h2 class="eyebrow text-zinc-400 text-xs font-semibold">PROYEK LAINNYA</h2>
+                  <h2 class="font-mono text-zinc-400 text-xs font-semibold">PROYEK LAINNYA</h2>
                   <a href="/projects.html" class="text-[#FF385C] hover:text-white text-xs uppercase cursor-pointer">Semua (17) ↗</a>
                 </div>
                 <div id="detail-view-other-projects" class="space-y-1.5"></div>
@@ -1816,7 +1811,11 @@
 
           <!-- Header & Search -->
           <div class="mb-10 pb-8 border-b border-white/10">
-            <p class="eyebrow text-[#FF385C] mb-2 font-mono text-xs font-semibold tracking-normal">04 // KATALOG KARYA LENGKAP</p>
+            <div class="mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+              <span class="tabular-nums text-zinc-400">04</span>
+              <span class="text-zinc-600">/</span>
+              <span>Katalog Karya Lengkap</span>
+            </div>
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
               Semua Karya &amp; Repositori.
             </h1>

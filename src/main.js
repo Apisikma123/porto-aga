@@ -13,35 +13,22 @@ const loadNonCritical = () => {
   if (nonCriticalLoaded) return;
   nonCriticalLoaded = true;
 
-  import("./data-loader.js").then((m) => {
-    if (m && m.initData) m.initData();
+  const schedule = typeof requestIdleCallback === "function" 
+    ? (fn) => requestIdleCallback(fn, { timeout: 2000 }) 
+    : (fn) => setTimeout(fn, 10);
+
+  schedule(() => {
+    import("./data-loader.js").then((m) => {
+      if (m && m.initData) m.initData();
+    });
   });
 
-  import("./animations.js").then((m) => {
-    if (m && m.initAnimations) m.initAnimations();
+  schedule(() => {
+    import("./animations.js").then((m) => {
+      if (m && m.initAnimations) m.initAnimations();
+    });
   });
 };
-
-// Immediate start for data & animations upon first user interaction or scroll
-window.addEventListener("scroll", loadNonCritical, { passive: true, once: true });
-window.addEventListener("touchstart", loadNonCritical, { passive: true, once: true });
-window.addEventListener("wheel", loadNonCritical, { passive: true, once: true });
-window.addEventListener("keydown", loadNonCritical, { passive: true, once: true });
-window.addEventListener("click", loadNonCritical, { passive: true, once: true });
-
-// Proximity observer: Load immediately when viewport approaches section 02 / about
-if (typeof IntersectionObserver !== "undefined") {
-  const triggerEl = document.getElementById("about") || document.getElementById("activity");
-  if (triggerEl) {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) {
-        loadNonCritical();
-        observer.disconnect();
-      }
-    }, { rootMargin: "400px" });
-    observer.observe(triggerEl);
-  }
-}
 
 // ═══════════════════════════════════════════════════════════
 // 1. NON-DESTRUCTIVE 3D / WEBGL ACTIVATION & TIMING ENGINE
@@ -52,7 +39,11 @@ function activate3D() {
   if (initialized3D) return;
   initialized3D = true;
 
-  requestAnimationFrame(() => {
+  const schedule = typeof requestIdleCallback === "function" 
+    ? (fn) => requestIdleCallback(fn, { timeout: 2000 }) 
+    : (fn) => setTimeout(fn, 10);
+
+  schedule(() => {
     import("./three-scene.js").then((m) => {
       const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
       if (typeof initFn === "function") {
@@ -64,24 +55,9 @@ function activate3D() {
   });
 }
 
-// 1. Listen for rocket blast-off event (reveals 3D smoothly as preloader dissolves)
-window.addEventListener("start3D", activate3D, { once: true });
-
-// 2. Immediate activation on real user gesture (mouse move, touch, scroll, click)
+// Activation on real user gesture (mouse move, pointer down, touch, scroll, keydown, click)
 ["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
+  window.addEventListener(event, loadNonCritical, { once: true, passive: true });
 });
-
-// 3. Fallback idle scheduler: Safe idle execution well outside initial audit window (0ms TBT)
-if (isRealUser) {
-  setTimeout(() => {
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(activate3D);
-      requestIdleCallback(loadNonCritical);
-    } else {
-      activate3D();
-      loadNonCritical();
-    }
-  }, 4500);
-}
 

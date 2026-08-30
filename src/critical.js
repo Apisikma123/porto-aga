@@ -50,13 +50,13 @@ export const TRANSLATIONS = {
     navScene: "Scene",
     navContactKey: "Contact",
     statusAvailable: "Open to Work",
-    heroEyebrow: "01 // Frontend & Web Developer",
+    heroEyebrow: "Frontend & Web Developer",
     heroRole: "Frontend Developer & Software Engineer",
     heroBio: "Building clean, high-performance web applications and interactive digital experiences with modern web technologies.",
     btnExploreAbout: "About Me",
     btnInitiate: "Let's Talk",
     scrollHint: "Scroll or press [S] to explore",
-    aboutEyebrow: "02 // Focus & Tech Stack",
+    aboutEyebrow: "Focus & Tech Stack",
     aboutTitle1: "Clean Code.",
     aboutTitle2: "Modern Design.",
     aboutDesc: "Passionate about creating responsive, high-performance websites and applications. Focused on user experience, clean architecture, and practical engineering.",
@@ -68,7 +68,7 @@ export const TRANSLATIONS = {
     focus3Desc: "Robust backend services with Laravel, Node.js, and database architecture.",
     focus4Title: "Performance & SEO",
     focus4Desc: "Fast load times, asset optimization, and Core Web Vitals refinement.",
-    activityEyebrow: "03 // GitHub Activity",
+    activityEyebrow: "GitHub Activity",
     activityTitle1: "Consistent Coding.",
     activityTitle2: "Every Day.",
     activityDesc: "Real-time contribution history and daily coding activity tracked directly from GitHub.",
@@ -91,7 +91,7 @@ export const TRANSLATIONS = {
     monthDec: "Dec",
     less: "Less",
     more: "More",
-    projectsEyebrow: "04 // Featured Projects",
+    projectsEyebrow: "Featured Projects & Works",
     projectsTitle1: "Featured",
     projectsTitle2: "Works.",
     sliderHint: "Use [←] [→] navigation buttons to explore projects",
@@ -121,11 +121,11 @@ export const TRANSLATIONS = {
     exploreAllProjects: "All Works (17)",
     btnReadReadme: "Quick Overview",
     visualPreview: "Visual Architecture Preview",
-    pricingEyebrow: "05 // Website Cost Configurator",
+    pricingEyebrow: "Website Cost Configurator",
     pricingTitle1: "Interactive",
     pricingTitle2: "Cost Estimator.",
     pricingBio: "Interactively configure your website requirements and get a transparent realtime price estimate ready for direct WhatsApp consultation.",
-    studioEyebrow: "05 // Freelance Studio & Services",
+    studioEyebrow: "Freelance Studio & Services",
     studioTitle1: "Also Available for",
     studioTitle2: "Client Projects.",
     studioDesc: "In addition to personal software engineering, I also accept freelance projects for professional website development — from landing pages to custom web applications.",
@@ -135,13 +135,13 @@ export const TRANSLATIONS = {
     studioCTATitle: "8 Website Packages + Interactive Cost Calculator",
     studioCTADesc: "Calculate transparent price estimates, select custom feature sets, and dispatch your brief directly to WhatsApp. Starting at Rp499K.",
     studioCTABtn: "Launch Web Studio",
-    contactEyebrow: "06 // Contact & Inquiries",
+    contactEyebrow: "Contact & Inquiries",
     contactTitle1: "Let's Build Something",
     contactTitle2: "Great Together.",
     contactBio: "Open to full-time engineering roles, freelance projects, and collaboration opportunities. Let's discuss your next project.",
     btnStartConv: "Start Conversation",
     scrollFooter: "Scroll for Details & Footer [07]",
-    footerEyebrow: "07 // Footer & Contact",
+    footerEyebrow: "Footer & Contact",
     footerColStack: "Tech Stack",
     footerColDesign: "Design & Credits",
     footerColInspiration: "DESIGN INSPIRATION",
@@ -187,13 +187,13 @@ export const TRANSLATIONS = {
     navScene: "Scene",
     navContactKey: "Kontak",
     statusAvailable: "Open to Work",
-    heroEyebrow: "01 // Frontend & Web Developer",
+    heroEyebrow: "Frontend & Web Developer",
     heroRole: "Frontend Developer & Software Engineer",
     heroBio: "Membangun aplikasi web yang cepat, bersih, dan interaktif dengan teknologi web modern.",
     btnExploreAbout: "Tentang Saya",
     btnInitiate: "Hubungi Saya",
     scrollHint: "Scroll atau tekan [S] untuk menjelajah",
-    aboutEyebrow: "02 // Keahlian & Teknologi",
+    aboutEyebrow: "Keahlian & Teknologi",
     aboutTitle1: "Kode Bersih.",
     aboutTitle2: "Desain Modern.",
     aboutDesc: "Fokus pada pembuatan website dan aplikasi yang responsif, cepat, dan mudah digunakan. Mengutamakan kode yang rapi, performa optimal, dan arsitektur yang terstruktur.",
@@ -205,7 +205,7 @@ export const TRANSLATIONS = {
     focus3Desc: "Layanan backend tangguh dengan Laravel, Node.js, dan arsitektur basis data terstruktur.",
     focus4Title: "Performa & SEO",
     focus4Desc: "Kecepatan muat halaman, optimasi aset, dan kepatuhan standar Core Web Vitals.",
-    activityEyebrow: "03 // Aktivitas GitHub",
+    activityEyebrow: "Aktivitas GitHub",
     activityTitle1: "Konsistensi Koding.",
     activityTitle2: "Setiap Hari.",
     activityDesc: "Riwayat kontribusi dan aktivitas koding harian yang terhubung langsung dengan GitHub.",
@@ -228,7 +228,7 @@ export const TRANSLATIONS = {
     monthDec: "Des",
     less: "Sedikit",
     more: "Banyak",
-    projectsEyebrow: "04 // Proyek Pilihan",
+    projectsEyebrow: "Proyek & Karya Pilihan",
     projectsTitle1: "Karya &",
     projectsTitle2: "Proyek.",
     sliderHint: "Tekan tombol [←] [→] untuk melihat karya",
@@ -258,11 +258,11 @@ export const TRANSLATIONS = {
     exploreAllProjects: "Semua Karya (17)",
     btnReadReadme: "Overview Singkat",
     visualPreview: "Pratinjau Arsitektur Visual",
-    pricingEyebrow: "05 // Kalkulator Biaya Website",
+    pricingEyebrow: "Kalkulator Biaya Website",
     pricingTitle1: "Estimasi Biaya",
     pricingTitle2: "Website Interaktif.",
     pricingBio: "Pilih kebutuhan website Anda secara interaktif dan dapatkan estimasi harga instan yang siap dikonsultasikan via WhatsApp.",
-    studioEyebrow: "05 // Studio & Layanan Freelance",
+    studioEyebrow: "Studio & Layanan Freelance",
     studioTitle1: "Juga Menerima",
     studioTitle2: "Proyek Klien.",
     studioDesc: "Selain engineering personal, saya juga menerima proyek freelance pembuatan website profesional — dari landing page hingga custom web app.",
@@ -272,13 +272,13 @@ export const TRANSLATIONS = {
     studioCTATitle: "8 Paket Website + Kalkulator Biaya Interaktif",
     studioCTADesc: "Hitung estimasi biaya transparan, pilih fitur custom, dan kirim brief langsung via WhatsApp. Mulai Rp499K.",
     studioCTABtn: "Buka Web Studio",
-    contactEyebrow: "06 // Kontak & Diskusi",
+    contactEyebrow: "Kontak & Diskusi",
     contactTitle1: "Mari Kolaborasi &",
     contactTitle2: "Berkarya Bersama.",
     contactBio: "Terbuka untuk pekerjaan full-time, proyek freelance, atau diskusi ide baru. Mari bicarakan proyek Anda.",
     btnStartConv: "Kirim Pesan",
     scrollFooter: "Scroll untuk Detail & Footer [07]",
-    footerEyebrow: "07 // Footer & Kontak",
+    footerEyebrow: "Footer & Kontak",
     footerColStack: "Teknologi",
     footerColDesign: "Desain & Kredit",
     footerColInspiration: "INSPIRASI DESAIN",
@@ -963,30 +963,33 @@ export const initPreloaderTimeline = () => {
 
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
 
-    const targetEl = rocketCenter || flameNozzle;
-    if (targetEl && targetEl.isConnected) {
-      const rect = targetEl.getBoundingClientRect();
-      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
-        const nozzleX = rect.left + rect.width / 2;
-        const nozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
-        
-        // Steady lightweight generation (capped at 30 particles for 120fps)
-        const spawnRate = launchTriggered ? 2 : 1;
-        for (let i = 0; i < spawnRate; i++) {
-          if (smokeParticles.length < 30) {
-            smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-              y: nozzleY + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-              vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
-              radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
-              growth: launchTriggered ? 0.9 : 0.4,
-              maxRadius: launchTriggered ? 70 : 40,
-              alpha: launchTriggered ? 0.8 : 0.6,
-              decay: launchTriggered ? 0.018 : 0.009,
-            });
-          }
-        }
+    if (launchTriggered || !cachedNozzleX) {
+      const targetEl = rocketCenter || flameNozzle;
+      if (targetEl && targetEl.isConnected) {
+        const rect = targetEl.getBoundingClientRect();
+        cachedNozzleX = rect.left + rect.width / 2;
+        cachedNozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
+      }
+    }
+
+    const nozzleX = cachedNozzleX || (window.innerWidth / 2);
+    const nozzleY = cachedNozzleY || (window.innerHeight / 2 + 50);
+    
+    // Steady lightweight generation (capped at 25 particles for 120fps, 0 main-thread cost)
+    const spawnRate = launchTriggered ? 2 : 1;
+    for (let i = 0; i < spawnRate; i++) {
+      if (smokeParticles.length < 25) {
+        smokeParticles.push({
+          x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
+          y: nozzleY + (Math.random() - 0.5) * 2,
+          vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
+          vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
+          radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
+          growth: launchTriggered ? 0.9 : 0.4,
+          maxRadius: launchTriggered ? 70 : 40,
+          alpha: launchTriggered ? 0.8 : 0.6,
+          decay: launchTriggered ? 0.018 : 0.009,
+        });
       }
     }
 
@@ -1027,10 +1030,6 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
-    try {
-      window.dispatchEvent(new CustomEvent("start3D"));
-    } catch (e) {}
-
     preloaderEl.style.pointerEvents = "none";
     preloaderEl.classList.add("preloader-launching");
 
@@ -1047,9 +1046,14 @@ export const initPreloaderTimeline = () => {
   };
 
   const updateDisplay = (pct, text) => {
-    const roundPct = Math.round(pct);
-    if (barEl) barEl.style.width = `${roundPct}%`;
-    if (percentEl) percentEl.textContent = `${roundPct}`;
+    const clamped = Math.min(100, Math.max(0, pct));
+    const roundPct = Math.round(clamped);
+    const progress = clamped / 100;
+    if (barEl) {
+      barEl.style.transform = `scaleX(${progress})`;
+      barEl.style.width = "100%";
+    }
+    if (percentEl) percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
     if (statusEl && text) statusEl.textContent = text;
   };
 
@@ -1068,11 +1072,12 @@ export const initPreloaderTimeline = () => {
     else if (currentPct > 68) stageText = PRELOADER_STAGES[2].text;
     else if (currentPct > 30) stageText = PRELOADER_STAGES[1].text;
 
-    updateDisplay(currentPct, stageText);
+    updateDisplay(easeProgress * 100, stageText);
 
     if (progress < 1) {
       requestAnimationFrame(animStep);
     } else {
+      updateDisplay(100, PRELOADER_STAGES[3].text);
       setTimeout(triggerLaunch, 120);
     }
   };
@@ -1273,9 +1278,17 @@ export const initCritical = () => {
   });
   setTheme(currentTheme, false);
 
-  // Navigation & card tilt don't use GSAP — run immediately
+  // Navigation runs immediately
   initNavigationAndKeyboard();
-  initGlobalCardTilt();
+
+  // Card tilt is non-blocking — initialize on first pointer interaction
+  const startTilt = () => {
+    initGlobalCardTilt();
+    window.removeEventListener("pointermove", startTilt);
+    window.removeEventListener("pointerdown", startTilt);
+  };
+  window.addEventListener("pointermove", startTilt, { once: true, passive: true });
+  window.addEventListener("pointerdown", startTilt, { once: true, passive: true });
 
   // Language init (only parse DOM if user preferred non-English language)
   if (currentLang !== "en") {
@@ -1286,7 +1299,9 @@ export const initCritical = () => {
 };
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCritical);
+  document.addEventListener("DOMContentLoaded", () => {
+    requestAnimationFrame(initCritical);
+  });
 } else {
-  initCritical();
+  requestAnimationFrame(initCritical);
 }

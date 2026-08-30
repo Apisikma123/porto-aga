@@ -593,16 +593,16 @@
 
       <!-- Bottom Progress Track -->
       <div id="preloader-footer" class="relative z-20 space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
-        <div class="w-full h-1 bg-white/10 relative overflow-hidden rounded-full preloader-track">
+        <div class="w-full h-1.5 bg-white/10 relative overflow-hidden rounded-full preloader-track shadow-inner">
           <div
             id="preloader-bar"
-            class="absolute inset-y-0 left-0 bg-[#DC143C] rounded-full transition-all duration-150 ease-out"
-            style="width: 0%;"
+            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu transition-transform duration-75 ease-out"
+            style="transform: scaleX(0); transform-origin: left center;"
           ></div>
         </div>
-        <div class="flex justify-between items-center text-[0.68rem] sm:text-xs text-zinc-500 font-mono">
+        <div class="flex justify-between items-center text-xs text-zinc-400 font-mono">
           <span>8 Paket Pilihan &amp; Konsultasi Gratis</span>
-          <span class="text-zinc-400 font-semibold tracking-wider">PIPELINE LOAD</span>
+          <span class="text-zinc-300 font-semibold tracking-normal">PIPELINE LOAD</span>
         </div>
       </div>
     </div>
@@ -659,7 +659,7 @@
       aria-label="Section Navigation"
       class="fixed left-6 xl:left-10 top-1/2 -translate-y-1/2 z-30 hidden lg:block pointer-events-auto select-none transition-all duration-300"
     >
-      <p class="eyebrow mb-6 text-zinc-500 text-[0.6rem] tracking-[0.3em]">On this page</p>
+      <div class="font-mono mb-6 text-zinc-500 text-xs tracking-[0.2em] uppercase font-semibold">On this page</div>
       <ul class="space-y-3" id="side-nav">
         <li>
           <a href="/#start" class="side-nav-item group flex items-center text-left py-1">
@@ -719,7 +719,7 @@
     <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-16 sm:pt-20 pb-12">
       
       <!-- Top Navigation & Breadcrumb Back Button -->
-      <div class="flex items-center justify-between gap-4 mb-6 sm:mb-8">
+      <div class="flex items-center justify-start gap-4 mb-6 sm:mb-8">
         <a
           href="/"
           class="btn-back"
@@ -729,24 +729,22 @@
           <span class="hidden sm:inline" data-i18n="backBtn">Portofolio 3D</span>
           <span class="sm:hidden" data-i18n="backBtnSm">Portofolio</span>
         </a>
-        <span class="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-          <span data-i18n="openCommissions">Open for Commissions</span>
-        </span>
       </div>
 
       <!-- Page Hero Header -->
       <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14 px-1">
-        <p class="eyebrow mb-2 sm:mb-3 text-[0.65rem] sm:text-xs" data-i18n="heroEyebrow">
-          <span class="mr-2 sm:mr-3 tabular-nums text-zinc-500">05</span>Studio Commissions &amp; Services
-        </p>
+        <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+          <span class="tabular-nums text-zinc-500">05</span>
+          <span class="text-zinc-600">/</span>
+          <span data-i18n="heroEyebrow">Studio Commissions &amp; Services</span>
+        </div>
         <h1 class="display-title text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-white tracking-tight leading-tight mb-3 sm:mb-4">
           <span class="font-light" data-i18n="heroTitleLight">Bespoke Web Development</span> <br class="hidden sm:inline" />
           <span class="font-black text-white">
             <span data-i18n="heroTitleBold">&amp; Digital Architecture</span><span class="text-[#DC143C]">.</span>
           </span>
         </h1>
-        <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto mb-6" data-i18n="heroDesc">
+        <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto mb-6 break-words" data-i18n="heroDesc">
           Aplikasi web performa tinggi, landing page terarah, dan visual modern. Dikerjakan langsung dengan arsitektur bersih tanpa perantara.
         </p>
 
@@ -758,9 +756,11 @@
       <div class="mb-14 sm:mb-20">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6 px-1">
           <div>
-            <p class="eyebrow text-[0.65rem] sm:text-xs mb-1" data-i18n="tiersEyebrow">
-              <span class="mr-2 tabular-nums text-zinc-500">01</span>Commission Tiers
-            </p>
+            <div class="mb-1 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+              <span class="tabular-nums text-zinc-500">01</span>
+              <span class="text-zinc-600">/</span>
+              <span data-i18n="tiersEyebrow">Commission Tiers</span>
+            </div>
             <h2 class="display-title text-lg sm:text-2xl font-bold text-white" data-i18n="tiersTitle">Tiga Skala Pengerjaan</h2>
           </div>
           <p class="body-copy text-xs text-zinc-400 font-light" data-i18n="tiersDesc">Pilih paket langsung atau sesuaikan di kalkulator.</p>
@@ -916,7 +916,7 @@
       <div id="configurator-anchor" class="pt-6 mb-6">
         <div class="flex items-center gap-3">
           <div class="h-px bg-white/10 flex-1"></div>
-          <span class="eyebrow text-xs px-3 py-1 rounded-full bg-zinc-950/80 border border-white/10 text-zinc-400">
+          <span class="font-mono text-xs px-3 py-1 rounded-full bg-zinc-950/80 border border-white/10 text-zinc-400">
             <span class="mr-2 tabular-nums text-zinc-500">02</span><span data-i18n="configuratorEyebrow">Interactive Studio Configurator</span>
           </span>
           <div class="h-px bg-white/10 flex-1"></div>
@@ -933,7 +933,7 @@
             </div>
             <div class="min-w-0 flex-1">
               <div class="mb-0.5">
-                <span class="text-[0.6rem] sm:text-[0.65rem] text-zinc-400 font-mono uppercase tracking-wider font-semibold" data-i18n="liveEstimate">Estimasi Real-Time</span>
+                <span class="text-xs text-zinc-400 font-mono uppercase tracking-wider font-semibold" data-i18n="liveEstimate">Estimasi Real-Time</span>
               </div>
               <h3 id="top-package-name" class="text-xs sm:text-base font-bold text-white truncate">Landing Page</h3>
             </div>
@@ -942,7 +942,7 @@
           <!-- Price (Never Breaks / Shrinks Gracefully) -->
           <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-4 pt-2.5 sm:pt-0 border-t border-white/5 sm:border-t-0">
             <div class="text-left sm:text-right min-w-0">
-              <span class="text-[0.55rem] sm:text-[0.62rem] font-mono text-zinc-400 uppercase tracking-wider block" data-i18n="totalStartingEstimate">Total Estimasi Awal</span>
+              <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider block" data-i18n="totalStartingEstimate">Total Estimasi Awal</span>
               <div id="top-package-price" class="font-mono text-base sm:text-2xl md:text-3xl font-black text-white whitespace-nowrap tracking-tight">
                 Rp499.000
               </div>
@@ -1304,7 +1304,7 @@
               100
             </div>
             <h3 class="font-bold text-white text-sm mb-1" data-i18n="s1Title">Performa Sub-Detik</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl" style="max-width: 60ch;" data-i18n="s1Desc">
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl break-words" style="max-width: 60ch;" data-i18n="s1Desc">
               Skor Core Web Vitals 100 dengan waktu muat di bawah 0.8 detik. Fondasi teknis optimal untuk retensi dan SEO.
             </p>
             <span class="text-xs font-mono text-zinc-400 block border-t border-white/5 pt-2" data-i18n="s1Metric">Metrik: TTFB &lt; 200ms</span>
@@ -1315,7 +1315,7 @@
               <span class="material-symbols-outlined text-lg">terminal</span>
             </div>
             <h3 class="font-bold text-white text-sm mb-1" data-i18n="s2Title">Direct Engineering</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl" style="max-width: 60ch;" data-i18n="s2Desc">
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl break-words" style="max-width: 60ch;" data-i18n="s2Desc">
               Kolaborasi langsung dengan engineer yang menulis kode Anda. Diskusi teknis presisi tanpa perantara non-teknis.
             </p>
             <span class="text-xs font-mono text-zinc-400 block border-t border-white/5 pt-2" data-i18n="s2Metric">Komunikasi: Direct Developer Line</span>
@@ -1326,7 +1326,7 @@
               <span class="material-symbols-outlined text-lg">layers</span>
             </div>
             <h3 class="font-bold text-white text-sm mb-1" data-i18n="s3Title">Bespoke Architecture</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl" style="max-width: 60ch;" data-i18n="s3Desc">
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl break-words" style="max-width: 60ch;" data-i18n="s3Desc">
               Desain visual berkelas, tipografi presisi, dan animasi mikro responsif yang meningkatkan kredibilitas brand Anda.
             </p>
             <span class="text-xs font-mono text-zinc-400 block border-t border-white/5 pt-2" data-i18n="s3Metric">Standar: Cyber-Professional Spec</span>
@@ -1337,7 +1337,7 @@
               <span class="material-symbols-outlined text-lg">code</span>
             </div>
             <h3 class="font-bold text-white text-sm mb-1" data-i18n="s4Title">100% Hak Milik Kode</h3>
-            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl" style="max-width: 60ch;" data-i18n="s4Desc">
+            <p class="text-xs text-zinc-400 font-light leading-relaxed mb-3 max-w-xl break-words" style="max-width: 60ch;" data-i18n="s4Desc">
               Source code, aset, dan repositori Git diserahkan utuh. Bebas di-deploy ke provider mana pun tanpa lock-in.
             </p>
             <span class="text-xs font-mono text-zinc-400 block border-t border-white/5 pt-2" data-i18n="s4Metric">Status: Zero Vendor Lock-in</span>
@@ -1483,11 +1483,11 @@
           backBtn: "Portofolio 3D",
           backBtnSm: "Portofolio",
           openCommissions: "Open for Commissions",
-          heroEyebrow: "05 STUDIO COMMISSIONS & SERVICES",
+          heroEyebrow: "Studio Commissions & Services",
           heroTitleLight: "Bespoke Web Development",
           heroTitleBold: "& Digital Architecture",
           heroDesc: "Aplikasi web performa tinggi, landing page terarah, dan visual modern. Dikerjakan langsung dengan arsitektur bersih tanpa perantara.",
-          tiersEyebrow: "01 COMMISSION TIERS",
+          tiersEyebrow: "Commission Tiers",
           tiersTitle: "Tiga Skala Pengerjaan",
           tiersDesc: "Pilih paket langsung atau sesuaikan di kalkulator.",
           startingFrom: "Mulai dari",
@@ -1630,11 +1630,11 @@
           backBtn: "3D Portfolio",
           backBtnSm: "Portfolio",
           openCommissions: "Open for Commissions",
-          heroEyebrow: "05 STUDIO COMMISSIONS & SERVICES",
+          heroEyebrow: "Studio Commissions & Services",
           heroTitleLight: "Bespoke Web Development",
           heroTitleBold: "& Digital Architecture",
           heroDesc: "High-performance web applications, goal-driven landing pages, and cutting-edge aesthetics. Handcrafted with clean architecture and zero intermediaries.",
-          tiersEyebrow: "01 COMMISSION TIERS",
+          tiersEyebrow: "Commission Tiers",
           tiersTitle: "Three Core Service Tiers",
           tiersDesc: "Choose an instant tier or configure a custom project below.",
           startingFrom: "Starting from",
@@ -2466,9 +2466,14 @@
         };
 
         const updateDisplay = (pct, text) => {
-          const roundPct = Math.round(pct);
-          if (barEl) barEl.style.width = `${roundPct}%`;
-          if (percentEl) percentEl.textContent = `${roundPct}`;
+          const clamped = Math.min(100, Math.max(0, pct));
+          const roundPct = Math.round(clamped);
+          const progress = clamped / 100;
+          if (barEl) {
+            barEl.style.transform = `scaleX(${progress})`;
+            barEl.style.width = "100%";
+          }
+          if (percentEl) percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
           if (statusEl && text) statusEl.textContent = text;
         };
 
@@ -2487,11 +2492,12 @@
           else if (currentPct > 68) stageText = PRELOADER_STAGES[2].text;
           else if (currentPct > 30) stageText = PRELOADER_STAGES[1].text;
 
-          updateDisplay(currentPct, stageText);
+          updateDisplay(easeProgress * 100, stageText);
 
           if (progress < 1) {
             requestAnimationFrame(animStep);
           } else {
+            updateDisplay(100, PRELOADER_STAGES[3].text);
             setTimeout(triggerLaunch, 120);
           }
         };
@@ -2533,21 +2539,7 @@
           }
         }
 
-        function schedule3D() {
-          if ("requestIdleCallback" in window) {
-            requestIdleCallback(() => activate3D(), { timeout: 4000 });
-          } else {
-            setTimeout(activate3D, 2000);
-          }
-        }
-
-        if (document.readyState === "complete") {
-          schedule3D();
-        } else {
-          window.addEventListener("load", schedule3D, { once: true });
-        }
-
-        ["pointerdown", "touchstart", "wheel", "keydown", "scroll", "mousemove"].forEach((event) => {
+        ["pointerdown", "touchstart", "wheel", "keydown", "scroll", "mousemove", "click"].forEach((event) => {
           window.addEventListener(event, activate3D, { once: true, passive: true });
         });
       };

@@ -4,6 +4,9 @@
    ═══════════════════════════════════════════════════════════ */
 
 import { gsap } from "gsap";
+if (typeof window !== "undefined") {
+  window.gsap = gsap;
+}
 import { currentLang, getProtectedWhatsAppNumber } from "./critical.js";
 import { marked } from "marked";
 // highlight.js & atom-one-dark theme loaded lazily (964KB deferred from critical path)
@@ -153,18 +156,18 @@ export const FEATURED_PROJECTS = [
 
 export const createFeaturedProjectCardElement = (item, idx) => {
   const card = document.createElement("div");
-  card.className = "carousel-card glass-card spatial-card w-full shrink-0 basis-full min-w-full flex flex-col justify-between rounded-2xl border border-white/10 bg-zinc-950/85 overflow-hidden select-none cursor-default";
+  card.className = "carousel-card glass-card spatial-card w-full flex flex-col justify-between rounded-2xl border border-white/10 bg-zinc-950/85 overflow-hidden select-none cursor-default";
   card.dataset.tilt = "true";
   card.dataset.slideIndex = idx;
 
   let mediaHtml = "";
   if (item.isPhoneMockup) {
     mediaHtml = `
-      <div class="aspect-[21/9] sm:aspect-[21/8.5] max-h-[260px] sm:max-h-[300px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center">
+      <div class="aspect-[16/9] sm:aspect-[21/8.5] max-h-[190px] sm:max-h-[280px] w-full overflow-hidden relative border-b border-white/10 bg-gradient-to-b from-[#141724] via-[#0d0e17] to-[#07080e] flex items-center justify-center">
         <div class="absolute inset-0 bg-gradient-to-tr from-[#DC143C]/20 via-[#FF5500]/15 to-transparent blur-xl opacity-60 pointer-events-none"></div>
         <img
           alt="${item.imgAlt}"
-          class="relative z-10 h-full w-auto max-h-[230px] sm:max-h-[270px] max-w-[200px] object-contain py-2 opacity-95 pointer-events-none"
+          class="relative z-10 h-full w-auto max-h-[175px] sm:max-h-[250px] max-w-[180px] object-contain py-2 opacity-95 pointer-events-none"
           src="${item.imgSrc}"
           width="${item.imgWidth}"
           height="${item.imgHeight}"
@@ -175,12 +178,12 @@ export const createFeaturedProjectCardElement = (item, idx) => {
           sizes="(max-width: 640px) 140px, 220px"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 pointer-events-none"></div>
-        ${item.isFeaturedBadge ? '<span class="absolute top-3.5 right-3.5 font-mono text-xs bg-[#DC143C] text-white px-2.5 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
+        ${item.isFeaturedBadge ? '<span class="absolute top-3 right-3 font-mono text-xs bg-[#DC143C] text-white px-2 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
       </div>
     `;
   } else {
     mediaHtml = `
-      <div class="aspect-[21/9] sm:aspect-[21/8.5] max-h-[260px] sm:max-h-[300px] w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
+      <div class="aspect-[16/9] sm:aspect-[21/8.5] max-h-[190px] sm:max-h-[280px] w-full overflow-hidden relative border-b border-white/10 bg-zinc-950">
         <img
           alt="${item.imgAlt}"
           class="w-full h-full object-cover object-top opacity-90 pointer-events-none"
@@ -194,30 +197,30 @@ export const createFeaturedProjectCardElement = (item, idx) => {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 900px"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 pointer-events-none"></div>
-        ${item.isFeaturedBadge ? '<span class="absolute top-3.5 right-3.5 font-mono text-xs bg-[#DC143C] text-white px-2.5 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
+        ${item.isFeaturedBadge ? '<span class="absolute top-3 right-3 font-mono text-xs bg-[#DC143C] text-white px-2 py-0.5 rounded font-bold tracking-wider uppercase shadow-sm">Featured</span>' : ""}
       </div>
     `;
   }
 
   const tagsHtml = item.tags
-    .map((tag) => `<span class="px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/10">${tag}</span>`)
+    .map((tag) => `<span class="px-2 sm:px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/10 text-xs">${tag}</span>`)
     .join("\n                    ");
 
   card.innerHTML = `
     <div class="block select-none">
       ${mediaHtml}
-      <div class="p-5 sm:p-6 md:p-7">
-        <div class="flex justify-between items-center mb-2">
+      <div class="p-4 sm:p-6 md:p-7">
+        <div class="flex justify-between items-center mb-1.5 sm:mb-2">
           <span class="eyebrow text-xs text-[#FF385C]" data-i18n="${item.tagI18n}">${item.tagFallback}</span>
           <span class="font-mono text-xs text-[#FF385C] font-semibold" data-i18n="${item.statusI18n}">${item.statusFallback}</span>
         </div>
-        <h3 class="font-bold text-lg sm:text-xl md:text-2xl text-white mb-2 line-clamp-1" data-i18n="${item.titleI18n}">
+        <h3 class="font-bold text-base sm:text-xl md:text-2xl text-white mb-1.5 sm:mb-2 line-clamp-1" data-i18n="${item.titleI18n}">
           ${item.titleFallback}
         </h3>
-        <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4 max-w-xl" style="max-width: 60ch;" data-i18n="${item.descI18n}">
+        <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-3 sm:mb-4 max-w-xl line-clamp-2 sm:line-clamp-none break-words" style="max-width: 60ch;" data-i18n="${item.descI18n}">
           ${item.descFallback}
         </p>
-        <div class="flex gap-2 flex-wrap font-mono text-xs text-zinc-400">
+        <div class="flex gap-1.5 sm:gap-2 flex-wrap font-mono text-xs text-zinc-400">
           ${tagsHtml}
         </div>
       </div>
@@ -238,17 +241,21 @@ export const renderFeaturedProjectsCarousel = () => {
   });
   track.appendChild(fragment);
 
-  updateCarouselUI(currentProjectSlide, true);
+  updateCarouselUI(currentProjectSlide);
 };
 window.renderFeaturedProjectsCarousel = renderFeaturedProjectsCarousel;
 
-let slideTimeout = null;
+let isProjectAnimating = false;
 
-export const updateCarouselUI = (index, immediate = false) => {
+export const updateCarouselUI = (index, animate = false, explicitDirection = null) => {
   const track = document.getElementById("projects-carousel-track");
   const cards = track ? track.querySelectorAll(".carousel-card") : [];
   const total = cards.length || TOTAL_PROJECT_SLIDES;
-  currentProjectSlide = Math.max(0, Math.min(total - 1, index));
+  const targetIndex = Math.max(0, Math.min(total - 1, index));
+
+  const prevIndex = currentProjectSlide;
+  const dir = explicitDirection !== null ? explicitDirection : targetIndex >= prevIndex ? 1 : -1;
+  currentProjectSlide = targetIndex;
 
   const counterEl = document.getElementById("carousel-counter");
   if (counterEl) {
@@ -266,29 +273,74 @@ export const updateCarouselUI = (index, immediate = false) => {
     }
   });
 
-  if (track) {
-    if (immediate) {
-      track.classList.remove("is-sliding");
-      track.style.transform = `translateX(-${currentProjectSlide * 100}%)`;
-    } else {
-      track.classList.add("is-sliding");
-      track.style.transform = `translateX(-${currentProjectSlide * 100}%)`;
-      if (slideTimeout) clearTimeout(slideTimeout);
-      slideTimeout = setTimeout(() => {
-        track.classList.remove("is-sliding");
-      }, 550);
-    }
-  }
+  const prevCard = cards[prevIndex];
+  const nextCard = cards[currentProjectSlide];
 
-  cards.forEach((c, idx) => {
-    const isActive = idx === currentProjectSlide;
-    c.setAttribute("aria-hidden", isActive ? "false" : "true");
-    if (isActive) {
-      c.removeAttribute("inert");
-    } else {
-      c.setAttribute("inert", "");
-    }
-  });
+  if (animate && prevCard && nextCard && prevCard !== nextCard && gsap && !isProjectAnimating) {
+    isProjectAnimating = true;
+
+    prevCard.classList.remove("is-active", "is-inactive");
+    prevCard.classList.add("is-animating");
+    nextCard.classList.remove("is-active", "is-inactive");
+    nextCard.classList.add("is-animating");
+    nextCard.removeAttribute("inert");
+    nextCard.setAttribute("aria-hidden", "false");
+
+    // Smooth Kinetic Outgoing Glide
+    gsap.fromTo(
+      prevCard,
+      { opacity: 1, x: 0, scale: 1 },
+      {
+        opacity: 0,
+        x: -45 * dir,
+        scale: 0.95,
+        duration: 0.32,
+        ease: "power2.inOut",
+        onComplete: () => {
+          prevCard.classList.remove("is-animating", "is-active");
+          prevCard.classList.add("is-inactive");
+          prevCard.setAttribute("inert", "");
+          prevCard.setAttribute("aria-hidden", "true");
+          gsap.set(prevCard, { clearProps: "transform,scale,opacity" });
+        },
+      }
+    );
+
+    // Elegant Incoming Directional Slide & Depth Unfurl
+    gsap.fromTo(
+      nextCard,
+      { opacity: 0, x: 45 * dir, scale: 0.95 },
+      {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        duration: 0.38,
+        ease: "power3.out",
+        onComplete: () => {
+          nextCard.classList.remove("is-animating", "is-inactive");
+          nextCard.classList.add("is-active");
+          gsap.set(nextCard, { clearProps: "transform,scale,opacity" });
+          isProjectAnimating = false;
+        },
+      }
+    );
+  } else {
+    cards.forEach((c, idx) => {
+      const isActive = idx === currentProjectSlide;
+      c.setAttribute("aria-hidden", isActive ? "false" : "true");
+      c.classList.remove("is-animating");
+      if (isActive) {
+        c.removeAttribute("inert");
+        c.classList.remove("is-inactive");
+        c.classList.add("is-active");
+        if (gsap) gsap.set(c, { clearProps: "transform,scale,opacity" });
+      } else {
+        c.setAttribute("inert", "");
+        c.classList.remove("is-active");
+        c.classList.add("is-inactive");
+      }
+    });
+  }
 };
 
 window.slideProjectsCarousel = (direction) => {
@@ -298,11 +350,12 @@ window.slideProjectsCarousel = (direction) => {
   let nextSlide = currentProjectSlide + direction;
   if (nextSlide >= total) nextSlide = 0;
   if (nextSlide < 0) nextSlide = total - 1;
-  window.goToProjectSlide(nextSlide);
+  updateCarouselUI(nextSlide, true, direction);
 };
 
 window.goToProjectSlide = (index) => {
-  updateCarouselUI(index);
+  const dir = index > currentProjectSlide ? 1 : -1;
+  updateCarouselUI(index, true, dir);
 };
 
 export const initProjectsCarousel = () => {
@@ -320,7 +373,6 @@ export const initProjectsCarousel = () => {
     "touchstart",
     (e) => {
       touchStartX = e.changedTouches[0].screenX;
-      track.classList.add("is-sliding");
     },
     { passive: true }
   );
@@ -331,8 +383,6 @@ export const initProjectsCarousel = () => {
       const diff = touchStartX - touchEndX;
       if (Math.abs(diff) > 40) {
         window.slideProjectsCarousel(diff > 0 ? 1 : -1);
-      } else {
-        track.classList.remove("is-sliding");
       }
     },
     { passive: true }
@@ -343,12 +393,18 @@ export const initProjectsCarousel = () => {
 // PRICING MARKETING CAROUSEL CONTROLLER (Section 05)
 // ═══════════════════════════════════════════════════════════
 let currentPricingSlide = 0;
+let isPricingAnimating = false;
 
-export const updatePricingCarouselUI = (index) => {
+export const updatePricingCarouselUI = (index, animate = false, explicitDirection = null) => {
   const track = document.getElementById("pricing-cards-track");
   const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
   const total = cards.length || 3;
-  currentPricingSlide = Math.max(0, Math.min(total - 1, index));
+  const isMobile = window.innerWidth < 768;
+  const targetIndex = Math.max(0, Math.min(total - 1, index));
+
+  const prevIndex = currentPricingSlide;
+  const dir = explicitDirection !== null ? explicitDirection : targetIndex >= prevIndex ? 1 : -1;
+  currentPricingSlide = targetIndex;
 
   const counterEl = document.getElementById("pricing-carousel-counter");
   if (counterEl) {
@@ -365,71 +421,109 @@ export const updatePricingCarouselUI = (index) => {
       dot.classList.add("bg-white/20", "opacity-40");
     }
   });
+
+  if (isMobile) {
+    const prevCard = cards[prevIndex];
+    const nextCard = cards[currentPricingSlide];
+
+    if (animate && prevCard && nextCard && prevCard !== nextCard && gsap && !isPricingAnimating) {
+      isPricingAnimating = true;
+
+      prevCard.classList.remove("hidden");
+      prevCard.classList.add("flex");
+      nextCard.classList.remove("hidden");
+      nextCard.classList.add("flex");
+      nextCard.removeAttribute("inert");
+      nextCard.setAttribute("aria-hidden", "false");
+
+      gsap.fromTo(
+        prevCard,
+        { opacity: 1, x: 0, scale: 1 },
+        {
+          opacity: 0,
+          x: -45 * dir,
+          scale: 0.95,
+          duration: 0.32,
+          ease: "power2.inOut",
+          onComplete: () => {
+            prevCard.classList.remove("flex");
+            prevCard.classList.add("hidden");
+            prevCard.setAttribute("aria-hidden", "true");
+            prevCard.setAttribute("inert", "");
+            gsap.set(prevCard, { clearProps: "transform,scale,opacity" });
+          },
+        }
+      );
+
+      gsap.fromTo(
+        nextCard,
+        { opacity: 0, x: 45 * dir, scale: 0.95 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.38,
+          ease: "power3.out",
+          onComplete: () => {
+            gsap.set(nextCard, { clearProps: "transform,scale,opacity" });
+            isPricingAnimating = false;
+          },
+        }
+      );
+    } else {
+      cards.forEach((card, idx) => {
+        const isActive = idx === currentPricingSlide;
+        if (isActive) {
+          card.classList.remove("hidden");
+          card.classList.add("flex");
+          card.removeAttribute("inert");
+          card.setAttribute("aria-hidden", "false");
+          if (gsap) gsap.set(card, { clearProps: "transform,scale,opacity" });
+        } else {
+          card.classList.remove("flex");
+          card.classList.add("hidden");
+          card.setAttribute("inert", "");
+          card.setAttribute("aria-hidden", "true");
+        }
+      });
+    }
+  } else {
+    cards.forEach((card) => {
+      card.classList.remove("hidden");
+      card.classList.add("flex", "md:flex");
+      card.removeAttribute("inert");
+      card.setAttribute("aria-hidden", "false");
+      if (gsap) gsap.set(card, { clearProps: "transform,scale,opacity" });
+    });
+  }
 };
 
 window.slidePricingCarousel = (direction) => {
   const track = document.getElementById("pricing-cards-track");
   const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
   const total = cards.length || 3;
-  const nextSlide = Math.max(0, Math.min(total - 1, currentPricingSlide + direction));
-  window.goToPricingSlide(nextSlide);
+  let nextSlide = currentPricingSlide + direction;
+  if (nextSlide >= total) nextSlide = 0;
+  if (nextSlide < 0) nextSlide = total - 1;
+  window.goToPricingSlide(nextSlide, true, direction);
 };
 
-window.goToPricingSlide = (index) => {
-  const track = document.getElementById("pricing-cards-track");
-  const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
-  if (track && cards[index]) {
-    const targetCard = cards[index];
-    const targetLeft = targetCard.offsetLeft - track.offsetLeft - (track.clientWidth - targetCard.offsetWidth) / 2;
-    track.scrollTo({
-      left: Math.max(0, targetLeft),
-      behavior: "smooth",
-    });
-  }
-  updatePricingCarouselUI(index);
+window.goToPricingSlide = (index, animate = true, direction = null) => {
+  updatePricingCarouselUI(index, animate, direction);
 };
 
 export const initPricingMarketingCarousel = () => {
   const track = document.getElementById("pricing-cards-track");
   if (!track) return;
 
-  if (window.enableDragToScroll) {
-    window.enableDragToScroll(track);
-  }
+  updatePricingCarouselUI(0);
 
-  let isTicking = false;
-  const calculateActiveSlide = () => {
-    const cards = track.querySelectorAll(".pricing-carousel-card");
-    if (!cards.length) {
-      isTicking = false;
-      return;
-    }
-    let closestIndex = 0;
-    let minDiff = Infinity;
-    const currentCenter = track.scrollLeft + track.clientWidth / 2;
-
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
-      const diff = Math.abs(currentCenter - cardCenter);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestIndex = idx;
-      }
-    });
-
-    if (closestIndex !== currentPricingSlide) {
-      updatePricingCarouselUI(closestIndex);
-    }
-    isTicking = false;
-  };
-
-  track.addEventListener(
-    "scroll",
+  let resizeTimer;
+  window.addEventListener(
+    "resize",
     () => {
-      if (!isTicking) {
-        requestAnimationFrame(calculateActiveSlide);
-        isTicking = true;
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => updatePricingCarouselUI(currentPricingSlide), 100);
     },
     { passive: true }
   );

@@ -862,7 +862,7 @@ export const initThreeEngine = () => {
   scrollTl
     .to(
       tesseractGroup.position,
-      { x: 0, y: isMobile ? 2.4 : 2.2, z: isMobile ? -1.0 : -0.8, ease: "power2.inOut", duration: 1 },
+      { x: 0, y: isMobile ? 3.5 : 2.2, z: isMobile ? -2.2 : -0.8, ease: "power2.inOut", duration: 1 },
       2
     )
     .to(
@@ -872,7 +872,7 @@ export const initThreeEngine = () => {
     )
     .to(
       tesseractGroup.scale,
-      { x: isMobile ? 0.30 : 0.68, y: isMobile ? 0.30 : 0.68, z: isMobile ? 0.30 : 0.68, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0.18 : 0.68, y: isMobile ? 0.18 : 0.68, z: isMobile ? 0.18 : 0.68, ease: "power2.inOut", duration: 1 },
       2
     )
     .to(
@@ -887,12 +887,22 @@ export const initThreeEngine = () => {
     )
     .to(
       polyhedronGroup.position,
-      { x: isMobile ? 1.2 : 3.0, y: 2.4, z: -1.2, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0 : 3.0, y: isMobile ? 6.0 : 2.4, z: isMobile ? -6.0 : -1.2, ease: "power2.inOut", duration: 1 },
+      2
+    )
+    .to(
+      polyhedronGroup.scale,
+      { x: isMobile ? 0.001 : 1, y: isMobile ? 0.001 : 1, z: isMobile ? 0.001 : 1, ease: "power2.inOut", duration: 1 },
       2
     )
     .to(
       gyroRingsGroup.position,
-      { x: isMobile ? -1.2 : -3.0, y: 2.4, z: -1.2, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0 : -3.0, y: isMobile ? 6.0 : 2.4, z: isMobile ? -6.0 : -1.2, ease: "power2.inOut", duration: 1 },
+      2
+    )
+    .to(
+      gyroRingsGroup.scale,
+      { x: isMobile ? 0.001 : 1, y: isMobile ? 0.001 : 1, z: isMobile ? 0.001 : 1, ease: "power2.inOut", duration: 1 },
       2
     )
     .to(

@@ -152,6 +152,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.05em;
+    text-transform: none;
     color: #FF385C !important;
   }
 
@@ -431,7 +432,7 @@
     font-weight: 600;
     letter-spacing: 0.15em;
     padding: 0.25rem 0.6rem;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     transition: all 0.25s ease;
   }
 
@@ -745,35 +746,69 @@
   clip-path: inset(0 round 1rem) !important;
 }
 
-.carousel-card {
+#projects-carousel-track {
+  display: grid;
+  grid-template-columns: 1fr;
   width: 100%;
-  flex: 0 0 100%;
-  min-width: 100%;
-  contain: paint;
-  transition: opacity 0.3s ease;
+  position: relative;
 }
 
-.carousel-card[aria-hidden="true"] {
-  visibility: hidden;
-  opacity: 0;
+.carousel-card {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  contain: layout paint;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+}
+
+.carousel-card.is-inactive {
+  display: none !important;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
-.carousel-card[aria-hidden="false"] {
-  visibility: visible;
-  opacity: 1;
+.carousel-card.is-active {
+  display: flex !important;
   pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
 }
 
-#projects-carousel-track.is-sliding .carousel-card {
-  visibility: visible !important;
-  opacity: 1 !important;
+.carousel-card.is-animating {
+  display: flex !important;
+  pointer-events: none;
+  visibility: visible;
+  z-index: 15;
 }
 
 .pricing-carousel-card {
   height: 100%;
+  width: 100%;
+  max-width: 100%;
   align-self: stretch;
-  overflow: visible;
+  overflow: hidden;
+  contain: layout paint;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+}
+
+@media (max-width: 767.98px) {
+  #pricing-cards-track {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    position: relative !important;
+  }
+
+  .pricing-carousel-card {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+  }
 }
 
 
