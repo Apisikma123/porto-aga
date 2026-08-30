@@ -16,8 +16,8 @@
                       (typeof window !== "undefined" && (
                         (window.innerWidth >= 1340 && window.innerWidth <= 1360) ||
                         (window.outerWidth >= 1340 && window.outerWidth <= 1360) ||
-                        (typeof screen !== "undefined" && (screen.width === 1350 || screen.availWidth === 1350)) ||
-                        (window.innerWidth === 412 || window.outerWidth === 412 || (typeof screen !== "undefined" && (screen.width === 412 || screen.width === 360 || screen.width === 393)) || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua)))
+                        (typeof screen !== "undefined" && (screen.width === 1350 || screen.availWidth === 1350 || screen.width === 412 || screen.width === 360 || screen.width === 393 || screen.availWidth === 412)) ||
+                        (window.innerWidth === 412 || window.outerWidth === 412 || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua)))
                       ));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
