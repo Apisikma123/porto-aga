@@ -55,8 +55,8 @@ function activate3D() {
   });
 }
 
-// Activation on real user gesture (mouse move, pointer down, touch, scroll, keydown, click)
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
+// Activation on real user gesture or preloader blast-off
+["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click", "start3D"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
   window.addEventListener(event, loadNonCritical, { once: true, passive: true });
 });

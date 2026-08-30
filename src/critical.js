@@ -1027,6 +1027,10 @@ export const initPreloaderTimeline = () => {
     if (launchTriggered) return;
     launchTriggered = true;
 
+    try {
+      window.dispatchEvent(new CustomEvent("start3D"));
+    } catch (e) {}
+
     preloaderEl.style.pointerEvents = "none";
     preloaderEl.classList.add("preloader-launching");
 

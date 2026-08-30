@@ -318,14 +318,7 @@
         window.addEventListener("touchstart", loadFonts, { passive: true, once: true });
         window.addEventListener("mousemove", loadFonts, { passive: true, once: true });
         window.addEventListener("keydown", loadFonts, { passive: true, once: true });
-
-        if (document.documentElement.classList.contains("is-real-user")) {
-          if ("requestIdleCallback" in window) {
-            requestIdleCallback(loadFonts, { timeout: 4000 });
-          } else {
-            setTimeout(loadFonts, 4000);
-          }
-        }
+        window.addEventListener("start3D", loadFonts, { passive: true, once: true });
       })();
     </script>
 
