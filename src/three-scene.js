@@ -106,7 +106,7 @@ export const initThreeEngine = () => {
   modelWrapper.rotation.set(0.45, 0.65, 0.15);
   tesseractGroup.add(modelWrapper);
 
-  const redCoreLight = new THREE.PointLight(0xff2210, 3.6, 14, 1.2);
+  const redCoreLight = new THREE.PointLight(0xdc143c, 4.0, 14, 1.2);
   redCoreLight.position.set(0, 0, 0);
   modelWrapper.add(redCoreLight);
 
@@ -200,7 +200,7 @@ export const initThreeEngine = () => {
   // Large Orbital Celestial Halo Rings (Responsive on Mobile)
   const ringGeom = new THREE.TorusGeometry(isMobile ? 0.95 : 1.65, isMobile ? 0.010 : 0.015, 16, 100);
   const ringMat = new THREE.MeshBasicMaterial({
-    color: 0xff2010,
+    color: 0xdc143c,
     transparent: true,
     opacity: 0.65,
     blending: THREE.AdditiveBlending,
@@ -242,22 +242,97 @@ export const initThreeEngine = () => {
     }
   );
 
+  // ─── Procedural Luxury Embossed Ketupat (Diamond Weave) Texture Engine ───
+  const createKetupatTextures = () => {
+    const size = 256;
+    const canvasColor = document.createElement("canvas");
+    canvasColor.width = size;
+    canvasColor.height = size;
+    const ctxColor = canvasColor.getContext("2d");
+
+    const canvasBump = document.createElement("canvas");
+    canvasBump.width = size;
+    canvasBump.height = size;
+    const ctxBump = canvasBump.getContext("2d");
+
+    // Dark Obsidian Base
+    ctxColor.fillStyle = "#111319";
+    ctxColor.fillRect(0, 0, size, size);
+
+    ctxBump.fillStyle = "#000000";
+    ctxBump.fillRect(0, 0, size, size);
+
+    const drawKetupat = (cx, cy) => {
+      // Outer Diamond
+      const drawRhombus = (ctx, radius, stroke, width, fill) => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - radius);
+        ctx.lineTo(cx + radius, cy);
+        ctx.lineTo(cx, cy + radius);
+        ctx.lineTo(cx - radius, cy);
+        ctx.closePath();
+        if (fill) {
+          ctx.fillStyle = fill;
+          ctx.fill();
+        }
+        if (stroke) {
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = width;
+          ctx.stroke();
+        }
+        ctx.restore();
+      };
+
+      // 1. Base Diamond Weave Ribs
+      drawRhombus(ctxColor, size * 0.48, "#2d3444", 8, "#161822");
+      drawRhombus(ctxBump, size * 0.48, "#666666", 10, "#1a1a1a");
+
+      // 2. High-Contrast Beveled Ketupat Ridge
+      drawRhombus(ctxColor, size * 0.36, "#727d94", 4, "#13151d");
+      drawRhombus(ctxBump, size * 0.36, "#ffffff", 6, "#333333");
+
+      // 3. Inner Concentric Ketupat Core
+      drawRhombus(ctxColor, size * 0.22, "#4a5366", 3, "#1a1d26");
+      drawRhombus(ctxBump, size * 0.22, "#cccccc", 4, "#555555");
+
+      // 4. Center Accent Jewel
+      drawRhombus(ctxColor, size * 0.08, "#8894ab", 2, "#262b3a");
+      drawRhombus(ctxBump, size * 0.08, "#ffffff", 2, "#888888");
+    };
+
+    // Draw center and 4 corners for 100% seamless infinite tiling
+    const gridPoints = [
+      [size / 2, size / 2],
+      [0, 0],
+      [size, 0],
+      [0, size],
+      [size, size]
+    ];
+
+    gridPoints.forEach(([gx, gy]) => {
+      drawKetupat(gx, gy);
+    });
+
+    const colorTex = new THREE.CanvasTexture(canvasColor);
+    colorTex.wrapS = THREE.RepeatWrapping;
+    colorTex.wrapT = THREE.RepeatWrapping;
+    colorTex.repeat.set(4, 4);
+    colorTex.colorSpace = THREE.SRGBColorSpace;
+
+    const bumpTex = new THREE.CanvasTexture(canvasBump);
+    bumpTex.wrapS = THREE.RepeatWrapping;
+    bumpTex.wrapT = THREE.RepeatWrapping;
+    bumpTex.repeat.set(4, 4);
+    bumpTex.colorSpace = THREE.NoColorSpace;
+
+    return { colorTex, bumpTex };
+  };
+
+  const { colorTex: ketupatColorMap, bumpTex: ketupatBumpMap } = createKetupatTextures();
+
   // Dynamic Texture Loading (TextureLoader - WebP Optimized with LoadingManager)
   const textureLoader = new THREE.TextureLoader(loadingManager);
-
-  const colorMap = textureLoader.load("/textures/box001.webp");
-  colorMap.colorSpace = THREE.SRGBColorSpace;
-  colorMap.wrapS = THREE.RepeatWrapping;
-  colorMap.wrapT = THREE.RepeatWrapping;
-  colorMap.repeat.set(32, 32);
-  colorMap.flipY = false;
-
-  const bumpMap = textureLoader.load("/textures/brown_leather_disp_1k.webp");
-  bumpMap.colorSpace = THREE.NoColorSpace;
-  bumpMap.wrapS = THREE.RepeatWrapping;
-  bumpMap.wrapT = THREE.RepeatWrapping;
-  bumpMap.repeat.set(32, 32);
-  bumpMap.flipY = false;
 
   // 3. GPU Warmup & Shader Pre-compilation (Single efficient pass)
   const executeGPUWarmup = () => {
@@ -265,8 +340,8 @@ export const initThreeEngine = () => {
     warmupExecuted = true;
     try {
       if (renderer && renderer.initTexture) {
-        if (colorMap && colorMap.image) renderer.initTexture(colorMap);
-        if (bumpMap && bumpMap.image) renderer.initTexture(bumpMap);
+        if (ketupatColorMap) renderer.initTexture(ketupatColorMap);
+        if (ketupatBumpMap) renderer.initTexture(ketupatBumpMap);
       }
 
       if (renderer && scene && camera) {
@@ -310,44 +385,37 @@ export const initThreeEngine = () => {
             }
           }
 
-          if (child.material) {
-            const materials = Array.isArray(child.material)
-              ? child.material
-              : [child.material];
+          const matName = (child.material && child.material.name) ? child.material.name.toLowerCase() : "";
+          const isOuterBox = matName === "box_out" || child.name.toLowerCase().includes("box_out") ||
+            ["object_4", "object_7", "object_10", "object_13", "object_16", "object_19", "object_22", "object_25"].some(name => child.name.toLowerCase().includes(name));
 
-            materials.forEach((mat) => {
-              if (
-                mat.name === "box_out" ||
-                (child.material && child.material.name === "box_out") ||
-                child.name.toLowerCase().includes("box_out")
-              ) {
-                if (mat.color) {
-                  mat.color.setHex(0x78808d);
-                }
-
-                mat.map = colorMap;
-                mat.bumpMap = bumpMap;
-                mat.bumpScale = 0.08;
-                mat.roughnessMap = bumpMap;
-                if ("roughness" in mat) mat.roughness = 0.65;
-                if ("metalness" in mat) mat.metalness = 0.85;
-                if ("envMapIntensity" in mat) mat.envMapIntensity = 1.2;
-                mat.needsUpdate = true;
-
-                console.log("Tekstur dipasang pada:", child.name);
-              } else if (
-                mat.name === "box_in" || mat.name.toLowerCase().includes("inner") ||
-                (child.material && child.material.name === "box_in") ||
-                child.name.toLowerCase().includes("box_in")
-              ) {
-                if (mat.color) {
-                  mat.color.setHex(0xcc1026);
-                }
-                mat.map = colorMap;
-                mat.emissive = new THREE.Color(0x280004);
-                mat.emissiveIntensity = 0.5;
-                mat.needsUpdate = true;
-              }
+          if (isOuterBox) {
+            // Matte Black Embossed Ketupat Weave (High-Definition 3D Relief)
+            child.material = new THREE.MeshPhysicalMaterial({
+              color: 0x181a22,
+              map: ketupatColorMap,
+              bumpMap: ketupatBumpMap,
+              bumpScale: 0.32, // Strong 3D embossed ketupat relief lines
+              roughness: 0.30,
+              metalness: 0.75,
+              clearcoat: 0.25,
+              clearcoatRoughness: 0.12,
+              reflectivity: 0.65,
+              envMapIntensity: 0.85,
+            });
+            console.log("Embossed Ketupat material applied to:", child.name);
+          } else {
+            // Inner Core Cubes (Pure Vibrant Brand Primary Crimson #DC143C)
+            child.material = new THREE.MeshPhysicalMaterial({
+              color: 0xdc143c, // Website Brand Primary Crimson
+              emissive: new THREE.Color(0xdc143c),
+              emissiveIntensity: 0.95,
+              roughness: 0.15,
+              metalness: 0.35,
+              clearcoat: 1.0,
+              clearcoatRoughness: 0.02,
+              reflectivity: 1.0,
+              envMapIntensity: 1.8,
             });
           }
         }
@@ -1194,13 +1262,13 @@ export const initThreeEngine = () => {
     modelWrapper.rotation.x += 0.002;
     modelWrapper.rotation.z = mouseX * 0.08;
 
-    // Kinetic holographic texture looping offset (refined micro-drift)
-    if (colorMap) {
-      colorMap.offset.x = (colorMap.offset.x + delta * 0.004) % 1;
-      colorMap.offset.y = (colorMap.offset.y + delta * 0.002) % 1;
-      if (bumpMap) {
-        bumpMap.offset.x = colorMap.offset.x;
-        bumpMap.offset.y = colorMap.offset.y;
+    // Kinetic embossed ketupat texture looping offset
+    if (ketupatColorMap) {
+      ketupatColorMap.offset.x = (ketupatColorMap.offset.x + delta * 0.008) % 1;
+      ketupatColorMap.offset.y = (ketupatColorMap.offset.y + delta * 0.004) % 1;
+      if (ketupatBumpMap) {
+        ketupatBumpMap.offset.x = ketupatColorMap.offset.x;
+        ketupatBumpMap.offset.y = ketupatColorMap.offset.y;
       }
     }
 
