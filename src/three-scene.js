@@ -249,14 +249,14 @@ export const initThreeEngine = () => {
   colorMap.colorSpace = THREE.SRGBColorSpace;
   colorMap.wrapS = THREE.RepeatWrapping;
   colorMap.wrapT = THREE.RepeatWrapping;
-  colorMap.repeat.set(2, 2);
+  colorMap.repeat.set(32, 32);
   colorMap.flipY = false;
 
   const bumpMap = textureLoader.load("/textures/brown_leather_disp_1k.webp");
   bumpMap.colorSpace = THREE.NoColorSpace;
   bumpMap.wrapS = THREE.RepeatWrapping;
   bumpMap.wrapT = THREE.RepeatWrapping;
-  bumpMap.repeat.set(2, 2);
+  bumpMap.repeat.set(32, 32);
   bumpMap.flipY = false;
 
   // 3. GPU Warmup & Shader Pre-compilation (Single efficient pass)
@@ -322,12 +322,16 @@ export const initThreeEngine = () => {
                 child.name.toLowerCase().includes("box_out")
               ) {
                 if (mat.color) {
-                  mat.color.setHex(0xffffff);
+                  mat.color.setHex(0x78808d);
                 }
 
                 mat.map = colorMap;
                 mat.bumpMap = bumpMap;
-                mat.bumpScale = 0.05;
+                mat.bumpScale = 0.08;
+                mat.roughnessMap = bumpMap;
+                if ("roughness" in mat) mat.roughness = 0.65;
+                if ("metalness" in mat) mat.metalness = 0.85;
+                if ("envMapIntensity" in mat) mat.envMapIntensity = 1.2;
                 mat.needsUpdate = true;
 
                 console.log("Tekstur dipasang pada:", child.name);
@@ -337,11 +341,11 @@ export const initThreeEngine = () => {
                 child.name.toLowerCase().includes("box_in")
               ) {
                 if (mat.color) {
-                  mat.color.setHex(0xff0028);
+                  mat.color.setHex(0xcc1026);
                 }
                 mat.map = colorMap;
-                mat.emissive = new THREE.Color(0x3a0006);
-                mat.emissiveIntensity = 0.6;
+                mat.emissive = new THREE.Color(0x280004);
+                mat.emissiveIntensity = 0.5;
                 mat.needsUpdate = true;
               }
             });
@@ -1190,10 +1194,10 @@ export const initThreeEngine = () => {
     modelWrapper.rotation.x += 0.002;
     modelWrapper.rotation.z = mouseX * 0.08;
 
-    // Kinetic holographic texture looping offset
+    // Kinetic holographic texture looping offset (refined micro-drift)
     if (colorMap) {
-      colorMap.offset.x = (colorMap.offset.x + delta * 0.035) % 1;
-      colorMap.offset.y = (colorMap.offset.y + delta * 0.018) % 1;
+      colorMap.offset.x = (colorMap.offset.x + delta * 0.004) % 1;
+      colorMap.offset.y = (colorMap.offset.y + delta * 0.002) % 1;
       if (bumpMap) {
         bumpMap.offset.x = colorMap.offset.x;
         bumpMap.offset.y = colorMap.offset.y;
