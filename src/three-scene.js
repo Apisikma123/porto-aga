@@ -106,7 +106,7 @@ export const initThreeEngine = () => {
   modelWrapper.rotation.set(0.45, 0.65, 0.15);
   tesseractGroup.add(modelWrapper);
 
-  const redCoreLight = new THREE.PointLight(0xdc143c, 4.0, 14, 1.2);
+  const redCoreLight = new THREE.PointLight(0x8a0a1c, 2.2, 14, 1.2);
   redCoreLight.position.set(0, 0, 0);
   modelWrapper.add(redCoreLight);
 
@@ -405,17 +405,17 @@ export const initThreeEngine = () => {
             });
             console.log("Embossed Ketupat material applied to:", child.name);
           } else {
-            // Inner Core Cubes (Pure Vibrant Brand Primary Crimson #DC143C)
+            // Inner Core Cubes (Deep Dark Crimson / Blood Velvet Red)
             child.material = new THREE.MeshPhysicalMaterial({
-              color: 0xdc143c, // Website Brand Primary Crimson
-              emissive: new THREE.Color(0xdc143c),
-              emissiveIntensity: 0.95,
-              roughness: 0.15,
-              metalness: 0.35,
-              clearcoat: 1.0,
-              clearcoatRoughness: 0.02,
-              reflectivity: 1.0,
-              envMapIntensity: 1.8,
+              color: 0x8a0a1c, // Deep Dark Crimson (#8A0A1C)
+              emissive: new THREE.Color(0x220004), // Dark wine shadow depth
+              emissiveIntensity: 0.3,
+              roughness: 0.28,
+              metalness: 0.12,
+              clearcoat: 0.35,
+              clearcoatRoughness: 0.1,
+              reflectivity: 0.5,
+              envMapIntensity: 0.3,
             });
           }
         }
@@ -1287,7 +1287,7 @@ export const initThreeEngine = () => {
 
     // Breathing pulse for light intensity
     const pulse = Math.sin(time * 3.0) * 0.5 + 0.5;
-    redCoreLight.intensity = 2.5 + pulse * 2.5;
+    redCoreLight.intensity = 1.8 + pulse * 1.2;
     rayMatFront.opacity = 0.65 + pulse * 0.2;
     rayMatCross.opacity = 0.45 + pulse * 0.15;
 
