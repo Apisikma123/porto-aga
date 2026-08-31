@@ -247,10 +247,16 @@ export const initThreeEngine = () => {
 
   const colorMap = textureLoader.load("/textures/box001.webp");
   colorMap.colorSpace = THREE.SRGBColorSpace;
+  colorMap.wrapS = THREE.RepeatWrapping;
+  colorMap.wrapT = THREE.RepeatWrapping;
+  colorMap.repeat.set(2, 2);
   colorMap.flipY = false;
 
   const bumpMap = textureLoader.load("/textures/brown_leather_disp_1k.webp");
   bumpMap.colorSpace = THREE.NoColorSpace;
+  bumpMap.wrapS = THREE.RepeatWrapping;
+  bumpMap.wrapT = THREE.RepeatWrapping;
+  bumpMap.repeat.set(2, 2);
   bumpMap.flipY = false;
 
   // 3. GPU Warmup & Shader Pre-compilation (Single efficient pass)
@@ -333,6 +339,7 @@ export const initThreeEngine = () => {
                 if (mat.color) {
                   mat.color.setHex(0xff0028);
                 }
+                mat.map = colorMap;
                 mat.emissive = new THREE.Color(0x3a0006);
                 mat.emissiveIntensity = 0.6;
                 mat.needsUpdate = true;
@@ -1182,6 +1189,16 @@ export const initThreeEngine = () => {
     modelWrapper.rotation.y += 0.004;
     modelWrapper.rotation.x += 0.002;
     modelWrapper.rotation.z = mouseX * 0.08;
+
+    // Kinetic holographic texture looping offset
+    if (colorMap) {
+      colorMap.offset.x = (colorMap.offset.x + delta * 0.035) % 1;
+      colorMap.offset.y = (colorMap.offset.y + delta * 0.018) % 1;
+      if (bumpMap) {
+        bumpMap.offset.x = colorMap.offset.x;
+        bumpMap.offset.y = colorMap.offset.y;
+      }
+    }
 
     // Gentle floating bobbing on inner model wrapper (Zero conflict with GSAP scroll timeline!)
     modelWrapper.position.y = Math.sin(time * 1.8) * 0.035;
