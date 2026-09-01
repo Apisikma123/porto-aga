@@ -27,6 +27,7 @@ dist-ssr
 lighthouse-*.json
 report-*.json
 *.webp
+*.webm
 *.jpg
 !public/**/*.jpg
 !public/**/*.webp
