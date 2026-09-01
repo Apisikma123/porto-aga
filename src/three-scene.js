@@ -35,18 +35,19 @@ export const initThreeEngine = () => {
   const cameraTarget = new THREE.Vector3(0, 0, 0);
   const currentCameraTarget = new THREE.Vector3(0, 0, 0);
 
-  // WebGLRenderer setup optimized for silky 60/120fps and low GPU thermal load
+  // WebGLRenderer setup optimized for HD Retina resolution (2x DPR) and silky 60/120fps
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: !isPhone,
+    antialias: true, // Crisp antialiased edges on all screens including mobile
     powerPreference: "high-performance",
-    precision: "mediump",
+    precision: "highp", // High-precision 32-bit shader math for sharp textures & speculars
     stencil: false,
     depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isPhone ? 1.0 : 1.25));
+  // Full Retina/OLED HD pixel ratio (up to 2.0 DPR) for ultra-sharp visuals on mobile
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -242,9 +243,9 @@ export const initThreeEngine = () => {
     }
   );
 
-  // ─── Procedural Luxury Embossed Ketupat (Diamond Weave) Texture Engine ───
+  // ─── Procedural Luxury Embossed Ketupat (Diamond Weave) HD Texture Engine ───
   const createKetupatTextures = () => {
-    const size = 256;
+    const size = 512;
     const canvasColor = document.createElement("canvas");
     canvasColor.width = size;
     canvasColor.height = size;
@@ -285,20 +286,20 @@ export const initThreeEngine = () => {
       };
 
       // 1. Base Diamond Weave Ribs
-      drawRhombus(ctxColor, size * 0.48, "#2d3444", 8, "#161822");
-      drawRhombus(ctxBump, size * 0.48, "#666666", 10, "#1a1a1a");
+      drawRhombus(ctxColor, size * 0.48, "#2d3444", 16, "#161822");
+      drawRhombus(ctxBump, size * 0.48, "#666666", 20, "#1a1a1a");
 
       // 2. High-Contrast Beveled Ketupat Ridge
-      drawRhombus(ctxColor, size * 0.36, "#727d94", 4, "#13151d");
-      drawRhombus(ctxBump, size * 0.36, "#ffffff", 6, "#333333");
+      drawRhombus(ctxColor, size * 0.36, "#727d94", 8, "#13151d");
+      drawRhombus(ctxBump, size * 0.36, "#ffffff", 12, "#333333");
 
       // 3. Inner Concentric Ketupat Core
-      drawRhombus(ctxColor, size * 0.22, "#4a5366", 3, "#1a1d26");
-      drawRhombus(ctxBump, size * 0.22, "#cccccc", 4, "#555555");
+      drawRhombus(ctxColor, size * 0.22, "#4a5366", 6, "#1a1d26");
+      drawRhombus(ctxBump, size * 0.22, "#cccccc", 8, "#555555");
 
       // 4. Center Accent Jewel
-      drawRhombus(ctxColor, size * 0.08, "#8894ab", 2, "#262b3a");
-      drawRhombus(ctxBump, size * 0.08, "#ffffff", 2, "#888888");
+      drawRhombus(ctxColor, size * 0.08, "#8894ab", 4, "#262b3a");
+      drawRhombus(ctxBump, size * 0.08, "#ffffff", 4, "#888888");
     };
 
     // Draw center and 4 corners for 100% seamless infinite tiling
@@ -314,16 +315,20 @@ export const initThreeEngine = () => {
       drawKetupat(gx, gy);
     });
 
+    const maxAnisotropy = renderer ? Math.min(renderer.capabilities.getMaxAnisotropy(), 8) : 4;
+
     const colorTex = new THREE.CanvasTexture(canvasColor);
     colorTex.wrapS = THREE.RepeatWrapping;
     colorTex.wrapT = THREE.RepeatWrapping;
     colorTex.repeat.set(4, 4);
+    colorTex.anisotropy = maxAnisotropy;
     colorTex.colorSpace = THREE.SRGBColorSpace;
 
     const bumpTex = new THREE.CanvasTexture(canvasBump);
     bumpTex.wrapS = THREE.RepeatWrapping;
     bumpTex.wrapT = THREE.RepeatWrapping;
     bumpTex.repeat.set(4, 4);
+    bumpTex.anisotropy = maxAnisotropy;
     bumpTex.colorSpace = THREE.NoColorSpace;
 
     return { colorTex, bumpTex };
@@ -544,13 +549,11 @@ export const initThreeEngine = () => {
     new THREE.DodecahedronGeometry(0.16, 0),
   ];
 
-  const shardMat = new THREE.MeshPhysicalMaterial({
+  const shardMat = new THREE.MeshStandardMaterial({
     color: 0x121420,
     emissive: 0x30050c,
-    metalness: 0.92,
-    roughness: 0.15,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
+    metalness: 0.9,
+    roughness: 0.25,
     flatShading: true,
   });
 
@@ -558,11 +561,11 @@ export const initThreeEngine = () => {
     color: 0xdc143c,
     wireframe: true,
     transparent: true,
-    opacity: 0.45,
+    opacity: 0.35,
   });
 
   const cosmicShards = [];
-  const shardCount = isMobile ? 12 : 28;
+  const shardCount = isMobile ? 4 : 8;
 
   for (let i = 0; i < shardCount; i++) {
     const shardGroup = new THREE.Group();
@@ -594,42 +597,49 @@ export const initThreeEngine = () => {
   }
 
   // ─── Multi-Layered Deep Cosmic Starfield & Floating Stardust ───
-  // Star Texture Generator
-  const createCosmicStarTexture = () => {
-    const starCanvas = document.createElement("canvas");
-    starCanvas.width = 64;
-    starCanvas.height = 64;
-    const sCtx = starCanvas.getContext("2d");
-    const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    sGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
-    sGrad.addColorStop(0.2, "rgba(255, 250, 240, 0.85)");
-    sGrad.addColorStop(0.5, "rgba(240, 80, 80, 0.35)");
-    sGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-    sCtx.fillStyle = sGrad;
-    sCtx.fillRect(0, 0, 64, 64);
-    const starTex = new THREE.CanvasTexture(starCanvas);
-    starTex.generateMipmaps = true;
-    return starTex;
-  };
-  const cosmicStarTex = createCosmicStarTexture();
+  // ─── Elegant Deep Cosmic Starfield & Atmospheric Galaxy ───
+  // Primary Crimson (#DC143C) Nebula Particle Texture
+  const createPrimaryCrimsonNebulaTexture = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    const cx = 32, cy = 32;
 
-  // Layer 1: 1,600 Distant Outer Space Stars with Realistic Spectrum
-  const starCount = 1600;
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 32);
+    grad.addColorStop(0.0, "rgba(220, 20, 60, 0.85)");   // Exact #DC143C Primary Crimson
+    grad.addColorStop(0.25, "rgba(220, 20, 60, 0.55)");  // Primary Crimson Glow
+    grad.addColorStop(0.55, "rgba(160, 15, 44, 0.20)");  // Deep Primary Velvet
+    grad.addColorStop(0.85, "rgba(80, 8, 22, 0.04)");    // Dark Primary Falloff
+    grad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.generateMipmaps = false;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    return tex;
+  };
+  const softNebulaTex = createPrimaryCrimsonNebulaTexture();
+
+  // Gentle, Quiet Cosmic Starfield (#DC143C Primary Tone Spectrum)
+  const starCount = isMobile ? 120 : 200;
   const starGeom = new THREE.BufferGeometry();
   const starPos = new Float32Array(starCount * 3);
   const starColors = new Float32Array(starCount * 3);
 
   const starSpectrum = [
-    new THREE.Color(0xffffff), // Pure white
-    new THREE.Color(0xdceaff), // Diamond blue
-    new THREE.Color(0xffedd8), // Warm stellar gold
-    new THREE.Color(0xff3b3b), // Crimson cosmic star
-    new THREE.Color(0x7fb5ff), // Deep space sapphire
+    new THREE.Color(0xdc143c), // #DC143C Primary Crimson
+    new THREE.Color(0xff3358), // Light Crimson Tint
+    new THREE.Color(0xaa0f2e), // Deep Crimson Tone
+    new THREE.Color(0xff4d6d), // Vivid Crimson Ember
   ];
 
   for (let i = 0; i < starCount; i++) {
     const i3 = i * 3;
-    const radius = 18 + Math.random() * 45;
+    const radius = 22 + Math.random() * 40;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(Math.random() * 2 - 1);
 
@@ -647,60 +657,103 @@ export const initThreeEngine = () => {
   starGeom.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
 
   const starMat = new THREE.PointsMaterial({
-    size: isMobile ? 0.12 : 0.16,
-    map: cosmicStarTex,
+    size: isMobile ? 0.045 : 0.06,
+    map: softNebulaTex,
     vertexColors: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.45,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
+    fog: false,
   });
   const starField = new THREE.Points(starGeom, starMat);
   scene.add(starField);
 
-  // Layer 2: 220 Floating Mid-Range Stardust Particles
-  const particleCount = isMobile ? 120 : 220;
-  const particleGeom = new THREE.BufferGeometry();
-  const particlePos = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount * 3; i += 3) {
-    particlePos[i] = (Math.random() - 0.5) * 26;
-    particlePos[i + 1] = (Math.random() - 0.5) * 22;
-    particlePos[i + 2] = (Math.random() - 0.5) * 18;
-  }
-  particleGeom.setAttribute("position", new THREE.BufferAttribute(particlePos, 3));
-  const particleMat = new THREE.PointsMaterial({
-    color: 0xff3b20,
-    size: isMobile ? 0.05 : 0.07,
-    map: cosmicStarTex,
-    transparent: true,
-    opacity: 0.7,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-  });
-  const particles = new THREE.Points(particleGeom, particleMat);
-  scene.add(particles);
+  // ═══════════════════════════════════════════════════════════
+  // ─── ATMOSPHERIC DEEP SPACE GALAXY (Single Elegant Spiral in #DC143C Primary Color) ───
+  // ═══════════════════════════════════════════════════════════
+  const galaxiesUniverseGroup = new THREE.Group();
+  scene.add(galaxiesUniverseGroup);
 
-  // Layer 3: Near-Field Cosmic Sparks (Floating close to camera for deep 3D stereoscopic perspective)
-  const sparkCount = isMobile ? 35 : 75;
-  const sparkGeom = new THREE.BufferGeometry();
-  const sparkPos = new Float32Array(sparkCount * 3);
-  for (let i = 0; i < sparkCount * 3; i += 3) {
-    sparkPos[i] = (Math.random() - 0.5) * 12;
-    sparkPos[i + 1] = (Math.random() - 0.5) * 10;
-    sparkPos[i + 2] = 1.8 + Math.random() * 4.2;
-  }
-  sparkGeom.setAttribute("position", new THREE.BufferAttribute(sparkPos, 3));
-  const sparkMat = new THREE.PointsMaterial({
-    color: 0xff4828,
-    size: isMobile ? 0.045 : 0.07,
-    map: cosmicStarTex,
-    transparent: true,
-    opacity: 0.85,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-  });
-  const closeSparks = new THREE.Points(sparkGeom, sparkMat);
-  scene.add(closeSparks);
+  let galaxy1 = null;
+  let galaxyMat1 = null;
+
+  loader.load(
+    "/need_some_space.glb",
+    (gltf) => {
+      let srcPoints = null;
+
+      gltf.scene.traverse((child) => {
+        if (child.isPoints && child.geometry && !srcPoints) {
+          srcPoints = child;
+        }
+      });
+
+      if (!srcPoints) return;
+
+      const srcPos = srcPoints.geometry.attributes.position;
+      const srcCol = srcPoints.geometry.attributes.color;
+      const totalPts = srcPos.count;
+
+      // Smooth sampling mapped purely to #DC143C Primary Color
+      const stride = isMobile ? 8 : 6;
+      const count = Math.floor(totalPts / stride);
+      const newPos = new Float32Array(count * 3);
+      const newCol = new Float32Array(count * 3);
+
+      const primaryR = 0.8627;
+      const primaryG = 0.0784;
+      const primaryB = 0.2353;
+
+      for (let i = 0; i < count; i++) {
+        const s = i * stride;
+        newPos[i * 3] = srcPos.getX(s);
+        newPos[i * 3 + 1] = srcPos.getY(s);
+        newPos[i * 3 + 2] = srcPos.getZ(s);
+
+        const r = srcCol ? srcCol.getX(s) : 0.8;
+        const g = srcCol ? srcCol.getY(s) : 0.8;
+        const b = srcCol ? srcCol.getZ(s) : 0.8;
+        const intensity = r * 0.3 + g * 0.59 + b * 0.11;
+
+        // Exact #DC143C Crimson depth scaling
+        const factor = 0.35 + intensity * 0.65;
+        newCol[i * 3] = primaryR * factor;
+        newCol[i * 3 + 1] = primaryG * factor;
+        newCol[i * 3 + 2] = primaryB * factor;
+      }
+
+      const geom = new THREE.BufferGeometry();
+      geom.setAttribute("position", new THREE.BufferAttribute(newPos, 3));
+      geom.setAttribute("color", new THREE.BufferAttribute(newCol, 3));
+      geom.center();
+
+      const isCurrentLight = document.documentElement.getAttribute("data-theme") === "light" || localStorage.getItem("aga_portfolio_theme") === "light";
+
+      galaxyMat1 = new THREE.PointsMaterial({
+        size: isMobile ? 0.22 : 0.32,
+        map: softNebulaTex,
+        vertexColors: true,
+        transparent: true,
+        opacity: isCurrentLight ? 0.20 : 0.45,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        sizeAttenuation: true,
+        fog: false,
+      });
+
+      galaxy1 = new THREE.Points(geom, galaxyMat1);
+      const scale = isMobile ? 0.09 : 0.13;
+      galaxy1.scale.set(scale, scale, scale);
+      galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
+      galaxy1.rotation.set(0.95, 0.40, -0.35);
+      galaxiesUniverseGroup.add(galaxy1);
+    },
+    undefined,
+    (error) => {
+      console.warn("Notice: need_some_space.glb background loading notice:", error);
+    }
+  );
 
   // ─── Theme Mode 3D Metamorphosis Engine (Dark / Light Atmospheric Sync) ───
   const updateThreeTheme = (theme, animate = true) => {
@@ -733,6 +786,7 @@ export const initThreeEngine = () => {
       shardMat.emissive.copy(targetShardEmissive);
       polyMat.color.copy(targetPolyColor);
       ring1Mat.color.copy(targetRing1Color);
+      if (galaxyMat1) galaxyMat1.opacity = isLight ? 0.20 : 0.45;
       return;
     }
 
@@ -828,6 +882,10 @@ export const initThreeEngine = () => {
       duration: 0.85,
       ease: "power2.inOut",
     });
+
+    if (galaxyMat1) {
+      gsap.to(galaxyMat1, { opacity: isLight ? 0.20 : 0.45, duration: 0.85, ease: "power2.inOut" });
+    }
   };
 
   window.updateThreeTheme = updateThreeTheme;
@@ -847,6 +905,12 @@ export const initThreeEngine = () => {
       scrub: 1.4,
     },
   });
+
+  if (galaxiesUniverseGroup) {
+    scrollTl
+      .to(galaxiesUniverseGroup.position, { z: "+=2.0", y: "-=0.6", ease: "power1.inOut", duration: 6 }, 0)
+      .to(galaxiesUniverseGroup.rotation, { z: "+=0.25", y: "+=0.18", ease: "power1.inOut", duration: 6 }, 0);
+  }
 
   // ─── Phase 1: Section 1 (Start) -> Section 2 (About) [0 to 1] ───
   // Dutch-Angle Orbital Sweep to Left Flank (giving stage for skill matrix on the right)
@@ -1123,6 +1187,7 @@ export const initThreeEngine = () => {
     polyhedronGroup.visible = true;
     gyroRingsGroup.visible = true;
     particles.visible = true;
+    if (galaxiesUniverseGroup) galaxiesUniverseGroup.visible = true;
 
     if (viewName === "project") {
       gsap.to(tesseractGroup.position, {
@@ -1222,13 +1287,12 @@ export const initThreeEngine = () => {
     { passive: true }
   );
 
-  // Window Resize Handler
+  // Window Resize Handler (Maintains HD pixel ratio)
   const onResize = () => {
-    const isMob = window.innerWidth < 768;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.0 : 1.25));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
   };
   window.addEventListener("resize", onResize);
 
@@ -1315,21 +1379,22 @@ export const initThreeEngine = () => {
       starField.position.x = mouseX * -0.4;
       starField.position.y = -mouseY * -0.3;
     }
-    if (typeof particles !== "undefined") {
-      particles.rotation.y = time * 0.015 + scrollVelocity * 0.3;
-      particles.rotation.x = Math.sin(time * 0.4) * 0.02;
-      particles.position.x = mouseX * 0.6;
-      particles.position.y = -mouseY * 0.45;
-    }
-    if (typeof closeSparks !== "undefined") {
-      closeSparks.rotation.y = -time * 0.025;
-      closeSparks.position.x = mouseX * 1.4;
-      closeSparks.position.y = -mouseY * 1.1;
-    }
     if (typeof cosmicShardsGroup !== "undefined") {
       cosmicShardsGroup.position.x = mouseX * 0.35;
       cosmicShardsGroup.position.y = -mouseY * 0.25;
       cosmicShardsGroup.rotation.y = time * 0.006 + scrollVelocity * 0.2;
+    }
+
+    // Atmospheric Spiral Galaxy gentle celestial drift
+    if (galaxy1) {
+      galaxy1.rotation.z += 0.00045 + scrollVelocity * 0.15;
+      galaxy1.rotation.y += 0.0001;
+    }
+
+    if (typeof galaxiesUniverseGroup !== "undefined") {
+      galaxiesUniverseGroup.position.x = mouseX * -0.25;
+      galaxiesUniverseGroup.position.y = -mouseY * -0.18;
+      galaxiesUniverseGroup.rotation.y = time * 0.0012 + scrollVelocity * 0.08;
     }
 
     // Animate individual tumbling 3D cosmic asteroids / crystal shards
