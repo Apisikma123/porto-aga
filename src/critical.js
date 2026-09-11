@@ -924,18 +924,46 @@ export const initPreloaderTimeline = () => {
     window.addEventListener("resize", resizeCanvas, { passive: true });
   }
 
+  // Pre-rendered offscreen smoke sprite (zero per-frame gradient allocation = ultra-fast 120fps GPU blit)
+  const smokeSprite = typeof document !== "undefined" ? document.createElement("canvas") : null;
+  if (smokeSprite) {
+    smokeSprite.width = 64;
+    smokeSprite.height = 64;
+    const sCtx = smokeSprite.getContext("2d");
+    if (sCtx) {
+      const grad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+      grad.addColorStop(0.35, "rgba(240, 244, 255, 0.6)");
+      grad.addColorStop(1, "rgba(200, 215, 255, 0)");
+      sCtx.fillStyle = grad;
+      sCtx.beginPath();
+      sCtx.arc(32, 32, 32, 0, Math.PI * 2);
+      sCtx.fill();
+    }
+  }
+
   let cachedNozzleX = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
   let cachedNozzleY = typeof window !== "undefined" ? window.innerHeight * 0.52 : 0;
-  let lastRectMeasure = 0;
+  let prevNozzleX = cachedNozzleX;
+  let prevNozzleY = cachedNozzleY;
   let lastSmokeTime = 0;
 
   const updateNozzlePos = () => {
-    const targetEl = document.getElementById("apple-rocket-flame") || document.getElementById("preloader-rocket-center") || rocketCenter;
-    if (targetEl && targetEl.isConnected) {
-      const rect = targetEl.getBoundingClientRect();
+    const flameEl = document.getElementById("apple-rocket-flame");
+    if (flameEl && flameEl.isConnected) {
+      const rect = flameEl.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
         cachedNozzleX = rect.left + rect.width / 2;
-        cachedNozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
+        cachedNozzleY = rect.bottom - (launchTriggered ? 2 : 6);
+        return true;
+      }
+    }
+    const rocketEl = document.getElementById("preloader-rocket-center") || rocketCenter;
+    if (rocketEl && rocketEl.isConnected) {
+      const rect = rocketEl.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        cachedNozzleX = rect.left + rect.width / 2;
+        cachedNozzleY = rect.top + rect.height * (launchTriggered ? 0.83 : 0.80);
         return true;
       }
     }
@@ -946,6 +974,8 @@ export const initPreloaderTimeline = () => {
     return false;
   };
   updateNozzlePos();
+  prevNozzleX = cachedNozzleX;
+  prevNozzleY = cachedNozzleY;
   window.addEventListener("resize", updateNozzlePos, { passive: true });
 
   // Pre-seed initial smoke cloud so smoke is immediately visible & fully formed from frame 0
@@ -953,22 +983,36 @@ export const initPreloaderTimeline = () => {
     updateNozzlePos();
     const nozzleX = cachedNozzleX;
     const nozzleY = cachedNozzleY;
-    for (let i = 0; i < 12; i++) {
-      const progress = i / 12;
+    for (let i = 0; i < 16; i++) {
+      const progress = i / 16;
       smokeParticles.push({
         x: nozzleX + (Math.random() - 0.5) * (8 + progress * 16),
-        y: nozzleY + progress * 35 + (Math.random() - 0.5) * 4,
+        y: nozzleY + progress * 40 + (Math.random() - 0.5) * 4,
         vx: (Math.random() - 0.5) * (0.6 + progress * 1.2),
         vy: 1.2 + Math.random() * 1.4,
-        radius: 8 + progress * 18 + Math.random() * 5,
-        growth: 0.4,
-        maxRadius: 45,
+        radius: 8 + progress * 20 + Math.random() * 5,
+        growth: 0.45,
+        maxRadius: 48,
         alpha: 0.75 * (1 - progress * 0.7),
         decay: 0.009,
       });
     }
   };
   seedSmokeParticles();
+
+  const spawnSmokeParticle = (x, y, isLaunch) => {
+    smokeParticles.push({
+      x: x + (Math.random() - 0.5) * (isLaunch ? 14 : 6),
+      y: y + (Math.random() - 0.5) * 3,
+      vx: (Math.random() - 0.5) * (isLaunch ? 2.5 : 0.8),
+      vy: isLaunch ? (4.5 + Math.random() * 6.0) : (1.3 + Math.random() * 1.6),
+      radius: isLaunch ? (14 + Math.random() * 8) : (8 + Math.random() * 5),
+      growth: isLaunch ? 1.0 : 0.45,
+      maxRadius: isLaunch ? 65 : 45,
+      alpha: isLaunch ? 0.85 : 0.65,
+      decay: isLaunch ? 0.020 : 0.009,
+    });
+  };
 
   const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
@@ -980,32 +1024,37 @@ export const initPreloaderTimeline = () => {
     const dt = lastSmokeTime > 0 ? Math.min(32, Math.max(8, currentTime - lastSmokeTime)) / 16.666 : 1.0;
     lastSmokeTime = currentTime;
 
-    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+    // Follow rocket flame in real-time on every frame
+    updateNozzlePos();
+    const currentX = cachedNozzleX;
+    const currentY = cachedNozzleY;
 
-    if (launchTriggered || currentTime - lastRectMeasure > 150) {
-      lastRectMeasure = currentTime;
-      updateNozzlePos();
-    }
-    const nozzleX = cachedNozzleX;
-    const nozzleY = cachedNozzleY;
+    smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
         
-        // Steady lightweight generation (capped at 30 particles for 120fps)
-        const spawnRate = launchTriggered ? 2 : 1;
-        for (let i = 0; i < spawnRate; i++) {
-          if (smokeParticles.length < 30) {
-            smokeParticles.push({
-              x: nozzleX + (Math.random() - 0.5) * (launchTriggered ? 12 : 6),
-              y: nozzleY + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * (launchTriggered ? 2.0 : 0.8),
-              vy: launchTriggered ? (5.0 + Math.random() * 6.0) : (1.2 + Math.random() * 1.6),
-              radius: launchTriggered ? (16 + Math.random() * 8) : (8 + Math.random() * 5),
-              growth: launchTriggered ? 0.9 : 0.4,
-              maxRadius: launchTriggered ? 70 : 40,
-              alpha: launchTriggered ? 0.8 : 0.6,
-              decay: launchTriggered ? 0.018 : 0.009,
-            });
-          }
+    const maxParticles = launchTriggered ? 55 : 28;
+
+    if (launchTriggered) {
+      // Contrail interpolation: fill any gaps if rocket moves quickly upward
+      const dist = Math.hypot(currentX - prevNozzleX, currentY - prevNozzleY);
+      const steps = Math.min(4, Math.max(2, Math.ceil(dist / 12)));
+      for (let s = 0; s < steps; s++) {
+        if (smokeParticles.length >= maxParticles) {
+          smokeParticles.shift(); // Recycle oldest particle to guarantee fresh contrail at nozzle
         }
+        const t = (s + Math.random() * 0.5) / steps;
+        const interpX = prevNozzleX + (currentX - prevNozzleX) * t;
+        const interpY = prevNozzleY + (currentY - prevNozzleY) * t;
+        spawnSmokeParticle(interpX, interpY, true);
+      }
+    } else {
+      // Steady gentle hover emission
+      if (smokeParticles.length < maxParticles) {
+        spawnSmokeParticle(currentX, currentY, false);
+      }
+    }
+
+    prevNozzleX = currentX;
+    prevNozzleY = currentY;
 
     for (let i = smokeParticles.length - 1; i >= 0; i--) {
       const p = smokeParticles[i];
@@ -1019,17 +1068,12 @@ export const initPreloaderTimeline = () => {
         continue;
       }
 
-      smokeCtx.save();
-      const grad = smokeCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-      grad.addColorStop(0, `rgba(255, 255, 255, ${p.alpha * 0.95})`);
-      grad.addColorStop(0.4, `rgba(240, 244, 255, ${p.alpha * 0.6})`);
-      grad.addColorStop(1, `rgba(200, 215, 255, 0)`);
-      smokeCtx.fillStyle = grad;
-      smokeCtx.beginPath();
-      smokeCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      smokeCtx.fill();
-      smokeCtx.restore();
+      if (smokeSprite) {
+        smokeCtx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
+        smokeCtx.drawImage(smokeSprite, p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+      }
     }
+    smokeCtx.globalAlpha = 1;
 
     smokeAnimId = requestAnimationFrame(renderSmokeCanvas);
   };

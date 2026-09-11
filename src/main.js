@@ -91,8 +91,10 @@ const triggerModules = () => {
   activate3D();
 };
 
-// Activation on real user gesture or preloader blast-off
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click", "start3D"].forEach((event) => {
+// Activation on real human interaction (touch, pointer, scroll, mouse, key)
+["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
   window.addEventListener(event, triggerModules, { once: true, passive: true });
 });
+// Non-intrusive fallback if user is completely idle for 6s
+setTimeout(triggerModules, 6000);
 
