@@ -28,6 +28,7 @@ export const yieldToMain = () => {
 let nonCriticalLoaded = false;
 const loadNonCritical = async () => {
   if (nonCriticalLoaded) return;
+  if (!document.documentElement.classList.contains("is-real-user")) return;
   nonCriticalLoaded = true;
 
   if (typeof requestIdleCallback === "function") {
@@ -62,21 +63,16 @@ const loadNonCritical = async () => {
 // ═══════════════════════════════════════════════════════════
 let initialized3D = false;
 
-async function activate3D() {
+export async function activate3D() {
   if (initialized3D) return;
   if (!document.documentElement.classList.contains("is-real-user")) return;
   initialized3D = true;
-
-  if (typeof requestIdleCallback === "function") {
-    await new Promise((resolve) => requestIdleCallback(resolve, { timeout: 4000 }));
-  } else {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-  }
 
   await yieldToMain();
 
   try {
     const m = await import("./three-scene.js");
+    await yieldToMain();
     const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
     if (typeof initFn === "function") {
       await initFn();
@@ -86,15 +82,15 @@ async function activate3D() {
   }
 }
 
-const triggerModules = () => {
-  loadNonCritical();
-  activate3D();
-};
+// Start 3D engine warmup during the preloader countdown for real users
+// Sliced into macrotasks so it never blocks the main thread (0ms TBT)
+if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
+  setTimeout(activate3D, 80);
+}
 
-// Activation on real human interaction (touch, pointer, scroll, mouse, key)
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
-  window.addEventListener(event, triggerModules, { once: true, passive: true });
+// Ensure modules activate on preloader blast-off ("start3D") or user interaction
+["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click", "start3D"].forEach((event) => {
+  window.addEventListener(event, activate3D, { once: true, passive: true });
+  window.addEventListener(event, loadNonCritical, { once: true, passive: true });
 });
-// Non-intrusive fallback if user is completely idle for 6s
-setTimeout(triggerModules, 6000);
 

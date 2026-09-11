@@ -4,8 +4,6 @@
    ═══════════════════════════════════════════════════════════ */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -368,13 +366,9 @@ export const initThreeEngine = async () => {
 
   executeGPUWarmup();
 
-  // Load /tesseract.glb with DRACOLoader & Dynamic Material Assignment
+  // Load /tesseract.glb with pure high-speed GLTFLoader & Dynamic Material Assignment
   let mixer = null;
-  const dracoLoader = new DRACOLoader(loadingManager);
-  dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
-
   const loader = new GLTFLoader(loadingManager);
-  loader.setDRACOLoader(dracoLoader);
 
   loader.load(
     "/tesseract.glb",
@@ -390,15 +384,6 @@ export const initThreeEngine = async () => {
 
       gltf.scene.traverse((child) => {
         if (child.isMesh) {
-          if (child.geometry) {
-            try {
-              const creaseAngle = THREE.MathUtils.degToRad(35);
-              child.geometry = toCreasedNormals(child.geometry, creaseAngle);
-            } catch (err) {
-              console.warn("toCreasedNormals warning on mesh:", child.name, err);
-            }
-          }
-
           const matName = (child.material && child.material.name) ? child.material.name.toLowerCase() : "";
           const isOuterBox = matName === "box_out" || child.name.toLowerCase().includes("box_out") ||
             ["object_4", "object_7", "object_10", "object_13", "object_16", "object_19", "object_22", "object_25"].some(name => child.name.toLowerCase().includes(name));
@@ -417,7 +402,6 @@ export const initThreeEngine = async () => {
               reflectivity: 0.65,
               envMapIntensity: 0.85,
             });
-            console.log("Embossed Ketupat material applied to:", child.name);
           } else {
             // Inner Core Cubes (Deep Dark Crimson / Blood Velvet Red)
             child.material = new THREE.MeshPhysicalMaterial({
@@ -446,6 +430,12 @@ export const initThreeEngine = async () => {
       }
 
       modelWrapper.add(model);
+      try {
+        if (renderer && scene && camera) {
+          renderer.compile(scene, camera);
+          renderer.render(scene, camera);
+        }
+      } catch (e) {}
     },
     undefined,
     (error) => {
