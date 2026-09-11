@@ -13,7 +13,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ limitCallbacks: true, autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
 
-export const initThreeEngine = () => {
+const yieldToMain = () => {
+  if (typeof scheduler !== "undefined" && typeof scheduler.yield === "function") {
+    return scheduler.yield();
+  }
+  return new Promise((resolve) => setTimeout(resolve, 0));
+};
+
+export const initThreeEngine = async () => {
   const canvas = document.getElementById("bg") || document.getElementById("webgl-canvas");
   if (!canvas) return;
 
@@ -84,6 +91,8 @@ export const initThreeEngine = () => {
   const crimsonPointAccent = new THREE.PointLight(0xff2838, 2.5, 16, 1.2);
   crimsonPointAccent.position.set(2, 3, 3);
   scene.add(crimsonPointAccent);
+
+  await yieldToMain();
 
   // ═══════════════════════════════════════════════════════════
   // ─── OBJECT 1: MASTER 4D TESSERACT (Hero Artifact) ───
@@ -536,6 +545,8 @@ export const initThreeEngine = () => {
     // Add volumetric space fog for realistic 3D depth
     scene.fog = new THREE.FogExp2(0x040509, 0.018);
 
+  await yieldToMain();
+
   // ═══════════════════════════════════════════════════════════
   // ─── OBJECT 4: FLOATING DEEP-SPACE COSMIC CRYSTAL SHARDS ───
   // ═══════════════════════════════════════════════════════════
@@ -892,6 +903,8 @@ export const initThreeEngine = () => {
   // Apply active theme immediately to WebGL scene
   const initialTheme = document.documentElement.getAttribute("data-theme") || localStorage.getItem("aga_portfolio_theme") || "dark";
   updateThreeTheme(initialTheme, false);
+
+  await yieldToMain();
 
   // ═══════════════════════════════════════════════════════════
   // 4. DYNAMIC 3D CAMERA PATH & CINEMATIC TIMELINE (5 Seamless Phases)
@@ -1409,6 +1422,8 @@ export const initThreeEngine = () => {
 
     renderer.render(scene, camera);
   };
+
+  await yieldToMain();
 
   if (typeof IntersectionObserver !== "undefined") {
     const observer = new IntersectionObserver((entries) => {

@@ -6,28 +6,55 @@
 import "./style.css";
 import "./critical.js";
 
-const isRealUser = typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user");
+export const yieldToMain = () => {
+  if (typeof scheduler !== "undefined" && typeof scheduler.yield === "function") {
+    return scheduler.yield();
+  }
+  return new Promise((resolve) => {
+    if (typeof MessageChannel !== "undefined") {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = () => {
+        channel.port1.close();
+        channel.port2.close();
+        resolve();
+      };
+      channel.port2.postMessage(null);
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+};
 
 let nonCriticalLoaded = false;
-const loadNonCritical = () => {
+const loadNonCritical = async () => {
   if (nonCriticalLoaded) return;
   nonCriticalLoaded = true;
 
-  const schedule = typeof requestIdleCallback === "function" 
-    ? (fn) => requestIdleCallback(fn, { timeout: 2000 }) 
-    : (fn) => setTimeout(fn, 10);
+  if (typeof requestIdleCallback === "function") {
+    await new Promise((resolve) => requestIdleCallback(resolve, { timeout: 3000 }));
+  } else {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
 
-  schedule(() => {
-    import("./data-loader.js").then((m) => {
-      if (m && m.initData) m.initData();
-    });
-  });
+  try {
+    const m = await import("./data-loader.js");
+    if (m && m.initData) {
+      await m.initData();
+    }
+  } catch (err) {
+    console.warn("data-loader load notice:", err);
+  }
 
-  schedule(() => {
-    import("./animations.js").then((m) => {
-      if (m && m.initAnimations) m.initAnimations();
-    });
-  });
+  await yieldToMain();
+
+  try {
+    const m = await import("./animations.js");
+    if (m && m.initAnimations) {
+      m.initAnimations();
+    }
+  } catch (err) {
+    console.warn("animations load notice:", err);
+  }
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -35,29 +62,37 @@ const loadNonCritical = () => {
 // ═══════════════════════════════════════════════════════════
 let initialized3D = false;
 
-function activate3D() {
+async function activate3D() {
   if (initialized3D) return;
+  if (!document.documentElement.classList.contains("is-real-user")) return;
   initialized3D = true;
 
-  const schedule = typeof requestIdleCallback === "function" 
-    ? (fn) => requestIdleCallback(fn, { timeout: 2000 }) 
-    : (fn) => setTimeout(fn, 10);
+  if (typeof requestIdleCallback === "function") {
+    await new Promise((resolve) => requestIdleCallback(resolve, { timeout: 4000 }));
+  } else {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  }
 
-  schedule(() => {
-    import("./three-scene.js").then((m) => {
-      const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
-      if (typeof initFn === "function") {
-        initFn();
-      }
-    }).catch((err) => {
-      console.warn("Three.js deferred load notice:", err);
-    });
-  });
+  await yieldToMain();
+
+  try {
+    const m = await import("./three-scene.js");
+    const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
+    if (typeof initFn === "function") {
+      await initFn();
+    }
+  } catch (err) {
+    console.warn("Three.js deferred load notice:", err);
+  }
 }
+
+const triggerModules = () => {
+  loadNonCritical();
+  activate3D();
+};
 
 // Activation on real user gesture or preloader blast-off
 ["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click", "start3D"].forEach((event) => {
-  window.addEventListener(event, activate3D, { once: true, passive: true });
-  window.addEventListener(event, loadNonCritical, { once: true, passive: true });
+  window.addEventListener(event, triggerModules, { once: true, passive: true });
 });
 

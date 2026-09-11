@@ -949,7 +949,22 @@ export const initPreloaderTimeline = () => {
   };
   seedSmokeParticles();
 
-  let lastSmokeTime = 0;
+  let cachedNozzleX = window.innerWidth / 2;
+  let cachedNozzleY = window.innerHeight * 0.5;
+  let lastRectMeasure = 0;
+
+  const updateNozzlePos = () => {
+    const targetEl = rocketCenter || flameNozzle;
+    if (targetEl && targetEl.isConnected) {
+      const rect = targetEl.getBoundingClientRect();
+      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
+        cachedNozzleX = rect.left + rect.width / 2;
+        cachedNozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
+      }
+    }
+  };
+  updateNozzlePos();
+  window.addEventListener("resize", updateNozzlePos, { passive: true });
 
   const renderSmokeCanvas = (now) => {
     if (!smokeCtx || !smokeCanvas || !document.getElementById("web-preloader")) {
@@ -963,12 +978,12 @@ export const initPreloaderTimeline = () => {
 
     smokeCtx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
 
-    const targetEl = rocketCenter || flameNozzle;
-    if (targetEl && targetEl.isConnected) {
-      const rect = targetEl.getBoundingClientRect();
-      if (rect.bottom >= -80 && rect.top <= window.innerHeight + 100) {
-        const nozzleX = rect.left + rect.width / 2;
-        const nozzleY = rect.top + rect.height * (launchTriggered ? 0.82 : 0.78);
+    if (launchTriggered || currentTime - lastRectMeasure > 200) {
+      lastRectMeasure = currentTime;
+      updateNozzlePos();
+    }
+    const nozzleX = cachedNozzleX;
+    const nozzleY = cachedNozzleY;
         
         // Steady lightweight generation (capped at 30 particles for 120fps)
         const spawnRate = launchTriggered ? 2 : 1;
@@ -987,8 +1002,6 @@ export const initPreloaderTimeline = () => {
             });
           }
         }
-      }
-    }
 
     for (let i = smokeParticles.length - 1; i >= 0; i--) {
       const p = smokeParticles[i];

@@ -3,7 +3,15 @@
    Muhammad Aga Putra | Frontend Software Engineer & System Architect
    ═══════════════════════════════════════════════════════════ */
 
-import { gsap } from "gsap";
+let _gsap = typeof window !== "undefined" ? window.gsap : null;
+const getGsap = async () => {
+  if (_gsap) return _gsap;
+  if (typeof window !== "undefined" && window.gsap) return (_gsap = window.gsap);
+  const mod = await import("gsap");
+  _gsap = mod.gsap || mod.default || mod;
+  if (typeof window !== "undefined") window.gsap = _gsap;
+  return _gsap;
+};
 
 // ═══════════════════════════════════════════════════════════
 // DIRECTIONAL SCENE REVEALS (Native IntersectionObserver + Silky GPU Transforms)
@@ -12,11 +20,13 @@ export const initScrollRevealAnimations = () => {
   if (typeof IntersectionObserver === "undefined") return;
 
   const revealObserver = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
+    entries.forEach(async (entry) => {
       if (entry.isIntersecting) {
         const target = entry.target;
         const id = target.id;
         obs.unobserve(target);
+        const gsap = await getGsap();
+        if (!gsap) return;
 
         if (id === "about") {
           const header = document.querySelector("#about header") || document.querySelector("#about .display-title");

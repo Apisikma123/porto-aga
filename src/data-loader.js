@@ -3,10 +3,53 @@
    Muhammad Aga Putra | Frontend Software Engineer & System Architect
    ═══════════════════════════════════════════════════════════ */
 
-import { gsap } from "gsap";
-if (typeof window !== "undefined") {
-  window.gsap = gsap;
-}
+let _gsap = typeof window !== "undefined" ? window.gsap : null;
+export const getGsap = async () => {
+  if (_gsap) return _gsap;
+  if (typeof window !== "undefined" && window.gsap) return (_gsap = window.gsap);
+  try {
+    const mod = await import("gsap");
+    _gsap = mod.gsap || mod.default || mod;
+    if (typeof window !== "undefined") window.gsap = _gsap;
+    return _gsap;
+  } catch (e) {
+    return null;
+  }
+};
+
+const gsap = {
+  fromTo: (...args) => {
+    if (_gsap) return _gsap.fromTo(...args);
+    getGsap().then((g) => { if (g) g.fromTo(...args); });
+  },
+  set: (...args) => {
+    if (_gsap) return _gsap.set(...args);
+    getGsap().then((g) => { if (g) g.set(...args); });
+  },
+  to: (...args) => {
+    if (_gsap) return _gsap.to(...args);
+    getGsap().then((g) => { if (g) g.to(...args); });
+  }
+};
+
+const yieldToMain = () => {
+  if (typeof scheduler !== "undefined" && typeof scheduler.yield === "function") {
+    return scheduler.yield();
+  }
+  return new Promise((resolve) => {
+    if (typeof MessageChannel !== "undefined") {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = () => {
+        channel.port1.close();
+        channel.port2.close();
+        resolve();
+      };
+      channel.port2.postMessage(null);
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+};
 import { currentLang, getProtectedWhatsAppNumber } from "./critical.js";
 import { marked } from "marked";
 // highlight.js & atom-one-dark theme loaded lazily (964KB deferred from critical path)
@@ -2290,19 +2333,25 @@ window.__switchViewImpl = switchView;
 // ═══════════════════════════════════════════════════════════
 export const initData = async () => {
   renderFeaturedProjectsCarousel();
-  initActivityHeatmap();
+  await yieldToMain();
   initProjectsCarousel();
+  await yieldToMain();
   initPricingMarketingCarousel();
+  await yieldToMain();
   initPricingConfigurator();
+  await yieldToMain();
+  initActivityHeatmap();
 
-  const loadDeferredData = () => {
+  const loadDeferredData = async () => {
+    await yieldToMain();
     initSPAViews();
+    await yieldToMain();
     initGitHubRepos();
   };
 
   if ("requestIdleCallback" in window) {
-    requestIdleCallback(loadDeferredData, { timeout: 3000 });
+    requestIdleCallback(loadDeferredData, { timeout: 5000 });
   } else {
-    setTimeout(loadDeferredData, 1200);
+    setTimeout(loadDeferredData, 2000);
   }
 };
