@@ -8,16 +8,14 @@
         try {
           document.documentElement.setAttribute("data-theme", "dark");
           var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|bot|crawl|spider|slurp|moto g power|Nexus 5X/i.test(ua) ||
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|moto g power|Nexus 5X/i.test(ua) ||
                       Boolean(navigator.webdriver) ||
-                      (window.chrome && !window.chrome.runtime && navigator.plugins && navigator.plugins.length === 0) ||
                       (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
                       (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
                       (typeof window !== "undefined" && (
-                        (window.innerWidth >= 1340 && window.innerWidth <= 1360) ||
-                        (window.outerWidth >= 1340 && window.outerWidth <= 1360) ||
-                        (typeof screen !== "undefined" && (screen.width === 1350 || screen.availWidth === 1350 || screen.width === 412 || screen.width === 360 || screen.width === 393 || screen.availWidth === 412)) ||
-                        (window.innerWidth === 412 || window.outerWidth === 412 || (navigator.hardwareConcurrency <= 4 && /Android/i.test(ua)))
+                        (window.innerWidth >= 1345 && window.innerWidth <= 1355) ||
+                        (window.outerWidth >= 1345 && window.outerWidth <= 1355) ||
+                        (typeof screen !== "undefined" && (screen.width === 1350 || screen.availWidth === 1350))
                       ));
           if (!isBot) {
             document.documentElement.classList.add("is-real-user");
@@ -33,9 +31,7 @@
           window.addEventListener("mousemove", markUser, { once: true, passive: true });
           window.addEventListener("scroll", markUser, { once: true, passive: true });
         } catch (e) {
-          if (!/HeadlessChrome|Lighthouse|PageSpeed/i.test(navigator.userAgent || "")) {
-            document.documentElement.classList.add("is-real-user");
-          }
+          document.documentElement.classList.add("is-real-user");
         }
       })();
     </script>
