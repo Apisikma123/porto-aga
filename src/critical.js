@@ -920,7 +920,7 @@ export const initPreloaderTimeline = () => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 950);
+    }, 1300);
   };
 
   let lastDisplayedPct = -1;

@@ -272,42 +272,40 @@
         animation: flameFlicker 0.12s ease-in-out infinite alternate;
         will-change: transform;
       }
-      @keyframes rocketBlastOff {
-        0% {
-          transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-        }
-        15% {
-          transform: translate3d(0, 10px, 0) scale(0.96, 1.04) rotate(0.5deg);
-        }
-        100% {
-          transform: translate3d(0, -150vh, 0) scale(1.15) rotate(0deg);
-        }
+      @keyframes flameMaxThrust {
+        0% { transform: scale(1.15, 1.6); opacity: 0.95; }
+        100% { transform: scale(1.30, 2.05); opacity: 1; }
+      }
+      .preloader-launching #apple-rocket-flame {
+        transform-origin: 70px 118px;
+        animation: flameMaxThrust 0.08s ease-in-out infinite alternate !important;
+        filter: drop-shadow(0 0 16px rgba(255, 60, 40, 0.95)) drop-shadow(0 0 30px rgba(255, 140, 20, 0.8));
       }
       .preloader-launching #preloader-rocket-center {
-        animation: rocketBlastOff 0.95s cubic-bezier(0.25, 0.9, 0.3, 1) forwards !important;
+        animation: none !important;
         will-change: transform;
       }
       .preloader-launching #preloader-backdrop {
-        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.50s;
         opacity: 0 !important;
       }
       .preloader-launching #preloader-header {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
         opacity: 0 !important;
-        transform: translateY(-15px) !important;
+        transform: translateY(-16px) !important;
       }
       .preloader-launching #preloader-footer {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
         opacity: 0 !important;
-        transform: translateY(15px) !important;
+        transform: translateY(16px) !important;
       }
       .preloader-launching #preloader-text-group {
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
         opacity: 0 !important;
-        transform: translateY(-15px) !important;
+        transform: translateY(-16px) !important;
       }
       .preloader-launching #preloader-smoke-canvas {
-        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.62s;
+        transition: opacity 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.85s;
         opacity: 0 !important;
       }
     </style>
@@ -799,15 +797,15 @@
 
         function spawnPuff(x, y, isLaunch) {
           particles.push({
-            x: x + (Math.random() - 0.5) * (isLaunch ? 14 : 7),
-            y: y + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (isLaunch ? 2.5 : 0.7),
-            vy: isLaunch ? (4.5 + Math.random() * 6.0) : (1.3 + Math.random() * 1.6),
-            radius: isLaunch ? (12 + Math.random() * 6) : (6 + Math.random() * 4),
-            growth: isLaunch ? 1.0 : 0.45,
-            maxRadius: isLaunch ? 68 : 44,
-            alpha: isLaunch ? 0.85 : 0.70,
-            decay: isLaunch ? 0.020 : 0.011
+            x: x + (Math.random() - 0.5) * (isLaunch ? 8 : 6),
+            y: y + (Math.random() - 0.5) * 2,
+            vx: (Math.random() - 0.5) * (isLaunch ? 1.6 : 0.7),
+            vy: isLaunch ? (2.0 + Math.random() * 3.2) : (1.3 + Math.random() * 1.6),
+            radius: isLaunch ? (11 + Math.random() * 5) : (6 + Math.random() * 4),
+            growth: isLaunch ? 1.05 : 0.45,
+            maxRadius: isLaunch ? 74 : 44,
+            alpha: isLaunch ? 0.90 : 0.70,
+            decay: isLaunch ? 0.013 : 0.011
           });
         }
 
@@ -815,11 +813,11 @@
           sparks.push({
             x: x + (Math.random() - 0.5) * 6,
             y: y + Math.random() * 4,
-            vx: (Math.random() - 0.5) * (isLaunch ? 3.0 : 1.2),
-            vy: isLaunch ? (6.0 + Math.random() * 7.0) : (2.4 + Math.random() * 2.8),
-            size: isLaunch ? (4 + Math.random() * 4) : (2.5 + Math.random() * 3),
+            vx: (Math.random() - 0.5) * (isLaunch ? 2.5 : 1.2),
+            vy: isLaunch ? (6.0 + Math.random() * 6.5) : (2.4 + Math.random() * 2.8),
+            size: isLaunch ? (3.5 + Math.random() * 3.5) : (2.5 + Math.random() * 3),
             alpha: 1.0,
-            decay: isLaunch ? 0.035 : 0.022
+            decay: isLaunch ? 0.028 : 0.022
           });
         }
 
@@ -834,17 +832,40 @@
 
           var isLaunch = preloaderEl.classList.contains("preloader-launching");
           if (isLaunch) {
-            if (!launchStartTime) launchStartTime = now;
-            var t = Math.min(1, (now - launchStartTime) / 950);
-            var offsetY = 0;
-            if (t < 0.15) {
-              offsetY = (t / 0.15) * 10;
-            } else {
-              var u = (t - 0.15) / 0.85;
-              var easeY = u * u * (3 - 2 * u);
-              offsetY = 10 - easeY * (window.innerHeight * 1.5 + 250);
+            if (!launchStartTime) {
+              launchStartTime = now;
+              if (rocketCenter) rocketCenter.style.animation = "none";
             }
-            cachedX = initialNozzleX;
+            var launchDuration = 1150; // 1.15s cinematic flight
+            var t = Math.min(1, (now - launchStartTime) / launchDuration);
+            var offsetY = 0;
+            var shakeX = 0;
+            var scaleY = 1;
+            var scaleX = 1;
+
+            if (t < 0.20) {
+              // Phase 1: Ignition rumble & thrust building (0.0 - 0.20s)
+              var p = t / 0.20;
+              shakeX = Math.sin(p * Math.PI * 14) * 1.5;
+              offsetY = Math.sin(p * Math.PI * 2) * 1.5;
+              scaleY = 1 + Math.sin(p * Math.PI) * 0.04;
+              scaleX = 1 - Math.sin(p * Math.PI) * 0.02;
+            } else {
+              // Phase 2: Upward accelerating liftoff (0.20 - 1.0s)
+              var p = (t - 0.20) / 0.80;
+              // Smooth quadratic/cubic acceleration curve
+              var accel = p * p * (1.65 - 0.65 * p);
+              offsetY = -accel * (window.innerHeight * 1.6 + 320);
+              shakeX = (1 - p) * Math.sin(now * 0.15) * 1.2;
+              scaleY = 1 + p * 0.12;
+              scaleX = 1 - p * 0.06;
+            }
+
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(" + shakeX.toFixed(2) + "px, " + offsetY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
+            }
+
+            cachedX = initialNozzleX + shakeX;
             cachedY = initialNozzleY + offsetY;
           } else {
             cachedX = initialNozzleX;
@@ -856,24 +877,26 @@
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var maxP = isLaunch ? 55 : 30;
+          var maxP = isLaunch ? 80 : 30;
 
           if (isLaunch) {
             var dist = Math.hypot(curX - prevX, curY - prevY);
-            var steps = Math.min(4, Math.max(2, Math.ceil(dist / 12)));
+            // Dense contrail trail: interpolate steps along the exact path traversed
+            var steps = Math.min(10, Math.max(3, Math.ceil(dist / 9)));
             for (var s = 0; s < steps; s++) {
               if (particles.length >= maxP) particles.shift();
-              var t = (s + Math.random() * 0.5) / steps;
-              var ix = prevX + (curX - prevX) * t;
-              var iy = prevY + (curY - prevY) * t;
+              var interp = (s + Math.random() * 0.5) / steps;
+              var ix = prevX + (curX - prevX) * interp;
+              var iy = prevY + (curY - prevY) * interp;
               spawnPuff(ix, iy, true);
-              if (Math.random() < 0.6) spawnSpark(ix, iy, true);
+              if (Math.random() < 0.6) {
+                if (sparks.length >= 25) sparks.shift();
+                spawnSpark(ix, iy, true);
+              }
             }
           } else {
-            // Continuous emission: ALWAYS spawn fresh puff at current flame nozzle position
             if (particles.length >= maxP) particles.shift();
             spawnPuff(curX, curY, false);
-            // Continuous ember specks ("bercak api/asap") following movement
             if (Math.random() < 0.45) {
               if (sparks.length >= 18) sparks.shift();
               spawnSpark(curX, curY, false);
