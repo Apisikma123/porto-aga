@@ -660,16 +660,16 @@
         resize();
         window.addEventListener("resize", resize, { passive: true });
 
-        // 1. Offscreen sprite for volumetric pure white vapor cloud
+        // 1. Offscreen sprite for rich volumetric vapor cloud
         var sprite = document.createElement("canvas");
         sprite.width = 64;
         sprite.height = 64;
         var sCtx = sprite.getContext("2d");
         if (sCtx) {
           var grad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-          grad.addColorStop(0, "rgba(240, 245, 255, 0.35)");
-          grad.addColorStop(0.35, "rgba(220, 235, 255, 0.18)");
-          grad.addColorStop(0.7, "rgba(200, 220, 255, 0.06)");
+          grad.addColorStop(0, "rgba(255, 255, 255, 0.72)");
+          grad.addColorStop(0.35, "rgba(240, 246, 255, 0.44)");
+          grad.addColorStop(0.7, "rgba(215, 230, 255, 0.16)");
           grad.addColorStop(1, "rgba(200, 220, 255, 0)");
           sCtx.fillStyle = grad;
           sCtx.beginPath();
@@ -723,33 +723,33 @@
         prevX = cachedX;
         prevY = cachedY;
 
-        // Pre-seed gentle, translucent vapor
-        for (var i = 0; i < 14; i++) {
-          var prog = i / 14;
+        // Pre-seed visible, billowing vapor plume
+        for (var i = 0; i < 18; i++) {
+          var prog = i / 18;
           particles.push({
-            x: cachedX + (Math.random() - 0.5) * (4 + prog * 10),
-            y: cachedY + prog * 36 + (Math.random() - 0.5) * 2,
-            vx: (Math.random() - 0.5) * (0.3 + prog * 0.5),
-            vy: 0.8 + Math.random() * 0.9,
-            radius: 6 + prog * 14 + Math.random() * 3,
-            growth: 0.35,
-            maxRadius: 36,
-            alpha: 0.30 * (1 - prog * 0.5),
-            decay: 0.010
+            x: cachedX + (Math.random() - 0.5) * (6 + prog * 16),
+            y: cachedY + prog * 42 + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * (0.4 + prog * 0.8),
+            vy: 1.0 + Math.random() * 1.2,
+            radius: 8 + prog * 18 + Math.random() * 4,
+            growth: 0.45,
+            maxRadius: 46,
+            alpha: 0.55 * (1 - prog * 0.45),
+            decay: 0.009
           });
         }
 
         function spawnPuff(x, y, isLaunch) {
           particles.push({
-            x: x + (Math.random() - 0.5) * (isLaunch ? 6 : 4),
+            x: x + (Math.random() - 0.5) * (isLaunch ? 8 : 5),
             y: y + (Math.random() - 0.5) * 2,
-            vx: (Math.random() - 0.5) * (isLaunch ? 0.7 : 0.4),
-            vy: isLaunch ? (0.6 + Math.random() * 1.0) : (0.9 + Math.random() * 1.0),
-            radius: isLaunch ? (10 + Math.random() * 5) : (7 + Math.random() * 4),
-            growth: isLaunch ? 0.65 : 0.40,
-            maxRadius: isLaunch ? 55 : 35,
-            alpha: isLaunch ? 0.35 : 0.28,
-            decay: isLaunch ? 0.009 : 0.010
+            vx: (Math.random() - 0.5) * (isLaunch ? 0.9 : 0.5),
+            vy: isLaunch ? (0.8 + Math.random() * 1.3) : (1.0 + Math.random() * 1.2),
+            radius: isLaunch ? (14 + Math.random() * 7) : (9 + Math.random() * 5),
+            growth: isLaunch ? 0.85 : 0.50,
+            maxRadius: isLaunch ? 70 : 42,
+            alpha: isLaunch ? 0.65 : 0.48,
+            decay: isLaunch ? 0.0075 : 0.009
           });
         }
 
@@ -799,14 +799,14 @@
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var maxP = isLaunch ? 140 : 40;
+          var maxP = isLaunch ? 240 : 50;
 
           if (isLaunch) {
             // Only spawn new contrail while rocket is on-screen (t < 1)
             if (t < 1) {
               var dist = Math.hypot(curX - prevX, curY - prevY);
-              // Graceful translucent contrail: step every 14px of flight
-              var steps = Math.min(8, Math.max(2, Math.ceil(dist / 14)));
+              // Thick, continuous contrail trail: step every 9px of flight
+              var steps = Math.min(10, Math.max(2, Math.ceil(dist / 9)));
               for (var s = 0; s < steps; s++) {
                 if (particles.length >= maxP) particles.shift();
                 var interp = s / steps;
@@ -823,14 +823,14 @@
           prevX = curX;
           prevY = curY;
 
-          // Draw subtle, translucent vapor trail
+          // Draw billowing vapor trail
           for (var i = particles.length - 1; i >= 0; i--) {
             var p = particles[i];
             p.x += p.vx * dt;
             p.y += p.vy * dt;
             p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
             // After rocket exits screen (t >= 1), contrail gently and smoothly dissolves over the hero
-            var decayRate = isLaunch && t >= 1 ? 0.018 : p.decay;
+            var decayRate = isLaunch && t >= 1 ? 0.015 : p.decay;
             p.alpha -= decayRate * dt;
 
             if (p.alpha <= 0.005 || p.y > window.innerHeight + 60) {
