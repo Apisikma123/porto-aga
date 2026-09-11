@@ -923,49 +923,91 @@ export const initPreloaderTimeline = () => {
     }, 950);
   };
 
+  let lastDisplayedPct = -1;
   const updateDisplay = (pct, text) => {
     const clamped = Math.min(100, Math.max(0, pct));
-    const roundPct = Math.round(clamped);
+    const roundPct = Math.floor(clamped);
     const progress = clamped / 100;
+
     if (barEl) {
-      barEl.style.transform = `scaleX(${progress})`;
-      barEl.style.width = "100%";
+      barEl.style.transform = `scaleX(${progress}) translateZ(0)`;
     }
-    if (percentEl) percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
-    if (statusEl && text) statusEl.textContent = text;
+    if (percentEl && roundPct !== lastDisplayedPct) {
+      lastDisplayedPct = roundPct;
+      percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
+    }
+    if (statusEl && text && statusEl.textContent !== text) {
+      statusEl.textContent = text;
+    }
   };
 
-  const startProgressTime = performance.now();
-  const totalDuration = 700; // Relaxed, luxurious count
+  // Real Progress Synchronization Engine (Silky Continuous 120fps Lerp)
+  let currentPct = 0;
+  let targetPct = 16;
+  let currentStageText = PRELOADER_STAGES[0].text;
+  let isReadyForLaunch = false;
+  let lastTime = performance.now();
+
+  window.__setPreloaderProgress = (target, text) => {
+    targetPct = Math.max(targetPct, Math.min(100, target));
+    if (text) currentStageText = text;
+  };
 
   const animStep = (now) => {
     if (launchTriggered) return;
-    const elapsed = now - startProgressTime;
-    const progress = Math.min(1, elapsed / totalDuration);
-    const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-    const currentPct = Math.round(easeProgress * 100);
 
-    let stageText = PRELOADER_STAGES[0].text;
-    if (currentPct > 88) stageText = PRELOADER_STAGES[3].text;
-    else if (currentPct > 68) stageText = PRELOADER_STAGES[2].text;
-    else if (currentPct > 30) stageText = PRELOADER_STAGES[1].text;
+    const dt = Math.min(32, Math.max(8, now - lastTime)) / 16.666;
+    lastTime = now;
 
-    updateDisplay(easeProgress * 100, stageText);
+    // Gentle auto-creep: softly crawl forward up to 88% while waiting for heavy assets,
+    // NEVER jumping to 100% until real 3D engine confirms GPU compilation
+    if (targetPct < 88) {
+      targetPct = Math.min(88, targetPct + 0.16 * dt);
+    }
 
-    if (progress < 1) {
-      requestAnimationFrame(animStep);
-    } else {
+    // Dynamic stage status text
+    if (currentPct >= 96) currentStageText = PRELOADER_STAGES[3].text;
+    else if (currentPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
+    else if (currentPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
+    else currentStageText = PRELOADER_STAGES[0].text;
+
+    // Smooth lerp physics: moves currentPct toward targetPct continuously every frame
+    const diff = targetPct - currentPct;
+    if (diff > 0.01) {
+      const lerpFactor = Math.min(0.12, Math.max(0.045, diff * 0.0035));
+      currentPct += Math.max(0.14 * dt, diff * lerpFactor * dt);
+    }
+    if (currentPct > 100) currentPct = 100;
+
+    updateDisplay(currentPct, currentStageText);
+
+    if (currentPct >= 99.5 && targetPct >= 100) {
       updateDisplay(100, PRELOADER_STAGES[3].text);
-      setTimeout(triggerLaunch, 120);
+      if (!isReadyForLaunch) {
+        isReadyForLaunch = true;
+        // Luxurious 180ms celebration beat on 100% before launch
+        setTimeout(triggerLaunch, 180);
+      }
+    } else {
+      requestAnimationFrame(animStep);
     }
   };
 
   requestAnimationFrame(animStep);
 
-  // Hard Failsafe: Always dismiss preloader and unlock body scrolling after 2400ms max
+  // Safety Failsafe: if device or network is slow, advance target to 100% gracefully
+  setTimeout(() => {
+    if (targetPct < 100) {
+      if (typeof window.__setPreloaderProgress === "function") {
+        window.__setPreloaderProgress(100, PRELOADER_STAGES[3].text);
+      }
+    }
+  }, 3200);
+
+  // Hard Failsafe: Always dismiss preloader after 4500ms max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 2400);
+  }, 4500);
 };
 
 // ═══════════════════════════════════════════════════════════

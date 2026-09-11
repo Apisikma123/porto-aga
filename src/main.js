@@ -68,10 +68,17 @@ export async function activate3D() {
   if (!document.documentElement.classList.contains("is-real-user")) return;
   initialized3D = true;
 
+  if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+    window.__setPreloaderProgress(35);
+  }
+
   await yieldToMain();
 
   try {
     const m = await import("./three-scene.js");
+    if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+      window.__setPreloaderProgress(55);
+    }
     await yieldToMain();
     const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
     if (typeof initFn === "function") {

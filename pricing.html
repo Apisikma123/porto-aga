@@ -641,7 +641,7 @@
         <div class="w-full h-1.5 bg-white/10 relative overflow-hidden rounded-full preloader-track shadow-inner">
           <div
             id="preloader-bar"
-            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu transition-transform duration-75 ease-out"
+            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu"
             style="transform: scaleX(0); transform-origin: left center;"
           ></div>
         </div>
@@ -707,33 +707,44 @@
         var rocketCenter = document.getElementById("preloader-rocket-center");
         var flameNozzle = document.getElementById("apple-rocket-flame");
 
-        var cachedX = window.innerWidth / 2;
-        var cachedY = window.innerHeight * 0.52;
+        var initialNozzleX = window.innerWidth / 2;
+        var initialNozzleY = window.innerHeight * 0.52;
+        var cachedX = initialNozzleX;
+        var cachedY = initialNozzleY;
         var prevX = cachedX;
         var prevY = cachedY;
         var lastTime = 0;
+        var launchStartTime = 0;
         var animId = null;
 
-        function updateNozzle() {
+        function measureNozzle() {
           if (flameNozzle && flameNozzle.isConnected) {
             var fRect = flameNozzle.getBoundingClientRect();
             if (fRect.width > 0 && fRect.height > 0) {
-              cachedX = fRect.left + fRect.width / 2;
-              cachedY = fRect.bottom - 2;
+              initialNozzleX = fRect.left + fRect.width / 2;
+              initialNozzleY = fRect.bottom - 2;
+              cachedX = initialNozzleX;
+              cachedY = initialNozzleY;
               return;
             }
           }
           if (rocketCenter && rocketCenter.isConnected) {
             var rRect = rocketCenter.getBoundingClientRect();
             if (rRect.width > 0 && rRect.height > 0) {
-              cachedX = rRect.left + rRect.width * 0.5;
-              cachedY = rRect.top + rRect.height * 0.80;
+              initialNozzleX = rRect.left + rRect.width * 0.5;
+              initialNozzleY = rRect.top + rRect.height * 0.80;
+              cachedX = initialNozzleX;
+              cachedY = initialNozzleY;
               return;
             }
           }
         }
 
-        updateNozzle();
+        measureNozzle();
+        window.addEventListener("resize", function() {
+          resize();
+          measureNozzle();
+        }, { passive: true });
         prevX = cachedX;
         prevY = cachedY;
 
@@ -788,13 +799,30 @@
           var dt = lastTime > 0 ? Math.min(32, Math.max(8, now - lastTime)) / 16.666 : 1.0;
           lastTime = now;
 
-          updateNozzle();
+          var isLaunch = preloaderEl.classList.contains("preloader-launching");
+          if (isLaunch) {
+            if (!launchStartTime) launchStartTime = now;
+            var t = Math.min(1, (now - launchStartTime) / 950);
+            var offsetY = 0;
+            if (t < 0.15) {
+              offsetY = (t / 0.15) * 10;
+            } else {
+              var u = (t - 0.15) / 0.85;
+              var easeY = u * u * (3 - 2 * u);
+              offsetY = 10 - easeY * (window.innerHeight * 1.5 + 250);
+            }
+            cachedX = initialNozzleX;
+            cachedY = initialNozzleY + offsetY;
+          } else {
+            cachedX = initialNozzleX;
+            cachedY = initialNozzleY + Math.sin(now * 0.0035) * 2;
+          }
+
           var curX = cachedX;
           var curY = cachedY;
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var isLaunch = preloaderEl.classList.contains("preloader-launching");
           var maxP = isLaunch ? 55 : 30;
 
           if (isLaunch) {

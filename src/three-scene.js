@@ -90,6 +90,10 @@ export const initThreeEngine = async () => {
   crimsonPointAccent.position.set(2, 3, 3);
   scene.add(crimsonPointAccent);
 
+  if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+    window.__setPreloaderProgress(70);
+  }
+
   await yieldToMain();
 
   // ═══════════════════════════════════════════════════════════
@@ -430,16 +434,26 @@ export const initThreeEngine = async () => {
       }
 
       modelWrapper.add(model);
+      if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+        window.__setPreloaderProgress(88);
+      }
       try {
         if (renderer && scene && camera) {
           renderer.compile(scene, camera);
           renderer.render(scene, camera);
         }
       } catch (e) {}
+
+      if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+        window.__setPreloaderProgress(100);
+      }
     },
     undefined,
     (error) => {
       console.error("Error loading tesseract.glb:", error);
+      if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
+        window.__setPreloaderProgress(100);
+      }
     }
   );
 
