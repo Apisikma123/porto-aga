@@ -95,9 +95,15 @@ if (typeof document !== "undefined" && document.documentElement.classList.contai
   setTimeout(activate3D, 80);
 }
 
-// Ensure modules activate on preloader blast-off ("start3D") or user interaction
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click", "start3D"].forEach((event) => {
+// Ensure modules activate smoothly without competing with the 850ms rocket flight animation
+["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
   window.addEventListener(event, loadNonCritical, { once: true, passive: true });
 });
+
+window.addEventListener("start3D", () => {
+  activate3D();
+  // Defer non-critical scripts until rocket liftoff is complete (950ms) to ensure pure 120fps buttery smoothness
+  setTimeout(loadNonCritical, 950);
+}, { once: true, passive: true });
 
