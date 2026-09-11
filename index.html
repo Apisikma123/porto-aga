@@ -199,7 +199,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: rocketHover 1.4s ease-in-out infinite alternate;
         will-change: transform;
       }
       #preloader-rocket-center svg {
@@ -257,10 +256,6 @@
         color: #f4f4f5;
         font-family: var(--font-mono);
         font-size: 0.72rem;
-      }
-      @keyframes rocketHover {
-        from { transform: translate3d(0, 0, 0) rotate(0deg); }
-        to { transform: translate3d(0, -12px, 0) rotate(1.5deg); }
       }
       @keyframes flameFlicker {
         0% { transform: scale(1, 0.94); opacity: 0.90; }
@@ -720,6 +715,10 @@
         var lastTime = 0;
         var launchStartTime = 0;
         var animId = null;
+        var hoverY = 0;
+        var hoverRot = 0;
+        var startLaunchY = 0;
+        var startLaunchRot = 0;
 
         function measureNozzle() {
           if (flameNozzle && flameNozzle.isConnected) {
@@ -796,18 +795,21 @@
           if (isLaunch) {
             if (!launchStartTime) {
               launchStartTime = now;
-              if (rocketCenter) rocketCenter.style.animation = "none";
+              startLaunchY = hoverY;
+              startLaunchRot = hoverRot;
             }
             var launchDuration = 800; // 0.80s snappy, energetic liftoff
             t = Math.min(1, (now - launchStartTime) / launchDuration);
             // Single continuous power curve: smooth gentle liftoff that swiftly gains supersonic speed
             var ease = Math.pow(t, 2.15);
-            var offsetY = -ease * (window.innerHeight * 1.55 + 320);
+            // Launch directly from current hovered position without ever snapping back to center!
+            var offsetY = startLaunchY - ease * (window.innerHeight * 1.55 + 320);
+            var rot = startLaunchRot * (1 - Math.min(1, t * 2.5));
             var scaleY = 1 + ease * 0.12;
             var scaleX = 1 - ease * 0.06;
 
             if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
+              rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) rotate(" + rot.toFixed(2) + "deg) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
             }
 
             // BLACK BACKGROUND FADES IN EXACT PHYSICAL SYNC WITH ROCKET MOVEMENT
@@ -819,8 +821,16 @@
             cachedX = initialNozzleX;
             cachedY = initialNozzleY + offsetY;
           } else {
+            // Natural aerospace hover oscillation (smooth sinusoidal float with micro-tilt)
+            hoverY = Math.sin(now * 0.0032) * 8 - 4;
+            hoverRot = Math.sin(now * 0.0032) * 1.5;
+
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
+            }
+
             cachedX = initialNozzleX;
-            cachedY = initialNozzleY + Math.sin(now * 0.0035) * 2;
+            cachedY = initialNozzleY + hoverY;
           }
 
           var curX = cachedX;
