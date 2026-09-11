@@ -792,6 +792,19 @@
           });
         }
 
+        for (var k = 0; k < 8; k++) {
+          var kprog = k / 8;
+          sparks.push({
+            x: cachedX + (Math.random() - 0.5) * (6 + kprog * 12),
+            y: cachedY + kprog * 35 + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * 0.6,
+            vy: 1.2 + Math.random() * 1.4,
+            size: 2.5 + Math.random() * 2.5,
+            alpha: 0.95 * (1 - kprog * 0.4),
+            decay: 0.009
+          });
+        }
+
         function spawnPuff(x, y, isLaunch) {
           particles.push({
             x: x + (Math.random() - 0.5) * (isLaunch ? 6 : 6),
@@ -808,13 +821,15 @@
 
         function spawnSpark(x, y, isLaunch) {
           sparks.push({
-            x: x + (Math.random() - 0.5) * 5,
-            y: y + Math.random() * 3,
-            vx: (Math.random() - 0.5) * (isLaunch ? 2.0 : 1.2),
-            vy: isLaunch ? (4.5 + Math.random() * 4.5) : (2.4 + Math.random() * 2.8),
-            size: isLaunch ? (3.0 + Math.random() * 3.0) : (2.5 + Math.random() * 3),
+            x: x + (Math.random() - 0.5) * (isLaunch ? 8 : 5),
+            y: y + (Math.random() - 0.5) * 2,
+            // Match smoke drift velocity exactly so bercak stays embedded with the smoke cloud
+            vx: (Math.random() - 0.5) * (isLaunch ? 1.0 : 0.6),
+            vy: isLaunch ? (1.5 + Math.random() * 2.2) : (1.3 + Math.random() * 1.6),
+            size: isLaunch ? (3.5 + Math.random() * 3.5) : (2.5 + Math.random() * 2.5),
             alpha: 1.0,
-            decay: isLaunch ? 0.022 : 0.022
+            // Match long contrail lifespan so bercak doesn't vanish prematurely
+            decay: isLaunch ? 0.0075 : 0.009
           });
         }
 
@@ -857,8 +872,8 @@
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var maxP = isLaunch ? 240 : 35;
-          var maxSparks = isLaunch ? 55 : 20;
+          var maxP = isLaunch ? 280 : 50;
+          var maxSparks = isLaunch ? 180 : 40;
 
           if (isLaunch) {
             var dist = Math.hypot(curX - prevX, curY - prevY);
@@ -870,7 +885,7 @@
               var ix = prevX + (curX - prevX) * interp;
               var iy = prevY + (curY - prevY) * interp;
               spawnPuff(ix, iy, true);
-              if (Math.random() < 0.45) {
+              if (Math.random() < 0.65) {
                 if (sparks.length >= maxSparks) sparks.shift();
                 spawnSpark(ix, iy, true);
               }
