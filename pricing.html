@@ -112,34 +112,35 @@
       }
       .preloader-launching #apple-rocket-flame {
         transform-origin: 70px 118px;
-        animation: flameMaxThrust 0.08s ease-in-out infinite alternate !important;
-        filter: drop-shadow(0 0 16px rgba(255, 60, 40, 0.95)) drop-shadow(0 0 30px rgba(255, 140, 20, 0.8));
+        transform: scale(1.18, 1.65) !important;
+        transition: transform 0.35s ease-out;
+        filter: drop-shadow(0 0 16px rgba(255, 60, 40, 0.95)) drop-shadow(0 0 32px rgba(255, 140, 20, 0.8));
       }
       .preloader-launching #preloader-rocket-center {
         animation: none !important;
         will-change: transform;
       }
       .preloader-launching #preloader-backdrop {
-        transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.50s;
+        transition: opacity 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.55s;
         opacity: 0 !important;
       }
       .preloader-launching #preloader-header {
-        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
+        transition: opacity 0.30s ease-out, transform 0.30s ease-out;
         opacity: 0 !important;
         transform: translateY(-16px) !important;
       }
       .preloader-launching #preloader-footer {
-        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
+        transition: opacity 0.30s ease-out, transform 0.30s ease-out;
         opacity: 0 !important;
         transform: translateY(16px) !important;
       }
       .preloader-launching #preloader-text-group {
-        transition: opacity 0.32s ease-out, transform 0.32s ease-out;
+        transition: opacity 0.30s ease-out, transform 0.30s ease-out;
         opacity: 0 !important;
         transform: translateY(-16px) !important;
       }
       .preloader-launching #preloader-smoke-canvas {
-        transition: opacity 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.85s;
+        transition: opacity 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.95s;
         opacity: 0 !important;
       }
     </style>
@@ -764,27 +765,27 @@
 
         function spawnPuff(x, y, isLaunch) {
           particles.push({
-            x: x + (Math.random() - 0.5) * (isLaunch ? 8 : 6),
+            x: x + (Math.random() - 0.5) * (isLaunch ? 6 : 6),
             y: y + (Math.random() - 0.5) * 2,
-            vx: (Math.random() - 0.5) * (isLaunch ? 1.6 : 0.7),
-            vy: isLaunch ? (2.0 + Math.random() * 3.2) : (1.3 + Math.random() * 1.6),
-            radius: isLaunch ? (11 + Math.random() * 5) : (6 + Math.random() * 4),
-            growth: isLaunch ? 1.05 : 0.45,
-            maxRadius: isLaunch ? 74 : 44,
-            alpha: isLaunch ? 0.90 : 0.70,
-            decay: isLaunch ? 0.013 : 0.011
+            vx: (Math.random() - 0.5) * (isLaunch ? 1.0 : 0.7),
+            vy: isLaunch ? (1.5 + Math.random() * 2.2) : (1.3 + Math.random() * 1.6),
+            radius: isLaunch ? (10 + Math.random() * 5) : (6 + Math.random() * 4),
+            growth: isLaunch ? 0.65 : 0.45,
+            maxRadius: isLaunch ? 60 : 44,
+            alpha: isLaunch ? 0.85 : 0.70,
+            decay: isLaunch ? 0.0075 : 0.011
           });
         }
 
         function spawnSpark(x, y, isLaunch) {
           sparks.push({
-            x: x + (Math.random() - 0.5) * 6,
-            y: y + Math.random() * 4,
-            vx: (Math.random() - 0.5) * (isLaunch ? 2.5 : 1.2),
-            vy: isLaunch ? (6.0 + Math.random() * 6.5) : (2.4 + Math.random() * 2.8),
-            size: isLaunch ? (3.5 + Math.random() * 3.5) : (2.5 + Math.random() * 3),
+            x: x + (Math.random() - 0.5) * 5,
+            y: y + Math.random() * 3,
+            vx: (Math.random() - 0.5) * (isLaunch ? 2.0 : 1.2),
+            vy: isLaunch ? (4.5 + Math.random() * 4.5) : (2.4 + Math.random() * 2.8),
+            size: isLaunch ? (3.0 + Math.random() * 3.0) : (2.5 + Math.random() * 3),
             alpha: 1.0,
-            decay: isLaunch ? 0.028 : 0.022
+            decay: isLaunch ? 0.022 : 0.022
           });
         }
 
@@ -803,36 +804,19 @@
               launchStartTime = now;
               if (rocketCenter) rocketCenter.style.animation = "none";
             }
-            var launchDuration = 1150; // 1.15s cinematic flight
+            var launchDuration = 1200; // 1.20s continuous silky launch
             var t = Math.min(1, (now - launchStartTime) / launchDuration);
-            var offsetY = 0;
-            var shakeX = 0;
-            var scaleY = 1;
-            var scaleX = 1;
-
-            if (t < 0.20) {
-              // Phase 1: Ignition rumble & thrust building (0.0 - 0.20s)
-              var p = t / 0.20;
-              shakeX = Math.sin(p * Math.PI * 14) * 1.5;
-              offsetY = Math.sin(p * Math.PI * 2) * 1.5;
-              scaleY = 1 + Math.sin(p * Math.PI) * 0.04;
-              scaleX = 1 - Math.sin(p * Math.PI) * 0.02;
-            } else {
-              // Phase 2: Upward accelerating liftoff (0.20 - 1.0s)
-              var p = (t - 0.20) / 0.80;
-              // Smooth quadratic/cubic acceleration curve
-              var accel = p * p * (1.65 - 0.65 * p);
-              offsetY = -accel * (window.innerHeight * 1.6 + 320);
-              shakeX = (1 - p) * Math.sin(now * 0.15) * 1.2;
-              scaleY = 1 + p * 0.12;
-              scaleX = 1 - p * 0.06;
-            }
+            // Single continuous power curve: smooth gentle start accelerating into supersonic climb
+            var ease = Math.pow(t, 2.2);
+            var offsetY = -ease * (window.innerHeight * 1.65 + 350);
+            var scaleY = 1 + ease * 0.10;
+            var scaleX = 1 - ease * 0.05;
 
             if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(" + shakeX.toFixed(2) + "px, " + offsetY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
+              rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
             }
 
-            cachedX = initialNozzleX + shakeX;
+            cachedX = initialNozzleX;
             cachedY = initialNozzleY + offsetY;
           } else {
             cachedX = initialNozzleX;
@@ -844,20 +828,21 @@
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var maxP = isLaunch ? 80 : 30;
+          var maxP = isLaunch ? 240 : 35;
+          var maxSparks = isLaunch ? 55 : 20;
 
           if (isLaunch) {
             var dist = Math.hypot(curX - prevX, curY - prevY);
-            // Dense contrail trail: interpolate steps along the exact path traversed
-            var steps = Math.min(10, Math.max(3, Math.ceil(dist / 9)));
+            // Continuous contrail trail: interpolate steps along the flight path
+            var steps = Math.min(6, Math.max(2, Math.ceil(dist / 14)));
             for (var s = 0; s < steps; s++) {
               if (particles.length >= maxP) particles.shift();
-              var interp = (s + Math.random() * 0.5) / steps;
+              var interp = s / steps;
               var ix = prevX + (curX - prevX) * interp;
               var iy = prevY + (curY - prevY) * interp;
               spawnPuff(ix, iy, true);
-              if (Math.random() < 0.6) {
-                if (sparks.length >= 25) sparks.shift();
+              if (Math.random() < 0.45) {
+                if (sparks.length >= maxSparks) sparks.shift();
                 spawnSpark(ix, iy, true);
               }
             }
@@ -865,7 +850,7 @@
             if (particles.length >= maxP) particles.shift();
             spawnPuff(curX, curY, false);
             if (Math.random() < 0.45) {
-              if (sparks.length >= 18) sparks.shift();
+              if (sparks.length >= maxSparks) sparks.shift();
               spawnSpark(curX, curY, false);
             }
           }
@@ -2659,7 +2644,7 @@
             preloaderEl.style.display = "none";
             preloaderEl.remove();
             document.body.style.overflow = "auto";
-          }, 950);
+          }, 1400);
         };
 
         const updateDisplay = (pct, text) => {
