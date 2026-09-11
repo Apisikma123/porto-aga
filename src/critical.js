@@ -916,11 +916,12 @@ export const initPreloaderTimeline = () => {
     preloaderEl.style.pointerEvents = "none";
     preloaderEl.classList.add("preloader-launching");
 
+    // Allow smoke contrail to linger and softly fade out over the hero before unmounting
     setTimeout(() => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 1050);
+    }, 1800);
   };
 
   let lastDisplayedPct = -1;
@@ -941,28 +942,30 @@ export const initPreloaderTimeline = () => {
     }
   };
 
-  // Real Progress Synchronization Engine (Silky Continuous 120fps Lerp)
+  // Liquid Monotonic 120fps Counter Engine (Zero Stutter, Zero Jumps)
   let currentPct = 0;
-  let targetPct = 16;
   let currentStageText = PRELOADER_STAGES[0].text;
   let isReadyForLaunch = false;
-  let lastTime = performance.now();
+  const startProgressTime = performance.now();
+  const totalDuration = 800; // 800ms silky continuous progress
 
-  window.__setPreloaderProgress = (target, text) => {
-    targetPct = Math.max(targetPct, Math.min(100, target));
-    if (text) currentStageText = text;
+  window.__setPreloaderProgress = () => {
+    // Monotonic curve ensures zero stutter regardless of async compilation spikes
   };
 
   const animStep = (now) => {
     if (launchTriggered) return;
 
-    const dt = Math.min(32, Math.max(8, now - lastTime)) / 16.666;
-    lastTime = now;
+    const elapsed = now - startProgressTime;
+    const progress = Math.min(1, elapsed / totalDuration);
+    // Smooth cubic ease-in-out curve for natural counting rhythm
+    const easeProgress = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    const targetVal = Math.round(easeProgress * 100);
 
-    // Gentle auto-creep: softly crawl forward up to 88% while waiting for heavy assets,
-    // NEVER jumping to 100% until real 3D engine confirms GPU compilation
-    if (targetPct < 88) {
-      targetPct = Math.min(88, targetPct + 0.16 * dt);
+    if (targetVal > currentPct) {
+      currentPct = targetVal;
     }
 
     // Dynamic stage status text
@@ -971,22 +974,13 @@ export const initPreloaderTimeline = () => {
     else if (currentPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
     else currentStageText = PRELOADER_STAGES[0].text;
 
-    // Smooth lerp physics: moves currentPct toward targetPct continuously every frame
-    const diff = targetPct - currentPct;
-    if (diff > 0.01) {
-      const lerpFactor = Math.min(0.12, Math.max(0.045, diff * 0.0035));
-      currentPct += Math.max(0.14 * dt, diff * lerpFactor * dt);
-    }
-    if (currentPct > 100) currentPct = 100;
-
     updateDisplay(currentPct, currentStageText);
 
-    if (currentPct >= 99.5 && targetPct >= 100) {
+    if (currentPct >= 100) {
       updateDisplay(100, PRELOADER_STAGES[3].text);
       if (!isReadyForLaunch) {
         isReadyForLaunch = true;
-        // Luxurious 180ms celebration beat on 100% before launch
-        setTimeout(triggerLaunch, 180);
+        setTimeout(triggerLaunch, 120);
       }
     } else {
       requestAnimationFrame(animStep);
