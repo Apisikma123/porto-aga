@@ -927,6 +927,7 @@ export const initPreloaderTimeline = () => {
   let cachedNozzleX = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
   let cachedNozzleY = typeof window !== "undefined" ? window.innerHeight * 0.52 : 0;
   let lastRectMeasure = 0;
+  let lastSmokeTime = 0;
 
   const updateNozzlePos = () => {
     const targetEl = document.getElementById("apple-rocket-flame") || document.getElementById("preloader-rocket-center") || rocketCenter;
