@@ -40,19 +40,19 @@ export const initThreeEngine = async () => {
   const cameraTarget = new THREE.Vector3(0, 0, 0);
   const currentCameraTarget = new THREE.Vector3(0, 0, 0);
 
-  // WebGLRenderer setup optimized for HD Retina resolution (2x DPR) and silky 60/120fps
+  // WebGLRenderer setup: antialiased on desktop, optimized fillrate on mobile (silky 60/120fps)
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: true, // Crisp antialiased edges on all screens including mobile
+    antialias: !isMobile, // Disable on mobile to prevent GPU fillrate drop on Retina screens
     powerPreference: "high-performance",
-    precision: "highp", // High-precision 32-bit shader math for sharp textures & speculars
+    precision: isMobile ? "mediump" : "highp", // 16-bit float on mobile for 2x faster ALU math
     stencil: false,
     depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // Full Retina/OLED HD pixel ratio (up to 2.0 DPR) for ultra-sharp visuals on mobile
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
+  // Full Retina/OLED HD pixel ratio (1.35 DPR on mobile, up to 2.0 on desktop) for ultra-sharp visuals without thermal throttling
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 2.0));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -256,7 +256,7 @@ export const initThreeEngine = async () => {
 
   // ─── Procedural Luxury Embossed Ketupat (Diamond Weave) HD Texture Engine ───
   const createKetupatTextures = () => {
-    const size = 512;
+    const size = isMobile ? 256 : 512;
     const canvasColor = document.createElement("canvas");
     canvasColor.width = size;
     canvasColor.height = size;

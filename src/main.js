@@ -89,14 +89,17 @@ export async function activate3D() {
   }
 }
 
-// Start 3D engine warmup during the preloader countdown for real users
-// Sliced into macrotasks so it never blocks the main thread (0ms TBT)
+// Start 3D engine warmup during the preloader countdown for desktop users
+// On mobile devices, 3D starts cleanly on start3D at liftoff to preserve 120fps preloader fluidity
+const isMobileDevice = typeof window !== "undefined" && (window.innerWidth < 1024 || (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0));
 if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
-  setTimeout(activate3D, 80);
+  if (!isMobileDevice) {
+    setTimeout(activate3D, 80);
+  }
 }
 
-// Ensure modules activate smoothly without competing with the 850ms rocket flight animation
-["mousemove", "pointerdown", "touchstart", "wheel", "keydown", "scroll", "click"].forEach((event) => {
+// Ensure modules activate smoothly without competing with rocket flight animation
+["mousemove", "wheel", "keydown", "scroll"].forEach((event) => {
   window.addEventListener(event, activate3D, { once: true, passive: true });
   window.addEventListener(event, loadNonCritical, { once: true, passive: true });
 });

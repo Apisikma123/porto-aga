@@ -743,78 +743,8 @@ export const initNavigationAndKeyboard = () => {
     { passive: false }
   );
 
-  // ─── 2. Mobile Touch Swipe Snap (1 Swipe = Exactly 1 Scene) ───
-  let touchStartY = 0;
-  let touchStartX = 0;
-  let touchStartTime = 0;
-
-  window.addEventListener(
-    "touchstart",
-    (e) => {
-      if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
-      if (e.touches.length > 0) {
-        touchStartY = e.touches[0].clientY;
-        touchStartX = e.touches[0].clientX;
-        touchStartTime = Date.now();
-      }
-    },
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "touchmove",
-    (e) => {
-      if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
-      if (e.touches.length > 0) {
-        const diffY = touchStartY - e.touches[0].clientY;
-        const diffX = touchStartX - e.touches[0].clientX;
-
-        const target = e.target;
-        const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
-        if (isHorizontalContainer && Math.abs(diffX) > 4) {
-          return;
-        }
-
-        if (target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view")) return;
-
-        // Prevent free scrolling on vertical swipe
-        if (Math.abs(diffY) > 6 && Math.abs(diffY) > Math.abs(diffX)) {
-          if (e.cancelable) e.preventDefault();
-        }
-      }
-    },
-    { passive: false }
-  );
-
-  window.addEventListener(
-    "touchend",
-    (e) => {
-      if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
-      if (isAnimating) return;
-      const now = Date.now();
-      if (now - lastScrollTime < WHEEL_COOLDOWN) return;
-
-      if (e.changedTouches.length > 0) {
-        const diffY = touchStartY - e.changedTouches[0].clientY;
-        const diffX = touchStartX - e.changedTouches[0].clientX;
-        const elapsed = now - touchStartTime;
-
-        const isHorizontalContainer = e.target && e.target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
-        if (isHorizontalContainer && Math.abs(diffX) > Math.abs(diffY)) {
-          return;
-        }
-
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 25 && elapsed < 900) {
-          if (diffY > 0 && currentSectionIndex < SECTION_IDS.length - 1) {
-            scrollToSection(currentSectionIndex + 1);
-          } else if (diffY < 0 && currentSectionIndex > 0) {
-            scrollToSection(currentSectionIndex - 1);
-          }
-        }
-      }
-    },
-    { passive: true }
-  );
+  // ─── 2. Mobile Touch: Native fluid 120Hz momentum scrolling without gesture hijacking ───
+  // Active section tracking is handled seamlessly by IntersectionObserver (lines 658-674)
 
   // Keyboard Navigation (Fast & Spammable W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
   let lastKeyTime = 0;

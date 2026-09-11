@@ -834,14 +834,16 @@
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          var maxP = isLaunch ? 240 : 50;
+          var isMobileScreen = window.innerWidth < 768;
+          var maxP = isLaunch ? (isMobileScreen ? 90 : 240) : (isMobileScreen ? 28 : 50);
 
           if (isLaunch) {
             // Only spawn new contrail while rocket is on-screen (t < 1)
             if (t < 1) {
               var dist = Math.hypot(curX - prevX, curY - prevY);
-              // Thick, continuous contrail trail: step every 9px of flight
-              var steps = Math.min(10, Math.max(2, Math.ceil(dist / 9)));
+              // Thick, continuous contrail trail: step every 9px of flight (16px on mobile)
+              var stepDist = isMobileScreen ? 16 : 9;
+              var steps = Math.min(isMobileScreen ? 5 : 10, Math.max(2, Math.ceil(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
                 if (particles.length >= maxP) particles.shift();
                 var interp = s / steps;
