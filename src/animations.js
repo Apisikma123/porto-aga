@@ -43,11 +43,15 @@ export const initScrollRevealAnimations = () => {
           gsap.fromTo("#projects header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" });
           gsap.fromTo("#projects-slider-frame", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.08 });
         } else if (id === "contact") {
-          gsap.fromTo("#contact .display-title span", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power3.out" });
-          gsap.fromTo("#contact .glass-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.1 });
+          const spans = document.querySelectorAll("#contact .display-title span");
+          if (spans.length) gsap.fromTo(spans, { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "power3.out" });
+          const contactCards = document.querySelectorAll("#contact .glass-card, #contact form, #contact .spatial-card");
+          if (contactCards.length) gsap.fromTo(contactCards, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.1 });
         } else if (id === "footer") {
-          gsap.fromTo("#footer header", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" });
-          gsap.fromTo("#footer .grid > div", { y: 25, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.7, ease: "power2.out", delay: 0.1 });
+          const footerHeader = document.querySelector("#footer header, #footer h2, #footer .display-title");
+          if (footerHeader) gsap.fromTo(footerHeader, { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" });
+          const footerCols = document.querySelectorAll("#footer .grid > div");
+          if (footerCols.length) gsap.fromTo(footerCols, { y: 25, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, duration: 0.7, ease: "power2.out", delay: 0.1 });
         }
       }
     });

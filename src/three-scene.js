@@ -40,19 +40,19 @@ export const initThreeEngine = async () => {
   const cameraTarget = new THREE.Vector3(0, 0, 0);
   const currentCameraTarget = new THREE.Vector3(0, 0, 0);
 
-  // WebGLRenderer setup: antialiased on desktop, optimized fillrate on mobile (silky 60/120fps)
+  // WebGLRenderer setup: antialiased, full precision, sharp Retina pixel ratio
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: !isMobile, // Disable on mobile to prevent GPU fillrate drop on Retina screens
+    antialias: true, // Crystal-clear edges on both mobile OLED & desktop displays
     powerPreference: "high-performance",
-    precision: isMobile ? "mediump" : "highp", // 16-bit float on mobile for 2x faster ALU math
+    precision: "highp", // 32-bit float for smooth PBR lighting & zero banding
     stencil: false,
     depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // Full Retina/OLED HD pixel ratio (1.35 DPR on mobile, up to 2.0 on desktop) for ultra-sharp visuals without thermal throttling
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 2.0));
+  // Full Retina/OLED HD pixel ratio (up to 2.0) for ultra-sharp visuals without blur
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -919,7 +919,7 @@ export const initThreeEngine = async () => {
       trigger: mainTrigger,
       start: "top top",
       end: "bottom bottom",
-      scrub: 1.4,
+      scrub: isMobile ? 0.6 : 1.4,
     },
   });
 
@@ -1304,14 +1304,24 @@ export const initThreeEngine = async () => {
     { passive: true }
   );
 
-  // Window Resize Handler (Maintains HD pixel ratio)
+  // Window Resize Handler (Maintains HD pixel ratio & ignores mobile URL-bar jitter)
+  let lastW = window.innerWidth;
+  let lastH = window.innerHeight;
   const onResize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const newW = window.innerWidth;
+    const newH = window.innerHeight;
+    // On mobile touch devices, ignore vertical-only resize (< 120px) caused by address bar hide/show
+    if (isMobile && Math.abs(newW - lastW) < 4 && Math.abs(newH - lastH) < 120) {
+      return;
+    }
+    lastW = newW;
+    lastH = newH;
+    camera.aspect = newW / newH;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(newW, newH);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
   };
-  window.addEventListener("resize", onResize);
+  window.addEventListener("resize", onResize, { passive: true });
 
   // ─── Render Loop (IntersectionObserver Throttled & 60/120fps Zero-GC) ───
   let lastTime = performance.now();
@@ -1343,8 +1353,8 @@ export const initThreeEngine = async () => {
     modelWrapper.rotation.x += 0.002;
     modelWrapper.rotation.z = mouseX * 0.08;
 
-    // Kinetic embossed ketupat texture looping offset
-    if (ketupatColorMap) {
+    // Kinetic embossed ketupat texture looping offset (desktop only to preserve mobile GPU framerate)
+    if (ketupatColorMap && !isMobile) {
       ketupatColorMap.offset.x = (ketupatColorMap.offset.x + delta * 0.008) % 1;
       ketupatColorMap.offset.y = (ketupatColorMap.offset.y + delta * 0.004) % 1;
       if (ketupatBumpMap) {

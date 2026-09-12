@@ -798,6 +798,32 @@
 }
 
 @media (max-width: 767.98px) {
+  /* Disable expensive live backdrop-filter readbacks over WebGL canvas on mobile GPUs (saves up to 80% compositor work) */
+  .glass-card,
+  .tesseract-card,
+  .carousel-card,
+  .repo-card,
+  .activity-standalone-card,
+  .spatial-card,
+  .pricing-tier-card,
+  #project-detail-view,
+  #project-detail-modal,
+  #all-projects-view {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: rgba(13, 14, 20, 0.97) !important;
+  }
+
+  /* Hardware-accelerated fluid touch scrolling for horizontal tracks without vertical scroll lock */
+  #activity-heatmap-scroll,
+  #projects-carousel-track,
+  #pricing-cards-track,
+  .overflow-x-auto {
+    touch-action: pan-x pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-x: contain;
+  }
+
   #pricing-cards-track {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -1250,12 +1276,15 @@ textarea {
   pointer-events: auto !important;
 }
 
-/* Ensure 3D transformed cards allow clean click-through to child buttons */
-.carousel-card,
-.pricing-carousel-card,
+/* Ensure 3D transformed cards allow clean click-through to child buttons without locking horizontal swipe */
 .project-card,
 [data-tilt] {
   touch-action: pan-y pinch-zoom;
+}
+
+.carousel-card,
+.pricing-carousel-card {
+  touch-action: pan-x pan-y;
 }
 
 

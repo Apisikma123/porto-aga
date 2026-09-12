@@ -546,8 +546,8 @@ export const enableDragToScroll = (track) => {
   });
 
   const onPointerDown = (e) => {
-    // Only primary button on mouse
-    if (e.pointerType === "mouse" && e.button !== 0) return;
+    // Desktop mouse only — mobile touch devices use native 120Hz momentum scrolling without gesture conflict
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
     if (e.target && e.target.closest("button, input, textarea, select")) return;
 
     if (rafMomentum) {
@@ -921,9 +921,12 @@ export const initPreloaderTimeline = () => {
 
   // Safety Failsafe: if device or network is slow, advance target to 100% gracefully
   setTimeout(() => {
-    if (targetPct < 100) {
-      if (typeof window.__setPreloaderProgress === "function") {
-        window.__setPreloaderProgress(100, PRELOADER_STAGES[3].text);
+    if (currentPct < 100) {
+      currentPct = 100;
+      updateDisplay(100, PRELOADER_STAGES[3].text);
+      if (!isReadyForLaunch) {
+        isReadyForLaunch = true;
+        setTimeout(triggerLaunch, 120);
       }
     }
   }, 3200);
