@@ -877,7 +877,7 @@ export const initPreloaderTimeline = () => {
   let currentStageText = PRELOADER_STAGES[0].text;
   let isReadyForLaunch = false;
   const startProgressTime = performance.now();
-  const totalDuration = 800; // 800ms silky continuous progress
+  const totalDuration = 650; // 650ms silky continuous progress
 
   window.__setPreloaderProgress = () => {
     // Monotonic curve ensures zero stutter regardless of async compilation spikes
@@ -910,7 +910,8 @@ export const initPreloaderTimeline = () => {
       updateDisplay(100, PRELOADER_STAGES[3].text);
       if (!isReadyForLaunch) {
         isReadyForLaunch = true;
-        setTimeout(triggerLaunch, 120);
+        const delay = window.__is3DReady ? 40 : 80;
+        setTimeout(triggerLaunch, delay);
       }
     } else {
       requestAnimationFrame(animStep);

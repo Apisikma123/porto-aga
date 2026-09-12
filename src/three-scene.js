@@ -444,15 +444,21 @@ export const initThreeEngine = async () => {
         }
       } catch (e) {}
 
-      if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
-        window.__setPreloaderProgress(100);
+      if (typeof window !== "undefined") {
+        window.__is3DReady = true;
+        if (typeof window.__setPreloaderProgress === "function") {
+          window.__setPreloaderProgress(100);
+        }
       }
     },
     undefined,
     (error) => {
       console.error("Error loading tesseract.glb:", error);
-      if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
-        window.__setPreloaderProgress(100);
+      if (typeof window !== "undefined") {
+        window.__is3DReady = true;
+        if (typeof window.__setPreloaderProgress === "function") {
+          window.__setPreloaderProgress(100);
+        }
       }
     }
   );
@@ -693,82 +699,98 @@ export const initThreeEngine = async () => {
   let galaxy1 = null;
   let galaxyMat1 = null;
 
-  loader.load(
-    "/need_some_space.glb",
-    (gltf) => {
-      let srcPoints = null;
+  // Defer non-critical 1.4MB galaxy point cloud until AFTER rocket liftoff to protect 120fps launch fluidity
+  let galaxyLoaded = false;
+  const loadGalaxy = () => {
+    if (galaxyLoaded) return;
+    galaxyLoaded = true;
 
-      gltf.scene.traverse((child) => {
-        if (child.isPoints && child.geometry && !srcPoints) {
-          srcPoints = child;
+    loader.load(
+      "/need_some_space.glb",
+      (gltf) => {
+        let srcPoints = null;
+
+        gltf.scene.traverse((child) => {
+          if (child.isPoints && child.geometry && !srcPoints) {
+            srcPoints = child;
+          }
+        });
+
+        if (!srcPoints) return;
+
+        const srcPos = srcPoints.geometry.attributes.position;
+        const srcCol = srcPoints.geometry.attributes.color;
+        const totalPts = srcPos.count;
+
+        // Smooth sampling mapped purely to #DC143C Primary Color
+        const stride = isMobile ? 8 : 6;
+        const count = Math.floor(totalPts / stride);
+        const newPos = new Float32Array(count * 3);
+        const newCol = new Float32Array(count * 3);
+
+        const primaryR = 0.8627;
+        const primaryG = 0.0784;
+        const primaryB = 0.2353;
+
+        for (let i = 0; i < count; i++) {
+          const s = i * stride;
+          newPos[i * 3] = srcPos.getX(s);
+          newPos[i * 3 + 1] = srcPos.getY(s);
+          newPos[i * 3 + 2] = srcPos.getZ(s);
+
+          const r = srcCol ? srcCol.getX(s) : 0.8;
+          const g = srcCol ? srcCol.getY(s) : 0.8;
+          const b = srcCol ? srcCol.getZ(s) : 0.8;
+          const intensity = r * 0.3 + g * 0.59 + b * 0.11;
+
+          // Exact #DC143C Crimson depth scaling
+          const factor = 0.35 + intensity * 0.65;
+          newCol[i * 3] = primaryR * factor;
+          newCol[i * 3 + 1] = primaryG * factor;
+          newCol[i * 3 + 2] = primaryB * factor;
         }
-      });
 
-      if (!srcPoints) return;
+        const geom = new THREE.BufferGeometry();
+        geom.setAttribute("position", new THREE.BufferAttribute(newPos, 3));
+        geom.setAttribute("color", new THREE.BufferAttribute(newCol, 3));
+        geom.center();
 
-      const srcPos = srcPoints.geometry.attributes.position;
-      const srcCol = srcPoints.geometry.attributes.color;
-      const totalPts = srcPos.count;
+        const isCurrentLight = document.documentElement.getAttribute("data-theme") === "light" || localStorage.getItem("aga_portfolio_theme") === "light";
 
-      // Smooth sampling mapped purely to #DC143C Primary Color
-      const stride = isMobile ? 8 : 6;
-      const count = Math.floor(totalPts / stride);
-      const newPos = new Float32Array(count * 3);
-      const newCol = new Float32Array(count * 3);
+        galaxyMat1 = new THREE.PointsMaterial({
+          size: isMobile ? 0.22 : 0.32,
+          map: softNebulaTex,
+          vertexColors: true,
+          transparent: true,
+          opacity: isCurrentLight ? 0.20 : 0.45,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          sizeAttenuation: true,
+          fog: false,
+        });
 
-      const primaryR = 0.8627;
-      const primaryG = 0.0784;
-      const primaryB = 0.2353;
-
-      for (let i = 0; i < count; i++) {
-        const s = i * stride;
-        newPos[i * 3] = srcPos.getX(s);
-        newPos[i * 3 + 1] = srcPos.getY(s);
-        newPos[i * 3 + 2] = srcPos.getZ(s);
-
-        const r = srcCol ? srcCol.getX(s) : 0.8;
-        const g = srcCol ? srcCol.getY(s) : 0.8;
-        const b = srcCol ? srcCol.getZ(s) : 0.8;
-        const intensity = r * 0.3 + g * 0.59 + b * 0.11;
-
-        // Exact #DC143C Crimson depth scaling
-        const factor = 0.35 + intensity * 0.65;
-        newCol[i * 3] = primaryR * factor;
-        newCol[i * 3 + 1] = primaryG * factor;
-        newCol[i * 3 + 2] = primaryB * factor;
+        galaxy1 = new THREE.Points(geom, galaxyMat1);
+        const scale = isMobile ? 0.09 : 0.13;
+        galaxy1.scale.set(scale, scale, scale);
+        galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
+        galaxy1.rotation.set(0.95, 0.40, -0.35);
+        galaxiesUniverseGroup.add(galaxy1);
+      },
+      undefined,
+      (error) => {
+        console.warn("Notice: need_some_space.glb background loading notice:", error);
       }
+    );
+  };
 
-      const geom = new THREE.BufferGeometry();
-      geom.setAttribute("position", new THREE.BufferAttribute(newPos, 3));
-      geom.setAttribute("color", new THREE.BufferAttribute(newCol, 3));
-      geom.center();
-
-      const isCurrentLight = document.documentElement.getAttribute("data-theme") === "light" || localStorage.getItem("aga_portfolio_theme") === "light";
-
-      galaxyMat1 = new THREE.PointsMaterial({
-        size: isMobile ? 0.22 : 0.32,
-        map: softNebulaTex,
-        vertexColors: true,
-        transparent: true,
-        opacity: isCurrentLight ? 0.20 : 0.45,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        sizeAttenuation: true,
-        fog: false,
-      });
-
-      galaxy1 = new THREE.Points(geom, galaxyMat1);
-      const scale = isMobile ? 0.09 : 0.13;
-      galaxy1.scale.set(scale, scale, scale);
-      galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
-      galaxy1.rotation.set(0.95, 0.40, -0.35);
-      galaxiesUniverseGroup.add(galaxy1);
-    },
-    undefined,
-    (error) => {
-      console.warn("Notice: need_some_space.glb background loading notice:", error);
-    }
-  );
+  if (typeof window !== "undefined") {
+    window.addEventListener("start3D", () => {
+      setTimeout(loadGalaxy, 1400);
+    }, { once: true, passive: true });
+    setTimeout(loadGalaxy, 3500);
+  } else {
+    loadGalaxy();
+  }
 
   // ─── Theme Mode 3D Metamorphosis Engine (Dark / Light Atmospheric Sync) ───
   const updateThreeTheme = (theme, animate = true) => {

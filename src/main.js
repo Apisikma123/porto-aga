@@ -89,13 +89,10 @@ export async function activate3D() {
   }
 }
 
-// Start 3D engine warmup during the preloader countdown for desktop users
-// On mobile devices, 3D starts cleanly on start3D at liftoff to preserve 120fps preloader fluidity
-const isMobileDevice = typeof window !== "undefined" && (window.innerWidth < 1024 || (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0));
+// Start 3D engine warmup during preloader countdown for all devices (desktop & mobile)
+// Pre-compiling shaders in background ensures pure 120fps rocket liftoff without mid-air GPU stalls
 if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
-  if (!isMobileDevice) {
-    setTimeout(activate3D, 80);
-  }
+  setTimeout(activate3D, 50);
 }
 
 // Ensure modules activate smoothly without competing with rocket flight animation
