@@ -372,9 +372,165 @@ export const initThreeEngine = async () => {
 
   await yieldToMain();
 
-  // Load /tesseract.glb with pure high-speed GLTFLoader & Dynamic Material Assignment
+  // ─── Primary Crimson (#DC143C) Nebula Particle Texture ───
+  const createPrimaryCrimsonNebulaTexture = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    const cx = 32, cy = 32;
+
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 32);
+    grad.addColorStop(0.0, "rgba(220, 20, 60, 0.85)");   // Exact #DC143C Primary Crimson
+    grad.addColorStop(0.25, "rgba(220, 20, 60, 0.55)");  // Primary Crimson Glow
+    grad.addColorStop(0.55, "rgba(160, 15, 44, 0.20)");  // Deep Primary Velvet
+    grad.addColorStop(0.85, "rgba(80, 8, 22, 0.04)");    // Dark Primary Falloff
+    grad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.generateMipmaps = false;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    return tex;
+  };
+  const softNebulaTex = createPrimaryCrimsonNebulaTexture();
+
+  // ═══════════════════════════════════════════════════════════
+  // ─── ATMOSPHERIC DEEP SPACE GALAXY (Single Elegant Spiral in #DC143C Primary Color) ───
+  // ═══════════════════════════════════════════════════════════
+  const galaxiesUniverseGroup = new THREE.Group();
+  scene.add(galaxiesUniverseGroup);
+
+  let galaxy1 = null;
+  let galaxyMat1 = null;
+  let galaxyLoaded = false;
+  let tesseractLoaded = false;
+  let sceneReadinessNotified = false;
+
+  const notifySceneReady = () => {
+    if (sceneReadinessNotified) return;
+    sceneReadinessNotified = true;
+
+    try {
+      if (renderer && scene && camera) {
+        renderer.compile(scene, camera);
+        renderer.render(scene, camera);
+      }
+    } catch (e) {}
+
+    if (typeof window !== "undefined") {
+      window.__is3DReady = true;
+      if (typeof window.__setPreloaderProgress === "function") {
+        window.__setPreloaderProgress(100);
+      }
+    }
+  };
+
+  const checkAllAssetsReady = () => {
+    if (tesseractLoaded && galaxyLoaded) {
+      notifySceneReady();
+    }
+  };
+
+  // Load /tesseract.glb and /need_some_space.glb concurrently with pure high-speed GLTFLoader
   let mixer = null;
   const loader = new GLTFLoader(loadingManager);
+
+  const loadGalaxy = () => {
+    if (galaxyLoaded) return;
+
+    loader.load(
+      "/need_some_space.glb",
+      (gltf) => {
+        let srcPoints = null;
+
+        gltf.scene.traverse((child) => {
+          if (child.isPoints && child.geometry && !srcPoints) {
+            srcPoints = child;
+          }
+        });
+
+        if (!srcPoints) {
+          galaxyLoaded = true;
+          checkAllAssetsReady();
+          return;
+        }
+
+        const srcPos = srcPoints.geometry.attributes.position;
+        const srcCol = srcPoints.geometry.attributes.color;
+        const totalPts = srcPos.count;
+
+        // Smooth sampling mapped purely to #DC143C Primary Color
+        const stride = isMobile ? 8 : 6;
+        const count = Math.floor(totalPts / stride);
+        const newPos = new Float32Array(count * 3);
+        const newCol = new Float32Array(count * 3);
+
+        const primaryR = 0.8627;
+        const primaryG = 0.0784;
+        const primaryB = 0.2353;
+
+        for (let i = 0; i < count; i++) {
+          const s = i * stride;
+          newPos[i * 3] = srcPos.getX(s);
+          newPos[i * 3 + 1] = srcPos.getY(s);
+          newPos[i * 3 + 2] = srcPos.getZ(s);
+
+          const r = srcCol ? srcCol.getX(s) : 0.8;
+          const g = srcCol ? srcCol.getY(s) : 0.8;
+          const b = srcCol ? srcCol.getZ(s) : 0.8;
+          const intensity = r * 0.3 + g * 0.59 + b * 0.11;
+
+          // Exact #DC143C Crimson depth scaling
+          const factor = 0.35 + intensity * 0.65;
+          newCol[i * 3] = primaryR * factor;
+          newCol[i * 3 + 1] = primaryG * factor;
+          newCol[i * 3 + 2] = primaryB * factor;
+        }
+
+        const geom = new THREE.BufferGeometry();
+        geom.setAttribute("position", new THREE.BufferAttribute(newPos, 3));
+        geom.setAttribute("color", new THREE.BufferAttribute(newCol, 3));
+        geom.center();
+
+        const isCurrentLight = document.documentElement.getAttribute("data-theme") === "light" || localStorage.getItem("aga_portfolio_theme") === "light";
+
+        galaxyMat1 = new THREE.PointsMaterial({
+          size: isMobile ? 0.22 : 0.32,
+          map: softNebulaTex,
+          vertexColors: true,
+          transparent: true,
+          opacity: isCurrentLight ? 0.20 : 0.45,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          sizeAttenuation: true,
+          fog: false,
+        });
+
+        galaxy1 = new THREE.Points(geom, galaxyMat1);
+        const scale = isMobile ? 0.09 : 0.13;
+        galaxy1.scale.set(scale, scale, scale);
+        galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
+        galaxy1.rotation.set(0.95, 0.40, -0.35);
+        galaxiesUniverseGroup.add(galaxy1);
+
+        galaxyLoaded = true;
+        checkAllAssetsReady();
+      },
+      undefined,
+      (error) => {
+        console.warn("Notice: need_some_space.glb background loading notice:", error);
+        galaxyLoaded = true;
+        checkAllAssetsReady();
+      }
+    );
+  };
+
+  // Launch galaxy point-cloud download concurrently in parallel
+  loadGalaxy();
 
   loader.load(
     "/tesseract.glb",
@@ -436,32 +592,20 @@ export const initThreeEngine = async () => {
       }
 
       modelWrapper.add(model);
+      tesseractLoaded = true;
       if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
         window.__setPreloaderProgress(88);
       }
-      try {
-        if (renderer && scene && camera) {
-          renderer.compile(scene, camera);
-          renderer.render(scene, camera);
-        }
-      } catch (e) {}
+      checkAllAssetsReady();
 
-      if (typeof window !== "undefined") {
-        window.__is3DReady = true;
-        if (typeof window.__setPreloaderProgress === "function") {
-          window.__setPreloaderProgress(100);
-        }
-      }
+      // Graceful failsafe: if galaxy model takes longer than 700ms after tesseract is ready, release preloader smoothly
+      setTimeout(notifySceneReady, 700);
     },
     undefined,
     (error) => {
       console.error("Error loading tesseract.glb:", error);
-      if (typeof window !== "undefined") {
-        window.__is3DReady = true;
-        if (typeof window.__setPreloaderProgress === "function") {
-          window.__setPreloaderProgress(100);
-        }
-      }
+      tesseractLoaded = true;
+      notifySceneReady();
     }
   );
 
@@ -622,33 +766,6 @@ export const initThreeEngine = async () => {
   await yieldToMain();
 
   // ─── Multi-Layered Deep Cosmic Starfield & Floating Stardust ───
-  // ─── Elegant Deep Cosmic Starfield & Atmospheric Galaxy ───
-  // Primary Crimson (#DC143C) Nebula Particle Texture
-  const createPrimaryCrimsonNebulaTexture = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext("2d");
-    const cx = 32, cy = 32;
-
-    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 32);
-    grad.addColorStop(0.0, "rgba(220, 20, 60, 0.85)");   // Exact #DC143C Primary Crimson
-    grad.addColorStop(0.25, "rgba(220, 20, 60, 0.55)");  // Primary Crimson Glow
-    grad.addColorStop(0.55, "rgba(160, 15, 44, 0.20)");  // Deep Primary Velvet
-    grad.addColorStop(0.85, "rgba(80, 8, 22, 0.04)");    // Dark Primary Falloff
-    grad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
-
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 64, 64);
-
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.generateMipmaps = false;
-    tex.minFilter = THREE.LinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    return tex;
-  };
-  const softNebulaTex = createPrimaryCrimsonNebulaTexture();
-
   // Gentle, Quiet Cosmic Starfield (#DC143C Primary Tone Spectrum)
   const starCount = isMobile ? 120 : 200;
   const starGeom = new THREE.BufferGeometry();
@@ -693,108 +810,6 @@ export const initThreeEngine = async () => {
   });
   const starField = new THREE.Points(starGeom, starMat);
   scene.add(starField);
-
-  // ═══════════════════════════════════════════════════════════
-  // ─── ATMOSPHERIC DEEP SPACE GALAXY (Single Elegant Spiral in #DC143C Primary Color) ───
-  // ═══════════════════════════════════════════════════════════
-  const galaxiesUniverseGroup = new THREE.Group();
-  scene.add(galaxiesUniverseGroup);
-
-  let galaxy1 = null;
-  let galaxyMat1 = null;
-
-  // Defer non-critical 1.4MB galaxy point cloud until AFTER rocket liftoff to protect 120fps launch fluidity
-  let galaxyLoaded = false;
-  const loadGalaxy = () => {
-    if (galaxyLoaded) return;
-    galaxyLoaded = true;
-
-    loader.load(
-      "/need_some_space.glb",
-      (gltf) => {
-        let srcPoints = null;
-
-        gltf.scene.traverse((child) => {
-          if (child.isPoints && child.geometry && !srcPoints) {
-            srcPoints = child;
-          }
-        });
-
-        if (!srcPoints) return;
-
-        const srcPos = srcPoints.geometry.attributes.position;
-        const srcCol = srcPoints.geometry.attributes.color;
-        const totalPts = srcPos.count;
-
-        // Smooth sampling mapped purely to #DC143C Primary Color
-        const stride = isMobile ? 8 : 6;
-        const count = Math.floor(totalPts / stride);
-        const newPos = new Float32Array(count * 3);
-        const newCol = new Float32Array(count * 3);
-
-        const primaryR = 0.8627;
-        const primaryG = 0.0784;
-        const primaryB = 0.2353;
-
-        for (let i = 0; i < count; i++) {
-          const s = i * stride;
-          newPos[i * 3] = srcPos.getX(s);
-          newPos[i * 3 + 1] = srcPos.getY(s);
-          newPos[i * 3 + 2] = srcPos.getZ(s);
-
-          const r = srcCol ? srcCol.getX(s) : 0.8;
-          const g = srcCol ? srcCol.getY(s) : 0.8;
-          const b = srcCol ? srcCol.getZ(s) : 0.8;
-          const intensity = r * 0.3 + g * 0.59 + b * 0.11;
-
-          // Exact #DC143C Crimson depth scaling
-          const factor = 0.35 + intensity * 0.65;
-          newCol[i * 3] = primaryR * factor;
-          newCol[i * 3 + 1] = primaryG * factor;
-          newCol[i * 3 + 2] = primaryB * factor;
-        }
-
-        const geom = new THREE.BufferGeometry();
-        geom.setAttribute("position", new THREE.BufferAttribute(newPos, 3));
-        geom.setAttribute("color", new THREE.BufferAttribute(newCol, 3));
-        geom.center();
-
-        const isCurrentLight = document.documentElement.getAttribute("data-theme") === "light" || localStorage.getItem("aga_portfolio_theme") === "light";
-
-        galaxyMat1 = new THREE.PointsMaterial({
-          size: isMobile ? 0.22 : 0.32,
-          map: softNebulaTex,
-          vertexColors: true,
-          transparent: true,
-          opacity: isCurrentLight ? 0.20 : 0.45,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          sizeAttenuation: true,
-          fog: false,
-        });
-
-        galaxy1 = new THREE.Points(geom, galaxyMat1);
-        const scale = isMobile ? 0.09 : 0.13;
-        galaxy1.scale.set(scale, scale, scale);
-        galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
-        galaxy1.rotation.set(0.95, 0.40, -0.35);
-        galaxiesUniverseGroup.add(galaxy1);
-      },
-      undefined,
-      (error) => {
-        console.warn("Notice: need_some_space.glb background loading notice:", error);
-      }
-    );
-  };
-
-  if (typeof window !== "undefined") {
-    window.addEventListener("start3D", () => {
-      setTimeout(loadGalaxy, 1400);
-    }, { once: true, passive: true });
-    setTimeout(loadGalaxy, 3500);
-  } else {
-    loadGalaxy();
-  }
 
   // ─── Theme Mode 3D Metamorphosis Engine (Dark / Light Atmospheric Sync) ───
   const updateThreeTheme = (theme, animate = true) => {

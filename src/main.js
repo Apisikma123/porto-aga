@@ -72,6 +72,18 @@ export async function activate3D() {
     window.__setPreloaderProgress(35);
   }
 
+  // Pre-fetch both 3D models concurrently in browser cache during preloader countdown
+  if (typeof document !== "undefined") {
+    ["/tesseract.glb", "/need_some_space.glb"].forEach((url) => {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "fetch";
+      link.href = url;
+      link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+    });
+  }
+
   await yieldToMain();
 
   try {
