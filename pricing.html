@@ -105,7 +105,7 @@
         transform-origin: 70px 118px;
         transform: scale(1.22, 1.75) !important;
         transition: transform 0.25s ease-out;
-        filter: drop-shadow(0 0 16px rgba(255, 60, 40, 0.95)) drop-shadow(0 0 32px rgba(255, 140, 20, 0.8));
+        filter: drop-shadow(0 0 12px rgba(255, 60, 40, 0.75));
       }
       .preloader-launching #preloader-rocket-center {
         animation: none !important;
@@ -194,21 +194,150 @@
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#040509" />
 
-    <!-- Google Fonts & Material Symbols (Non-blocking async load) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
-      />
-    </noscript>
+    <!-- Asynchronous Deferred Google Fonts (Zero Render Blocking, Instant FCP) -->
+    <script>
+      (function () {
+        var fontsLoaded = false;
+        var loadFonts = function () {
+          if (fontsLoaded) return;
+          fontsLoaded = true;
+          var f = document.createElement("link");
+          f.rel = "stylesheet";
+          f.href = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700;800&display=swap";
+          document.head.appendChild(f);
+
+          var m = document.createElement("link");
+          m.rel = "stylesheet";
+          m.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&text=arrow_forward,arrow_outward,arrow_back,article,code,star,close,menu,light_mode,dark_mode,chat,tune,view_in_ar,calculate,search,content_copy,check,terminal,verified_user,expand_more,check_circle,folder_off,search_off,grid_view,description,add_circle_outline,radio_button_unchecked&display=swap";
+          document.head.appendChild(m);
+        };
+
+        window.addEventListener("scroll", loadFonts, { passive: true, once: true });
+        window.addEventListener("touchstart", loadFonts, { passive: true, once: true });
+        window.addEventListener("mousemove", loadFonts, { passive: true, once: true });
+        window.addEventListener("keydown", loadFonts, { passive: true, once: true });
+        window.addEventListener("start3D", loadFonts, { passive: true, once: true });
+      })();
+    </script>
+
+    <!-- Critical Hero & Inline Styles for Instant 0ms Paint & Zero CLS -->
+    <style id="critical-hero-css">
+      html:not(.styles-ready) *,
+      html:not(.styles-ready) *::before,
+      html:not(.styles-ready) *::after {
+        transition: none !important;
+      }
+      :root {
+        --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        --color-crimson: #DC143C;
+      }
+      html {
+        background-color: #040509;
+        color: #f4f4f5;
+        font-family: var(--font-sans);
+        margin: 0;
+        padding: 0;
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      body {
+        background-color: transparent !important;
+        color: #f4f4f5;
+        font-family: var(--font-sans);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      main {
+        position: relative;
+        z-index: 10;
+        max-width: 72rem;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+      }
+      @media (min-width: 640px) {
+        main { padding-top: 5rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+      }
+      @media (min-width: 768px) {
+        main { padding-left: 2.5rem; padding-right: 2.5rem; }
+      }
+      @media (min-width: 1024px) {
+        main { padding-left: 7rem; }
+      }
+      @media (min-width: 1280px) {
+        main { padding-left: 9rem; }
+      }
+      .display-title {
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        font-family: var(--font-sans);
+      }
+      .body-copy {
+        color: #a1a1aa;
+        line-height: 1.62;
+        font-family: var(--font-sans);
+      }
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 0.5rem 0.875rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: #f4f4f5;
+        text-decoration: none;
+        box-sizing: border-box;
+        min-height: 38px;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 40;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      @media (min-width: 640px) {
+        header { padding-top: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+      }
+      .lang-btn {
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.375rem;
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        color: #a1a1aa;
+        background: transparent;
+        border: none;
+      }
+      .lang-btn.active {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+      }
+      .pricing-tier-card {
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        background: rgba(18, 18, 24, 0.65);
+        box-sizing: border-box;
+      }
+    </style>
 
     <!-- Tailwind CSS Engine -->
     <link rel="stylesheet" href="/src/style.css" />
@@ -392,6 +521,8 @@
           ]
         }
       ]
+    }
+    </script>
     <!-- Cookie & LocalStorage State Synchronizer (Zero-Flash Theme & Language Bootstrapper) -->
     <script>
       (function() {
@@ -754,8 +885,9 @@
             return;
           }
 
-          var dt = lastTime > 0 ? Math.min(32, Math.max(8, now - lastTime)) / 16.666 : 1.0;
+          var rawDelta = lastTime > 0 ? (now - lastTime) : 16.666;
           lastTime = now;
+          var dt = Math.min(48, Math.max(2, rawDelta)) / 16.666;
 
           var isLaunch = preloaderEl.classList.contains("preloader-launching");
           var t = 0;
@@ -765,15 +897,15 @@
               startLaunchY = hoverY;
               startLaunchRot = hoverRot;
             }
-            var launchDuration = 800; // 0.80s snappy, energetic liftoff
+            var launchDuration = 780; // 0.78s majestic supersonic liftoff
             t = Math.min(1, (now - launchStartTime) / launchDuration);
-            // Single continuous power curve: smooth gentle liftoff that swiftly gains supersonic speed
-            var ease = Math.pow(t, 2.15);
-            // Launch directly from current hovered position without ever snapping back to center!
+            // Continuous power curve: gentle start swiftly accelerating into supersonic thrust
+            var ease = Math.pow(t, 2.3);
+            // Launch directly from current hovered position without ever snapping back to center
             var offsetY = startLaunchY - ease * (window.innerHeight * 1.55 + 320);
             var rot = startLaunchRot * (1 - Math.min(1, t * 2.5));
-            var scaleY = 1 + ease * 0.12;
-            var scaleX = 1 - ease * 0.06;
+            var scaleY = 1 + ease * 0.14;
+            var scaleX = 1 - ease * 0.07;
 
             if (rocketCenter) {
               rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) rotate(" + rot.toFixed(2) + "deg) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
@@ -806,15 +938,15 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           var isMobileScreen = window.innerWidth < 768;
-          var maxP = isLaunch ? (isMobileScreen ? 90 : 240) : (isMobileScreen ? 28 : 50);
+          var maxP = isLaunch ? (isMobileScreen ? 70 : 200) : (isMobileScreen ? 24 : 45);
 
           if (isLaunch) {
             // Only spawn new contrail while rocket is on-screen (t < 1)
             if (t < 1) {
               var dist = Math.hypot(curX - prevX, curY - prevY);
-              // Thick, continuous contrail trail: step every 9px of flight (16px on mobile)
-              var stepDist = isMobileScreen ? 16 : 9;
-              var steps = Math.min(isMobileScreen ? 5 : 10, Math.max(2, Math.ceil(dist / stepDist)));
+              // Continuous contrail trail
+              var stepDist = isMobileScreen ? 18 : 10;
+              var steps = Math.min(isMobileScreen ? 4 : 8, Math.max(2, Math.ceil(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
                 if (particles.length >= maxP) particles.shift();
                 var interp = s / steps;
@@ -976,7 +1108,7 @@
           class="btn-back"
           title="Kembali ke Portofolio 3D"
         >
-          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           <span class="hidden sm:inline" data-i18n="backBtn">Portofolio 3D</span>
           <span class="sm:hidden" data-i18n="backBtnSm">Portofolio</span>
         </a>
@@ -1051,7 +1183,7 @@
                 class="w-full rounded-xl bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 touch-manipulation"
               >
                 <span data-i18n="t1OrderBtn">Pesan Tier 01</span>
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
               <button
                 type="button"
@@ -1102,7 +1234,7 @@
                 class="w-full rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer active:scale-95 touch-manipulation"
               >
                 <span data-i18n="t2OrderBtn">Pesan Tier 02</span>
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
               <button
                 type="button"
@@ -1147,7 +1279,7 @@
                 class="w-full rounded-xl bg-white hover:bg-zinc-200 text-black font-mono text-xs font-bold uppercase tracking-wider py-2.5 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 touch-manipulation"
               >
                 <span data-i18n="t3OrderBtn">Inisiasi Custom</span>
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
               <button
                 type="button"
@@ -1658,7 +1790,7 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- FOOTER                                                     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <footer class="relative z-10 border-t border-white/10 py-8 px-4 sm:px-6 md:px-12 bg-[#090a10] font-mono text-xs text-zinc-500 mt-16">
+    <footer class="relative z-10 border-t border-white/10 py-8 px-4 sm:px-6 md:px-12 bg-[#090a10] font-mono text-xs text-zinc-300 mt-16">
       <div class="max-w-6xl mx-auto space-y-6 lg:pl-28 xl:pl-36">
         
         <!-- Internal Referral Links Grid (Halaman Perujuk) -->
@@ -1666,7 +1798,7 @@
           <span class="eyebrow text-[0.58rem] sm:text-[0.62rem] text-[#DC143C] block mb-2.5 font-semibold" data-i18n="footerReferralTitle">
             LAYANAN SPESIFIK &amp; JASA PEMBUATAN WEBSITE CEPAT (INTERNAL REFERRAL INDEX)
           </span>
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-zinc-400">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-zinc-300">
             <a href="/" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerHome">→ Beranda / Portofolio 3D</a>
             <a href="/jasa-pembuatan-landing-page.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerLanding">→ Jasa Landing Page Murah</a>
             <a href="/jasa-pembuatan-company-profile.html" class="hover:text-[#DC143C] transition-colors truncate" data-i18n="footerCompro">→ Jasa Company Profile</a>
@@ -1682,11 +1814,11 @@
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-zinc-300">
           <div>
-            <span class="text-zinc-300">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
+            <span class="text-white font-medium">Muhammad Aga Putra</span> / Software Engineer &amp; Web Architect © <span id="footer-year">2026</span>
           </div>
-          <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs">
+          <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[0.7rem] sm:text-xs text-zinc-300">
             <a href="/#start" class="hover:text-white transition-colors" data-i18n="footerNav3D">Portofolio 3D</a>
             <a href="/projects.html" class="hover:text-white transition-colors" data-i18n="footerNavWorks">Semua Karya</a>
             <a href="/jasa-pembuatan-website.html" class="hover:text-white transition-colors" data-i18n="footerNavServices">Layanan Website</a>
@@ -1702,9 +1834,16 @@
     <!-- 5. 100% IDENTICAL HOMEPAGE 3D SCENE & ANIMATION ENGINE     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <script type="module">
-      import { gsap } from "gsap";
       import { PRICING_CONFIG, PRICING_WA_NUMBER, formatPriceRp, formatPriceRpFull, calculatePricingEstimate, buildWhatsAppMessage } from '/src/pricing-config.js';
-      import { initThreeEngine } from '/src/three-scene.js';
+
+      let _gsap = null;
+      const getGsap = async () => {
+        if (_gsap) return _gsap;
+        if (typeof window !== "undefined" && window.gsap) return (_gsap = window.gsap);
+        const mod = await import("gsap");
+        _gsap = mod.gsap || mod.default || mod;
+        return _gsap;
+      };
 
       window.openProtectedWhatsApp = (event, text = "") => {
         if (event && event.preventDefault) event.preventDefault();
@@ -2094,7 +2233,7 @@
       }
 
       // ─── STEP NAVIGATION ───
-      window.goToStep = function(step) {
+      window.goToStep = function(step, isInitial = false) {
         if (step < 1) step = 1;
         if (step > 7) step = 7;
         state.step = step;
@@ -2103,12 +2242,16 @@
           const el = document.getElementById(`step-${i}`);
           if (el) {
             el.classList.toggle('hidden', i !== step);
-            if (i === step && el.children.length > 0) {
-              gsap.fromTo(
-                el.children,
-                { opacity: 0, y: 22, scale: 0.98 },
-                { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.04, ease: "power3.out", clearProps: "transform,scale" }
-              );
+            if (i === step && el.children.length > 0 && !isInitial) {
+              getGsap().then((gsap) => {
+                if (gsap) {
+                  gsap.fromTo(
+                    el.children,
+                    { opacity: 0, y: 22, scale: 0.98 },
+                    { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.04, ease: "power3.out", clearProps: "transform,scale" }
+                  );
+                }
+              });
             }
           }
 
@@ -2116,7 +2259,13 @@
           if (tab) {
             if (i === step) {
               tab.className = "shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all cursor-pointer whitespace-nowrap sm:truncate";
-              try { tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e) {}
+              const tabParent = tab.parentElement;
+              if (tabParent && tabParent.scrollWidth > tabParent.clientWidth) {
+                tabParent.scrollTo({
+                  left: tab.offsetLeft - tabParent.clientWidth / 2 + tab.clientWidth / 2,
+                  behavior: 'smooth'
+                });
+              }
             } else if (i < step) {
               tab.className = "shrink-0 py-1.5 sm:py-2 px-2.5 rounded-lg border border-white/10 bg-white/[0.04] text-zinc-200 text-center transition-all hover:text-white cursor-pointer whitespace-nowrap sm:truncate";
             } else {
@@ -2540,13 +2689,19 @@
 
           if (isInternalPage) {
             e.preventDefault();
-            gsap.to("main, header, aside, footer", {
-              opacity: 0,
-              y: -22,
-              scale: 0.98,
-              duration: 0.28,
-              ease: "power2.inOut",
-              onComplete: () => {
+            getGsap().then((gsap) => {
+              if (gsap) {
+                gsap.to("main, header, aside, footer", {
+                  opacity: 0,
+                  y: -22,
+                  scale: 0.98,
+                  duration: 0.28,
+                  ease: "power2.inOut",
+                  onComplete: () => {
+                    window.location.href = href;
+                  }
+                });
+              } else {
                 window.location.href = href;
               }
             });
@@ -2618,28 +2773,47 @@
           if (statusEl && text) statusEl.textContent = text;
         };
 
+        let targetPct = 0;
+        let visualPct = 0;
+        let lastProgressTime = performance.now();
         const startProgressTime = performance.now();
-        const totalDuration = 700; // Relaxed, luxurious count matching index
+        const baseAutoDuration = 750;
+
+        window.__setPreloaderProgress = (val) => {
+          const num = Number(val);
+          if (!isNaN(num) && num > targetPct) targetPct = Math.min(100, num);
+        };
 
         const animStep = (now) => {
           if (launchTriggered) return;
+          const delta = Math.min(48, Math.max(1, now - lastProgressTime));
+          lastProgressTime = now;
+
           const elapsed = now - startProgressTime;
-          const progress = Math.min(1, elapsed / totalDuration);
-          const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-          const currentPct = Math.round(easeProgress * 100);
+          const baseProgress = Math.min(0.46, (elapsed / baseAutoDuration) * 0.46);
+          const basePct = baseProgress * 100;
+          if (basePct > targetPct && targetPct < 46) targetPct = basePct;
+
+          if (window.__is3DReady && targetPct < 100) targetPct = 100;
+
+          const lerpSpeed = targetPct >= 100 ? 0.012 : 0.007;
+          visualPct += (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
 
           let stageText = PRELOADER_STAGES[0].text;
-          if (currentPct > 88) stageText = PRELOADER_STAGES[3].text;
-          else if (currentPct > 68) stageText = PRELOADER_STAGES[2].text;
-          else if (currentPct > 30) stageText = PRELOADER_STAGES[1].text;
+          if (visualPct > 88) stageText = PRELOADER_STAGES[3].text;
+          else if (visualPct > 68) stageText = PRELOADER_STAGES[2].text;
+          else if (visualPct > 30) stageText = PRELOADER_STAGES[1].text;
 
-          updateDisplay(easeProgress * 100, stageText);
+          updateDisplay(visualPct, stageText);
 
-          if (progress < 1) {
-            requestAnimationFrame(animStep);
-          } else {
+          const is3DVerified = Boolean(window.__is3DReady);
+          const isTimedOut = (now - startProgressTime) > 3800;
+
+          if (visualPct >= 99.5 && (is3DVerified || isTimedOut)) {
             updateDisplay(100, PRELOADER_STAGES[3].text);
-            setTimeout(triggerLaunch, 120);
+            setTimeout(triggerLaunch, 150);
+          } else {
+            requestAnimationFrame(animStep);
           }
         };
 
@@ -2648,11 +2822,18 @@
         // Safety fallback timer to guarantee preloader dismiss
         setTimeout(() => {
           if (!launchTriggered) triggerLaunch();
-        }, 2400);
+        }, 4200);
+      };
+
+      const yieldToMain = () => {
+        if (typeof scheduler !== "undefined" && typeof scheduler.yield === "function") {
+          return scheduler.yield();
+        }
+        return new Promise((resolve) => setTimeout(resolve, 0));
       };
 
       // ─── SAFE BOOT ENGINE (Instant UI Hydration + Non-blocking 3D Engine) ───
-      const bootPricingApp = () => {
+      const bootPricingApp = async () => {
         const footerYear = document.getElementById('footer-year');
         if (footerYear) footerYear.textContent = new Date().getFullYear();
         parseSmartDefaultUrl();
@@ -2663,18 +2844,32 @@
         document.documentElement.setAttribute('lang', storedLang);
         document.getElementById('btn-lang-en')?.classList.toggle('active', storedLang === 'en');
         document.getElementById('btn-lang-id')?.classList.toggle('active', storedLang === 'id');
-        applyPricingLanguage(storedLang);
 
-        goToStep(1);
-        initPageTransitionLinks();
+        goToStep(1, true);
         initStudioPreloader();
+        initPageTransitionLinks();
+
+        // Yield to let browser paint FCP and LCP at 0ms TBT before rendering configurator components
+        await yieldToMain();
+
+        if (storedLang !== 'id') {
+          applyPricingLanguage(storedLang);
+        } else {
+          renderWebsiteTypes();
+          updateLiveBill();
+        }
 
         let initialized3D = false;
-        function activate3D() {
+        async function activate3D() {
           if (initialized3D) return;
+          if (!document.documentElement.classList.contains("is-real-user")) return;
           initialized3D = true;
           try {
-            initThreeEngine();
+            const m = await import('/src/three-scene.js');
+            const initFn = m.initThreeEngine || m.init3D;
+            if (typeof initFn === "function") {
+              initFn();
+            }
           } catch (e) {
             console.warn("Three.js engine init error:", e);
           }

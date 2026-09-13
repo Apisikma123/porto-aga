@@ -265,7 +265,7 @@
         transform-origin: 70px 118px;
         transform: scale(1.22, 1.75) !important;
         transition: transform 0.25s ease-out;
-        filter: drop-shadow(0 0 16px rgba(255, 60, 40, 0.95)) drop-shadow(0 0 32px rgba(255, 140, 20, 0.8));
+        filter: drop-shadow(0 0 12px rgba(255, 60, 40, 0.75));
       }
       .preloader-launching #preloader-rocket-center {
         animation: none !important;
@@ -781,8 +781,9 @@
             return;
           }
 
-          var dt = lastTime > 0 ? Math.min(32, Math.max(8, now - lastTime)) / 16.666 : 1.0;
+          var rawDelta = lastTime > 0 ? (now - lastTime) : 16.666;
           lastTime = now;
+          var dt = Math.min(48, Math.max(2, rawDelta)) / 16.666;
 
           var isLaunch = preloaderEl.classList.contains("preloader-launching");
           var t = 0;
@@ -792,15 +793,15 @@
               startLaunchY = hoverY;
               startLaunchRot = hoverRot;
             }
-            var launchDuration = 600; // 0.60s snappy, supersonic liftoff
+            var launchDuration = 780; // 0.78s majestic supersonic liftoff
             t = Math.min(1, (now - launchStartTime) / launchDuration);
-            // Single continuous power curve: smooth gentle liftoff that swiftly gains supersonic speed
-            var ease = Math.pow(t, 2.15);
-            // Launch directly from current hovered position without ever snapping back to center!
+            // Continuous power curve: gentle start swiftly accelerating into supersonic thrust
+            var ease = Math.pow(t, 2.3);
+            // Launch directly from current hovered position without ever snapping back to center
             var offsetY = startLaunchY - ease * (window.innerHeight * 1.55 + 320);
             var rot = startLaunchRot * (1 - Math.min(1, t * 2.5));
-            var scaleY = 1 + ease * 0.12;
-            var scaleX = 1 - ease * 0.06;
+            var scaleY = 1 + ease * 0.14;
+            var scaleX = 1 - ease * 0.07;
 
             if (rocketCenter) {
               rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) rotate(" + rot.toFixed(2) + "deg) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
@@ -833,15 +834,15 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           var isMobileScreen = window.innerWidth < 768;
-          var maxP = isLaunch ? (isMobileScreen ? 90 : 240) : (isMobileScreen ? 28 : 50);
+          var maxP = isLaunch ? (isMobileScreen ? 70 : 200) : (isMobileScreen ? 24 : 45);
 
           if (isLaunch) {
             // Only spawn new contrail while rocket is on-screen (t < 1)
             if (t < 1) {
               var dist = Math.hypot(curX - prevX, curY - prevY);
-              // Thick, continuous contrail trail: step every 9px of flight (16px on mobile)
-              var stepDist = isMobileScreen ? 16 : 9;
-              var steps = Math.min(isMobileScreen ? 5 : 10, Math.max(2, Math.ceil(dist / stepDist)));
+              // Continuous contrail trail
+              var stepDist = isMobileScreen ? 18 : 10;
+              var steps = Math.min(isMobileScreen ? 4 : 8, Math.max(2, Math.ceil(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
                 if (particles.length >= maxP) particles.shift();
                 var interp = s / steps;

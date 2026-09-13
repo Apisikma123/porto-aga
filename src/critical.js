@@ -872,46 +872,67 @@ export const initPreloaderTimeline = () => {
     }
   };
 
-  // Liquid Monotonic 120fps Counter Engine (Zero Stutter, Zero Jumps)
-  let currentPct = 0;
+  // ═══════════════════════════════════════════════════════════
+  // DYNAMIC SYNCHRONIZED PRELOADER PROGRESS ENGINE (Zero Stutter, 120fps Monotonic)
+  // ═══════════════════════════════════════════════════════════
+  let targetPct = 0;
+  let visualPct = 0;
+  let lastProgressTime = performance.now();
   let currentStageText = PRELOADER_STAGES[0].text;
   let isReadyForLaunch = false;
-  const startProgressTime = performance.now();
-  const totalDuration = 650; // 650ms silky continuous progress
 
-  window.__setPreloaderProgress = () => {
-    // Monotonic curve ensures zero stutter regardless of async compilation spikes
+  // Real-time progress synchronization with 3D scene & dynamic data loaders
+  window.__setPreloaderProgress = (val) => {
+    const num = Number(val);
+    if (!isNaN(num) && num > targetPct) {
+      targetPct = Math.min(100, num);
+    }
   };
+
+  const startProgressTime = performance.now();
+  const baseAutoDuration = 750; // Smooth natural baseline crawl up to ~45% during asset decode
 
   const animStep = (now) => {
     if (launchTriggered) return;
 
-    const elapsed = now - startProgressTime;
-    const progress = Math.min(1, elapsed / totalDuration);
-    // Smooth cubic ease-in-out curve for natural counting rhythm
-    const easeProgress = progress < 0.5
-      ? 4 * progress * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    const targetVal = Math.round(easeProgress * 100);
+    const delta = Math.min(48, Math.max(1, now - lastProgressTime));
+    lastProgressTime = now;
 
-    if (targetVal > currentPct) {
-      currentPct = targetVal;
+    // 1. Natural baseline progress curve during initial bootstrap
+    const elapsed = now - startProgressTime;
+    const baseProgress = Math.min(0.46, (elapsed / baseAutoDuration) * 0.46);
+    const basePct = baseProgress * 100;
+    if (basePct > targetPct && targetPct < 46) {
+      targetPct = basePct;
     }
 
+    // 2. When 3D engine signals completion, target surges to 100%
+    if (window.__is3DReady && targetPct < 100) {
+      targetPct = 100;
+    }
+
+    // 3. Silky continuous exponential interpolation (Zero jumps, pure 120fps fluid glide)
+    const lerpSpeed = targetPct >= 100 ? 0.012 : 0.007;
+    visualPct += (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
+
     // Dynamic stage status text
-    if (currentPct >= 96) currentStageText = PRELOADER_STAGES[3].text;
-    else if (currentPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
-    else if (currentPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
+    if (visualPct >= 96) currentStageText = PRELOADER_STAGES[3].text;
+    else if (visualPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
+    else if (visualPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
     else currentStageText = PRELOADER_STAGES[0].text;
 
-    updateDisplay(currentPct, currentStageText);
+    updateDisplay(visualPct, currentStageText);
 
-    if (currentPct >= 100) {
+    // 4. Trigger liftoff ONLY when visual reaches 99.5% AND 3D is verified ready (or failsafe timeout)
+    const is3DVerified = Boolean(window.__is3DReady);
+    const isTimedOut = (now - startProgressTime) > 3800;
+
+    if (visualPct >= 99.5 && (is3DVerified || isTimedOut)) {
       updateDisplay(100, PRELOADER_STAGES[3].text);
       if (!isReadyForLaunch) {
         isReadyForLaunch = true;
-        const delay = window.__is3DReady ? 40 : 80;
-        setTimeout(triggerLaunch, delay);
+        // Brief 150ms ignition pause: allows plasma thrusters to flare before liftoff
+        setTimeout(triggerLaunch, 150);
       }
     } else {
       requestAnimationFrame(animStep);
@@ -922,20 +943,15 @@ export const initPreloaderTimeline = () => {
 
   // Safety Failsafe: if device or network is slow, advance target to 100% gracefully
   setTimeout(() => {
-    if (currentPct < 100) {
-      currentPct = 100;
-      updateDisplay(100, PRELOADER_STAGES[3].text);
-      if (!isReadyForLaunch) {
-        isReadyForLaunch = true;
-        setTimeout(triggerLaunch, 120);
-      }
+    if (targetPct < 100) {
+      targetPct = 100;
     }
   }, 3200);
 
-  // Hard Failsafe: Always dismiss preloader after 4500ms max
+  // Hard Failsafe: Always dismiss preloader after 4200ms max
   setTimeout(() => {
     if (!launchTriggered) triggerLaunch();
-  }, 4500);
+  }, 4200);
 };
 
 // ═══════════════════════════════════════════════════════════

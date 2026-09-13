@@ -51,8 +51,8 @@ export const initThreeEngine = async () => {
     depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // Full Retina/OLED HD pixel ratio (up to 2.0) for ultra-sharp visuals without blur
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
+  // Full Retina/OLED HD pixel ratio (up to 2.0 on desktop, 1.5 on mobile to eliminate touch scroll lag)
+  renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2.0));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -370,6 +370,8 @@ export const initThreeEngine = async () => {
 
   executeGPUWarmup();
 
+  await yieldToMain();
+
   // Load /tesseract.glb with pure high-speed GLTFLoader & Dynamic Material Assignment
   let mixer = null;
   const loader = new GLTFLoader(loadingManager);
@@ -616,6 +618,8 @@ export const initThreeEngine = async () => {
     cosmicShardsGroup.add(shardGroup);
     cosmicShards.push(shardGroup);
   }
+
+  await yieldToMain();
 
   // ─── Multi-Layered Deep Cosmic Starfield & Floating Stardust ───
   // ─── Elegant Deep Cosmic Starfield & Atmospheric Galaxy ───
@@ -941,7 +945,7 @@ export const initThreeEngine = async () => {
       trigger: mainTrigger,
       start: "top top",
       end: "bottom bottom",
-      scrub: isMobile ? 0.6 : 1.4,
+      scrub: isMobile ? 0.35 : 1.2,
     },
   });
 
@@ -1308,7 +1312,7 @@ export const initThreeEngine = async () => {
       const currentScrollY = window.scrollY;
       const deltaY = currentScrollY - lastScrollY;
       lastScrollY = currentScrollY;
-      scrollVelocity += Math.min(Math.max(deltaY * 0.00008, -0.006), 0.006);
+      scrollVelocity += Math.min(Math.max(deltaY * (isMobile ? 0.00004 : 0.00008), -0.005), 0.005);
     },
     { passive: true }
   );
@@ -1341,7 +1345,8 @@ export const initThreeEngine = async () => {
     camera.aspect = newW / newH;
     camera.updateProjectionMatrix();
     renderer.setSize(newW, newH);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
+    const isMobileNow = newW < 1024;
+    renderer.setPixelRatio(isMobileNow ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2.0));
   };
   window.addEventListener("resize", onResize, { passive: true });
 
@@ -1367,8 +1372,8 @@ export const initThreeEngine = async () => {
       mixer.update(delta);
     }
 
-    // Decay scroll rotational velocity (inertia)
-    scrollVelocity *= 0.92;
+    // Decay scroll rotational velocity (inertia - tighter on mobile for silkiness)
+    scrollVelocity *= isMobile ? 0.88 : 0.92;
 
     // Continuous floating idle rotation
     modelWrapper.rotation.y += 0.004;
@@ -1481,7 +1486,35 @@ export const initThreeEngine = async () => {
     }
   });
 
-  rafId = requestAnimationFrame(animate);
+  const preloaderActive = typeof document !== "undefined" &&
+    document.getElementById("web-preloader") &&
+    document.documentElement.classList.contains("is-real-user");
+
+  if (preloaderActive) {
+    // Warm up one frame so shader cache and VRAM are fully primed
+    try {
+      renderer.compile(scene, camera);
+      renderer.render(scene, camera);
+    } catch (e) {}
+
+    // Start continuous 60/120fps animation loop the moment rocket liftoff commences
+    window.addEventListener("start3D", () => {
+      if (!rafId && !document.hidden && isCanvasVisible) {
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(animate);
+      }
+    }, { once: true, passive: true });
+
+    // Failsafe in case start3D was missed or preloader skipped
+    setTimeout(() => {
+      if (!rafId && !document.hidden && isCanvasVisible) {
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(animate);
+      }
+    }, 2800);
+  } else {
+    rafId = requestAnimationFrame(animate);
+  }
 };
 
 export const init3D = initThreeEngine;
