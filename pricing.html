@@ -101,13 +101,13 @@
         }
       }
       @keyframes flameFlicker {
-        0% { transform: scale(1, 0.94); opacity: 0.90; }
-        50% { transform: scale(1.03, 1.08); opacity: 1; }
-        100% { transform: scale(0.97, 0.95); opacity: 0.93; }
+        0% { transform: scale(1, 0.95); opacity: 0.92; }
+        50% { transform: scale(1.02, 1.05); opacity: 1; }
+        100% { transform: scale(0.98, 0.96); opacity: 0.94; }
       }
       .rocket-flame-flicker {
         transform-origin: 70px 118px;
-        animation: flameFlicker 0.12s ease-in-out infinite alternate;
+        animation: flameFlicker 0.28s ease-in-out infinite alternate;
         will-change: transform;
       }
       @keyframes flameMaxThrust {
@@ -120,9 +120,30 @@
         transition: transform 0.25s ease-out;
         filter: drop-shadow(0 0 12px rgba(255, 60, 40, 0.75));
       }
+      @keyframes rocketSupersonicLaunch {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1, 1);
+        }
+        14% {
+          transform: translate3d(0, 8px, 0) scale(1.04, 0.94);
+        }
+        100% {
+          transform: translate3d(0, calc(-100vh - 350px), 0) scale(0.92, 1.25);
+        }
+      }
       .preloader-launching #preloader-rocket-center {
-        animation: none !important;
+        animation: rocketSupersonicLaunch 0.82s cubic-bezier(0.12, 0.88, 0.32, 1.15) forwards !important;
         will-change: transform;
+      }
+      .preloader-launching #preloader-backdrop {
+        opacity: 0 !important;
+        transition: opacity 0.72s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        pointer-events: none;
+      }
+      .preloader-launching #preloader-smoke-canvas {
+        opacity: 0 !important;
+        transition: opacity 0.75s ease-out !important;
+        pointer-events: none;
       }
       .preloader-launching #preloader-header {
         transition: opacity 0.25s ease-out, transform 0.25s ease-out;
@@ -907,28 +928,11 @@
           if (isLaunch) {
             if (!launchStartTime) {
               launchStartTime = now;
-              startLaunchY = hoverY;
-              startLaunchRot = hoverRot;
             }
-            var launchDuration = 780; // 0.78s majestic supersonic liftoff
+            var launchDuration = 820; // 0.82s majestic supersonic liftoff
             t = Math.min(1, (now - launchStartTime) / launchDuration);
-            // Continuous power curve: gentle start swiftly accelerating into supersonic thrust
             var ease = Math.pow(t, 2.3);
-            // Launch directly from current hovered position without ever snapping back to center
-            var offsetY = startLaunchY - ease * (window.innerHeight * 1.55 + 320);
-            var rot = startLaunchRot * (1 - Math.min(1, t * 2.5));
-            var scaleY = 1 + ease * 0.14;
-            var scaleX = 1 - ease * 0.07;
-
-            if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(0, " + offsetY.toFixed(2) + "px, 0) rotate(" + rot.toFixed(2) + "deg) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")";
-            }
-
-            // BLACK BACKGROUND FADES IN EXACT PHYSICAL SYNC WITH ROCKET MOVEMENT
-            if (backdropEl) {
-              var bgOpacity = Math.max(0, 1 - Math.pow(t, 1.4));
-              backdropEl.style.opacity = bgOpacity.toFixed(3);
-            }
+            var offsetY = -ease * (window.innerHeight * 1.55 + 320);
 
             cachedX = initialNozzleX;
             cachedY = initialNozzleY + offsetY;

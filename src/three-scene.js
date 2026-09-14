@@ -1485,54 +1485,54 @@ export const initThreeEngine = async () => {
 
   await yieldToMain();
 
+  const preloaderActive = typeof document !== "undefined" &&
+    document.getElementById("web-preloader") &&
+    document.documentElement.classList.contains("is-real-user");
+
+  let canRun3DLoop = !preloaderActive;
+
+  const startLoopIfReady = () => {
+    if (canRun3DLoop && isCanvasVisible && !rafId && !document.hidden) {
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(animate);
+    }
+  };
+
   if (typeof IntersectionObserver !== "undefined") {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         isCanvasVisible = entry.isIntersecting;
-        if (isCanvasVisible && !rafId && !document.hidden) {
-          lastTime = performance.now();
-          rafId = requestAnimationFrame(animate);
-        }
+        startLoopIfReady();
       });
     }, { rootMargin: "60px" });
     observer.observe(canvas);
   }
 
   document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && isCanvasVisible && !rafId) {
-      lastTime = performance.now();
-      rafId = requestAnimationFrame(animate);
-    }
+    startLoopIfReady();
   });
 
-  const preloaderActive = typeof document !== "undefined" &&
-    document.getElementById("web-preloader") &&
-    document.documentElement.classList.contains("is-real-user");
-
   if (preloaderActive) {
-    // Warm up one frame so shader cache and VRAM are fully primed
+    // Warm up one frame so shader cache and VRAM are fully primed without starting continuous render loop
     try {
       renderer.compile(scene, camera);
       renderer.render(scene, camera);
     } catch (e) {}
 
-    // Start continuous 60/120fps animation loop the moment rocket liftoff commences
+    // Start continuous 60/120fps animation loop ONLY when rocket liftoff begins
     window.addEventListener("start3D", () => {
-      if (!rafId && !document.hidden && isCanvasVisible) {
-        lastTime = performance.now();
-        rafId = requestAnimationFrame(animate);
-      }
+      canRun3DLoop = true;
+      startLoopIfReady();
     }, { once: true, passive: true });
 
     // Failsafe in case start3D was missed or preloader skipped
     setTimeout(() => {
-      if (!rafId && !document.hidden && isCanvasVisible) {
-        lastTime = performance.now();
-        rafId = requestAnimationFrame(animate);
-      }
+      canRun3DLoop = true;
+      startLoopIfReady();
     }, 2800);
   } else {
-    rafId = requestAnimationFrame(animate);
+    canRun3DLoop = true;
+    startLoopIfReady();
   }
 };
 
