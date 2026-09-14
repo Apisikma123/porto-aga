@@ -109,12 +109,12 @@
       }
       .preloader-launching #preloader-backdrop {
         opacity: 0 !important;
-        transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.16s !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-smoke-canvas {
         opacity: 0 !important;
-        transition: opacity 0.60s ease-out 0.48s !important;
+        transition: opacity 0.60s ease-out 0.54s !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-header {
@@ -871,23 +871,26 @@
           });
         }
 
-        function spawnPuff(x, y, isLaunch, velY) {
+        function spawnPuff(x, y, isLaunch, velY, isDip) {
           var isMobile = window.innerWidth < 768;
           if (isLaunch) {
-            var maxP = isMobile ? 42 : 60;
+            var maxP = isMobile ? 45 : 65;
             if (particles.length >= maxP) {
               particles.shift();
             }
-            var wakeY = Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3;
+            var wakeY = isDip
+              ? (0.8 + Math.random() * 0.9)
+              : (Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3);
+            var spreadX = isDip ? 1.6 : 0.85;
             particles.push({
-              x: x + (Math.random() - 0.5) * 5,
+              x: x + (Math.random() - 0.5) * (isDip ? 8 : 5),
               y: y + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * 0.9,
+              vx: (Math.random() - 0.5) * spreadX,
               vy: wakeY,
-              radius: 14 + Math.random() * 5,
-              growth: 0.95,
-              maxRadius: 65,
-              alpha: 0.68,
+              radius: isDip ? (15 + Math.random() * 6) : (13 + Math.random() * 5),
+              growth: isDip ? 0.75 : 0.95,
+              maxRadius: isDip ? 54 : 65,
+              alpha: isDip ? 0.64 : 0.68,
               decay: 0.0075,
               isLaunch: true
             });
@@ -936,28 +939,30 @@
               prevCurY = initialNozzleY + hoverY;
             }
 
-            var launchDuration = 480; // Snappy & fast supersonic liftoff
             var elapsed = now - launchStartTime;
-            var t = Math.min(1, elapsed / launchDuration);
+            var isDip = elapsed <= 180;
+            var launchY, scaleX, scaleY, rotDeg;
 
-            // 1. Continuous C^inf bell curve for downward recoil bounce (mantul kebawah kek tadi)
-            // Peak downward compression at t = 0.10 (+7.5px), smoothly finishing at t = 0.20 with zero jerk
-            var dipProg = Math.min(1, t / 0.20);
-            var sinDip = Math.sin(dipProg * Math.PI);
-            var dip = sinDip * sinDip * 7.5;
-
-            // 2. Continuous supersonic acceleration curve (C^2 zero jerk)
-            var ease = Math.pow(t, 2.2);
-            var totalDist = window.innerHeight + 480;
-            var launchY = startLaunchY + dip - ease * totalDist;
-
-            // 3. Dynamic squash & stretch
-            var squash = (dip / 7.5) * 0.035;
-            var stretch = ease * 0.28;
-            var scaleX = 1 + squash - ease * 0.10;
-            var scaleY = 1 - squash + stretch;
-
-            var rotDeg = startLaunchRot * Math.max(0, 1 - t * 4.5);
+            if (isDip) {
+              // 1. Mantul ke bawah: Visible downward recoil crunch & squash
+              var u = elapsed / 180;
+              var dip = Math.sin(u * Math.PI) * 18.0;
+              var squash = (dip / 18.0) * 0.08;
+              scaleX = 1 + squash;
+              scaleY = 1 - squash;
+              launchY = startLaunchY + dip;
+              rotDeg = startLaunchRot * (1 - u);
+            } else {
+              // 2. Meluncur ke atas: Supersonic blast-off carrying upward bounce momentum
+              var v = Math.min(1, (elapsed - 180) / 400);
+              var ease = Math.pow(v, 2.0) * 0.85 + v * 0.15;
+              var totalDist = window.innerHeight + 500;
+              launchY = startLaunchY - ease * totalDist;
+              var stretch = ease * 0.32;
+              scaleX = 1 - ease * 0.10;
+              scaleY = 1 + stretch;
+              rotDeg = 0;
+            }
 
             // Direct GPU Compositor Transform on Rocket DOM
             if (rocketCenter) {
@@ -973,7 +978,7 @@
             var velY = curY - prevCurY;
 
             // Contrail generation: Fill continuous dense segment between prev frame and cur frame
-            if (t < 1) {
+            if (elapsed < 580) {
               var dist = Math.abs(curY - prevCurY);
               var stepDist = isMobileScreen ? 14 : 10;
               var steps = Math.min(isMobileScreen ? 4 : 5, Math.max(1, Math.round(dist / stepDist)));
@@ -981,7 +986,7 @@
                 var interp = (s + 1) / steps;
                 var ix = prevCurX + (curX - prevCurX) * interp;
                 var iy = prevCurY + (curY - prevCurY) * interp;
-                spawnPuff(ix, iy, true, velY);
+                spawnPuff(ix, iy, true, velY, isDip);
               }
             }
           } else {
@@ -1021,7 +1026,7 @@
             }
             p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
 
-            var decayRate = isLaunch && (now - launchStartTime > 480) ? 0.016 : p.decay;
+            var decayRate = isLaunch && (now - launchStartTime > 580) ? 0.016 : p.decay;
             p.alpha -= decayRate * dt;
 
             if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
