@@ -187,17 +187,6 @@
         pointer-events: none;
         will-change: opacity;
       }
-      @keyframes rocketAerospaceHover {
-        0% {
-          transform: translate3d(0, -6px, 0) rotate(-1.5deg);
-        }
-        50% {
-          transform: translate3d(0, 6px, 0) rotate(1.5deg);
-        }
-        100% {
-          transform: translate3d(0, -6px, 0) rotate(-1.5deg);
-        }
-      }
       #preloader-rocket-center {
         position: relative;
         z-index: 10;
@@ -205,8 +194,7 @@
         align-items: center;
         justify-content: center;
         will-change: transform;
-        transform-origin: center 70%;
-        animation: rocketAerospaceHover 2.8s ease-in-out infinite alternate;
+        transform-origin: 50% 65%;
       }
       #preloader-rocket-center svg {
         width: 112px;
@@ -280,21 +268,6 @@
         transition: transform 0.25s ease-out;
         filter: drop-shadow(0 0 12px rgba(255, 60, 40, 0.75));
       }
-      @keyframes rocketSupersonicLaunch {
-        0% {
-          transform: translate3d(0, 0, 0) scale(1, 1);
-        }
-        14% {
-          transform: translate3d(0, 8px, 0) scale(1.04, 0.94);
-        }
-        100% {
-          transform: translate3d(0, calc(-100vh - 350px), 0) scale(0.92, 1.25);
-        }
-      }
-      .preloader-launching #preloader-rocket-center {
-        animation: rocketSupersonicLaunch 0.82s cubic-bezier(0.12, 0.88, 0.32, 1.15) forwards !important;
-        will-change: transform;
-      }
       .preloader-launching #preloader-backdrop {
         opacity: 0 !important;
         transition: opacity 0.72s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -302,7 +275,7 @@
       }
       .preloader-launching #preloader-smoke-canvas {
         opacity: 0 !important;
-        transition: opacity 0.75s ease-out !important;
+        transition: opacity 0.65s ease-out 0.85s !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-header {
@@ -736,10 +709,8 @@
 
         var initialNozzleX = window.innerWidth / 2;
         var initialNozzleY = window.innerHeight * 0.52;
-        var cachedX = initialNozzleX;
-        var cachedY = initialNozzleY;
-        var prevX = cachedX;
-        var prevY = cachedY;
+        var prevCurX = initialNozzleX;
+        var prevCurY = initialNozzleY;
         var lastTime = 0;
         var launchStartTime = 0;
         var animId = null;
@@ -747,15 +718,14 @@
         var hoverRot = 0;
         var startLaunchY = 0;
         var startLaunchRot = 0;
+        var lastHoverSpawnTime = 0;
 
         function measureNozzle() {
           if (flameNozzle && flameNozzle.isConnected) {
             var fRect = flameNozzle.getBoundingClientRect();
             if (fRect.width > 0 && fRect.height > 0) {
               initialNozzleX = fRect.left + fRect.width / 2;
-              initialNozzleY = fRect.bottom - 2;
-              cachedX = initialNozzleX;
-              cachedY = initialNozzleY;
+              initialNozzleY = fRect.bottom - 4;
               return;
             }
           }
@@ -764,8 +734,6 @@
             if (rRect.width > 0 && rRect.height > 0) {
               initialNozzleX = rRect.left + rRect.width * 0.5;
               initialNozzleY = rRect.top + rRect.height * 0.80;
-              cachedX = initialNozzleX;
-              cachedY = initialNozzleY;
               return;
             }
           }
@@ -774,38 +742,47 @@
         measureNozzle();
         window.addEventListener("resize", function() {
           resize();
-          measureNozzle();
+          var isLaunch = preloaderEl && preloaderEl.classList.contains("preloader-launching");
+          if (!isLaunch && rocketCenter) {
+            rocketCenter.style.transform = "";
+            measureNozzle();
+          }
         }, { passive: true });
-        prevX = cachedX;
-        prevY = cachedY;
+        prevCurX = initialNozzleX;
+        prevCurY = initialNozzleY;
 
         // Pre-seed visible, billowing vapor plume
         for (var i = 0; i < 18; i++) {
           var prog = i / 18;
           particles.push({
-            x: cachedX + (Math.random() - 0.5) * (6 + prog * 16),
-            y: cachedY + prog * 42 + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (0.4 + prog * 0.8),
-            vy: 1.0 + Math.random() * 1.2,
-            radius: 8 + prog * 18 + Math.random() * 4,
+            x: initialNozzleX + (Math.random() - 0.5) * (6 + prog * 16),
+            y: initialNozzleY + prog * 42 + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * (0.3 + prog * 0.5),
+            vy: 0.8 + Math.random() * 0.9,
+            radius: 8 + prog * 16 + Math.random() * 4,
             growth: 0.45,
-            maxRadius: 46,
+            maxRadius: 42,
             alpha: 0.55 * (1 - prog * 0.45),
-            decay: 0.009
+            decay: 0.008
           });
         }
 
         function spawnPuff(x, y, isLaunch) {
+          var isMobile = window.innerWidth < 768;
+          var maxP = isLaunch ? (isMobile ? 28 : 45) : (isMobile ? 22 : 36);
+          if (particles.length >= maxP) {
+            particles.shift();
+          }
           particles.push({
-            x: x + (Math.random() - 0.5) * (isLaunch ? 8 : 5),
+            x: x + (Math.random() - 0.5) * (isLaunch ? 6 : 4),
             y: y + (Math.random() - 0.5) * 2,
-            vx: (Math.random() - 0.5) * (isLaunch ? 0.9 : 0.5),
-            vy: isLaunch ? (0.8 + Math.random() * 1.3) : (1.0 + Math.random() * 1.2),
-            radius: isLaunch ? (14 + Math.random() * 7) : (9 + Math.random() * 5),
-            growth: isLaunch ? 0.85 : 0.50,
-            maxRadius: isLaunch ? 70 : 42,
-            alpha: isLaunch ? 0.65 : 0.48,
-            decay: isLaunch ? 0.0075 : 0.009
+            vx: (Math.random() - 0.5) * (isLaunch ? 0.7 : 0.4),
+            vy: isLaunch ? (0.6 + Math.random() * 0.9) : (0.8 + Math.random() * 1.0),
+            radius: isLaunch ? (14 + Math.random() * 6) : (8 + Math.random() * 4),
+            growth: isLaunch ? 0.80 : 0.48,
+            maxRadius: isLaunch ? 64 : 38,
+            alpha: isLaunch ? 0.65 : 0.50,
+            decay: isLaunch ? 0.008 : 0.0085
           });
         }
 
@@ -820,55 +797,91 @@
           var dt = Math.min(48, Math.max(2, rawDelta)) / 16.666;
 
           var isLaunch = preloaderEl.classList.contains("preloader-launching");
-          var t = 0;
+          var isMobileScreen = window.innerWidth < 768;
+
+          var curX = initialNozzleX;
+          var curY = initialNozzleY;
+
           if (isLaunch) {
             if (!launchStartTime) {
               launchStartTime = now;
+              startLaunchY = hoverY;
+              startLaunchRot = hoverRot;
+              prevCurX = initialNozzleX;
+              prevCurY = initialNozzleY + hoverY;
             }
-            var launchDuration = 820; // 0.82s majestic supersonic liftoff
-            t = Math.min(1, (now - launchStartTime) / launchDuration);
-            var ease = Math.pow(t, 2.3);
-            var offsetY = -ease * (window.innerHeight * 1.55 + 320);
 
-            cachedX = initialNozzleX;
-            cachedY = initialNozzleY + offsetY;
-          } else {
-            // Natural aerospace hover tracked purely for smoke nozzle alignment (rocket body floats via 120fps CSS compositor)
-            hoverY = Math.sin(now * 0.0022) * 6;
-            cachedX = initialNozzleX;
-            cachedY = initialNozzleY + hoverY;
-          }
+            var launchDuration = 840; // 0.84s majestic supersonic liftoff
+            var elapsed = now - launchStartTime;
+            var t = Math.min(1, elapsed / launchDuration);
 
-          var curX = cachedX;
-          var curY = cachedY;
+            var launchY, scaleX, scaleY, rotDeg;
+            if (t < 0.10) {
+              // Phase 1: Thruster ignition compression dip (5.5px)
+              var pDip = t / 0.10;
+              var dip = Math.sin(pDip * Math.PI) * 5.5;
+              launchY = startLaunchY + dip;
+              rotDeg = startLaunchRot * (1 - pDip);
+              scaleX = 1 + Math.sin(pDip * Math.PI) * 0.035;
+              scaleY = 1 - Math.sin(pDip * Math.PI) * 0.03;
+            } else {
+              // Phase 2: Explosive, silky supersonic ascent
+              var pFly = (t - 0.10) / 0.90;
+              var ease = Math.pow(pFly, 2.7);
+              var totalDist = window.innerHeight + 420;
+              launchY = startLaunchY - ease * totalDist;
+              rotDeg = 0;
+              scaleX = Math.max(0.88, 1 - ease * 0.10);
+              scaleY = Math.min(1.24, 1 + ease * 0.22);
+            }
 
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Direct GPU Compositor Transform on Rocket DOM
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(0, " + launchY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")" + (rotDeg !== 0 ? " rotate(" + rotDeg.toFixed(2) + "deg)" : "");
+            }
 
-          var isMobileScreen = window.innerWidth < 768;
-          var maxP = isLaunch ? (isMobileScreen ? 60 : 180) : (isMobileScreen ? 20 : 38);
+            // Flame nozzle tip position (100% synchronized with rocket at all times)
+            var flameTipOffset = 22 + (scaleY - 1) * 35;
+            curX = initialNozzleX;
+            curY = initialNozzleY + launchY + flameTipOffset;
 
-          if (isLaunch) {
-            // Only spawn new contrail while rocket is on-screen (t < 1)
+            // Contrail generation: Fill continuous segment between prev frame and cur frame
             if (t < 1) {
-              var dist = Math.hypot(curX - prevX, curY - prevY);
-              // Continuous contrail trail
-              var stepDist = isMobileScreen ? 18 : 10;
-              var steps = Math.min(isMobileScreen ? 4 : 8, Math.max(2, Math.ceil(dist / stepDist)));
+              var dist = Math.abs(curY - prevCurY);
+              var stepDist = isMobileScreen ? 20 : 16;
+              var steps = Math.min(isMobileScreen ? 3 : 5, Math.max(1, Math.round(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
-                var interp = s / steps;
-                var ix = prevX + (curX - prevX) * interp;
-                var iy = prevY + (curY - prevY) * interp;
+                var interp = (s + 1) / steps;
+                var ix = prevCurX + (curX - prevCurX) * interp;
+                var iy = prevCurY + (curY - prevCurY) * interp;
                 spawnPuff(ix, iy, true);
               }
             }
           } else {
-            if (particles.length < maxP) {
+            // Hover State: Smooth aerospace breathing float
+            var hoverPeriod = now * 0.0022;
+            hoverY = Math.sin(hoverPeriod) * 6.0;
+            hoverRot = Math.sin(hoverPeriod * 0.75) * 1.5;
+
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
+            }
+
+            curX = initialNozzleX - hoverRot * 1.05;
+            curY = initialNozzleY + hoverY;
+
+            // Steady rhythmic emission (no empty gaps!)
+            var hoverInterval = isMobileScreen ? 85 : 65;
+            if (now - lastHoverSpawnTime >= hoverInterval) {
+              lastHoverSpawnTime = now;
               spawnPuff(curX, curY, false);
             }
           }
 
-          prevX = curX;
-          prevY = curY;
+          prevCurX = curX;
+          prevCurY = curY;
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           // Draw billowing vapor trail
           for (var i = particles.length - 1; i >= 0; i--) {
@@ -876,11 +889,11 @@
             p.x += p.vx * dt;
             p.y += p.vy * dt;
             p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
-            // After rocket exits screen (t >= 1), contrail gently and smoothly dissolves over the hero
-            var decayRate = isLaunch && t >= 1 ? 0.015 : p.decay;
+
+            var decayRate = isLaunch && (now - launchStartTime > 840) ? 0.016 : p.decay;
             p.alpha -= decayRate * dt;
 
-            if (p.alpha <= 0.005 || p.y > window.innerHeight + 60) {
+            if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
               particles.splice(i, 1);
               continue;
             }
