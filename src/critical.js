@@ -851,7 +851,7 @@ export const initPreloaderTimeline = () => {
       preloaderEl.style.display = "none";
       preloaderEl.remove();
       document.body.style.overflow = "auto";
-    }, 1500);
+    }, 1600);
   };
 
   let lastDisplayedPct = -1;

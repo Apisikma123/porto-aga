@@ -106,16 +106,15 @@
         transform-origin: 70px 118px;
         transform: scale(1.22, 1.75) !important;
         transition: transform 0.25s ease-out;
-        filter: drop-shadow(0 0 12px rgba(255, 60, 40, 0.75));
       }
       .preloader-launching #preloader-backdrop {
         opacity: 0 !important;
-        transition: opacity 0.48s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: opacity 0.52s cubic-bezier(0.4, 0, 0.2, 1) !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-smoke-canvas {
         opacity: 0 !important;
-        transition: opacity 0.65s ease-out 0.55s !important;
+        transition: opacity 0.65s ease-out 0.62s !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-header {
@@ -873,18 +872,18 @@
 
         function spawnPuff(x, y, isLaunch, velY) {
           var isMobile = window.innerWidth < 768;
-          var maxP = isLaunch ? 60 : (isMobile ? 22 : 36);
+          var maxP = isLaunch ? (isMobile ? 38 : 55) : (isMobile ? 22 : 36);
           if (particles.length >= maxP) {
             particles.shift();
           }
-          var wakeY = isLaunch ? ((velY || 0) * 0.16 + (Math.random() - 0.5) * 0.4) : (0.8 + Math.random() * 0.9);
+          var wakeY = isLaunch ? (Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3) : (0.8 + Math.random() * 0.9);
           particles.push({
             x: x + (Math.random() - 0.5) * (isLaunch ? 5 : 4),
             y: y + (Math.random() - 0.5) * 2,
             vx: (Math.random() - 0.5) * (isLaunch ? 0.9 : 0.4),
             vy: wakeY,
             radius: isLaunch ? (13 + Math.random() * 5) : (8 + Math.random() * 4),
-            growth: isLaunch ? 0.88 : 0.48,
+            growth: isLaunch ? 0.85 : 0.48,
             maxRadius: isLaunch ? 60 : 38,
             alpha: isLaunch ? 0.68 : 0.50,
             decay: isLaunch ? 0.0075 : 0.0085,
@@ -917,29 +916,28 @@
               prevCurY = initialNozzleY + hoverY;
             }
 
-            var launchDuration = 520; // Fast, energetic 0.52s supersonic liftoff
+            var launchDuration = 620; // 0.62s majestic & snappy supersonic liftoff
             var elapsed = now - launchStartTime;
             var t = Math.min(1, elapsed / launchDuration);
 
-            var launchY, scaleX, scaleY, rotDeg;
-            if (t < 0.06) {
-              // Rapid 30ms ignition recoil
-              var pDip = t / 0.06;
-              var dip = Math.sin(pDip * Math.PI) * 3.2;
-              launchY = startLaunchY + dip;
-              rotDeg = startLaunchRot * (1 - pDip);
-              scaleX = 1 + Math.sin(pDip * Math.PI) * 0.03;
-              scaleY = 1 - Math.sin(pDip * Math.PI) * 0.025;
-            } else {
-              // High-speed, silky supersonic ascent
-              var pFly = (t - 0.06) / 0.94;
-              var ease = Math.pow(pFly, 2.05);
-              var totalDist = window.innerHeight + 440;
-              launchY = startLaunchY - ease * totalDist;
-              rotDeg = 0;
-              scaleX = Math.max(0.86, 1 - ease * 0.12);
-              scaleY = Math.min(1.28, 1 + ease * 0.26);
-            }
+            // 1. Continuous C^inf bell curve for downward recoil bounce (mantul kebawah kek tadi)
+            // Peak downward compression at t = 0.11 (+8.5px), smoothly finishing at t = 0.22 with zero jerk
+            var dipProg = Math.min(1, t / 0.22);
+            var sinDip = Math.sin(dipProg * Math.PI);
+            var dip = sinDip * sinDip * 8.5;
+
+            // 2. Continuous supersonic acceleration curve (C^2 zero jerk)
+            var ease = Math.pow(t, 2.5);
+            var totalDist = window.innerHeight + 450;
+            var launchY = startLaunchY + dip - ease * totalDist;
+
+            // 3. Dynamic squash & stretch
+            var squash = (dip / 8.5) * 0.04;
+            var stretch = ease * 0.26;
+            var scaleX = 1 + squash - ease * 0.10;
+            var scaleY = 1 - squash + stretch;
+
+            var rotDeg = startLaunchRot * Math.max(0, 1 - t * 4.5);
 
             // Direct GPU Compositor Transform on Rocket DOM
             if (rocketCenter) {
@@ -957,8 +955,8 @@
             // Contrail generation: Fill continuous dense segment between prev frame and cur frame
             if (t < 1) {
               var dist = Math.abs(curY - prevCurY);
-              var stepDist = isMobileScreen ? 14 : 10;
-              var steps = Math.min(isMobileScreen ? 4 : 6, Math.max(1, Math.round(dist / stepDist)));
+              var stepDist = isMobileScreen ? 16 : 12;
+              var steps = Math.min(isMobileScreen ? 3 : 4, Math.max(1, Math.round(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
                 var interp = (s + 1) / steps;
                 var ix = prevCurX + (curX - prevCurX) * interp;
@@ -998,12 +996,12 @@
             p.x += p.vx * dt;
             p.y += p.vy * dt;
             if (p.isLaunch) {
-              p.vy *= 0.90; // Aerodynamic slipstream dampening
+              p.vy *= 0.92; // Aerodynamic slipstream drag
               p.vx *= 0.98;
             }
             p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
 
-            var decayRate = isLaunch && (now - launchStartTime > 520) ? 0.015 : p.decay;
+            var decayRate = isLaunch && (now - launchStartTime > 620) ? 0.015 : p.decay;
             p.alpha -= decayRate * dt;
 
             if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
@@ -2791,7 +2789,7 @@
             preloaderEl.style.display = "none";
             preloaderEl.remove();
             document.body.style.overflow = "auto";
-          }, 1500);
+          }, 1600);
         };
 
         const updateDisplay = (pct, text) => {
