@@ -912,8 +912,10 @@ export const initPreloaderTimeline = () => {
     }
 
     // 3. Silky continuous exponential interpolation (Zero jumps, pure 120fps fluid glide)
-    const lerpSpeed = targetPct >= 100 ? 0.012 : 0.007;
-    visualPct += (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
+    const lerpSpeed = targetPct >= 100 ? 0.010 : 0.007;
+    const rawStep = (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
+    const maxStep = targetPct >= 100 ? delta * 0.065 : delta * 0.045;
+    visualPct += Math.min(rawStep, maxStep);
 
     // Dynamic stage status text
     if (visualPct >= 96) currentStageText = PRELOADER_STAGES[3].text;

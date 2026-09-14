@@ -104,7 +104,7 @@ export async function activate3D() {
 // Start 3D engine warmup during preloader countdown for all devices (desktop & mobile)
 // Pre-compiling shaders in background ensures pure 120fps rocket liftoff without mid-air GPU stalls
 if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
-  setTimeout(activate3D, 50);
+  setTimeout(activate3D, 180);
 }
 
 // Ensure modules activate smoothly without competing with rocket flight animation

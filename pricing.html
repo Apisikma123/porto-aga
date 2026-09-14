@@ -62,6 +62,17 @@
         pointer-events: none;
         will-change: opacity;
       }
+      @keyframes rocketAerospaceHover {
+        0% {
+          transform: translate3d(0, -6px, 0) rotate(-1.5deg);
+        }
+        50% {
+          transform: translate3d(0, 6px, 0) rotate(1.5deg);
+        }
+        100% {
+          transform: translate3d(0, -6px, 0) rotate(-1.5deg);
+        }
+      }
       #preloader-rocket-center {
         position: relative;
         z-index: 10;
@@ -69,6 +80,8 @@
         align-items: center;
         justify-content: center;
         will-change: transform;
+        transform-origin: center 70%;
+        animation: rocketAerospaceHover 2.8s ease-in-out infinite alternate;
       }
       #preloader-rocket-center svg {
         width: 112px;
@@ -920,14 +933,8 @@
             cachedX = initialNozzleX;
             cachedY = initialNozzleY + offsetY;
           } else {
-            // Natural aerospace hover oscillation (smooth sinusoidal float with micro-tilt)
-            hoverY = Math.sin(now * 0.0032) * 8 - 4;
-            hoverRot = Math.sin(now * 0.0032) * 1.5;
-
-            if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
-            }
-
+            // Natural aerospace hover tracked purely for smoke nozzle alignment (rocket body floats via 120fps CSS compositor)
+            hoverY = Math.sin(now * 0.0022) * 6;
             cachedX = initialNozzleX;
             cachedY = initialNozzleY + hoverY;
           }
@@ -938,7 +945,7 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           var isMobileScreen = window.innerWidth < 768;
-          var maxP = isLaunch ? (isMobileScreen ? 70 : 200) : (isMobileScreen ? 24 : 45);
+          var maxP = isLaunch ? (isMobileScreen ? 60 : 180) : (isMobileScreen ? 20 : 38);
 
           if (isLaunch) {
             // Only spawn new contrail while rocket is on-screen (t < 1)
@@ -948,7 +955,6 @@
               var stepDist = isMobileScreen ? 18 : 10;
               var steps = Math.min(isMobileScreen ? 4 : 8, Math.max(2, Math.ceil(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
-                if (particles.length >= maxP) particles.shift();
                 var interp = s / steps;
                 var ix = prevX + (curX - prevX) * interp;
                 var iy = prevY + (curY - prevY) * interp;
@@ -956,8 +962,9 @@
               }
             }
           } else {
-            if (particles.length >= maxP) particles.shift();
-            spawnPuff(curX, curY, false);
+            if (particles.length < maxP) {
+              spawnPuff(curX, curY, false);
+            }
           }
 
           prevX = curX;

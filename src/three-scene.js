@@ -410,9 +410,11 @@ export const initThreeEngine = async () => {
   let tesseractLoaded = false;
   let sceneReadinessNotified = false;
 
-  const notifySceneReady = () => {
+  const notifySceneReady = async () => {
     if (sceneReadinessNotified) return;
     sceneReadinessNotified = true;
+
+    await yieldToMain();
 
     try {
       if (renderer && scene && camera) {
@@ -420,6 +422,8 @@ export const initThreeEngine = async () => {
         renderer.render(scene, camera);
       }
     } catch (e) {}
+
+    await yieldToMain();
 
     if (typeof window !== "undefined") {
       window.__is3DReady = true;
@@ -464,7 +468,7 @@ export const initThreeEngine = async () => {
         const totalPts = srcPos.count;
 
         // Smooth sampling mapped purely to #DC143C Primary Color
-        const stride = isMobile ? 8 : 6;
+        const stride = isMobile ? 10 : 6;
         const count = Math.floor(totalPts / stride);
         const newPos = new Float32Array(count * 3);
         const newCol = new Float32Array(count * 3);
