@@ -890,7 +890,6 @@ export const initPreloaderTimeline = () => {
   };
 
   const startProgressTime = performance.now();
-  const baseAutoDuration = 750; // Smooth natural baseline crawl up to ~45% during asset decode
 
   const animStep = (now) => {
     if (launchTriggered) return;
@@ -898,27 +897,31 @@ export const initPreloaderTimeline = () => {
     const delta = Math.min(48, Math.max(1, now - lastProgressTime));
     lastProgressTime = now;
 
-    // 1. Natural baseline progress curve during initial bootstrap
     const elapsed = now - startProgressTime;
-    const baseProgress = Math.min(0.46, (elapsed / baseAutoDuration) * 0.46);
+
+    // 1. Smooth baseline target cruise (glides towards 88% over ~1500ms)
+    const baseProgress = Math.min(0.88, Math.pow(elapsed / 1600, 0.92) * 0.88);
     const basePct = baseProgress * 100;
-    if (basePct > targetPct && targetPct < 46) {
+    if (basePct > targetPct && targetPct < 88) {
       targetPct = basePct;
     }
 
-    // 2. When 3D engine signals completion, target surges to 100%
+    // 2. When 3D signals ready, glide target smoothly to 100%
     if (window.__is3DReady && targetPct < 100) {
       targetPct = 100;
     }
 
-    // 3. Silky continuous exponential interpolation (Zero jumps, pure 120fps fluid glide)
-    const lerpSpeed = targetPct >= 100 ? 0.010 : 0.007;
-    const rawStep = (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
-    const maxStep = targetPct >= 100 ? delta * 0.065 : delta * 0.045;
-    visualPct += Math.min(rawStep, maxStep);
+    // 3. Butter-smooth monotonic progression:
+    // Guarantees visualPct moves forward steadily, never skipping or stuttering
+    const diff = targetPct - visualPct;
+    if (diff > 0) {
+      // At 60fps (delta ≈ 16.6ms), max step is ~0.9%, ensuring sequential number ticks (01, 02, 03... 100)
+      const step = Math.min(diff * 0.08 + 0.30, delta * 0.055);
+      visualPct = Math.min(targetPct, visualPct + step);
+    }
 
     // Dynamic stage status text
-    if (visualPct >= 96) currentStageText = PRELOADER_STAGES[3].text;
+    if (visualPct >= 94) currentStageText = PRELOADER_STAGES[3].text;
     else if (visualPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
     else if (visualPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
     else currentStageText = PRELOADER_STAGES[0].text;
@@ -933,8 +936,8 @@ export const initPreloaderTimeline = () => {
       updateDisplay(100, PRELOADER_STAGES[3].text);
       if (!isReadyForLaunch) {
         isReadyForLaunch = true;
-        // Brief 150ms ignition pause: allows plasma thrusters to flare before liftoff
-        setTimeout(triggerLaunch, 150);
+        // Brief 120ms ignition pause: allows plasma thrusters to flare before liftoff
+        setTimeout(triggerLaunch, 120);
       }
     } else {
       requestAnimationFrame(animStep);

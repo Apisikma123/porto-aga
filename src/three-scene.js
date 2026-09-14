@@ -350,26 +350,6 @@ export const initThreeEngine = async () => {
   // Dynamic Texture Loading (TextureLoader - WebP Optimized with LoadingManager)
   const textureLoader = new THREE.TextureLoader(loadingManager);
 
-  // 3. GPU Warmup & Shader Pre-compilation (Single efficient pass)
-  const executeGPUWarmup = () => {
-    if (warmupExecuted) return;
-    warmupExecuted = true;
-    try {
-      if (renderer && renderer.initTexture) {
-        if (ketupatColorMap) renderer.initTexture(ketupatColorMap);
-        if (ketupatBumpMap) renderer.initTexture(ketupatBumpMap);
-      }
-
-      if (renderer && scene && camera) {
-        renderer.compile(scene, camera);
-      }
-    } catch (err) {
-      console.warn("GPU warmup notice:", err);
-    }
-  };
-
-  executeGPUWarmup();
-
   await yieldToMain();
 
   // ─── Primary Crimson (#DC143C) Nebula Particle Texture ───
@@ -418,6 +398,10 @@ export const initThreeEngine = async () => {
 
     try {
       if (renderer && scene && camera) {
+        if (renderer.initTexture) {
+          if (ketupatColorMap) renderer.initTexture(ketupatColorMap);
+          if (ketupatBumpMap) renderer.initTexture(ketupatBumpMap);
+        }
         renderer.compile(scene, camera);
         renderer.render(scene, camera);
       }
@@ -1513,12 +1497,6 @@ export const initThreeEngine = async () => {
   });
 
   if (preloaderActive) {
-    // Warm up one frame so shader cache and VRAM are fully primed without starting continuous render loop
-    try {
-      renderer.compile(scene, camera);
-      renderer.render(scene, camera);
-    } catch (e) {}
-
     // Start continuous 60/120fps animation loop ONLY when rocket liftoff begins
     window.addEventListener("start3D", () => {
       canRun3DLoop = true;

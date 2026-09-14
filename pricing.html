@@ -109,12 +109,12 @@
       }
       .preloader-launching #preloader-backdrop {
         opacity: 0 !important;
-        transition: opacity 0.52s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-smoke-canvas {
         opacity: 0 !important;
-        transition: opacity 0.65s ease-out 0.62s !important;
+        transition: opacity 0.60s ease-out 0.48s !important;
         pointer-events: none;
       }
       .preloader-launching #preloader-header {
@@ -855,40 +855,60 @@
         prevCurY = initialNozzleY;
 
         // Pre-seed visible, billowing vapor plume
-        for (var i = 0; i < 18; i++) {
-          var prog = i / 18;
+        for (var i = 0; i < 14; i++) {
+          var prog = i / 14;
           particles.push({
-            x: initialNozzleX + (Math.random() - 0.5) * (6 + prog * 16),
-            y: initialNozzleY + prog * 42 + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (0.3 + prog * 0.5),
-            vy: 0.8 + Math.random() * 0.9,
-            radius: 8 + prog * 16 + Math.random() * 4,
-            growth: 0.45,
-            maxRadius: 42,
-            alpha: 0.55 * (1 - prog * 0.45),
-            decay: 0.008
+            x: initialNozzleX + (Math.random() - 0.5) * (5 + prog * 12),
+            y: initialNozzleY + prog * 38 + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * (0.25 + prog * 0.4),
+            vy: 0.75 + Math.random() * 0.85,
+            radius: 8 + prog * 14 + Math.random() * 3,
+            growth: 0.44,
+            maxRadius: 36,
+            alpha: 0.46 * (1 - prog * 0.5),
+            decay: 0.0090,
+            isLaunch: false
           });
         }
 
         function spawnPuff(x, y, isLaunch, velY) {
           var isMobile = window.innerWidth < 768;
-          var maxP = isLaunch ? (isMobile ? 38 : 55) : (isMobile ? 22 : 36);
-          if (particles.length >= maxP) {
-            particles.shift();
+          if (isLaunch) {
+            var maxP = isMobile ? 42 : 60;
+            if (particles.length >= maxP) {
+              particles.shift();
+            }
+            var wakeY = Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3;
+            particles.push({
+              x: x + (Math.random() - 0.5) * 5,
+              y: y + (Math.random() - 0.5) * 2,
+              vx: (Math.random() - 0.5) * 0.9,
+              vy: wakeY,
+              radius: 14 + Math.random() * 5,
+              growth: 0.95,
+              maxRadius: 65,
+              alpha: 0.68,
+              decay: 0.0075,
+              isLaunch: true
+            });
+          } else {
+            // Hover State: NEVER shift active particles! Let them fade naturally to alpha <= 0.005
+            var maxHover = isMobile ? 22 : 32;
+            if (particles.length >= maxHover) return; // Drop spawn if saturated, zero optical pop
+
+            particles.push({
+              x: x + (Math.random() - 0.5) * 4,
+              y: y + (Math.random() - 0.5) * 2,
+              vx: (Math.random() - 0.5) * 0.35,
+              vy: 0.75 + Math.random() * 0.85,
+              radius: 8 + Math.random() * 4,
+              growth: 0.46,
+              maxRadius: 36,
+              alpha: 0.46,
+              decay: 0.0090, // Fades smoothly to 0 in ~51 frames (~850ms)
+              isLaunch: false
+            });
           }
-          var wakeY = isLaunch ? (Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3) : (0.8 + Math.random() * 0.9);
-          particles.push({
-            x: x + (Math.random() - 0.5) * (isLaunch ? 5 : 4),
-            y: y + (Math.random() - 0.5) * 2,
-            vx: (Math.random() - 0.5) * (isLaunch ? 0.9 : 0.4),
-            vy: wakeY,
-            radius: isLaunch ? (13 + Math.random() * 5) : (8 + Math.random() * 4),
-            growth: isLaunch ? 0.85 : 0.48,
-            maxRadius: isLaunch ? 60 : 38,
-            alpha: isLaunch ? 0.68 : 0.50,
-            decay: isLaunch ? 0.0075 : 0.0085,
-            isLaunch: Boolean(isLaunch)
-          });
         }
 
         function render(now) {
@@ -916,24 +936,24 @@
               prevCurY = initialNozzleY + hoverY;
             }
 
-            var launchDuration = 620; // 0.62s majestic & snappy supersonic liftoff
+            var launchDuration = 480; // Snappy & fast supersonic liftoff
             var elapsed = now - launchStartTime;
             var t = Math.min(1, elapsed / launchDuration);
 
             // 1. Continuous C^inf bell curve for downward recoil bounce (mantul kebawah kek tadi)
-            // Peak downward compression at t = 0.11 (+8.5px), smoothly finishing at t = 0.22 with zero jerk
-            var dipProg = Math.min(1, t / 0.22);
+            // Peak downward compression at t = 0.10 (+7.5px), smoothly finishing at t = 0.20 with zero jerk
+            var dipProg = Math.min(1, t / 0.20);
             var sinDip = Math.sin(dipProg * Math.PI);
-            var dip = sinDip * sinDip * 8.5;
+            var dip = sinDip * sinDip * 7.5;
 
             // 2. Continuous supersonic acceleration curve (C^2 zero jerk)
-            var ease = Math.pow(t, 2.5);
-            var totalDist = window.innerHeight + 450;
+            var ease = Math.pow(t, 2.2);
+            var totalDist = window.innerHeight + 480;
             var launchY = startLaunchY + dip - ease * totalDist;
 
             // 3. Dynamic squash & stretch
-            var squash = (dip / 8.5) * 0.04;
-            var stretch = ease * 0.26;
+            var squash = (dip / 7.5) * 0.035;
+            var stretch = ease * 0.28;
             var scaleX = 1 + squash - ease * 0.10;
             var scaleY = 1 - squash + stretch;
 
@@ -945,7 +965,7 @@
             }
 
             // Flame nozzle tip position (tightly locked to the rocket flame tip)
-            var flameTipOffset = 14 * Math.min(1, elapsed / 120);
+            var flameTipOffset = 14 * Math.min(1, elapsed / 100);
             curX = initialNozzleX;
             curY = initialNozzleY + launchY + flameTipOffset;
 
@@ -955,8 +975,8 @@
             // Contrail generation: Fill continuous dense segment between prev frame and cur frame
             if (t < 1) {
               var dist = Math.abs(curY - prevCurY);
-              var stepDist = isMobileScreen ? 16 : 12;
-              var steps = Math.min(isMobileScreen ? 3 : 4, Math.max(1, Math.round(dist / stepDist)));
+              var stepDist = isMobileScreen ? 14 : 10;
+              var steps = Math.min(isMobileScreen ? 4 : 5, Math.max(1, Math.round(dist / stepDist)));
               for (var s = 0; s < steps; s++) {
                 var interp = (s + 1) / steps;
                 var ix = prevCurX + (curX - prevCurX) * interp;
@@ -978,7 +998,7 @@
             curY = initialNozzleY + hoverY;
 
             // Steady rhythmic emission (no empty gaps!)
-            var hoverInterval = isMobileScreen ? 85 : 65;
+            var hoverInterval = isMobileScreen ? 90 : 70;
             if (now - lastHoverSpawnTime >= hoverInterval) {
               lastHoverSpawnTime = now;
               spawnPuff(curX, curY, false, 0);
@@ -1001,7 +1021,7 @@
             }
             p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
 
-            var decayRate = isLaunch && (now - launchStartTime > 620) ? 0.015 : p.decay;
+            var decayRate = isLaunch && (now - launchStartTime > 480) ? 0.016 : p.decay;
             p.alpha -= decayRate * dt;
 
             if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
@@ -2808,7 +2828,6 @@
         let visualPct = 0;
         let lastProgressTime = performance.now();
         const startProgressTime = performance.now();
-        const baseAutoDuration = 750;
 
         window.__setPreloaderProgress = (val) => {
           const num = Number(val);
@@ -2821,19 +2840,26 @@
           lastProgressTime = now;
 
           const elapsed = now - startProgressTime;
-          const baseProgress = Math.min(0.46, (elapsed / baseAutoDuration) * 0.46);
-          const basePct = baseProgress * 100;
-          if (basePct > targetPct && targetPct < 46) targetPct = basePct;
 
+          // 1. Smooth baseline target cruise (glides towards 88% over ~1500ms)
+          const baseProgress = Math.min(0.88, Math.pow(elapsed / 1600, 0.92) * 0.88);
+          const basePct = baseProgress * 100;
+          if (basePct > targetPct && targetPct < 88) targetPct = basePct;
+
+          // 2. When 3D signals ready, glide target smoothly to 100%
           if (window.__is3DReady && targetPct < 100) targetPct = 100;
 
-          const lerpSpeed = targetPct >= 100 ? 0.012 : 0.007;
-          visualPct += (targetPct - visualPct) * (1 - Math.exp(-delta * lerpSpeed));
+          // 3. Butter-smooth monotonic progression
+          const diff = targetPct - visualPct;
+          if (diff > 0) {
+            const step = Math.min(diff * 0.08 + 0.30, delta * 0.055);
+            visualPct = Math.min(targetPct, visualPct + step);
+          }
 
           let stageText = PRELOADER_STAGES[0].text;
-          if (visualPct > 88) stageText = PRELOADER_STAGES[3].text;
-          else if (visualPct > 68) stageText = PRELOADER_STAGES[2].text;
-          else if (visualPct > 30) stageText = PRELOADER_STAGES[1].text;
+          if (visualPct >= 94) stageText = PRELOADER_STAGES[3].text;
+          else if (visualPct >= 68) stageText = PRELOADER_STAGES[2].text;
+          else if (visualPct >= 35) stageText = PRELOADER_STAGES[1].text;
 
           updateDisplay(visualPct, stageText);
 
@@ -2842,7 +2868,7 @@
 
           if (visualPct >= 99.5 && (is3DVerified || isTimedOut)) {
             updateDisplay(100, PRELOADER_STAGES[3].text);
-            setTimeout(triggerLaunch, 150);
+            setTimeout(triggerLaunch, 120);
           } else {
             requestAnimationFrame(animStep);
           }
