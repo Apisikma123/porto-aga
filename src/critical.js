@@ -362,6 +362,7 @@ window.setLanguage = setLanguage;
 // 3. NAVIGATION & SCROLL SYSTEM
 // ═══════════════════════════════════════════════════════════
 let isAnimating = false;
+let scrollAnimFrame = null;
 
 export const scrollToSection = (index, immediate = false) => {
   const safeIndex = Math.max(0, Math.min(index, SECTION_IDS.length - 1));
@@ -376,19 +377,45 @@ export const scrollToSection = (index, immediate = false) => {
   const targetY = Math.round(targetEl.getBoundingClientRect().top + startY);
 
   if (immediate) {
+    if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
+    isAnimating = false;
     window.scrollTo(0, targetY);
     return;
   }
 
-  isAnimating = true;
-  window.scrollTo({
-    top: targetY,
-    behavior: "smooth",
-  });
+  if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
 
-  setTimeout(() => {
+  const distance = targetY - startY;
+  if (Math.abs(distance) < 2) {
     isAnimating = false;
-  }, 450);
+    return;
+  }
+
+  isAnimating = true;
+
+  // Luxurious, slow, silky smooth glide (~900ms - 1150ms)
+  const duration = Math.min(1150, Math.max(850, Math.abs(distance) * 0.7));
+  const startTime = performance.now();
+
+  // Smooth cubic ease-in-out curve for cinematic travel
+  const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  const step = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = easeInOutCubic(progress);
+
+    window.scrollTo(0, Math.round(startY + distance * ease));
+
+    if (progress < 1) {
+      scrollAnimFrame = requestAnimationFrame(step);
+    } else {
+      isAnimating = false;
+      scrollAnimFrame = null;
+    }
+  };
+
+  scrollAnimFrame = requestAnimationFrame(step);
 };
 window.scrollToSection = scrollToSection;
 window.getCurrentSectionIndex = () => currentSectionIndex;
@@ -503,58 +530,20 @@ export const initNavigationAndKeyboard = () => {
   const horizontalTracks = document.querySelectorAll("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
   horizontalTracks.forEach((track) => enableDragToScroll(track));
 
-  // ─── 1. Desktop Lock Scroller (Mouse Wheel Snap Section-by-Section) ───
-  let lastScrollTime = 0;
-  const WHEEL_COOLDOWN = 600;
-
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      // STRICTLY DESKTOP ONLY (>= 1024px) — mobile gets 100% fluid native scrolling!
-      if (window.innerWidth < 1024) return;
-      if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
-
-      const target = e.target;
-      // Allow native horizontal scroll on code matrix / carousel / horizontal tracks
-      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
-      if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        return;
-      }
-
-      // Allow native vertical scrolling inside open modals or full-page detail views
-      const isModal = target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view");
-      if (isModal) return;
-
-      // STRICT LOCK ON DESKTOP: Suppress loose free scrolling and snap scene-by-scene
-      e.preventDefault();
-
-      if (isAnimating) return;
-
-      const now = Date.now();
-      if (now - lastScrollTime < WHEEL_COOLDOWN) {
-        return;
-      }
-
-      if (Math.abs(e.deltaY) < 16) return;
-
-      if (e.deltaY > 0) {
-        if (currentSectionIndex < SECTION_IDS.length - 1) {
-          lastScrollTime = now;
-          scrollToSection(currentSectionIndex + 1);
-        }
-      } else {
-        if (currentSectionIndex > 0) {
-          lastScrollTime = now;
-          scrollToSection(currentSectionIndex - 1);
-        }
-      }
-    },
-    { passive: false }
-  );
+  // ─── 1. Free Natural Scrolling (Lock Scroll Disabled for Silky Fluid Momentum) ───
+  const interruptSmoothGlide = () => {
+    if (isAnimating && scrollAnimFrame) {
+      cancelAnimationFrame(scrollAnimFrame);
+      isAnimating = false;
+      scrollAnimFrame = null;
+    }
+  };
+  window.addEventListener("wheel", interruptSmoothGlide, { passive: true });
+  window.addEventListener("touchstart", interruptSmoothGlide, { passive: true });
 
   // ─── 2. Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Home / End) ───
   let lastKeyTime = 0;
-  const KEY_COOLDOWN = 160;
+  const KEY_COOLDOWN = 550;
 
   window.addEventListener("keydown", (e) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;

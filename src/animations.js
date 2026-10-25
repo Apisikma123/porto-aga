@@ -24,7 +24,7 @@ export const initScrollRevealAnimations = () => {
   }
 
   const isMobile = window.innerWidth < 1024 || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
-  const scrubValue = isMobile ? 0.35 : 0.8;
+  const scrubValue = isMobile ? 0.35 : 1.25;
 
   // ─── SECTION 01: HERO (#start) — Horizon Departure Scrub ───
   const startSec = document.getElementById("start");
