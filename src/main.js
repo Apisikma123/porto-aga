@@ -46,18 +46,13 @@ const loadNonCritical = async () => {
 
   await yieldToMain();
 
-  const isMobile = window.innerWidth < 1024;
-  if (!isMobile) {
-    try {
-      const m = await import("./animations.js");
-      if (m && m.initAnimations) {
-        m.initAnimations();
-      }
-    } catch (err) {
-      console.warn("animations load notice:", err);
+  try {
+    const m = await import("./animations.js");
+    if (m && m.initAnimations) {
+      m.initAnimations();
     }
-  } else if (window.renderActivityHeatmap) {
-    try { window.renderActivityHeatmap(); } catch (e) {}
+  } catch (err) {
+    console.warn("animations load notice:", err);
   }
 };
 
