@@ -77,6 +77,14 @@ window.initCardTilt = initCardTilt;
 // MASTER ANIMATIONS INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 export const initAnimations = () => {
+  const isMobile = window.innerWidth < 1024 || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+  const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (isMobile || prefersReduced) {
+    if (window.renderActivityHeatmap) {
+      try { window.renderActivityHeatmap(); } catch (e) {}
+    }
+    return;
+  }
   initScrollRevealAnimations();
   initCardTilt();
 };

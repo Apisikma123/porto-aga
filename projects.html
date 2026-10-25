@@ -110,7 +110,7 @@
     <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none"></canvas>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 2. TOP FLOATING NAVIGATION BAR (Matches Homepage & Pricing) -->
+    <!-- 2. TOP FLOATING NAVIGATION BAR (Matches Homepage) -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <header class="fixed top-0 inset-x-0 z-40 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 flex justify-between items-center pointer-events-none">
       <a
@@ -127,7 +127,6 @@
         <a href="/#about" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">About</a>
         <a href="/#activity" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Activity</a>
         <a href="/projects.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
-        <a href="/pricing.html" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Pricing</a>
         <a href="/#contact" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Contact</a>
         <a href="/#footer" class="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-400 hover:text-white transition-colors">Footer</a>
       </nav>
@@ -187,22 +186,15 @@
           </a>
         </li>
         <li>
-          <a href="/pricing.html" class="side-nav-item group flex items-center text-left py-1">
-            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
-            <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Pricing</span>
-          </a>
-        </li>
-        <li>
           <a href="/#contact" class="side-nav-item group flex items-center text-left py-1">
-            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
             <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Contact</span>
           </a>
         </li>
         <li>
           <a href="/#footer" class="side-nav-item group flex items-center text-left py-1">
-            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
+            <span class="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
             <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Footer</span>
           </a>
@@ -257,7 +249,7 @@
 
           <!-- Category Pill Filters -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 font-mono text-xs" id="category-filter-container">
-            <button type="button" class="category-btn active" onclick="setCategory('all', this)" id="cat-all">Semua (17)</button>
+            <button type="button" class="category-btn active" onclick="setCategory('all', this)" id="cat-all">Semua (18)</button>
             <button type="button" class="category-btn" onclick="setCategory('Fullstack', this)" id="cat-fullstack">Fullstack</button>
             <button type="button" class="category-btn" onclick="setCategory('Mobile', this)" id="cat-mobile">Mobile</button>
             <button type="button" class="category-btn" onclick="setCategory('Frontend', this)" id="cat-frontend">Frontend</button>
@@ -298,8 +290,8 @@
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs">
           <a href="/#start" class="hover:text-white transition-colors">Start</a>
-          <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Projects (04)</a>
-          <a href="/pricing.html" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Estimasi Harga ↗</a>
+          <a href="/projects.html" class="text-[#DC143C] hover:text-white transition-colors">Projects</a>
+          <a href="/#contact" class="hover:text-white transition-colors">Contact</a>
           <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub ↗</a>
         </div>
       </div>
@@ -320,8 +312,8 @@
         id: {
           eyebrow: "Katalog Karya Lengkap",
           title: "Semua Karya & Repositori.",
-          desc: "Eksplorasi seluruh 17 proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan open-source code oleh Muhammad Aga Putra (@Apisikma123).",
-          catAll: "Semua (17)",
+          desc: "Eksplorasi seluruh 18 proyek perangkat lunak, sistem arsitektur web, aplikasi mobile, dan open-source code oleh Muhammad Aga Putra (@Apisikma123).",
+          catAll: "Semua (18)",
           readReadme: "Detail Proyek",
           emptyTitle: "Tidak ada proyek yang cocok",
           emptyDesc: "Coba gunakan kata kunci pencarian yang berbeda.",
@@ -331,8 +323,8 @@
         en: {
           eyebrow: "Complete Works Catalog",
           title: "All Works & Repositories.",
-          desc: "Explore all 17 software engineering systems, web architectures, mobile applications, and open-source code by Muhammad Aga Putra (@Apisikma123).",
-          catAll: "All (17)",
+          desc: "Explore all 18 software engineering systems, web architectures, mobile applications, and open-source code by Muhammad Aga Putra (@Apisikma123).",
+          catAll: "All (18)",
           readReadme: "Project Details",
           emptyTitle: "No projects matched",
           emptyDesc: "Try a different search keyword or category filter.",
@@ -429,6 +421,7 @@
           "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
           "grow-a-garden": "/projects/grow-a-garden.webp",
           bkj: "/projects/bkj.webp",
+          "pratama-tehnik": "/projects/pratama-tehnik.webp",
         };
 
         filtered.forEach(p => {

@@ -47,7 +47,9 @@
   }
 
   /* Hardware Accelerated 3D Canvas Container & Canvas */
+  /* Hardware Accelerated 3D Canvas Container & Canvas — Strictly 2D on mobile, Full 3D on Desktop */
   #bg {
+    display: none !important;
     position: fixed !important;
     inset: 0 !important;
     top: 0 !important;
@@ -57,7 +59,38 @@
     pointer-events: none !important;
     z-index: 0 !important;
     opacity: 1 !important;
-    display: block !important;
+  }
+  @media (min-width: 1024px) {
+    #bg {
+      display: block !important;
+    }
+  }
+
+  /* Fixed Numeric Sidebar Navigation */
+  .side-nav-item {
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .side-nav-item .side-nav-num {
+    transition: color 0.25s ease;
+  }
+  .side-nav-item .side-nav-line {
+    transition: width 0.25s ease, background-color 0.25s ease;
+  }
+  .side-nav-item .side-nav-label {
+    transition: color 0.25s ease;
+  }
+  .side-nav-item.active .side-nav-num {
+    color: #DC143C !important;
+    font-weight: 700;
+  }
+  .side-nav-item.active .side-nav-line {
+    width: 1.75rem !important;
+    background-color: #DC143C !important;
+  }
+  .side-nav-item.active .side-nav-label {
+    color: #ffffff !important;
+    font-weight: 600;
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -207,32 +240,6 @@
     transform: scale(1.3);
     z-index: 30;
     filter: brightness(1.25);
-  }
-
-  /* Infinite Background Marquee (Anti-Collision Masking from Sidebar) */
-  .marquee-wrapper {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.06;
-    user-select: none;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 240px, rgba(0,0,0,0.9) 380px, rgba(0,0,0,0.9) 82%, transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0%, transparent 240px, rgba(0,0,0,0.9) 380px, rgba(0,0,0,0.9) 82%, transparent 100%);
-  }
-
-  .marquee-content {
-    display: inline-block;
-    animation: marquee 25s linear infinite;
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: clamp(5rem, 14vw, 14rem);
-    letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.35);
   }
 
   /* Spatial 3D Perspective Wrapper */
@@ -401,16 +408,7 @@
   .btn-crimson,
   .btn-glass,
   .btn-back,
-  .pricing-btn-next,
-  .pricing-btn-back,
-  button:not(.lang-btn):not(#theme-toggle-btn):not(.nav-link):not(.side-nav-item):not([class*="rounded-full"]):not([class*="w-1.5"]):not([class*="w-2"]):not(.heatmap-cell),
-  a[class*="btn-"]:not([class*="rounded-full"]),
-  a[class*="px-4"][class*="py-2"]:not([class*="rounded-full"]),
-  a[class*="px-3.5"][class*="py-2"]:not([class*="rounded-full"]),
-  a[class*="px-5"][class*="py-2.5"]:not([class*="rounded-full"]),
-  a[class*="px-6"][class*="py-3"]:not([class*="rounded-full"]) {
-    border-radius: 0.75rem !important;
-  }
+  
 
   /* Unified Card & Container Shape (DESIGN.md standard: 20px / 1.25rem / rounded-2xl) */
   .glass-card,
@@ -419,7 +417,7 @@
   .carousel-card,
   .tesseract-card,
   .repo-card,
-  .pricing-card,
+  
   .phone-mockup-banner,
   [class*="rounded-2xl"] {
     border-radius: 1.25rem !important;
@@ -563,14 +561,6 @@
   }
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
 
 @keyframes spin {
   to {
@@ -786,16 +776,7 @@
   z-index: 15;
 }
 
-.pricing-carousel-card {
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
-  align-self: stretch;
-  overflow: hidden;
-  contain: layout paint;
-  box-sizing: border-box;
-  will-change: transform, opacity;
-}
+
 
 @media (max-width: 767.98px) {
   /* Disable expensive live backdrop-filter readbacks over WebGL canvas on mobile GPUs (saves up to 80% compositor work) */
@@ -805,7 +786,7 @@
   .repo-card,
   .activity-standalone-card,
   .spatial-card,
-  .pricing-tier-card,
+  
   #project-detail-view,
   #project-detail-modal,
   #all-projects-view {
@@ -817,164 +798,55 @@
   /* Hardware-accelerated fluid touch scrolling for horizontal tracks without vertical scroll lock */
   #activity-heatmap-scroll,
   #projects-carousel-track,
-  #pricing-cards-track,
+  
   .overflow-x-auto {
     touch-action: pan-x pan-y !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior-x: contain;
   }
 
-  #pricing-cards-track {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    position: relative !important;
-  }
+  
 
-  .pricing-carousel-card {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-  }
+  
 }
 
 
 
 /* Website Type Selection Card */
-.pricing-type-card {
-  display: block;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  text-align: left;
-}
 
-.pricing-type-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
-}
 
-.pricing-type-card.selected {
-  border-color: rgba(220, 20, 60, 0.5);
-  background: rgba(220, 20, 60, 0.06);
-}
+
+
+
 
 /* Option Card (Pages, Design) */
-.pricing-option-card {
-  display: block;
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-}
 
-.pricing-option-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.04);
-}
 
-.pricing-option-card.selected {
-  border-color: rgba(220, 20, 60, 0.45);
-  background: rgba(220, 20, 60, 0.06);
-}
+
+
+
 
 /* Addon Chip */
-.pricing-addon-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
 
-.pricing-addon-chip:hover {
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.05);
-}
 
-.pricing-addon-chip.selected {
-  border-color: rgba(220, 20, 60, 0.45);
-  background: rgba(220, 20, 60, 0.08);
-}
+
+
+
 
 /* Navigation Buttons */
-.pricing-btn-next {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: #e4e4e7;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.pricing-btn-next:hover:not(:disabled) {
-  border-color: rgba(220, 20, 60, 0.5);
-  background: rgba(220, 20, 60, 0.1);
-  color: #ffffff;
-}
 
-.pricing-btn-next:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
 
-.pricing-btn-next.pricing-btn-wa {
-  background: #DC143C;
-  border-color: #DC143C;
-  color: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
 
-.pricing-btn-next.pricing-btn-wa:hover {
-  background: #b01030;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
 
-.pricing-btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1.15rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #d4d4d8;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-}
 
-.pricing-btn-back:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(220, 20, 60, 0.5);
-}
+
+
+
+
+
+
+
 
 
 
@@ -1001,41 +873,7 @@
   z-index: 99999 !important;
 }
 
-/* Pricing Page Core Commission Tier Cards */
-.pricing-tier-card {
-  border-radius: 1.25rem !important;
-  background: rgba(16, 17, 24, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Image Preview Overlay Floating Badges (Visual Architecture Preview, Language Badges) */
-#detail-view-banner-container [class*="bg-black"],
-#detail-view-banner-container [class*="bg-black"] *,
-#detail-view-banner-badge,
-[data-i18n="visualPreview"],
-.aspect-\[16\/8\.5\] [class*="bg-black"],
-.aspect-\[16\/8\.5\] [class*="bg-black"] * {
-  color: #f8fafc !important;
-  background-color: rgba(0, 0, 0, 0.78) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-
-
-/* ═══════════════════════════════════════════════════════════
-   100% ZOOM VIEWPORT FIT & DENSITY ADAPTATION (Zero-Overflow Guarantee)
-   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  #pricing {
-    min-height: 100svh;
-    padding-top: 5rem !important;
-    padding-bottom: 3rem !important;
-  }
-  #pricing .pricing-carousel-card {
-    min-height: auto;
-  }
   .carousel-card {
     border-radius: 1rem !important;
   }
@@ -1105,9 +943,7 @@
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
-  .pricing-carousel-card {
-    padding: 0.85rem !important;
-  }
+  
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1282,9 +1118,17 @@ textarea {
   touch-action: pan-y pinch-zoom;
 }
 
-.carousel-card,
-.pricing-carousel-card {
-  touch-action: pan-x pan-y;
+/* Projects Carousel Counter Robust Single-Line Defense */
+#carousel-counter-container {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
 }
 
+#carousel-counter {
+  white-space: nowrap !important;
+  min-width: 3.25rem !important;
+  text-align: center !important;
+  display: inline-block !important;
+  font-variant-numeric: tabular-nums !important;
+}
 

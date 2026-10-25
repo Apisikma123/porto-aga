@@ -7,72 +7,25 @@
       (function () {
         try {
           document.documentElement.setAttribute("data-theme", "dark");
-          var ua = navigator.userAgent || "";
-          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest|moto g power|Nexus 5X/i.test(ua) ||
-                      Boolean(navigator.webdriver) ||
-                      (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
-                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search)) ||
-                      (typeof window !== "undefined" && (
-                        (window.innerWidth >= 1345 && window.innerWidth <= 1355) ||
-                        (window.outerWidth >= 1345 && window.outerWidth <= 1355) ||
-                        (typeof screen !== "undefined" && (screen.width === 1350 || screen.availWidth === 1350))
-                      ));
-          if (!isBot) {
-            document.documentElement.classList.add("is-real-user");
-          }
-          function markUser() {
-            if (isBot) return;
-            if (!document.documentElement.classList.contains("is-real-user")) {
-              document.documentElement.classList.add("is-real-user");
-            }
-          }
-          window.addEventListener("touchstart", markUser, { once: true, passive: true });
-          window.addEventListener("pointerdown", markUser, { once: true, passive: true });
-          window.addEventListener("mousemove", markUser, { once: true, passive: true });
-          window.addEventListener("scroll", markUser, { once: true, passive: true });
-          window.addEventListener("keydown", markUser, { once: true, passive: true });
-        } catch (e) {
-          document.documentElement.classList.add("is-real-user");
-        }
+          var savedLang = localStorage.getItem("aga_portfolio_lang") || "en";
+          document.documentElement.setAttribute("lang", savedLang);
+        } catch (e) {}
       })();
     </script>
-    <style id="preloader-gate">
-      /* Preloader hidden by default for audit bots — visible instantly at 0ms for real users */
-      #web-preloader {
-        display: none !important;
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: transparent !important;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow: hidden;
-      }
-      html.is-real-user #web-preloader {
-        display: flex !important;
-      }
-      /* 3D bg canvas hidden for bots */
-      #bg {
-        display: none !important;
-      }
-      html.is-real-user #bg {
-        display: block !important;
-      }
-    </style>
 
     <!-- Google Search Console Site Verification -->
     <meta name="google-site-verification" content="c3e739d4426414fe" />
     
     <!-- Primary Search & Recruiter Meta Tags -->
-    <title>Muhammad Aga Putra | Software Engineer Portfolio</title>
-    <meta name="title" content="Muhammad Aga Putra | Software Engineer Portfolio" />
+    <title>Muhammad Aga Putra | Software Engineer &amp; Frontend Specialist</title>
+    <meta name="title" content="Muhammad Aga Putra | Software Engineer &amp; Frontend Specialist" />
     <meta
       name="description"
-      content="Portofolio resmi Muhammad Aga Putra. Software Engineer & Frontend Developer dengan keahlian 3D WebGL, fullstack web development, dan arsitektur sistem."
+      content="Official portfolio of Muhammad Aga Putra. Software Engineer &amp; Frontend Developer specializing in high-performance web applications, interactive 3D WebGL experiences, and scalable fullstack systems."
     />
     <meta
       name="keywords"
-      content="Muhammad Aga Putra, software engineer, web developer, frontend developer, three.js, fullstack, portfolio"
+      content="Muhammad Aga Putra, software engineer, frontend developer, three.js, fullstack developer, laravel, react, flutter, tailwind css, webgl, portfolio"
     />
     <meta name="author" content="Muhammad Aga Putra" />
     <meta name="publisher" content="Muhammad Aga Putra" />
@@ -80,9 +33,6 @@
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="theme-color" content="#040509" />
     <meta name="color-scheme" content="dark" />
-    <meta name="rating" content="General" />
-    <meta name="distribution" content="Global" />
-    <meta name="revisit-after" content="7 days" />
 
     <!-- Canonical & Multilingual Alternate Links -->
     <link rel="canonical" href="https://porto-aga.vercel.app/" />
@@ -96,24 +46,20 @@
     <meta name="geo.position" content="3.5952;98.6722" />
     <meta name="ICBM" content="3.5952, 98.6722" />
 
-    <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+    <!-- Open Graph / Social Meta Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://porto-aga.vercel.app/" />
-    <meta property="og:title" content="Muhammad Aga Putra | Software Engineer Portfolio" />
+    <meta property="og:title" content="Muhammad Aga Putra | Software Engineer &amp; Frontend Specialist" />
     <meta
       property="og:description"
-      content="Portofolio resmi Muhammad Aga Putra. Software Engineer & Frontend Developer dengan showcase 3D WebGL, web apps, dan repositori open-source."
+      content="Portfolio of Muhammad Aga Putra. Software Engineer &amp; Frontend Developer with verified production applications, 3D WebGL experiences, and open-source contributions."
     />
     <meta property="og:image" content="https://porto-aga.vercel.app/preview-hero.jpg" />
-    <meta property="og:image:secure_url" content="https://porto-aga.vercel.app/preview-hero.jpg" />
-    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Muhammad Aga Putra Portfolio" />
     <meta property="og:site_name" content="Muhammad Aga Putra" />
-    <meta property="og:locale" content="id_ID" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <link rel="image_src" href="https://porto-aga.vercel.app/preview-hero.jpg" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="id_ID" />
 
     <!-- Twitter / X Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -121,40 +67,37 @@
     <meta name="twitter:title" content="Muhammad Aga Putra | Software Engineer Portfolio" />
     <meta
       name="twitter:description"
-      content="Portofolio resmi Muhammad Aga Putra. Software Engineer & Frontend Developer."
+      content="Official portfolio of Muhammad Aga Putra. Software Engineer &amp; Frontend Developer."
     />
     <meta name="twitter:image" content="https://porto-aga.vercel.app/preview-hero.jpg" />
-    <meta name="twitter:image:alt" content="Muhammad Aga Putra Portfolio" />
     <meta name="twitter:creator" content="@Apisikma123" />
-    <meta name="twitter:site" content="@Apisikma123" />
 
+    <!-- Font DNS Preconnect & Non-Blocking Async Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" /></noscript>
 
-
-    <!-- Critical Hero & Preloader Inline Styles for Instant 0ms Paint -->
+    <!-- Critical Inline Styles (0ms Paint, Zero Render-Blocking) -->
     <style id="critical-hero-css">
-      html:not(.styles-ready) *,
-      html:not(.styles-ready) *::before,
-      html:not(.styles-ready) *::after {
-        transition: none !important;
-      }
       :root {
         --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         --color-crimson: #DC143C;
       }
       html {
-        background: 
+        background-color: #040509;
+        background-image: 
           radial-gradient(ellipse 90% 70% at 50% -10%, rgba(220, 20, 60, 0.15), transparent 70%),
           radial-gradient(ellipse 70% 60% at 85% 90%, rgba(40, 60, 140, 0.14), transparent 70%),
-          radial-gradient(circle at 15% 50%, rgba(180, 10, 40, 0.08), transparent 50%),
           radial-gradient(130% 90% at 50% 10%, #0c0e1a 0%, #07080f 55%, #030408 100%);
-        background-color: #040509;
         color: #f4f4f5;
         font-family: var(--font-sans);
         margin: 0;
         padding: 0;
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
       }
       body {
         background-color: transparent !important;
@@ -163,180 +106,81 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
+        overflow-x: hidden;
       }
-      html::-webkit-scrollbar,
-      body::-webkit-scrollbar {
+      /* STRICT MOBILE 2D: Canvas hidden on screens < 1024px to eliminate GPU overhead */
+      #bg {
         display: none !important;
-        width: 0 !important;
-        height: 0 !important;
       }
-      #web-preloader {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow: hidden;
-      }
-      #preloader-backdrop {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background-color: #040509 !important;
-        pointer-events: none;
-        will-change: opacity;
-      }
-      #preloader-rocket-center {
-        position: relative;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        will-change: transform;
-        transform-origin: 50% 65%;
-      }
-      #preloader-rocket-center svg {
-        width: 112px;
-        height: 160px;
-        display: block;
-      }
-      @media (min-width: 640px) {
-        #preloader-rocket-center svg {
-          width: 128px;
-          height: 176px;
+      @media (min-width: 1024px) {
+        #bg {
+          display: block !important;
+          position: fixed;
+          inset: 0;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+          z-index: 0;
         }
-      }
-      @media (min-width: 768px) {
-        #preloader-rocket-center svg {
-          width: 144px;
-          height: 208px;
-        }
-      }
-      #start {
-        min-height: 100svh;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        position: relative;
-      }
-      .hero-name {
-        font-size: clamp(2.2rem, 4.8vw, 4.4rem);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
       }
       .display-title {
         letter-spacing: -0.03em;
-        line-height: 1.05;
+        line-height: 1.08;
       }
       .eyebrow {
         font-family: var(--font-mono);
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
       }
       .body-copy {
         color: #a1a1aa;
-        line-height: 1.62;
+        line-height: 1.68;
       }
       .btn-crimson {
         background-color: #DC143C;
         color: #ffffff;
         font-family: var(--font-mono);
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.06em;
+        transition: background-color 0.2s ease, transform 0.15s ease;
+      }
+      .btn-crimson:hover {
+        background-color: #b01030;
       }
       .btn-glass {
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         background: rgba(255, 255, 255, 0.04);
         color: #f4f4f5;
         font-family: var(--font-mono);
-        font-size: 0.72rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
       }
-      @keyframes flameFlicker {
-        0% { transform: scale(1, 0.95); opacity: 0.92; }
-        50% { transform: scale(1.02, 1.05); opacity: 1; }
-        100% { transform: scale(0.98, 0.96); opacity: 0.94; }
+      .btn-glass:hover {
+        border-color: rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
       }
-      .rocket-flame-flicker {
-        transform-origin: 70px 118px;
-        animation: flameFlicker 0.28s ease-in-out infinite alternate;
-        will-change: transform;
+      .spatial-card {
+        background: rgba(12, 13, 20, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1rem;
+        transition: border-color 0.25s ease, transform 0.2s ease;
       }
-      .preloader-launching #apple-rocket-flame {
-        transform-origin: 70px 118px;
-        transform: scale(1.22, 1.75) !important;
-        transition: transform 0.25s ease-out;
-      }
-      .preloader-launching #preloader-backdrop {
-        opacity: 0 !important;
-        transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.16s !important;
-        pointer-events: none;
-      }
-      .preloader-launching #preloader-smoke-canvas {
-        opacity: 0 !important;
-        transition: opacity 0.60s ease-out 0.54s !important;
-        pointer-events: none;
-      }
-      .preloader-launching #preloader-header {
-        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-        opacity: 0 !important;
-        transform: translateY(-16px) !important;
-      }
-      .preloader-launching #preloader-footer {
-        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-        opacity: 0 !important;
-        transform: translateY(16px) !important;
-      }
-      .preloader-launching #preloader-text-group {
-        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-        opacity: 0 !important;
-        transform: translateY(-16px) !important;
+      .spatial-card:hover {
+        border-color: rgba(255, 255, 255, 0.18);
       }
     </style>
 
-    <!-- Font DNS/TLS Preconnect (eliminates ~400ms latency when deferred fonts load) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Asynchronous Deferred Google Fonts (Zero Render Blocking, Instant FCP) -->
-    <script>
-      (function () {
-        var fontsLoaded = false;
-        var loadFonts = function () {
-          if (fontsLoaded) return;
-          fontsLoaded = true;
-          var f = document.createElement("link");
-          f.rel = "stylesheet";
-          f.href = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700&display=swap";
-          document.head.appendChild(f);
-
-          var m = document.createElement("link");
-          m.rel = "stylesheet";
-          m.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&text=arrow_forward,arrow_outward,arrow_back,article,code,star,close,menu,light_mode,dark_mode,chat,tune,view_in_ar,calculate,search,content_copy,check,terminal,verified_user,expand_more,check_circle,folder_off,search_off,grid_view,description,add_circle_outline,radio_button_unchecked&display=swap";
-          document.head.appendChild(m);
-        };
-
-        window.addEventListener("scroll", loadFonts, { passive: true, once: true });
-        window.addEventListener("touchstart", loadFonts, { passive: true, once: true });
-        window.addEventListener("mousemove", loadFonts, { passive: true, once: true });
-        window.addEventListener("keydown", loadFonts, { passive: true, once: true });
-        window.addEventListener("start3D", loadFonts, { passive: true, once: true });
-      })();
-    </script>
-
-    <!-- Standard & Google SEO Compliant Favicon & App Icons -->
+    <!-- Favicon & App Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="msapplication-TileColor" content="#040509" />
 
-    <!-- Schema.org JSON-LD Structured Data for Top Google Ranking -->
+    <!-- Schema.org JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -349,8 +193,8 @@
             "@id": "https://porto-aga.vercel.app/#person",
             "name": "Muhammad Aga Putra",
             "alternateName": ["Aga Putra", "Apisikma123"],
-            "jobTitle": "Software Engineer & Frontend Developer",
-            "description": "Software Engineer & Frontend Developer specializing in modern web applications, 3D WebGL experiences, and fullstack systems architecture.",
+            "jobTitle": "Software Engineer & Frontend Specialist",
+            "description": "Software Engineer & Frontend Developer specializing in modern web applications, 3D WebGL experiences, and scalable fullstack architecture.",
             "url": "https://porto-aga.vercel.app/",
             "image": "https://porto-aga.vercel.app/preview-hero.jpg",
             "email": "agaputra62@gmail.com",
@@ -364,17 +208,7 @@
               "addressRegion": "Sumatera Utara",
               "addressCountry": "ID"
             },
-            "knowsAbout": ["Frontend Development", "Three.js", "WebGL", "Laravel", "Flutter", "Tailwind CSS", "JavaScript", "Node.js", "GSAP", "SEO Optimization"],
-            "makesOffer": {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": "Freelance Web Development & Studio Services",
-                "description": "Professional website development services including Landing Page, Company Profile, E-Commerce, and Custom Web Applications.",
-                "url": "https://porto-aga.vercel.app/pricing.html",
-                "provider": { "@id": "https://porto-aga.vercel.app/#person" }
-              }
-            }
+            "knowsAbout": ["Frontend Engineering", "Three.js", "WebGL", "Laravel", "React", "Flutter", "Tailwind CSS", "JavaScript", "TypeScript", "Node.js", "Performance Optimization"]
           }
         },
         {
@@ -382,14 +216,9 @@
           "@id": "https://porto-aga.vercel.app/#website",
           "url": "https://porto-aga.vercel.app/",
           "name": "Muhammad Aga Putra — Software Engineer Portfolio",
-          "description": "Portfolio resmi Muhammad Aga Putra — Software Engineer & Frontend Developer. Showcase proyek 3D WebGL, fullstack web apps, dan open-source contributions.",
+          "description": "Official portfolio of Muhammad Aga Putra — Software Engineer & Frontend Specialist. Showcase of production projects, 3D WebGL, and open-source contributions.",
           "image": "https://porto-aga.vercel.app/favicon.svg",
-          "inLanguage": ["id", "en"],
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://porto-aga.vercel.app/projects.html?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
+          "inLanguage": ["en", "id"]
         },
         {
           "@type": "BreadcrumbList",
@@ -404,13 +233,7 @@
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "Aga Web Studio & Kalkulator",
-              "item": "https://porto-aga.vercel.app/pricing.html"
-            },
-            {
-              "@type": "ListItem",
-              "position": 3,
-              "name": "Semua Proyek",
+              "name": "All Projects",
               "item": "https://porto-aga.vercel.app/projects.html"
             }
           ]
@@ -418,534 +241,14 @@
       ]
     }
     </script>
-
-    <!-- Cookie & LocalStorage State Synchronizer (Zero-Flash Theme & Language Bootstrapper) -->
-    <script>
-      (function() {
-        function getCookie(name) {
-          var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-          return v ? decodeURIComponent(v[2]) : null;
-        }
-        var theme = getCookie('aga_theme') || localStorage.getItem('aga_portfolio_theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-        var lang = getCookie('aga_lang') || localStorage.getItem('aga_portfolio_lang') || 'en';
-        document.documentElement.setAttribute('lang', lang);
-      })();
-    </script>
   </head>
 
-  <body class="bg-transparent text-zinc-100 font-sans antialiased relative min-h-screen selection:bg-[#DC143C]/35 selection:text-white">
+  <body class="bg-transparent text-zinc-100 font-sans antialiased relative min-h-screen selection:bg-[#DC143C]/40 selection:text-white">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 0. CLIENT-FRIENDLY LUXURY LOADING EXPERIENCE               -->
+    <!-- 1. FIXED 3D CANVAS (Strict 2D on Mobile, Full 3D on PC)    -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div
-      id="web-preloader"
-      class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto overflow-hidden"
-    >
-      <!-- Dedicated Smooth Fading Backdrop (Rocket & Smoke remain 100% solid & non-fading) -->
-      <div id="preloader-backdrop" class="absolute inset-0 z-0 bg-[#040509] pointer-events-none"></div>
-
-      <!-- Top Brand Header -->
-      <div id="preloader-header" class="relative z-20 flex items-center justify-between font-mono text-[0.62rem] sm:text-xs text-zinc-500 uppercase tracking-widest border-b border-white/10 pb-4">
-        <div class="flex items-center gap-2.5 text-zinc-300 font-semibold tracking-wider">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#DC143C]"></span>
-          </span>
-          <span class="tracking-[0.2em]">AGA PUTRA</span>
-          <span class="text-[#DC143C] hidden sm:inline">/</span>
-          <span class="text-zinc-400 font-normal hidden sm:inline">CREATIVE PORTFOLIO</span>
-        </div>
-        <div class="hidden sm:flex items-center gap-4 text-zinc-400 font-mono text-[0.6rem] sm:text-xs">
-          <span>MODERN WEB EXPERIENCE</span>
-        </div>
-      </div>
-
-      <!-- High-Performance 60fps Pure White Smoke Particle Canvas -->
-      <canvas id="preloader-smoke-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
-
-      <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
-      <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
-        
-        <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
-        <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu -mt-2 sm:-mt-4 mb-4 sm:mb-6 pointer-events-none overflow-visible">
-          <svg
-            class="relative z-10 w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-md"
-            viewBox="0 0 140 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <!-- Nosecone 3D Glossy Crimson -->
-              <linearGradient id="noseconeGrad" x1="50" y1="10" x2="85" y2="45" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FF2E5D"/>
-                <stop offset="40%" stop-color="#DC143C"/>
-                <stop offset="100%" stop-color="#8B001F"/>
-              </linearGradient>
-
-              <!-- Fuselage 3D Cylindrical White -->
-              <linearGradient id="fuselageGrad" x1="45" y1="40" x2="95" y2="40" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="35%" stop-color="#F8FAFC"/>
-                <stop offset="80%" stop-color="#E2E8F0"/>
-                <stop offset="100%" stop-color="#CBD5E1"/>
-              </linearGradient>
-
-              <!-- Left Fin 3D Crimson -->
-              <linearGradient id="leftFinGrad" x1="20" y1="75" x2="45" y2="105" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FF2E5D"/>
-                <stop offset="60%" stop-color="#DC143C"/>
-                <stop offset="100%" stop-color="#700018"/>
-              </linearGradient>
-
-              <!-- Right Fin 3D Crimson (Shadow Side) -->
-              <linearGradient id="rightFinGrad" x1="95" y1="75" x2="120" y2="105" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#DC143C"/>
-                <stop offset="60%" stop-color="#990022"/>
-                <stop offset="100%" stop-color="#550010"/>
-              </linearGradient>
-
-              <!-- Center Fin Gloss -->
-              <linearGradient id="centerFinGrad" x1="70" y1="75" x2="70" y2="115" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FF3366"/>
-                <stop offset="100%" stop-color="#A00020"/>
-              </linearGradient>
-
-              <!-- Engine Nozzle Titanium -->
-              <linearGradient id="nozzleGrad" x1="55" y1="108" x2="85" y2="118" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#475569"/>
-                <stop offset="40%" stop-color="#334155"/>
-                <stop offset="100%" stop-color="#0F172A"/>
-              </linearGradient>
-
-              <!-- Jet Flame Outer Crimson/Orange -->
-              <linearGradient id="appleFlameOuter" x1="70" y1="118" x2="70" y2="195" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FF0044" stop-opacity="0.95"/>
-                <stop offset="45%" stop-color="#FF5500" stop-opacity="0.85"/>
-                <stop offset="85%" stop-color="#FF9900" stop-opacity="0.4"/>
-                <stop offset="100%" stop-color="#FF0044" stop-opacity="0"/>
-              </linearGradient>
-
-              <!-- Jet Flame Mid Gold Core -->
-              <linearGradient id="appleFlameMid" x1="70" y1="118" x2="70" y2="175" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFCC00" stop-opacity="1"/>
-                <stop offset="50%" stop-color="#FF8800" stop-opacity="0.85"/>
-                <stop offset="100%" stop-color="#FF4400" stop-opacity="0"/>
-              </linearGradient>
-
-              <!-- Jet Flame Superheated White Core -->
-              <linearGradient id="appleFlameCore" x1="70" y1="118" x2="70" y2="148" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
-                <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
-              </linearGradient>
-
-              <!-- Volumetric Pure White Smoke Gradients -->
-              <radialGradient id="smokeWhiteCore" cx="50%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
-              </radialGradient>
-
-              <!-- Astronaut Pilot Gradients -->
-              <linearGradient id="astronautHelmetGrad" x1="62" y1="52" x2="78" y2="68" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="60%" stop-color="#F1F5F9"/>
-                <stop offset="100%" stop-color="#CBD5E1"/>
-              </linearGradient>
-              <linearGradient id="astronautVisorGrad" x1="64" y1="56" x2="76" y2="66" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#38BDF8"/>
-                <stop offset="35%" stop-color="#0284C7"/>
-                <stop offset="70%" stop-color="#F59E0B"/>
-                <stop offset="100%" stop-color="#D97706"/>
-              </linearGradient>
-            </defs>
-
-            <!-- 1. JET FLAME EXHAUST — Pure space thruster plasma -->
-            <g id="apple-rocket-flame" class="rocket-flame-flicker">
-              <!-- Outer Crimson/Orange Plasma Plume -->
-              <path d="M58 118C58 118 48 138 70 162C92 138 82 118 82 118H58Z" fill="url(#appleFlameOuter)"/>
-              <!-- Mid Golden Core -->
-              <path d="M62 118C62 118 54 134 70 150C86 134 78 118 78 118H62Z" fill="url(#appleFlameMid)"/>
-              <!-- Superheated White Plasma Needle -->
-              <path d="M65 118C65 118 60 128 70 138C80 128 75 118 75 118H65Z" fill="url(#appleFlameCore)"/>
-              <!-- Thruster Shock Diamond Rings -->
-              <ellipse cx="70" cy="128" rx="6" ry="1.8" fill="#FFFFFF" opacity="0.75"/>
-              <ellipse cx="70" cy="140" rx="4.2" ry="1.3" fill="#FFEAA7" opacity="0.6"/>
-            </g>
-
-            <!-- 2. ROCKET BODY (Apple 3D Aesthetic in Crimson & White) -->
-            <g id="apple-rocket-body">
-              <!-- Left Swept Fin -->
-              <path d="M48 82L22 108C20 110.5 21.5 114 25 114H49L52 96L48 82Z" fill="url(#leftFinGrad)"/>
-              <path d="M48 82L23 107C23.5 106 25 105 27 105L49 84L48 82Z" fill="#FFFFFF" opacity="0.4"/>
-
-              <!-- Right Swept Fin (Shadowed) -->
-              <path d="M92 82L118 108C120 110.5 118.5 114 115 114H91L88 96L92 82Z" fill="url(#rightFinGrad)"/>
-
-              <!-- Engine Titanium Bell Nozzle -->
-              <path d="M57 110H83L80 120H60L57 110Z" fill="url(#nozzleGrad)"/>
-              <ellipse cx="70" cy="120" rx="10" ry="2" fill="#09090b"/>
-
-              <!-- Main White Fuselage Body -->
-              <path d="M70 12C70 12 46 36 46 80C46 96 50 112 54 112H86C90 112 94 96 94 80C94 36 70 12 70 12Z" fill="url(#fuselageGrad)"/>
-
-              <!-- Fuselage Left Specular Highlight Curve -->
-              <path d="M70 14C70 14 50 36 50 78C50 92 53 106 55 108C53 104 51 90 51 78C51 38 69 16 70 14Z" fill="#FFFFFF" opacity="0.75"/>
-
-              <!-- Glossy Crimson Nosecone -->
-              <path d="M70 12C70 12 59 28 58 44H82C81 28 70 12 70 12Z" fill="url(#noseconeGrad)"/>
-              <path d="M70 14C67 20 62 30 61 42H64C65 30 69 20 70 14Z" fill="#FFFFFF" opacity="0.6"/>
-
-              <!-- Center Fin (Front Spine) -->
-              <path d="M68 76H72V112H68V76Z" fill="url(#centerFinGrad)"/>
-              <path d="M68 76H70V112H68V76Z" fill="#FFFFFF" opacity="0.3"/>
-
-              <!-- Cockpit Porthole Outer Chrome/Crimson Bevel Ring -->
-              <circle cx="70" cy="62" r="14" fill="#0F172A"/>
-              <circle cx="70" cy="62" r="13" fill="url(#noseconeGrad)"/>
-              <circle cx="70" cy="62" r="11" fill="#09090B"/>
-
-              <!-- Porthole Interior Cabin -->
-              <circle cx="70" cy="62" r="10" fill="#0B0F19"/>
-
-              <!-- 3. ASTRONAUT PILOT (Clearly Visible Inside Cockpit) -->
-              <g id="astronaut-pilot">
-                <!-- Shoulders & Space Suit -->
-                <path d="M61 72C61 68.5 64.5 67 70 67C75.5 67 79 68.5 79 72V73H61V72Z" fill="url(#astronautHelmetGrad)"/>
-                <!-- Suit Collar / Red Mission Badge -->
-                <rect x="67.5" y="68.5" width="5" height="1.8" rx="0.6" fill="#DC143C"/>
-                <circle cx="65.5" cy="69.5" r="0.8" fill="#38BDF8"/>
-                
-                <!-- Astronaut Helmet Dome -->
-                <ellipse cx="70" cy="61" rx="8" ry="7.2" fill="url(#astronautHelmetGrad)"/>
-                <ellipse cx="70" cy="61" rx="8" ry="7.2" stroke="#94A3B8" stroke-width="0.5"/>
-                
-                <!-- Golden & Cyberpunk Holographic Visor -->
-                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" fill="url(#astronautVisorGrad)"/>
-                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" stroke="#0F172A" stroke-width="0.6"/>
-                
-                <!-- Visor Specular Apple Glossy Reflection Curve -->
-                <ellipse cx="68" cy="59.5" rx="2.8" ry="1.4" transform="rotate(-25 68 59.5)" fill="#FFFFFF" opacity="0.9"/>
-                <circle cx="73" cy="63.5" r="0.9" fill="#FFFFFF" opacity="0.6"/>
-              </g>
-
-              <!-- Porthole Outer Glass Sphere Overlay & Ambient Glow -->
-              <circle cx="70" cy="62" r="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
-              <ellipse cx="66" cy="56" rx="4.5" ry="2" transform="rotate(-30 66 56)" fill="#FFFFFF" opacity="0.45"/>
-            </g>
-          </svg>
-        </div>
-
-        <!-- Monospace Counter & Status -->
-        <div id="preloader-text-group" class="flex flex-col items-center mt-3 sm:mt-4">
-          <div class="flex items-baseline justify-center gap-2 font-mono leading-none mb-2">
-            <span id="preloader-percent" class="text-6xl sm:text-7xl md:text-8xl font-black text-white tracking-tight tabular-nums">00</span>
-            <span class="text-2xl sm:text-3xl text-[#DC143C] font-semibold">%</span>
-          </div>
-
-          <div class="font-sans text-xs sm:text-sm text-zinc-300 font-medium tracking-wide flex items-center justify-center gap-2.5">
-            <span class="inline-block w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-            <span id="preloader-status">Menyiapkan visual &amp; pipeline 3D...</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Bottom Progress Track -->
-      <div id="preloader-footer" class="relative z-20 space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
-        <div class="w-full h-1.5 bg-white/10 relative overflow-hidden rounded-full preloader-track shadow-inner">
-          <div
-            id="preloader-bar"
-            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu"
-            style="transform: scaleX(0); transform-origin: left center;"
-          ></div>
-        </div>
-        <div class="flex justify-between items-center text-xs text-zinc-400 font-mono">
-          <span>Desain Responsif &amp; Arsitektur Modern</span>
-          <span class="text-zinc-300 font-semibold tracking-normal">PIPELINE LOAD</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ultra-Smooth Instant-Start Preloader Smoke & Flame Tracking Engine (0ms TBT, 120fps GPU Blit) -->
-    <script>
-      (function() {
-        var preloaderEl = document.getElementById("web-preloader");
-        var canvas = document.getElementById("preloader-smoke-canvas");
-        if (!preloaderEl || !canvas) return;
-
-        var ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        function resize() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener("resize", resize, { passive: true });
-
-        // 1. Offscreen sprite for rich volumetric vapor cloud
-        var sprite = document.createElement("canvas");
-        sprite.width = 64;
-        sprite.height = 64;
-        var sCtx = sprite.getContext("2d");
-        if (sCtx) {
-          var grad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-          grad.addColorStop(0, "rgba(255, 255, 255, 0.72)");
-          grad.addColorStop(0.35, "rgba(240, 246, 255, 0.44)");
-          grad.addColorStop(0.7, "rgba(215, 230, 255, 0.16)");
-          grad.addColorStop(1, "rgba(200, 220, 255, 0)");
-          sCtx.fillStyle = grad;
-          sCtx.beginPath();
-          sCtx.arc(32, 32, 32, 0, Math.PI * 2);
-          sCtx.fill();
-        }
-
-        var particles = [];
-        var rocketCenter = document.getElementById("preloader-rocket-center");
-        var flameNozzle = document.getElementById("apple-rocket-flame");
-        var backdropEl = document.getElementById("preloader-backdrop");
-
-        var initialNozzleX = window.innerWidth / 2;
-        var initialNozzleY = window.innerHeight * 0.52;
-        var prevCurX = initialNozzleX;
-        var prevCurY = initialNozzleY;
-        var lastTime = 0;
-        var launchStartTime = 0;
-        var animId = null;
-        var hoverY = 0;
-        var hoverRot = 0;
-        var startLaunchY = 0;
-        var startLaunchRot = 0;
-        var lastHoverSpawnTime = 0;
-
-        function measureNozzle() {
-          if (flameNozzle && flameNozzle.isConnected) {
-            var fRect = flameNozzle.getBoundingClientRect();
-            if (fRect.width > 0 && fRect.height > 0) {
-              initialNozzleX = fRect.left + fRect.width / 2;
-              initialNozzleY = fRect.bottom - 4;
-              return;
-            }
-          }
-          if (rocketCenter && rocketCenter.isConnected) {
-            var rRect = rocketCenter.getBoundingClientRect();
-            if (rRect.width > 0 && rRect.height > 0) {
-              initialNozzleX = rRect.left + rRect.width * 0.5;
-              initialNozzleY = rRect.top + rRect.height * 0.80;
-              return;
-            }
-          }
-        }
-
-        measureNozzle();
-        window.addEventListener("resize", function() {
-          resize();
-          var isLaunch = preloaderEl && preloaderEl.classList.contains("preloader-launching");
-          if (!isLaunch && rocketCenter) {
-            rocketCenter.style.transform = "";
-            measureNozzle();
-          }
-        }, { passive: true });
-        prevCurX = initialNozzleX;
-        prevCurY = initialNozzleY;
-
-        // Pre-seed visible, billowing vapor plume
-        for (var i = 0; i < 14; i++) {
-          var prog = i / 14;
-          particles.push({
-            x: initialNozzleX + (Math.random() - 0.5) * (5 + prog * 12),
-            y: initialNozzleY + prog * 38 + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (0.25 + prog * 0.4),
-            vy: 0.75 + Math.random() * 0.85,
-            radius: 8 + prog * 14 + Math.random() * 3,
-            growth: 0.44,
-            maxRadius: 36,
-            alpha: 0.46 * (1 - prog * 0.5),
-            decay: 0.0090,
-            isLaunch: false
-          });
-        }
-
-        function spawnPuff(x, y, isLaunch, velY, isDip) {
-          var isMobile = window.innerWidth < 768;
-          if (isLaunch) {
-            var maxP = isMobile ? 45 : 65;
-            if (particles.length >= maxP) {
-              particles.shift();
-            }
-            var wakeY = isDip
-              ? (0.8 + Math.random() * 0.9)
-              : (Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3);
-            var spreadX = isDip ? 1.6 : 0.85;
-            particles.push({
-              x: x + (Math.random() - 0.5) * (isDip ? 8 : 5),
-              y: y + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * spreadX,
-              vy: wakeY,
-              radius: isDip ? (15 + Math.random() * 6) : (13 + Math.random() * 5),
-              growth: isDip ? 0.75 : 0.95,
-              maxRadius: isDip ? 54 : 65,
-              alpha: isDip ? 0.64 : 0.68,
-              decay: 0.0075,
-              isLaunch: true
-            });
-          } else {
-            // Hover State: NEVER shift active particles! Let them fade naturally to alpha <= 0.005
-            var maxHover = isMobile ? 22 : 32;
-            if (particles.length >= maxHover) return; // Drop spawn if saturated, zero optical pop
-
-            particles.push({
-              x: x + (Math.random() - 0.5) * 4,
-              y: y + (Math.random() - 0.5) * 2,
-              vx: (Math.random() - 0.5) * 0.35,
-              vy: 0.75 + Math.random() * 0.85,
-              radius: 8 + Math.random() * 4,
-              growth: 0.46,
-              maxRadius: 36,
-              alpha: 0.46,
-              decay: 0.0090, // Fades smoothly to 0 in ~51 frames (~850ms)
-              isLaunch: false
-            });
-          }
-        }
-
-        function render(now) {
-          if (!preloaderEl || !preloaderEl.isConnected || preloaderEl.style.display === "none") {
-            if (animId) cancelAnimationFrame(animId);
-            return;
-          }
-
-          var rawDelta = lastTime > 0 ? (now - lastTime) : 16.666;
-          lastTime = now;
-          var dt = Math.min(48, Math.max(2, rawDelta)) / 16.666;
-
-          var isLaunch = preloaderEl.classList.contains("preloader-launching");
-          var isMobileScreen = window.innerWidth < 768;
-
-          var curX = initialNozzleX;
-          var curY = initialNozzleY;
-
-          if (isLaunch) {
-            if (!launchStartTime) {
-              launchStartTime = now;
-              startLaunchY = hoverY;
-              startLaunchRot = hoverRot;
-              prevCurX = initialNozzleX;
-              prevCurY = initialNozzleY + hoverY;
-            }
-
-            var elapsed = now - launchStartTime;
-            var isDip = elapsed <= 180;
-            var launchY, scaleX, scaleY, rotDeg;
-
-            if (isDip) {
-              // 1. Mantul ke bawah: Visible downward recoil crunch & squash
-              var u = elapsed / 180;
-              var dip = Math.sin(u * Math.PI) * 18.0;
-              var squash = (dip / 18.0) * 0.08;
-              scaleX = 1 + squash;
-              scaleY = 1 - squash;
-              launchY = startLaunchY + dip;
-              rotDeg = startLaunchRot * (1 - u);
-            } else {
-              // 2. Meluncur ke atas: Supersonic blast-off carrying upward bounce momentum
-              var v = Math.min(1, (elapsed - 180) / 400);
-              var ease = Math.pow(v, 2.0) * 0.85 + v * 0.15;
-              var totalDist = window.innerHeight + 500;
-              launchY = startLaunchY - ease * totalDist;
-              var stretch = ease * 0.32;
-              scaleX = 1 - ease * 0.10;
-              scaleY = 1 + stretch;
-              rotDeg = 0;
-            }
-
-            // Direct GPU Compositor Transform on Rocket DOM
-            if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(0, " + launchY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")" + (rotDeg !== 0 ? " rotate(" + rotDeg.toFixed(2) + "deg)" : "");
-            }
-
-            // Flame nozzle tip position (tightly locked to the rocket flame tip)
-            var flameTipOffset = 14 * Math.min(1, elapsed / 100);
-            curX = initialNozzleX;
-            curY = initialNozzleY + launchY + flameTipOffset;
-
-            // Velocity vector for slipstream suction (smoke follows upward)
-            var velY = curY - prevCurY;
-
-            // Contrail generation: Fill continuous dense segment between prev frame and cur frame
-            if (elapsed < 580) {
-              var dist = Math.abs(curY - prevCurY);
-              var stepDist = isMobileScreen ? 14 : 10;
-              var steps = Math.min(isMobileScreen ? 4 : 5, Math.max(1, Math.round(dist / stepDist)));
-              for (var s = 0; s < steps; s++) {
-                var interp = (s + 1) / steps;
-                var ix = prevCurX + (curX - prevCurX) * interp;
-                var iy = prevCurY + (curY - prevCurY) * interp;
-                spawnPuff(ix, iy, true, velY, isDip);
-              }
-            }
-          } else {
-            // Hover State: Smooth aerospace breathing float
-            var hoverPeriod = now * 0.0022;
-            hoverY = Math.sin(hoverPeriod) * 6.0;
-            hoverRot = Math.sin(hoverPeriod * 0.75) * 1.5;
-
-            if (rocketCenter) {
-              rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
-            }
-
-            curX = initialNozzleX - hoverRot * 1.05;
-            curY = initialNozzleY + hoverY;
-
-            // Steady rhythmic emission (no empty gaps!)
-            var hoverInterval = isMobileScreen ? 90 : 70;
-            if (now - lastHoverSpawnTime >= hoverInterval) {
-              lastHoverSpawnTime = now;
-              spawnPuff(curX, curY, false, 0);
-            }
-          }
-
-          prevCurX = curX;
-          prevCurY = curY;
-
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-          // Draw billowing vapor trail
-          for (var i = particles.length - 1; i >= 0; i--) {
-            var p = particles[i];
-            p.x += p.vx * dt;
-            p.y += p.vy * dt;
-            if (p.isLaunch) {
-              p.vy *= 0.92; // Aerodynamic slipstream drag
-              p.vx *= 0.98;
-            }
-            p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
-
-            var decayRate = isLaunch && (now - launchStartTime > 580) ? 0.016 : p.decay;
-            p.alpha -= decayRate * dt;
-
-            if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
-              particles.splice(i, 1);
-              continue;
-            }
-
-            ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
-            ctx.drawImage(sprite, p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
-          }
-
-          ctx.globalAlpha = 1;
-          animId = requestAnimationFrame(render);
-        }
-
-        animId = requestAnimationFrame(render);
-      })();
-    </script>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 1. FIXED 3D MULTI-OBJECT CANVAS (100% Bright, Crisp & Free)-->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <canvas id="bg" class="fixed inset-0 z-0 w-full h-full pointer-events-none"></canvas>
+    <canvas id="bg" class="pointer-events-none" aria-hidden="true"></canvas>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 2. TOP FLOATING NAVIGATION BAR WITH BILINGUAL SWITCHER     -->
@@ -956,17 +259,18 @@
         onclick="window.scrollToSection(0)"
         class="pointer-events-auto eyebrow text-zinc-100 hover:text-white transition-colors duration-300 font-bold cursor-pointer text-xs sm:text-sm"
         style="letter-spacing: 0.12em;"
+        aria-label="Back to top"
       >
         AGA PUTRA
       </button>
 
       <!-- Center Navigation (7 Sections) - Absolute Screen Center -->
-      <nav class="pointer-events-auto hidden md:flex items-center gap-2.5 lg:gap-3.5 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-md transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[55vw]">
+      <nav class="pointer-events-auto hidden md:flex items-center gap-2 lg:gap-3 rounded-full border border-white/10 bg-zinc-950/85 backdrop-blur-2xl px-4 lg:px-5 py-2 shadow-md transition-all duration-300 hover:border-white/20 absolute left-1/2 -translate-x-1/2 max-w-[65vw]">
         <button type="button" onclick="window.scrollToSection(0)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navStart">Start</button>
         <button type="button" onclick="window.scrollToSection(1)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navAbout">About</button>
-        <button type="button" onclick="window.scrollToSection(2)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navActivity">Activity</button>
-        <button type="button" onclick="window.scrollToSection(3)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navProjects">Projects</button>
-        <button type="button" onclick="window.scrollToSection(4)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer text-[#FF385C] font-semibold" data-i18n="navPricing">Pricing</button>
+        <button type="button" onclick="window.scrollToSection(2)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navExperience">Experience</button>
+        <button type="button" onclick="window.scrollToSection(3)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navActivity">Activity</button>
+        <button type="button" onclick="window.scrollToSection(4)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navProjects">Projects</button>
         <button type="button" onclick="window.scrollToSection(5)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navContact">Contact</button>
         <button type="button" onclick="window.scrollToSection(6)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navFooter">Footer</button>
       </nav>
@@ -974,9 +278,9 @@
       <!-- Right Actions: Language Switcher + Contact CTA -->
       <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
         <!-- Bilingual Toggle (EN | ID) -->
-        <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg">
-          <button type="button" id="btn-lang-en" class="lang-btn active cursor-pointer" onclick="window.setLanguage('en')">EN</button>
-          <button type="button" id="btn-lang-id" class="lang-btn cursor-pointer" onclick="window.setLanguage('id')">ID</button>
+        <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg font-mono text-xs">
+          <button type="button" id="btn-lang-en" class="lang-btn active px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors" onclick="window.setLanguage('en')">EN</button>
+          <button type="button" id="btn-lang-id" class="lang-btn px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors text-zinc-400" onclick="window.setLanguage('id')">ID</button>
         </div>
 
         <button
@@ -991,7 +295,7 @@
     </header>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 3. CLICKABLE VERTICAL NUMERIC SIDEBAR (7 Sections)         -->
+    <!-- 3. CLICKABLE VERTICAL NUMERIC SIDEBAR (6 Sections)         -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <aside
       aria-label="Section Navigation"
@@ -1017,21 +321,21 @@
           <button type="button" class="side-nav-item group flex items-center text-left py-1" data-index="2">
             <span class="side-nav-num font-mono text-[0.72rem] text-zinc-400 group-hover:text-zinc-200 mr-2 tabular-nums">03</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sideActivity">Activity</span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sideExperience">Experience</span>
           </button>
         </li>
         <li>
           <button type="button" class="side-nav-item group flex items-center text-left py-1" data-index="3">
             <span class="side-nav-num font-mono text-[0.72rem] text-zinc-400 group-hover:text-zinc-200 mr-2 tabular-nums">04</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sideProjects">Projects</span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sideActivity">Activity</span>
           </button>
         </li>
         <li>
           <button type="button" class="side-nav-item group flex items-center text-left py-1" data-index="4">
             <span class="side-nav-num font-mono text-[0.72rem] text-zinc-400 group-hover:text-zinc-200 mr-2 tabular-nums">05</span>
             <span class="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sidePricing">Pricing</span>
+            <span class="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-400 group-hover:text-zinc-200 transition-colors duration-300" data-i18n="sideProjects">Projects</span>
           </button>
         </li>
         <li>
@@ -1065,37 +369,32 @@
         <div class="flex items-center gap-1">
           <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-300">W</kbd>
           <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-300">S</kbd>
-          <span class="text-zinc-500" aria-hidden="true">/</span>
+          <span class="text-zinc-500 font-mono px-1">or</span>
           <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-300">↑</kbd>
           <kbd class="border border-white/15 px-1.5 py-0.5 rounded-md text-[0.6rem] text-zinc-300">↓</kbd>
-          <span class="ml-1.5 text-zinc-300" data-i18n="navScene">Lock Scene</span>
+          <span class="ml-2 text-zinc-300" data-i18n="navScene">Switch Section</span>
         </div>
       </div>
     </aside>
 
-    <!-- Refined Architectural Status Badge -->
+    <!-- Clean Status Badge (Zero Dot Slop) -->
     <a
       href="#contact"
       onclick="if(window.scrollToSection){ window.scrollToSection(5); return false; }"
       aria-label="Open to Work"
       class="fixed bottom-8 right-8 xl:right-12 z-30 hidden lg:flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg border border-white/10 bg-[#131318]/90 backdrop-blur-xl shadow-lg hover:border-[#DC143C]/40 hover:bg-[#1b1b20] transition-all duration-300 group cursor-pointer"
     >
-      <span class="relative flex h-2 w-2">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#DC143C]"></span>
-      </span>
+      <svg class="w-3.5 h-3.5 text-[#DC143C] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
       <span class="font-mono text-[0.65rem] uppercase tracking-wider text-zinc-200 font-semibold group-hover:text-white transition-colors" data-i18n="statusAvailable">Open to Work</span>
     </a>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 5. MAIN EDITORIAL CONTENT (6 Dedicated Full 100svh Sections)-->
+    <!-- 5. MAIN EDITORIAL CONTENT (7 Dedicated Sections)           -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <main class="relative z-10 w-full bg-transparent lg:pl-56 xl:pl-64 lg:pr-12 xl:pr-20" id="main">
-
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <!-- VIEW 1: MAIN 6-SECTION 3D PORTFOLIO                        -->
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <div id="portfolio-view" class="w-full transition-opacity duration-300">
 
       <!-- ─── SECTION 01: HERO (UI on LEFT / Tesseract on RIGHT) ─── -->
       <section
@@ -1103,33 +402,33 @@
         class="relative flex min-h-[100svh] items-center px-5 sm:px-6 md:px-10 pt-24 sm:pt-28 pb-12 sm:pb-16 justify-start"
       >
         <div class="section-content spatial-text-3d w-full lg:w-7/12 max-w-xl text-left" data-reveal>
-          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
             <span class="tabular-nums text-zinc-400">01</span>
-            <span class="text-zinc-500" aria-hidden="true">/</span>
-            <span data-i18n="heroEyebrow">Frontend &amp; Web Developer</span>
+            <span class="text-zinc-500">—</span>
+            <span data-i18n="heroEyebrow">Software Engineer &amp; Frontend Specialist</span>
           </div>
 
           <h1 class="hero-name display-title text-[clamp(2.2rem,4.8vw,4.4rem)] text-white mb-2 sm:mb-3">
-            <span class="hero-line block font-light">Muhammad</span>
+            <span class="hero-line block font-light text-zinc-300">Muhammad</span>
             <span class="hero-line block font-black text-white">
-              Aga Putra<span class="text-[#DC143C]">.</span>
+              Aga Putra
             </span>
           </h1>
 
-          <p class="font-mono text-xs sm:text-sm text-[#FF385C] font-semibold tracking-normal mb-3 sm:mb-4" data-i18n="heroRole">
+          <p class="font-mono text-xs sm:text-sm text-zinc-300 font-semibold tracking-normal mb-3 sm:mb-4" data-i18n="heroRole">
             Frontend Developer &amp; Software Engineer
           </p>
 
           <p class="body-copy text-xs sm:text-sm md:text-base mb-5 sm:mb-7 leading-relaxed max-w-md break-words" style="max-width: 50ch;" data-i18n="heroBio">
-            Building clean, high-performance web applications and interactive digital experiences with modern web technologies.
+            I design and build fast, reliable web applications with clean code and thoughtful user experience. Focused on turning complex problems into intuitive digital products.
           </p>
 
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <button type="button" onclick="window.scrollToSection(1)" class="btn-crimson rounded-xl px-7 py-3.5 inline-flex items-center justify-center cursor-pointer text-xs font-mono uppercase tracking-wider leading-none w-full sm:w-auto" data-i18n="btnExploreAbout">
-              <span>About Me</span>
+              <span>About &amp; Skills</span>
             </button>
             <button type="button" onclick="window.scrollToSection(5)" class="btn-glass rounded-xl px-6 py-3.5 inline-flex items-center justify-center gap-2 cursor-pointer text-xs font-mono uppercase tracking-wider leading-none w-full sm:w-auto">
-              <span data-i18n="btnInitiate">Let's Talk</span>
+              <span data-i18n="btnInitiate">Get in Touch</span>
               <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -1138,96 +437,146 @@
           </div>
 
           <div class="mt-6 sm:mt-8 flex items-center gap-3 text-zinc-400 font-mono text-xs tracking-wider">
-            <span class="inline-block h-7 w-px animate-pulse bg-[#DC143C]"></span>
-            <span data-i18n="scrollHint">Scroll or press [S] to explore</span>
+            <span class="inline-block h-5 w-px bg-[#DC143C]"></span>
+            <span data-i18n="scrollHint">Scroll down or press [S] to explore</span>
           </div>
         </div>
 
         <div class="hidden lg:block lg:w-5/12 pointer-events-none" aria-hidden="true"></div>
       </section>
 
-      <!-- ─── SECTION 02: ABOUT (UI on RIGHT / Tesseract on LEFT + Marquee) ─── -->
+      <!-- ─── SECTION 02: ABOUT (UI on RIGHT / Tesseract on LEFT) ─── -->
       <section
         id="about"
         class="relative flex min-h-[100svh] items-center px-5 sm:px-6 md:px-10 pt-20 sm:pt-24 md:pt-28 pb-10 sm:pb-14 md:pb-16 justify-end overflow-hidden"
       >
-        <div class="marquee-wrapper" aria-hidden="true">
-          <div class="marquee-content">
-            FRONTEND DEVELOPER • SOFTWARE ENGINEER • CLEAN CODE • WEBGL 3D • FULLSTACK API • 
-          </div>
-          <div class="marquee-content">
-            FRONTEND DEVELOPER • SOFTWARE ENGINEER • CLEAN CODE • WEBGL 3D • FULLSTACK API • 
-          </div>
-        </div>
-
         <div class="hidden lg:block lg:w-6/12 pointer-events-none" aria-hidden="true"></div>
 
         <div class="section-content spatial-text-3d w-full lg:w-6/12 max-w-lg relative z-10" data-reveal>
-          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
             <span class="tabular-nums text-zinc-400">02</span>
-            <span class="text-zinc-500" aria-hidden="true">/</span>
-            <span data-i18n="aboutEyebrow">Focus &amp; Tech Stack</span>
+            <span class="text-zinc-500">—</span>
+            <span data-i18n="aboutEyebrow">Core Capabilities</span>
           </div>
 
           <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.2rem,4.5vw,4.2rem)] text-white mb-2 sm:mb-4">
-            <span class="block" data-i18n="aboutTitle1">Clean Code.</span>
-            <span class="block font-light text-zinc-400" data-i18n="aboutTitle2">Modern Design.</span>
+            <span class="block font-bold text-white tracking-tight" data-i18n="aboutTitle1">Clean Code.</span>
+            <span class="block font-medium text-zinc-300 tracking-tight" data-i18n="aboutTitle2">Reliable Solutions.</span>
           </h2>
 
-          <p class="body-copy mb-4 sm:mb-6 text-xs sm:text-sm md:text-base leading-relaxed text-zinc-300 font-light max-w-md break-words" style="max-width: 50ch;" data-i18n="aboutDesc">
-            Passionate about creating responsive, high-performance websites and applications. Focused on user experience, clean architecture, and practical engineering.
+          <p class="body-copy mb-4 sm:mb-6 text-xs sm:text-sm md:text-base leading-relaxed text-zinc-300 font-normal max-w-md break-words" style="max-width: 48ch;" data-i18n="aboutDesc">
+            Engineering modern web applications with high performance, maintainable code, and intuitive user experiences.
           </p>
 
-          <div class="space-y-px mt-3 sm:mt-6" role="list" aria-label="Focus areas">
-            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="font-mono text-zinc-400 md:pt-1 text-xs">01 // UI/UX</span>
+          <div class="space-y-px mt-3 sm:mt-5" role="list" aria-label="Focus areas">
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium">01 — FRONTEND</span>
               <div>
-                <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus1Title">Frontend Development</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus1Desc">Modern component architecture, reactive state management, and responsive interfaces.</span>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus1Title">Modern Frontend</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="focus1Desc">Responsive, fast, and accessible interfaces tailored cleanly for all device sizes.</span>
               </div>
             </div>
 
-            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="font-mono text-zinc-400 md:pt-1 text-xs">02 // 3D WEBGL</span>
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium">02 — 3D WEBGL</span>
               <div>
-                <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus2Title">Interactive 3D Web</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus2Desc">Immersive 3D experiences with Three.js, WebGL shaders, and smooth GSAP animations.</span>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus2Title">Interactive &amp; 3D Web</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="focus2Desc">Smooth micro-interactions and lightweight 3D visuals crafted for maximum fluidity.</span>
               </div>
             </div>
 
-            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3.5">
-              <span class="font-mono text-zinc-400 md:pt-1 text-xs">03 // SYSTEMS</span>
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium">03 — SYSTEMS</span>
               <div>
-                <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus3Title">Fullstack &amp; Backend API</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus3Desc">Robust backend services with Laravel, Node.js, and database architecture.</span>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus3Title">Backend &amp; API Integration</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="focus3Desc">Resilient server architecture, secure authentication, and optimized database workflows.</span>
               </div>
             </div>
 
-            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-0.5 md:gap-4 border-t border-b border-white/10 py-2 sm:py-3.5">
-              <span class="font-mono text-zinc-400 md:pt-1 text-xs">04 // SPEED</span>
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[7.5rem_1fr] gap-0.5 md:gap-4 border-t border-b border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium">04 — PERFORMANCE</span>
               <div>
-                <span class="font-sans font-bold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus4Title">Performance &amp; SEO</span>
-                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-light break-words" data-i18n="focus4Desc">Fast load times, asset optimization, and Core Web Vitals refinement.</span>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="focus4Title">Performance &amp; Speed</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="focus4Desc">Sub-second load times, optimized assets, and strict benchmarks for optimal speed.</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ─── SECTION 03: DEDICATED ACTIVITY SECTION (Full High-Definition Floating Card) ─── -->
+      <!-- ─── SECTION 03: EXPERIENCE (UI on LEFT / Tesseract on RIGHT) ─── -->
+      <section
+        id="experience"
+        class="relative flex min-h-[100svh] items-center px-5 sm:px-6 md:px-10 pt-20 sm:pt-24 md:pt-28 pb-10 sm:pb-14 md:pb-16 justify-start overflow-hidden"
+      >
+        <div class="section-content spatial-text-3d w-full lg:w-6/12 max-w-lg relative z-10" data-reveal>
+          <div class="mb-2 sm:mb-3 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
+            <span class="tabular-nums text-zinc-400">03</span>
+            <span class="text-zinc-500">—</span>
+            <span data-i18n="expEyebrow">Work &amp; Internship Experience</span>
+          </div>
+
+          <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(2.2rem,4.5vw,4.2rem)] text-white mb-2 sm:mb-4">
+            <span class="block font-bold text-white tracking-tight" data-i18n="expTitle1">Wilmar Bisnis Indonesia.</span>
+            <span class="block font-medium text-zinc-300 tracking-tight" data-i18n="expTitle2">4 Months. 4 Systems.</span>
+          </h2>
+
+          <p class="body-copy mb-4 sm:mb-6 text-xs sm:text-sm md:text-base leading-relaxed text-zinc-300 font-normal max-w-md break-words" style="max-width: 48ch;" data-i18n="expDesc">
+            Full-Stack Web Developer Intern at Politeknik Wilmar Bisnis Indonesia (WBI). Architected and developed 4 functional web applications from scratch for campus operations:
+          </p>
+
+          <div class="space-y-px mt-3 sm:mt-5" role="list" aria-label="WBI Internship Projects">
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[8.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium" data-i18n="exp1Tag">01 — WILMAR BUKU</span>
+              <div>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="exp1Title">Wilmar Buku — Book Donation System</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="exp1Desc">Centralized donation platform with Google OAuth login, real-time WebSocket inventory sync, and automated reporting (live at donasi-buku.wbi.ac.id).</span>
+              </div>
+            </div>
+
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[8.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium" data-i18n="exp2Tag">02 — GENLABS</span>
+              <div>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="exp2Title">GenLabs — Laboratory Management System</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="exp2Desc">Digital lab operational software for equipment scheduling, experiment logging, and collaborative academic research workflows.</span>
+              </div>
+            </div>
+
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[8.5rem_1fr] gap-0.5 md:gap-4 border-t border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium" data-i18n="exp3Tag">03 — GROW A GARDEN</span>
+              <div>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="exp3Title">Grow a Garden — Campus Agriculture Tracker</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="exp3Desc">Indoor gardening and hydroponics management platform featuring automated watering schedules, crop growth logs, and harvest projections.</span>
+              </div>
+            </div>
+
+            <div role="listitem" class="grid grid-cols-1 md:grid-cols-[8.5rem_1fr] gap-0.5 md:gap-4 border-t border-b border-white/10 py-2 sm:py-3 transition-colors hover:bg-white/[0.02]">
+              <span class="font-mono text-zinc-400 md:pt-0.5 text-xs font-medium" data-i18n="exp4Tag">04 — INVENTARIS</span>
+              <div>
+                <span class="font-sans font-semibold text-xs sm:text-sm md:text-base text-white block" data-i18n="exp4Title">Inventaris — Campus Asset &amp; Logistics System</span>
+                <span class="body-copy block text-xs sm:text-sm text-zinc-300 mt-0.5 leading-relaxed font-normal break-words" data-i18n="exp4Desc">Internal inventory and asset registry system managing item circulation, barcode tracking, borrowing history, and administrative verification.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:block lg:w-6/12 pointer-events-none" aria-hidden="true"></div>
+      </section>
+
+      <!-- ─── SECTION 04: DEDICATED ACTIVITY SECTION (Full High-Definition Floating Card) ─── -->
       <section
         id="activity"
         class="relative flex min-h-[100svh] items-center justify-center px-5 sm:px-6 md:px-10 pt-20 sm:pt-28 pb-16 sm:pb-20 max-w-6xl mx-auto overflow-hidden"
       >
         <div class="section-content spatial-text-3d w-full" data-reveal>
           <header class="mb-3 sm:mb-4 md:mb-5 text-center max-w-2xl mx-auto">
-            <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
-              <span class="tabular-nums text-zinc-400">03</span>
-              <span class="text-zinc-500" aria-hidden="true">/</span>
-              <span data-i18n="activityEyebrow">GitHub Activity</span>
+            <div class="mb-2 sm:mb-3 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
+              <span class="tabular-nums text-zinc-400">04</span>
+              <span class="text-zinc-500">—</span>
+              <span data-i18n="activityEyebrow">GitHub Activity Track Record</span>
             </div>
             <h2 class="display-title text-[clamp(1.8rem,3.4vw,3.2rem)] text-white">
-              <span data-i18n="activityTitle1">Consistent Coding.</span> <span class="text-[#DC143C] font-light" data-i18n="activityTitle2">Every Day.</span>
+              <span data-i18n="activityTitle1">Consistent Coding.</span> <span class="text-zinc-400 font-light" data-i18n="activityTitle2">Every Day.</span>
             </h2>
             <p class="body-copy mt-2 text-xs sm:text-sm md:text-base text-zinc-300 font-light break-words" data-i18n="activityDesc">
               Real-time contribution history and daily coding activity tracked directly from GitHub.
@@ -1246,8 +595,12 @@
                 </div>
                 <div class="flex items-center gap-3 font-mono text-xs text-zinc-300">
                   <span id="total-contributions-count" class="font-semibold text-white">9,907+ Contributions</span>
-                  <span class="flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#DC143C]/10 border border-[#DC143C]/30 text-[#FF385C] font-semibold text-xs">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-ping"></span>
+                  <span class="flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#DC143C]/10 border border-[#DC143C]/30 text-zinc-200 font-semibold text-xs">
+                    <svg class="w-3.5 h-3.5 text-[#DC143C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <polyline points="1 20 1 14 7 14"></polyline>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
                     <span data-i18n="liveSync">Live Sync</span>
                   </span>
                 </div>
@@ -1290,7 +643,7 @@
                     </svg>
                     <span>GitHub: <strong>@Apisikma123</strong></span>
                   </span>
-                  <span class="hidden md:inline-block text-zinc-500" aria-hidden="true">/</span>
+                  <span class="hidden md:inline-block text-zinc-500">—</span>
                   <span class="text-zinc-400" data-i18n="velocityMatrix">365-Day Activity Matrix</span>
                 </div>
 
@@ -1310,7 +663,7 @@
         </div>
       </section>
 
-      <!-- ─── SECTION 04: PROJECTS CAROUSEL (Horizontal Showcase) ─── -->
+      <!-- ─── SECTION 05: PROJECTS CAROUSEL (Horizontal Showcase) ─── -->
       <section
         id="projects"
         class="relative flex flex-col justify-center min-h-[100svh] px-4 sm:px-6 md:px-10 pt-16 sm:pt-20 pb-12 sm:pb-20 max-w-6xl mx-auto overflow-hidden"
@@ -1318,9 +671,9 @@
         <div class="section-content spatial-text-3d w-full relative z-10 my-auto" data-reveal>
           <header class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3.5 sm:gap-4">
             <div>
-              <div class="mb-1.5 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
-                <span class="tabular-nums text-zinc-400">04</span>
-                <span class="text-zinc-500" aria-hidden="true">/</span>
+              <div class="mb-1.5 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
+                <span class="tabular-nums text-zinc-400">05</span>
+                <span class="text-zinc-500">—</span>
                 <span data-i18n="projectsEyebrow">Featured Projects &amp; Works</span>
               </div>
               <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] text-white">
@@ -1328,25 +681,25 @@
               </h2>
             </div>
 
-            <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
+            <div class="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
               <!-- Minimalist Slider Controls -->
-              <div id="carousel-counter-container" class="flex items-center border border-white/10 rounded-xl bg-zinc-950/80 backdrop-blur-md p-1 shadow-sm">
+              <div id="carousel-counter-container" class="flex items-center border border-white/10 rounded-xl bg-zinc-950/80 backdrop-blur-md p-1 shadow-sm shrink-0 whitespace-nowrap">
                 <button
                   type="button"
                   id="carousel-prev-btn"
                   onclick="window.slideProjectsCarousel(-1)"
                   aria-label="Previous Project"
-                  class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation shrink-0"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <span id="carousel-counter" class="font-mono text-xs text-zinc-300 px-2.5 select-none tabular-nums font-semibold leading-none">1 / 5</span>
+                <span id="carousel-counter" class="font-mono text-xs text-zinc-300 px-2 sm:px-2.5 select-none tabular-nums font-semibold leading-none whitespace-nowrap inline-block text-center min-w-[3.25rem]">1 / 5</span>
                 <button
                   type="button"
                   id="carousel-next-btn"
                   onclick="window.slideProjectsCarousel(1)"
                   aria-label="Next Project"
-                  class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation"
+                  class="w-8 h-8 rounded-lg inline-flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer touch-manipulation shrink-0"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
@@ -1354,10 +707,10 @@
 
               <a
                 href="/projects.html"
-                class="rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-3.5 sm:px-4 py-2.5 inline-flex items-center justify-center gap-2 transition-all font-mono text-xs uppercase tracking-wider group cursor-pointer touch-manipulation leading-none shrink-0"
+                class="rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-white px-2.5 sm:px-4 py-2 sm:py-2.5 inline-flex items-center justify-center gap-1.5 sm:gap-2 transition-all font-mono text-[0.72rem] sm:text-xs uppercase tracking-wider group cursor-pointer touch-manipulation leading-none shrink-0 whitespace-nowrap"
               >
-                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                <span data-i18n="exploreAllProjects">Semua Karya (17)</span>
+                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span data-i18n="exploreAllProjects">All Works (18 Projects)</span>
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
             </div>
@@ -1394,270 +747,12 @@
             </div>
 
             <div class="font-mono text-xs text-zinc-400 flex items-center justify-center gap-2 text-center">
-              <span class="material-symbols-outlined text-xs text-[#FF385C]">keyboard_keys</span>
-              <span data-i18n="sliderHint">Tekan tombol [←] [→] untuk melihat karya</span>
+              <span class="text-zinc-500 font-mono">[←] [→]</span>
+              <span data-i18n="sliderHint">Press [←] [→] to browse works</span>
             </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ─── SECTION 05: PRICING & WEB SERVICES ─── -->
-      <section
-        id="pricing"
-        class="relative flex flex-col justify-between sm:justify-center min-h-[100svh] px-5 sm:px-6 md:px-10 pt-16 sm:pt-16 md:pt-20 pb-4 sm:pb-10 md:pb-14 max-w-6xl mx-auto"
-      >
-        <div class="section-content spatial-text-3d w-full my-auto" data-reveal>
-
-          <!-- Section Eyebrow & Title -->
-          <div class="text-center max-w-xl mx-auto mb-1.5 sm:mb-4 md:mb-5">
-            <div class="mb-1.5 sm:mb-2 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
-              <span class="tabular-nums text-zinc-400">05</span>
-              <span class="text-zinc-500" aria-hidden="true">/</span>
-              <span data-i18n="studioEyebrow">Pricing &amp; Web Services</span>
-            </div>
-            <h2 class="display-title text-base sm:text-2xl md:text-3xl lg:text-[2.6rem] text-white tracking-tight leading-tight mb-0.5 sm:mb-2">
-              <span class="font-light" data-i18n="studioTitle1">Transparent Pricing &amp;</span>
-              <span class="font-black text-white" data-i18n="studioTitle2">
-                Custom Web Development<span class="text-[#DC143C]">.</span>
-              </span>
-            </h2>
-            <p class="body-copy text-xs sm:text-sm md:text-base text-zinc-300 font-light leading-relaxed max-w-lg mx-auto break-words" style="max-width: 50ch;" data-i18n="studioDesc">
-              Layanan pembuatan website profesional dengan paket jelas dan harga transparan — mulai dari landing page konversi tinggi hingga sistem web app custom.
-            </p>
-          </div>
-
-          <!-- 3 Highlight Service Cards (Mobile Carousel, 3-Column Grid on Desktop) -->
-          <div class="relative w-full max-w-5xl mx-auto">
-            <div
-              id="pricing-cards-track"
-              class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4 md:gap-5 pb-2 pt-4 mb-2 md:mb-8 select-none"
-            >
-
-              <!-- Card 1: Landing Page -->
-              <a
-                href="/pricing.html?type=landing-page"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-tilt="true"
-                class="pricing-carousel-card w-full group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex flex-col justify-between cursor-pointer touch-manipulation"
-                title="Landing Page"
-                aria-hidden="false"
-              >
-                <div class="flex flex-col flex-1">
-                  <div class="flex items-center justify-between mb-2 sm:mb-4">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] transition-colors duration-200 shrink-0">
-                      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
-                        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
-                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
-                      </svg>
-                    </div>
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-[#DC143C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </div>
-                  <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Landing Page</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard1Desc">
-                    Halaman promosi cepat untuk iklan campaign, lead generation, dan direct WhatsApp conversion.
-                  </p>
-                </div>
-                <div class="flex items-center justify-between font-mono text-xs pt-2 sm:pt-3 border-t border-white/5 mt-auto">
-                  <div>
-                    <span class="text-zinc-400 text-xs block">Mulai dari</span>
-                    <span class="text-xs sm:text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp499.000</span>
-                  </div>
-                  <span class="text-xs text-zinc-300 bg-white/5 px-2.5 py-1 rounded-md border border-white/10 transition-colors">1 Halaman</span>
-                </div>
-              </a>
-
-              <!-- Card 2: Company Profile (Popular) -->
-              <a
-                href="/pricing.html?type=company-profile"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-tilt="true"
-                class="pricing-carousel-card w-full group relative rounded-2xl border border-[#DC143C]/50 bg-zinc-950/90 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C] hover:shadow-md flex flex-col justify-between ring-1 ring-[#DC143C]/30 cursor-pointer touch-manipulation hidden md:flex"
-                title="Company Profile"
-                aria-hidden="false"
-              >
-                <div class="flex flex-col flex-1">
-                  <div class="flex items-center justify-between mb-2 sm:mb-4">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] transition-colors duration-200 shrink-0">
-                      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="16" height="20" x="4" y="2" rx="2" ry="2"/>
-                        <path d="M9 22v-4h6v4"/>
-                        <path d="M8 6h.01"/>
-                        <path d="M16 6h.01"/>
-                        <path d="M12 6h.01"/>
-                        <path d="M12 10h.01"/>
-                        <path d="M12 14h.01"/>
-                        <path d="M16 10h.01"/>
-                        <path d="M16 14h.01"/>
-                        <path d="M8 10h.01"/>
-                        <path d="M8 14h.01"/>
-                      </svg>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="px-2.5 py-0.5 rounded-full bg-[#DC143C] text-white font-mono text-[0.65rem] font-bold uppercase tracking-wider shadow-sm">POPULER</span>
-                      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#DC143C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </div>
-                  </div>
-                  <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Company Profile</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard2Desc">
-                    Website profil bisnis resmi untuk UMKM & corporate, multi-halaman dengan SEO Google ready.
-                  </p>
-                </div>
-                <div class="flex items-center justify-between font-mono text-xs pt-2 sm:pt-3 border-t border-white/5 mt-auto">
-                  <div>
-                    <span class="text-zinc-400 text-xs block">Mulai dari</span>
-                    <span class="text-xs sm:text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp999.000</span>
-                  </div>
-                  <span class="text-xs text-zinc-300 bg-white/5 px-2.5 py-1 rounded-md border border-white/10 transition-colors">Bisnis</span>
-                </div>
-              </a>
-
-              <!-- Card 3: Custom Web App -->
-              <a
-                href="/pricing.html?type=custom-web-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-tilt="true"
-                class="pricing-carousel-card w-full group relative rounded-2xl border border-white/10 bg-zinc-950/85 backdrop-blur-xl p-4 sm:p-5 md:p-6 transition-all duration-500 hover:border-[#DC143C]/40 hover:shadow-md flex flex-col justify-between cursor-pointer touch-manipulation hidden md:flex"
-                title="Custom Web App"
-                aria-hidden="false"
-              >
-                <div class="flex flex-col flex-1">
-                  <div class="flex items-center justify-between mb-2 sm:mb-4">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#DC143C] transition-colors duration-200 shrink-0">
-                      <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="16 18 22 12 16 6"/>
-                        <polyline points="8 6 2 12 8 18"/>
-                      </svg>
-                    </div>
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-[#DC143C] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </div>
-                  <h3 class="font-bold text-sm sm:text-lg text-white mb-0.5 sm:mb-1 group-hover:text-white transition-colors">Custom Web App</h3>
-                  <p class="text-xs sm:text-sm text-zinc-300 font-light leading-snug sm:leading-relaxed mb-2 sm:mb-4 flex-1 break-words" style="max-width: 48ch;" data-i18n="studioCard3Desc">
-                    Fullstack web application, SaaS, dashboard admin, dan sistem informasi dengan API terintegrasi.
-                  </p>
-                </div>
-                <div class="flex items-center justify-between font-mono text-xs pt-2 sm:pt-3 border-t border-white/5 mt-auto">
-                  <div>
-                    <span class="text-zinc-400 text-xs block">Mulai dari</span>
-                    <span class="text-xs sm:text-sm font-bold text-white group-hover:text-[#DC143C] transition-colors">Rp5.490.000</span>
-                  </div>
-                  <span class="text-xs text-zinc-300 bg-white/5 px-2.5 py-1 rounded-md border border-white/10 transition-colors">Fullstack</span>
-                </div>
-              </a>
-
-            </div>
-
-            <!-- Mobile Only Carousel Dots & Navigation Controls -->
-            <div class="flex md:hidden items-center justify-between mt-2 mb-3 px-1" id="pricing-mobile-controls">
-              <div class="flex items-center gap-1.5" id="pricing-carousel-dots">
-                <button type="button" onclick="window.goToPricingSlide(0)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat paket 1: Landing Page">
-                  <span class="pricing-dot active block w-4 h-1 rounded-full bg-[#DC143C] opacity-100 transition-opacity"></span>
-                </button>
-                <button type="button" onclick="window.goToPricingSlide(1)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat paket 2: Company Profile">
-                  <span class="pricing-dot block w-4 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
-                </button>
-                <button type="button" onclick="window.goToPricingSlide(2)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat paket 3: Custom Web App">
-                  <span class="pricing-dot block w-4 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-opacity"></span>
-                </button>
-              </div>
-              <div class="flex items-center gap-1">
-                <button
-                  type="button"
-                  onclick="window.slidePricingCarousel(-1)"
-                  aria-label="Previous Package"
-                  class="w-7 h-7 rounded inline-flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 border border-white/10 transition-colors cursor-pointer touch-manipulation"
-                >
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <span id="pricing-carousel-counter" class="font-mono text-xs text-zinc-400 px-1 select-none tabular-nums font-semibold">1 / 3</span>
-                <button
-                  type="button"
-                  onclick="window.slidePricingCarousel(1)"
-                  aria-label="Next Package"
-                  class="w-7 h-7 rounded inline-flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 border border-white/10 transition-colors cursor-pointer touch-manipulation"
-                >
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Studio CTA Conversion Bar -->
-          <div class="rounded-2xl border border-white/12 bg-gradient-to-r from-zinc-950/90 via-[#DC143C]/[0.08] to-zinc-950/90 backdrop-blur-xl p-3.5 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 sm:gap-4">
-            <div class="text-left flex items-center gap-3 sm:gap-3.5 w-full sm:w-auto">
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#DC143C]/20 border border-[#DC143C]/40 flex items-center justify-center text-[#DC143C] shrink-0">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
-                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                  <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
-                  <path d="M2 7h20"/>
-                  <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/>
-                </svg>
-              </div>
-              <div class="min-w-0 flex-1 flex flex-col justify-center">
-                <p class="text-xs sm:text-sm md:text-base font-bold text-white leading-tight sm:leading-snug mb-0.5" data-i18n="studioCTATitle">
-                  8 Paket Website + Kalkulator Biaya Interaktif
-                </p>
-                <p class="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed max-w-xl break-words" data-i18n="studioCTADesc">
-                  Hitung estimasi biaya transparan, pilih fitur custom, dan kirim brief langsung via WhatsApp. Mulai Rp499K.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2.5 w-full sm:w-auto shrink-0 justify-stretch sm:justify-end">
-              <a
-                href="/pricing.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex-1 sm:flex-initial rounded-xl bg-[#DC143C] hover:bg-[#b01030] text-white px-5 sm:px-6 py-3 font-mono text-xs md:text-sm font-bold uppercase tracking-wider transition-all inline-flex items-center justify-center gap-2 active:scale-[0.97] cursor-pointer group leading-none shadow-sm"
-                title="Buka Kalkulator Harga di Tab Baru"
-              >
-                <span data-i18n="studioCTABtn">Open Pricing Calculator</span>
-                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </a>
-
-              <a
-                href="#"
-                onclick="window.openProtectedWhatsApp(event, 'Halo Aga, saya tertarik konsultasi pembuatan website.'); return false;"
-                class="rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.1] text-zinc-200 hover:text-white px-3.5 sm:px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wider transition-all inline-flex items-center justify-center gap-1.5 cursor-pointer shrink-0 leading-none"
-                title="WhatsApp Konsultasi"
-              >
-                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                  <use href="/icons.svg#whatsapp-icon"></use>
-                </svg>
-                <span class="hidden sm:inline">WhatsApp</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Pulsing Hint to Section 06 Contact -->
-          <div class="mt-3 sm:mt-6 flex items-center justify-center gap-2 text-zinc-400 font-mono text-xs tracking-normal">
-            <span class="inline-block h-4 w-px animate-pulse bg-[#DC143C]"></span>
-            <button type="button" onclick="window.scrollToSection(5)" class="hover:text-white transition-colors cursor-pointer tracking-normal">
-              Scroll / Contact
-            </button>
           </div>
         </div>
       </section>
-
-
 
       <!-- ─── SECTION 06: CONTACT (Initiation Dialogue) ─── -->
       <section
@@ -1665,21 +760,21 @@
         class="relative flex flex-col justify-center min-h-[100svh] px-6 md:px-10 pt-28 pb-20 max-w-4xl mx-auto text-center overflow-hidden"
       >
         <div class="section-content spatial-text-3d my-auto py-4 sm:py-6" data-reveal>
-          <div class="mb-4 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+          <div class="mb-4 flex items-center justify-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
             <span class="tabular-nums text-zinc-400">06</span>
-            <span class="text-zinc-500" aria-hidden="true">/</span>
+            <span class="text-zinc-500">—</span>
             <span data-i18n="contactEyebrow">Contact &amp; Inquiries</span>
           </div>
 
           <h2 class="display-title text-[clamp(2rem,4.5vw,4.2rem)] text-white mb-3 sm:mb-4">
             <span class="block font-light" data-i18n="contactTitle1">Let's Build Something</span>
             <span class="block font-black text-white" data-i18n="contactTitle2">
-              Great Together<span class="text-[#DC143C]">.</span>
+              Great Together
             </span>
           </h2>
 
           <p class="body-copy max-w-md mx-auto text-xs sm:text-sm md:text-base mb-6 sm:mb-8 text-zinc-300 font-light break-words" style="max-width: 50ch;" data-i18n="contactBio">
-            Open to full-time engineering roles, freelance projects, and collaboration opportunities. Let's discuss your next project.
+            Open to full-time engineering roles, contract projects, and collaboration opportunities. Let's discuss your next project.
           </p>
 
           <!-- Direct Action Buttons -->
@@ -1702,19 +797,19 @@
               class="btn-glass rounded-xl px-8 py-3.5 inline-flex items-center justify-center gap-2.5 w-full sm:w-auto text-xs font-mono uppercase tracking-wider cursor-pointer leading-none"
             >
               <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-              <span>WhatsApp / Contact Direct</span>
+              <span>WhatsApp Direct</span>
             </a>
           </div>
 
-          <!-- Pulsing Hint to Section 07 Footer -->
+          <!-- Subtle Hint to Section 07 Footer -->
           <div class="mt-14 flex items-center justify-center gap-3 text-zinc-400 font-mono text-xs tracking-normal">
-            <span class="inline-block h-6 w-px animate-pulse bg-[#DC143C]"></span>
-            <span data-i18n="scrollFooter">Scroll for details &amp; footer</span>
+            <span class="inline-block h-6 w-px bg-[#DC143C]"></span>
+            <span data-i18n="scrollFooter">Scroll for details &amp; colophon</span>
           </div>
         </div>
       </section>
 
-      <!-- ─── SECTION 07: FULL-PAGE FOOTER ARCHITECTURE (100svh Dedicated) ─── -->
+      <!-- ─── SECTION 07: FULL-PAGE FOOTER ARCHITECTURE (Dedicated) ─── -->
       <section
         id="footer"
         class="relative flex flex-col justify-between min-h-[100svh] px-5 sm:px-6 md:px-10 pt-20 sm:pt-24 md:pt-28 pb-8 sm:pb-12 md:pb-16 max-w-6xl mx-auto overflow-hidden"
@@ -1723,31 +818,54 @@
         <div class="section-content spatial-text-3d w-full" data-reveal>
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-6 md:pb-8 border-b border-white/10">
             <div>
-              <div class="mb-1 sm:mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
+              <div class="mb-1 sm:mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
                 <span class="tabular-nums text-zinc-400">07</span>
-                <span class="text-zinc-500" aria-hidden="true">/</span>
-                <span data-i18n="footerEyebrow">Footer &amp; Contact</span>
+                <span class="text-zinc-500">—</span>
+                <span data-i18n="footerEyebrow">Colophon &amp; Specification</span>
+              </div>    </div>
+
+          <!-- Subtle Hint to Section 06 Footer -->
+          <div class="mt-14 flex items-center justify-center gap-3 text-zinc-400 font-mono text-xs tracking-normal">
+            <span class="inline-block h-6 w-px bg-[#DC143C]"></span>
+            <span data-i18n="scrollFooter">Scroll for details &amp; colophon</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 07: FULL-PAGE FOOTER ARCHITECTURE (Dedicated) ─── -->
+      <section
+        id="footer"
+        class="relative flex flex-col justify-between min-h-[100svh] px-5 sm:px-6 md:px-10 pt-20 sm:pt-24 md:pt-28 pb-8 sm:pb-12 md:pb-16 max-w-6xl mx-auto overflow-hidden"
+      >
+        <!-- Top Editorial Masthead & Identity -->
+        <div class="section-content spatial-text-3d w-full" data-reveal>
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-6 md:pb-8 border-b border-white/10">
+            <div>
+              <div class="mb-1 sm:mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#DC143C]">
+                <span class="tabular-nums text-zinc-400">07</span>
+                <span class="text-zinc-500">—</span>
+                <span data-i18n="footerEyebrow">Colophon &amp; Specification</span>
               </div>
               <h2 class="display-title text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] text-white tracking-tight leading-none">
-                AGA PUTRA<span class="text-[#DC143C]">.</span>
+                AGA PUTRA
               </h2>
             </div>
 
-            <!-- Live Telemetry Status -->
+            <!-- Live Status -->
             <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1.5 sm:gap-2 font-mono text-xs">
               <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-[#131318] backdrop-blur-md">
-                <span class="relative flex h-1.5 w-1.5">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#DC143C]"></span>
-                </span>
-                <span class="font-mono text-xs text-zinc-200 font-medium" data-i18n="footerAvailable">Available // Select Commissions</span>
+                <svg class="w-3.5 h-3.5 text-[#DC143C] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="font-mono text-xs text-zinc-200 font-medium" data-i18n="footerAvailable">Available for Full-time Roles &amp; Projects</span>
               </div>
               <span class="text-zinc-400 text-xs" data-i18n="footerLocation">Medan, Indonesia (UTC+7 / WIB)</span>
             </div>
           </div>
 
-          <!-- 4 Curated Editorial Specification Columns (2x2 on mobile, 4 columns on desktop) -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 py-2.5 sm:py-3.5 md:py-4 border-b border-white/10">
+          <!-- 4 Curated Editorial Specification Columns -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-8 py-5 sm:py-6 md:py-8 border-b border-white/10">
             
             <!-- Col 1: Direct Communication Channels -->
             <div class="space-y-2 sm:space-y-3 font-mono text-xs">
@@ -1766,19 +884,19 @@
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerPhoneLabel">WHATSAPP / VOICE</span>
+                <span class="text-zinc-400 text-xs block" data-i18n="footerPhoneLabel">WHATSAPP / CHAT</span>
                 <a
                   id="footer-whatsapp-link"
                   href="#"
                   onclick="window.openProtectedWhatsApp(event, 'Hello Aga, I am interested in discussing a project collaboration.'); return false;"
-                  class="editorial-link text-zinc-200 hover:text-emerald-400 block font-medium truncate transition-colors cursor-pointer"
+                  class="editorial-link text-zinc-200 hover:text-white block font-medium truncate transition-colors cursor-pointer"
                 >
                   WhatsApp Direct
                 </a>
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerLatencyLabel">RESPONSE LATENCY</span>
+                <span class="text-zinc-400 text-xs block" data-i18n="footerLatencyLabel">RESPONSE TIME</span>
                 <span class="text-zinc-300 block" data-i18n="footerLatencyVal">&lt; 12 Hours SLA</span>
               </div>
             </div>
@@ -1789,7 +907,7 @@
               
               <div class="space-y-0.5 sm:space-y-1">
                 <span class="text-zinc-400 text-xs block">3D ENGINE</span>
-                <span class="text-zinc-300 block truncate">Three.js · PBR</span>
+                <span class="text-zinc-300 block truncate">Three.js · PBR Shaders</span>
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
@@ -1798,389 +916,83 @@
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block">DECODER</span>
-                <span class="text-zinc-300 block truncate">Draco WASM</span>
+                <span class="text-zinc-400 text-xs block">STYLING &amp; BUILD</span>
+                <span class="text-zinc-300 block truncate">Tailwind v4 · Vite</span>
               </div>
             </div>
 
-            <!-- Col 3: Design Language & Credits -->
+            <!-- Col 3: Standards & Quality Benchmarks -->
             <div class="space-y-2 sm:space-y-3 font-mono text-xs">
-              <span class="eyebrow text-xs text-zinc-400 block mb-1 sm:mb-2" data-i18n="footerColDesign">Design &amp; Credits</span>
+              <span class="eyebrow text-xs text-zinc-400 block mb-1 sm:mb-2">Quality &amp; Standards</span>
               
               <div class="space-y-0.5 sm:space-y-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerColInspiration">DESIGN INSPIRATION</span>
-                <a
-                  href="https://scfo.de/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="editorial-link text-[#FF385C] hover:text-white block truncate transition-colors font-medium"
-                  data-i18n="creditScfo"
-                  title="scale & form (scfo.de)"
-                >
-                  scfo.de ↗
-                </a>
+                <span class="text-zinc-400 text-xs block">PERFORMANCE</span>
+                <span class="text-zinc-300 block truncate">Lighthouse 100 Benchmark</span>
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerColModel">3D TESSERACT MODEL</span>
-                <a
-                  href="https://skfb.ly/oU9t8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="editorial-link text-[#FF385C] hover:text-white block truncate transition-colors font-medium"
-                  data-i18n="creditModel"
-                  title="Dark Tesseract by Chaitanya Krishnan on Sketchfab"
-                >
-                  Dark Tesseract (Sketchfab) ↗
-                </a>
+                <span class="text-zinc-400 text-xs block">MOBILE RUNTIME</span>
+                <span class="text-zinc-300 block truncate">Pure 2D · Zero GPU Overhead</span>
               </div>
 
               <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerColTypography">TYPOGRAPHY</span>
-                <span class="text-zinc-300 block truncate">Poppins · JetBrains</span>
-              </div>
-
-              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
-                <span class="text-zinc-400 text-xs block" data-i18n="footerColAccent">COLOR ACCENT</span>
-                <span class="text-zinc-300 block truncate">Crimson #DC143C</span>
+                <span class="text-zinc-400 text-xs block">ACCESSIBILITY</span>
+                <span class="text-zinc-300 block truncate">WCAG 2.1 AA Compliant</span>
               </div>
             </div>
 
-            <!-- Col 4: Quick Scene Index -->
+            <!-- Col 4: Links & Colophon -->
             <div class="space-y-2 sm:space-y-3 font-mono text-xs">
-              <span class="eyebrow text-xs text-zinc-400 block mb-1 sm:mb-2" data-i18n="footerColNav">Navigation</span>
+              <span class="eyebrow text-xs text-zinc-400 block mb-1 sm:mb-2">Repositories</span>
               
-              <ul class="grid grid-cols-2 sm:grid-cols-1 gap-2 text-zinc-300">
-                <li>
-                  <button type="button" onclick="window.scrollToSection(0)" class="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-zinc-400 tabular-nums">01</span>
-                    <span data-i18n="sideStart">Start</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onclick="window.scrollToSection(1)" class="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-zinc-400 tabular-nums">02</span>
-                    <span data-i18n="sideAbout">About</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onclick="window.scrollToSection(2)" class="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-zinc-400 tabular-nums">03</span>
-                    <span data-i18n="sideActivity">Activity</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onclick="window.scrollToSection(3)" class="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-zinc-400 tabular-nums">04</span>
-                    <span data-i18n="sideProjects">Projects</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onclick="window.scrollToSection(4)" class="hover:text-[#FF385C] transition-colors flex items-center gap-1.5 cursor-pointer font-medium py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-[#FF385C] tabular-nums">05</span>
-                    <span data-i18n="sidePricing">Pricing</span>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onclick="window.scrollToSection(5)" class="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer py-1.5 min-h-[32px] w-full text-left">
-                    <span class="text-zinc-400 tabular-nums">06</span>
-                    <span data-i18n="sideContact">Contact</span>
-                  </button>
-                </li>
-              </ul>
+              <div class="space-y-0.5 sm:space-y-1">
+                <span class="text-zinc-400 text-xs block">GITHUB PROFILE</span>
+                <a
+                  href="https://github.com/Apisikma123"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="editorial-link text-zinc-200 hover:text-white block font-medium truncate transition-colors"
+                >
+                  @Apisikma123
+                </a>
+              </div>
+
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-400 text-xs block">PORTFOLIO REPO</span>
+                <a
+                  href="https://github.com/Apisikma123/porto-aga"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="editorial-link text-zinc-200 hover:text-white block font-medium truncate transition-colors"
+                >
+                  porto-aga
+                </a>
+              </div>
+
+              <div class="space-y-0.5 sm:space-y-1 pt-0.5 sm:pt-1">
+                <span class="text-zinc-400 text-xs block">ALL PROJECTS</span>
+                <a
+                  href="/projects.html"
+                  class="editorial-link text-[#DC143C] hover:underline block font-semibold truncate transition-colors"
+                >
+                  Browse 18 Works
+                </a>
+              </div>
             </div>
 
           </div>
 
-          <!-- Curated SEO Referring Links Grid (Halaman Perujuk Googlebot) -->
-          <div class="py-2.5 sm:py-3 border-b border-white/10 font-mono text-xs">
-            <span class="font-mono text-xs text-[#FF385C] block mb-2.5 font-semibold">
-              Web Services &amp; Pricing Directory (Referral Index)
-            </span>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-zinc-300">
-              <a href="/pricing.html" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF385C] transition-colors truncate">→ Aga Web Studio & Kalkulator ↗</a>
-              <a href="/jasa-pembuatan-landing-page.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Landing Page Murah</a>
-              <a href="/jasa-pembuatan-company-profile.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Company Profile</a>
-              <a href="/jasa-pembuatan-toko-online.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Toko Online E-Commerce</a>
-              <a href="/jasa-pembuatan-portfolio.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Website Portfolio</a>
-              <a href="/jasa-pembuatan-website-booking.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Web Booking &amp; Reservasi</a>
-              <a href="/jasa-pembuatan-website-absensi.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Sistem Absensi &amp; HR</a>
-              <a href="/jasa-pembuatan-web-app.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Web App &amp; SaaS</a>
-              <a href="/jasa-pembuatan-web-app-custom.html" class="hover:text-[#FF385C] transition-colors truncate">→ Jasa Web Custom &amp; Dashboard</a>
-              <a href="/jasa-pembuatan-website.html" class="hover:text-[#FF385C] transition-colors truncate">→ Semua Layanan Website</a>
-              <a href="/projects.html" class="hover:text-[#FF385C] transition-colors truncate">→ Katalog 17 Repositori</a>
-              <a href="/project.html" class="hover:text-[#FF385C] transition-colors truncate">→ Studi Kasus Proyek</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Minimalist Luxury Colophon Bottom Bar -->
-        <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 font-mono text-xs text-zinc-400">
-          <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
-            <span class="text-zinc-200 font-medium">Muhammad Aga Putra</span>
-            <span class="hidden sm:inline text-zinc-500" aria-hidden="true">/</span>
-            <span class="text-zinc-400">Software Engineer &amp; Frontend Developer</span>
-          </div>
-
-          <div class="flex items-center gap-4 text-xs">
-            <span class="text-zinc-400">© <span id="footer-year">2026</span> Aga Putra</span>
-            <button
-              type="button"
-              onclick="window.scrollToSection(0)"
-              class="text-zinc-400 hover:text-white transition-colors flex items-center gap-1 cursor-pointer"
-              title="Kembali ke atas"
-            >
-              <span>TOP</span>
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="19" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
-              </svg>
-            </button>
+          <!-- Colophon Subfooter -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 sm:pt-6 font-mono text-xs text-zinc-400">
+            <p>© <span id="footer-year">2026</span> Muhammad Aga Putra. <span data-i18n="footerRights">All Rights Reserved.</span></p>
+            <p data-i18n="footerBuiltWith">Built with Vite, Vanilla CSS, Tailwind v4, and modern standards. 100% 2D on mobile.</p>
           </div>
         </div>
       </section>
-      </div> <!-- End #portfolio-view -->
-
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <!-- VIEW 2: DEDICATED PROJECT CASE STUDY & README VIEWER        -->
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <div id="project-detail-view" class="fixed inset-0 z-[99999] overflow-y-auto bg-[#040509]/95 backdrop-blur-2xl pt-16 sm:pt-20 pb-24 hidden">
-        <div class="max-w-5xl mx-auto px-6 md:px-10">
-          
-          <!-- Top Action / Breadcrumb Bar -->
-          <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
-            <button
-              type="button"
-              onclick="window.switchView('portfolio', 3)"
-              class="btn-back inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-[#DC143C] text-white border border-white/15 transition-all text-xs font-mono font-semibold cursor-pointer active:scale-95 touch-manipulation"
-              title="Kembali ke Portofolio"
-            >
-              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-              <span data-i18n="backToPortfolio">← Kembali ke Portofolio</span>
-            </button>
-
-            <div class="flex items-center gap-2.5">
-              <a
-                href="/projects.html"
-                class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-mono text-xs cursor-pointer transition-colors leading-none touch-manipulation active:scale-95"
-              >
-                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="7"></rect>
-                  <rect x="14" y="3" width="7" height="7"></rect>
-                  <rect x="14" y="14" width="7" height="7"></rect>
-                  <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-                <span>Semua Karya (17)</span>
-              </a>
-
-              <a
-                id="detail-view-github-link"
-                href="https://github.com/Apisikma123"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#DC143C] hover:bg-[#b01030] border border-transparent text-white font-mono text-xs font-semibold cursor-pointer transition-all leading-none touch-manipulation active:scale-95 group shadow-sm"
-              >
-                <span>GitHub</span>
-                <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- Top Visual Preview Banner (Above Header) -->
-          <div id="detail-view-banner-container" class="mb-8 rounded-2xl overflow-hidden border border-white/10 glass-card aspect-video max-h-[380px] w-full relative group">
-            <img
-              id="detail-view-banner-img"
-              src="/projects/foodify.webp"
-              alt="Project Preview"
-              loading="lazy"
-              decoding="async"
-              class="w-full h-full object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity duration-300"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
-            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-xs text-zinc-300">
-              <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-                <span data-i18n="visualPreview">Visual Architecture Preview</span>
-              </span>
-              <span id="detail-view-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">Flutter 3.x</span>
-            </div>
-          </div>
-
-          <!-- Project Hero Header -->
-          <div class="mb-10 pb-8 border-b border-white/10">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-              <span id="detail-view-eyebrow" class="font-mono text-xs text-[#DC143C] font-semibold uppercase tracking-wider">FULLSTACK WEB · CASE STUDY</span>
-              <span class="text-zinc-500" aria-hidden="true">/</span>
-              <span id="detail-view-lang" class="font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md">Laravel</span>
-            </div>
-
-            <h1 id="detail-view-title" class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
-              FOODIFY — Food Delivery App
-            </h1>
-
-            <p id="detail-view-desc" class="text-base sm:text-lg text-zinc-300 font-light max-w-3xl leading-relaxed mb-6">
-              Aplikasi mobile pesan-antar makanan khusus Kota Medan dengan peta interaktif OpenStreetMap...
-            </p>
-
-            <div id="detail-view-tags" class="flex flex-wrap gap-2 font-mono text-xs">
-              <!-- Dynamic tags -->
-            </div>
-          </div>
-
-          <!-- 2 Column Layout: Markdown Article + Specs Sidebar -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
-            <!-- Left Column: Rendered Markdown -->
-            <article class="lg:col-span-8 glass-card rounded-2xl p-6 sm:p-10 border border-white/10 relative">
-              <div class="flex items-center justify-between pb-6 mb-6 border-b border-white/10 font-mono text-xs text-zinc-400">
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-sm text-[#DC143C]">description</span>
-                  <span class="font-semibold text-zinc-200 uppercase tracking-wider">README.md</span>
-                </div>
-                <span class="text-zinc-400">Apisikma123 / <span id="detail-view-repo-name" class="text-zinc-300 font-medium">foodify</span></span>
-              </div>
-
-              <div id="detail-view-markdown" class="markdown-body">
-                <!-- Rendered Markdown -->
-              </div>
-            </article>
-
-            <!-- Right Column: Sidebar Specs -->
-            <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-28 font-mono text-xs">
-              <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
-                <h2 class="font-mono text-zinc-400 text-xs font-semibold block">REPOSITORY TELEMETRY</h2>
-                
-                <div class="space-y-1">
-                  <span class="text-zinc-400 text-[0.62rem]">AUTHOR</span>
-                  <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" class="text-zinc-200 hover:text-[#DC143C] block font-medium">
-                    Muhammad Aga Putra (@Apisikma123) ↗
-                  </a>
-                </div>
-
-                <div class="space-y-1 pt-2 border-t border-white/5">
-                  <span class="text-zinc-400 text-[0.62rem]">PRIMARY STACK</span>
-                  <span id="detail-view-side-lang" class="text-zinc-300 block">Flutter &amp; Dart</span>
-                </div>
-
-                <div class="space-y-1 pt-2 border-t border-white/5">
-                  <span class="text-zinc-400 text-[0.62rem]">STATUS</span>
-                  <span class="text-emerald-400 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Public Open Source
-                  </span>
-                </div>
-
-                <div class="pt-3 border-t border-white/10">
-                  <button
-                    type="button"
-                    onclick="window.copyCurrentProjectClone()"
-                    class="w-full rounded-md bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-xs transition-colors cursor-pointer"
-                  >
-                    <span id="detail-clone-btn-label">git clone https://...</span>
-                    <span class="material-symbols-outlined text-xs text-zinc-400">content_copy</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Other Projects Quick Switcher -->
-              <div class="glass-card rounded-xl p-5 border border-white/10 space-y-3">
-                <div class="flex items-center justify-between">
-                  <h2 class="font-mono text-zinc-400 text-xs font-semibold">PROYEK LAINNYA</h2>
-                  <a href="/projects.html" class="text-[#FF385C] hover:text-white text-xs uppercase cursor-pointer">Semua (17) ↗</a>
-                </div>
-                <div id="detail-view-other-projects" class="space-y-1.5"></div>
-              </div>
-
-              <!-- Contact CTA -->
-              <div class="glass-card rounded-xl p-5 border border-[#DC143C]/20 bg-[#DC143C]/5 text-center space-y-2.5">
-                <h2 class="font-sans font-bold text-sm text-white">Diskusikan Proyek</h2>
-                <p class="font-sans text-xs text-zinc-300 font-light">Tertarik membangun sistem serupa atau kolaborasi teknis?</p>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=agaputra62@gmail.com" target="_blank" rel="noopener noreferrer" class="btn-crimson rounded-lg py-2 px-3 w-full block font-mono text-xs uppercase tracking-wider font-semibold">
-                  Hubungi Saya
-                </a>
-              </div>
-            </aside>
-
-          </div>
-
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <!-- VIEW 3: ALL 17 PROJECTS CATALOG & REPOSITORY BROWSER        -->
-      <!-- ═══════════════════════════════════════════════════════════ -->
-      <div id="all-projects-view" class="fixed inset-0 z-50 overflow-y-auto bg-transparent pt-24 pb-24 hidden">
-        <div class="max-w-6xl mx-auto px-6 md:px-10">
-          
-          <!-- Top Action / Breadcrumb Bar -->
-          <div class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
-            <button
-              type="button"
-              onclick="window.switchView('portfolio', 3)"
-              class="btn-back"
-              title="Kembali ke Portofolio"
-            >
-              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-              <span data-i18n="backToPortfolio">Kembali ke Portofolio (Section 04)</span>
-            </button>
-
-            <div class="font-mono text-xs font-semibold text-white tracking-normal hidden sm:block">
-              AGA PUTRA <span class="text-[#FF385C]" aria-hidden="true">/</span> REPOSITORY DIRECTORY
-            </div>
-          </div>
-
-          <!-- Header & Search -->
-          <div class="mb-10 pb-8 border-b border-white/10">
-            <div class="mb-2 flex items-center gap-2 font-mono text-xs font-semibold text-[#FF385C]">
-              <span class="tabular-nums text-zinc-400">04</span>
-              <span class="text-zinc-500" aria-hidden="true">/</span>
-              <span>Katalog Karya Lengkap</span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
-              Semua Karya &amp; Repositori.
-            </h1>
-            <p class="body-copy max-w-2xl text-base sm:text-lg mb-8">
-              Eksplorasi seluruh 17 proyek perangkat lunak, web systems architecture, aplikasi mobile, dan open-source code oleh Muhammad Aga Putra (@Apisikma123).
-            </p>
-
-            <!-- Search + Filter Bar -->
-            <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-4 border-t border-white/5">
-              <div class="relative w-full md:w-80 flex items-center">
-                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 pointer-events-none text-base z-10 flex items-center justify-center">search</span>
-                <input
-                  type="text"
-                  id="all-view-search-input"
-                  placeholder="Cari proyek (Flutter, Laravel, PWA...)"
-                  aria-label="Cari proyek (Flutter, Laravel, PWA...)"
-                  oninput="window.handleAllViewSearch(this.value)"
-                  class="w-full rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#DC143C]/60 focus:outline-none pl-10 pr-4 py-2.5 font-mono text-xs text-white placeholder-zinc-500 leading-none"
-                />
-              </div>
-
-              <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 font-mono text-xs" id="all-view-category-filters">
-                <button type="button" class="all-view-filter-btn active cursor-pointer px-3.5 py-2 rounded-lg bg-white/10 text-white font-medium transition-colors" onclick="window.setAllViewCategory('all', this)">Semua (17)</button>
-                <button type="button" class="all-view-filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="window.setAllViewCategory('Fullstack', this)">Fullstack</button>
-                <button type="button" class="all-view-filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="window.setAllViewCategory('Mobile', this)">Mobile</button>
-                <button type="button" class="all-view-filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="window.setAllViewCategory('Frontend', this)">Frontend / PWA</button>
-                <button type="button" class="all-view-filter-btn cursor-pointer px-3.5 py-2 rounded-lg bg-white/[0.03] text-zinc-400 hover:text-white border border-white/5 transition-colors" onclick="window.setAllViewCategory('Tools', this)">Tools &amp; Java</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Grid of Projects -->
-          <div id="all-view-projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            <!-- Dynamically populated -->
-          </div>
-
-        </div>
-      </div>
 
     </main>
 
-    <!-- Application Entry Point -->
+    <!-- Bundled Core Application Module -->
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

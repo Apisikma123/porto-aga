@@ -1,8 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
-   main.js — Modular Entry Point & Code-Splitting Orchestrator
-   Muhammad Aga Putra | Frontend Software Engineer & System Architect
+   main.js — Modular Entry Point & Mobile-First 2D/Desktop-3D Orchestrator
+   Muhammad Aga Putra | Software Engineer & Frontend Specialist
    ═══════════════════════════════════════════════════════════ */
-
 import "./style.css";
 import "./critical.js";
 
@@ -28,11 +27,10 @@ export const yieldToMain = () => {
 let nonCriticalLoaded = false;
 const loadNonCritical = async () => {
   if (nonCriticalLoaded) return;
-  if (!document.documentElement.classList.contains("is-real-user")) return;
   nonCriticalLoaded = true;
 
   if (typeof requestIdleCallback === "function") {
-    await new Promise((resolve) => requestIdleCallback(resolve, { timeout: 3000 }));
+    await new Promise((resolve) => requestIdleCallback(resolve, { timeout: 1500 }));
   } else {
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
@@ -48,31 +46,41 @@ const loadNonCritical = async () => {
 
   await yieldToMain();
 
-  try {
-    const m = await import("./animations.js");
-    if (m && m.initAnimations) {
-      m.initAnimations();
+  const isMobile = window.innerWidth < 1024;
+  if (!isMobile) {
+    try {
+      const m = await import("./animations.js");
+      if (m && m.initAnimations) {
+        m.initAnimations();
+      }
+    } catch (err) {
+      console.warn("animations load notice:", err);
     }
-  } catch (err) {
-    console.warn("animations load notice:", err);
+  } else if (window.renderActivityHeatmap) {
+    try { window.renderActivityHeatmap(); } catch (e) {}
   }
 };
 
 // ═══════════════════════════════════════════════════════════
-// 1. NON-DESTRUCTIVE 3D / WEBGL ACTIVATION & TIMING ENGINE
+// 1. DESKTOP-ONLY 3D / WEBGL ENGINE (Mobile is 100% 2D & Lightweight)
 // ═══════════════════════════════════════════════════════════
 let initialized3D = false;
 
 export async function activate3D() {
   if (initialized3D) return;
-  if (!document.documentElement.classList.contains("is-real-user")) return;
-  initialized3D = true;
 
-  if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
-    window.__setPreloaderProgress(35);
+  // STRICT REQUIREMENT: Mobile devices (<1024px) are 100% 2D.
+  // Never load Three.js, shaders, or 3.5MB GLB models on mobile.
+  if (typeof window === "undefined") return;
+  const isMobile = window.innerWidth < 1024;
+
+  if (isMobile) {
+    return;
   }
 
-  // Pre-fetch both 3D models concurrently in browser cache during preloader countdown
+  initialized3D = true;
+
+  // Pre-fetch 3D models only on desktop
   if (typeof document !== "undefined") {
     ["/tesseract.glb", "/need_some_space.glb"].forEach((url) => {
       const link = document.createElement("link");
@@ -88,9 +96,6 @@ export async function activate3D() {
 
   try {
     const m = await import("./three-scene.js");
-    if (typeof window !== "undefined" && typeof window.__setPreloaderProgress === "function") {
-      window.__setPreloaderProgress(55);
-    }
     await yieldToMain();
     const initFn = m.init3D || m.initThreeEngine || m.initThreeScene;
     if (typeof initFn === "function") {
@@ -101,21 +106,20 @@ export async function activate3D() {
   }
 }
 
-// Start 3D engine warmup during preloader countdown for all devices (desktop & mobile)
-// Pre-compiling shaders in background ensures pure 120fps rocket liftoff without mid-air GPU stalls
-if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
-  setTimeout(activate3D, 180);
+// Mobile-first boot: immediate non-critical data loader on idle/load
+if (typeof window !== "undefined") {
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(loadNonCritical, 50);
+  } else {
+    window.addEventListener("DOMContentLoaded", () => setTimeout(loadNonCritical, 50), { once: true });
+  }
+
+  // Activate desktop 3D immediately on large screens (pure 2D on mobile)
+  if (window.innerWidth >= 1024 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      setTimeout(activate3D, 100);
+    } else {
+      window.addEventListener("DOMContentLoaded", () => setTimeout(activate3D, 100), { once: true });
+    }
+  }
 }
-
-// Ensure modules activate smoothly without competing with rocket flight animation
-["mousemove", "wheel", "keydown", "scroll"].forEach((event) => {
-  window.addEventListener(event, activate3D, { once: true, passive: true });
-  window.addEventListener(event, loadNonCritical, { once: true, passive: true });
-});
-
-window.addEventListener("start3D", () => {
-  activate3D();
-  // Defer non-critical scripts until rocket liftoff is complete (950ms) to ensure pure 120fps buttery smoothness
-  setTimeout(loadNonCritical, 950);
-}, { once: true, passive: true });
-

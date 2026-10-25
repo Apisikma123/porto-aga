@@ -1,5 +1,11 @@
-// 7 Dedicated Section IDs (01 Start, 02 About, 03 Activity, 04 Projects, 05 Pricing, 06 Contact, 07 Colophon)
-export const SECTION_IDS = ["start", "about", "activity", "projects", "pricing", "contact", "footer"];
+/* ═══════════════════════════════════════════════════════════
+   critical.js — Core UX, Bilingual Engine & Navigation System
+   Muhammad Aga Putra | Software Engineer & Frontend Specialist
+   ═══════════════════════════════════════════════════════════ */
+
+// 7 Dedicated Section IDs matching the spatial sequence:
+// 01 Start (Hero), 02 About (Capabilities), 03 Experience (Wilmar PKL), 04 Activity (GitHub Matrix), 05 Projects (Carousel), 06 Contact, 07 Footer
+export const SECTION_IDS = ["start", "about", "experience", "activity", "projects", "contact", "footer"];
 export let currentSectionIndex = 0;
 
 // ═══════════════════════════════════════════════════════════
@@ -30,450 +36,340 @@ window.openProtectedWhatsApp = (event, text = "") => {
 // ═══════════════════════════════════════════════════════════
 export const TRANSLATIONS = {
   en: {
-    navStart: "Start",
+    navStart: "Home",
     navAbout: "About",
+    navExperience: "Experience",
     navActivity: "Activity",
     navProjects: "Projects",
-    navPricing: "Pricing",
     navContact: "Contact",
-    navFooter: "Footer",
-    ctaInitiate: "Let's Talk",
+    navFooter: "Details",
+    ctaInitiate: "Get in Touch",
     sidebarHeader: "On this page",
-    sideStart: "Start",
+    sideStart: "Home",
     sideAbout: "About",
+    sideExperience: "Experience",
     sideActivity: "Activity",
     sideProjects: "Projects",
-    sidePricing: "Pricing",
     sideContact: "Contact",
-    sideFooter: "Footer",
+    sideFooter: "Details",
     navHint: "Navigation",
-    navScene: "Scene",
-    navContactKey: "Contact",
-    statusAvailable: "Open to Work",
-    heroEyebrow: "Frontend & Web Developer",
+    navScene: "Switch Section",
+    statusAvailable: "Available for Hire",
+    heroEyebrow: "Software Engineer & Frontend Specialist",
     heroRole: "Frontend Developer & Software Engineer",
-    heroBio: "Building clean, high-performance web applications and interactive digital experiences with modern web technologies.",
-    btnExploreAbout: "About Me",
-    btnInitiate: "Let's Talk",
-    scrollHint: "Scroll or press [S] to explore",
-    aboutEyebrow: "Focus & Tech Stack",
+    heroBio: "I design and build fast, reliable web applications with clean code and thoughtful user experience. Focused on turning complex problems into intuitive digital products.",
+    btnExploreAbout: "About & Skills",
+    btnInitiate: "Get in Touch",
+    scrollHint: "Scroll down or press [S] to explore",
+
+    // Section 02: About
+    aboutEyebrow: "Core Capabilities",
     aboutTitle1: "Clean Code.",
-    aboutTitle2: "Modern Design.",
-    aboutDesc: "Passionate about creating responsive, high-performance websites and applications. Focused on user experience, clean architecture, and practical engineering.",
-    focus1Title: "Frontend Development",
-    focus1Desc: "Modern component architecture, reactive state management, and responsive interfaces.",
-    focus2Title: "Interactive 3D Web",
-    focus2Desc: "Immersive 3D experiences with Three.js, WebGL shaders, and smooth GSAP animations.",
-    focus3Title: "Fullstack & Backend API",
-    focus3Desc: "Robust backend services with Laravel, Node.js, and database architecture.",
-    focus4Title: "Performance & SEO",
-    focus4Desc: "Fast load times, asset optimization, and Core Web Vitals refinement.",
-    activityEyebrow: "GitHub Activity",
-    activityTitle1: "Consistent Coding.",
-    activityTitle2: "Every Day.",
-    activityDesc: "Real-time contribution history and daily coding activity tracked directly from GitHub.",
+    aboutTitle2: "Reliable Solutions.",
+    aboutDesc: "Engineering modern web applications with high performance, maintainable code, and intuitive user experiences.",
+    focus1Title: "Modern Frontend",
+    focus1Desc: "Responsive, fast, and accessible interfaces tailored cleanly for all device sizes.",
+    focus2Title: "Interactive & 3D Web",
+    focus2Desc: "Smooth micro-interactions and lightweight 3D visuals crafted for maximum fluidity.",
+    focus3Title: "Backend & API Integration",
+    focus3Desc: "Resilient server architecture, secure authentication, and optimized database workflows.",
+    focus4Title: "Performance & Speed",
+    focus4Desc: "Sub-second load times, optimized assets, and strict benchmarks for optimal speed.",
+
+    // Section 03: Experience
+    expEyebrow: "Work & Internship Experience",
+    expTitle1: "Wilmar Bisnis Indonesia.",
+    expTitle2: "4 Months. 4 Systems.",
+    expDesc: "Full-Stack Web Developer Intern at Politeknik Wilmar Bisnis Indonesia (WBI). Architected and developed 4 functional web applications from scratch for campus operations:",
+    exp1Tag: "01 — WILMAR BUKU",
+    exp1Title: "Wilmar Buku — Book Donation System",
+    exp1Desc: "Centralized donation platform with Google OAuth login, real-time WebSocket inventory sync, and automated reporting (live at donasi-buku.wbi.ac.id).",
+    exp2Tag: "02 — GENLABS",
+    exp2Title: "GenLabs — Laboratory Management System",
+    exp2Desc: "Digital lab operational software for equipment scheduling, experiment logging, and collaborative academic research workflows.",
+    exp3Tag: "03 — GROW A GARDEN",
+    exp3Title: "Grow a Garden — Campus Agriculture Tracker",
+    exp3Desc: "Indoor gardening and hydroponics management platform featuring automated watering schedules, crop growth logs, and harvest projections.",
+    exp4Tag: "04 — INVENTARIS",
+    exp4Title: "Inventaris — Campus Asset & Logistics System",
+    exp4Desc: "Internal inventory and asset registry system managing item circulation, barcode tracking, borrowing history, and administrative verification.",
+
+    // Section 04: Activity
+    activityEyebrow: "Work Ethic & Consistency",
+    activityTitle1: "Continuous Learning.",
+    activityTitle2: "Proven Consistency.",
+    activityDesc: "A live record of daily coding activity and open-source contributions directly synced from my GitHub repository.",
     liveSync: "Live Sync",
-    velocityMatrix: "365-Day Activity Matrix",
+    velocityMatrix: "365-Day Activity Record",
     dayMon: "Mon",
     dayWed: "Wed",
     dayFri: "Fri",
-    monthJan: "Jan",
-    monthFeb: "Feb",
-    monthMar: "Mar",
-    monthApr: "Apr",
-    monthMay: "May",
-    monthJun: "Jun",
-    monthJul: "Jul",
-    monthAug: "Aug",
-    monthSep: "Sep",
-    monthOct: "Oct",
-    monthNov: "Nov",
-    monthDec: "Dec",
     less: "Less",
     more: "More",
-    projectsEyebrow: "Featured Projects & Works",
-    projectsTitle1: "Featured",
+
+    // Section 04: Projects
+    projectsEyebrow: "Featured Projects",
+    projectsTitle1: "Selected",
     projectsTitle2: "Works.",
-    sliderHint: "Use [←] [→] navigation buttons to explore projects",
-    projBkjTag: "Corporate · Maritime Logistics",
-    projBkjStatus: "bkjgrup.com",
-    projBkjTitle: "BKJ Group Indonesia — Logistics Portal",
-    projBkjDesc: "Integrated enterprise maritime logistics and corporate platform built for PT Berkah Kapal Jaya with full CMS, subsidiary routing, and bilingual localization.",
-    proj1Tag: "Mobile App · Geolocation",
-    proj1Status: "Live Project",
-    proj1Title: "FOODIFY — Food Delivery App",
-    proj1Desc: "Modern food delivery mobile app tailored for Medan City featuring interactive OpenStreetMap, GPS detection, and real-time simulated driver delivery tracking.",
-    proj2Tag: "Fullstack · Web App",
-    proj2Status: "Live Project",
-    proj2Title: "Wilmar Buku — Donation System",
-    proj2Desc: "Centralized library donation platform built with TALL stack, Google OAuth 2.0, automated PDF reporting, and real-time WebSockets via Laravel Reverb.",
-    proj3Tag: "Web Application",
-    proj3Status: "Live Project",
+    exploreAllProjects: "All Works (18 Projects)",
+    sliderHint: "Press [←] [→] to browse works",
+    projBkjTag: "Corporate Portal · Maritime Logistics",
+    projBkjStatus: "Archived System",
+    projBkjTitle: "BKJ Group Indonesia — Corporate Logistics Portal",
+    projBkjDesc: "Built an enterprise web portal for a maritime logistics firm with dynamic service management, subsidiary directory, and multi-language support (project archived).",
+    projPratamaTag: "Production Web · UMKM Service Portal",
+    projPratamaStatus: "Live at pratama-tehnik.com",
+    projPratamaTitle: "Pratama Tehnik Service — Repair Booking Portal",
+    projPratamaDesc: "Engineered a high-converting service booking portal for an on-demand appliance repair business in Jakarta, featuring direct WhatsApp dispatch, fault diagnosis calculator, and local SEO schema.",
+    proj1Tag: "Mobile App · Food & Delivery",
+    proj1Status: "Production App",
+    proj1Title: "FOODIFY — Food Ordering App",
+    proj1Desc: "Developed a responsive food delivery mobile app with live GPS map routing, order status tracking, and intuitive merchant discovery.",
+    proj2Tag: "Web Application · Community Platform",
+    proj2Status: "Live at donasi-buku.wbi.ac.id",
+    proj2Title: "Wilmar Buku — Book Donation System",
+    proj2Desc: "Engineered a centralized book donation platform for community libraries, active at donasi-buku.wbi.ac.id, with Google sign-in, real-time WebSocket tracking, and automated reporting.",
+    proj3Tag: "Web Platform · Student Wellbeing",
+    proj3Status: "Production App",
     proj3Title: "CINTA — School Counseling Platform",
-    proj3Desc: "Anonymous grievance reporting and counseling web application empowering students and BK teachers with end-to-end privacy and intuitive case management.",
-    proj4Tag: "Web Platform",
-    proj4Status: "Live Project",
-    proj4Title: "Grow a Garden — Urban Farming",
-    proj4Desc: "Digital garden management platform for home gardens and hydroponics with smart spatial mapping, soil health tracking, and automated growth calendar.",
-    reposHeader: "GitHub Repositories (@Apisikma123)",
-    reposSync: "Synced via GitHub API",
-    syncingRepos: "Syncing repositories…",
-    exploreAllProjects: "All Works (17)",
-    btnReadReadme: "Quick Overview",
-    visualPreview: "Visual Architecture Preview",
-    pricingEyebrow: "Website Cost Configurator",
-    pricingTitle1: "Interactive",
-    pricingTitle2: "Cost Estimator.",
-    pricingBio: "Interactively configure your website requirements and get a transparent realtime price estimate ready for direct WhatsApp consultation.",
-    studioEyebrow: "Pricing & Web Services",
-    studioTitle1: "Transparent Pricing &",
-    studioTitle2: "Custom Web Development.",
-    studioDesc: "Professional web development services with clear scopes and transparent pricing tiers — from high-converting landing pages to bespoke fullstack web applications.",
-    studioCard1Desc: "Fast high-converting promotional pages for marketing campaigns, lead generation, and direct WhatsApp conversions.",
-    studioCard2Desc: "Official multi-page business website for SMEs & corporate entities with high Google SEO readiness.",
-    studioCard3Desc: "Fullstack web applications, SaaS platforms, administrative dashboards, and integrated API systems.",
-    studioCTATitle: "8 Website Packages + Interactive Cost Calculator",
-    studioCTADesc: "Calculate transparent price estimates, select custom feature sets, and dispatch your brief directly to WhatsApp. Starting at Rp499K.",
-    studioCTABtn: "Open Pricing Calculator",
-    contactEyebrow: "Contact & Inquiries",
+    proj3Desc: "Created a secure, confidential counseling portal allowing students to submit private concerns while giving counselors structured case tracking.",
+    proj4Tag: "Web Application · Gardening & Home Tech",
+    proj4Status: "Production App",
+    proj4Title: "Grow a Garden — Garden Tracker",
+    proj4Desc: "Designed an easy-to-use garden management app with planting schedules, plant care logs, and space planning for urban growers.",
+
+    // Section 05: Contact
+    contactEyebrow: "Get in Touch",
     contactTitle1: "Let's Build Something",
-    contactTitle2: "Great Together.",
-    contactBio: "Open to full-time engineering roles, freelance projects, and collaboration opportunities. Let's discuss your next project.",
-    btnStartConv: "Start Conversation",
-    scrollFooter: "Scroll for Details & Footer [07]",
-    footerEyebrow: "Footer & Contact",
-    footerColStack: "Tech Stack",
-    footerColDesign: "Design & Credits",
-    footerColInspiration: "DESIGN INSPIRATION",
-    creditScfo: "scfo.de ↗",
-    footerColModel: "3D TESSERACT MODEL",
-    creditModel: "Dark Tesseract (Sketchfab) ↗",
-    footerColTypography: "TYPOGRAPHY",
-    footerColAccent: "COLOR ACCENT",
-    footerEmailLabel: "DISPATCH EMAIL",
-    footerPhoneLabel: "WHATSAPP / VOICE",
-    footerLatencyLabel: "RESPONSE LATENCY",
-    footerLatencyVal: "< 12 Hours SLA",
-    footerRole: `Frontend Developer & Software Engineer © ${new Date().getFullYear()}`,
-    footerDesc: "Building clean, high-performance web applications and interactive digital experiences.",
-    footerColDirect: "Direct Contact",
-    footerColSocial: "Network & Socials",
-    footerColNav: "Quick Navigation",
-    footerAvailable: "AVAILABLE // SELECT COMMISSIONS",
+    contactTitle2: "Great Together",
+    contactBio: "I am actively seeking full-time software engineering roles and freelance opportunities. Feel free to reach out directly via email or WhatsApp.",
+    btnStartConv: "Send an Email",
+    scrollFooter: "Scroll for details & links",
+
+    // Section 06: Footer
+    footerEyebrow: "Summary & Contact",
+    footerAvailable: "Open to Full-time Roles & Contracts",
     footerLocation: "Medan, Indonesia (UTC+7 / WIB)",
+    footerColDirect: "Direct Contact",
+    footerEmailLabel: "PRIMARY EMAIL",
+    footerPhoneLabel: "WHATSAPP",
+    footerLatencyLabel: "RESPONSE TIME",
+    footerLatencyVal: "Within a few hours",
+    footerColStack: "Core Technologies",
     footerRights: "All Rights Reserved.",
-    footerBuiltWith: "Built with Three.js, GSAP & Modern Web Technologies.",
-    backToTop: "Back to Top",
-    waUrl: getProtectedWhatsAppUrl("Hello Aga, I am interested in discussing a project collaboration."),
+    footerBuiltWith: "Built with Vite, Vanilla CSS, Tailwind v4, and modern standards. 100% 2D on mobile.",
+    waUrl: getProtectedWhatsAppUrl("Hello Aga, I reviewed your portfolio and would like to discuss an opportunity."),
   },
+
   id: {
     navStart: "Mulai",
     navAbout: "Tentang",
+    navExperience: "Pengalaman",
     navActivity: "Aktivitas",
     navProjects: "Karya",
-    navPricing: "Harga",
     navContact: "Kontak",
-    navFooter: "Footer",
+    navFooter: "Detail",
     ctaInitiate: "Hubungi Saya",
     sidebarHeader: "Di halaman ini",
     sideStart: "Mulai",
     sideAbout: "Tentang",
+    sideExperience: "Pengalaman",
     sideActivity: "Aktivitas",
     sideProjects: "Karya",
-    sidePricing: "Harga",
     sideContact: "Kontak",
-    sideFooter: "Footer",
+    sideFooter: "Detail",
     navHint: "Navigasi",
-    navScene: "Scene",
-    navContactKey: "Kontak",
-    statusAvailable: "Open to Work",
-    heroEyebrow: "Frontend & Web Developer",
+    navScene: "Pindah Bagian",
+    statusAvailable: "Siap Kerja & Terbuka untuk Rekrutmen",
+    heroEyebrow: "Software Engineer & Frontend Specialist",
     heroRole: "Frontend Developer & Software Engineer",
-    heroBio: "Membangun aplikasi web yang cepat, bersih, dan interaktif dengan teknologi web modern.",
-    btnExploreAbout: "Tentang Saya",
+    heroBio: "Saya merancang dan membangun aplikasi web yang cepat, handal, dan mudah digunakan. Terbiasa mengubah kebutuhan rumit menjadi produk digital yang rapi dan fungsional.",
+    btnExploreAbout: "Tentang & Keahlian",
     btnInitiate: "Hubungi Saya",
     scrollHint: "Scroll atau tekan [S] untuk menjelajah",
-    aboutEyebrow: "Keahlian & Teknologi",
-    aboutTitle1: "Kode Bersih.",
-    aboutTitle2: "Desain Modern.",
-    aboutDesc: "Fokus pada pembuatan website dan aplikasi yang responsif, cepat, dan mudah digunakan. Mengutamakan kode yang rapi, performa optimal, dan arsitektur yang terstruktur.",
-    focus1Title: "Pengembangan Frontend",
-    focus1Desc: "Arsitektur komponen modern, manajemen state reaktif, dan antarmuka responsif.",
-    focus2Title: "Web 3D Interaktif",
-    focus2Desc: "Pengalaman 3D interaktif dengan Three.js, WebGL shader, dan animasi GSAP yang mulus.",
-    focus3Title: "Fullstack & Backend API",
-    focus3Desc: "Layanan backend tangguh dengan Laravel, Node.js, dan arsitektur basis data terstruktur.",
-    focus4Title: "Performa & SEO",
-    focus4Desc: "Kecepatan muat halaman, optimasi aset, dan kepatuhan standar Core Web Vitals.",
-    activityEyebrow: "Aktivitas GitHub",
-    activityTitle1: "Konsistensi Koding.",
+
+    // Section 02: About
+    aboutEyebrow: "Keahlian Inti",
+    aboutTitle1: "Kode Rapi.",
+    aboutTitle2: "Solusi Handal.",
+    aboutDesc: "Membangun aplikasi web modern yang cepat, rapi, dan mudah dirawat dengan pengalaman pengguna yang intuitif.",
+    focus1Title: "Frontend Modern",
+    focus1Desc: "Antarmuka responsif, rapi, dan cepat di semua perangkat dengan navigasi yang mudah.",
+    focus2Title: "Interaksi & Visual 3D",
+    focus2Desc: "Micro-interaction mulus dan visual 3D ringan yang estetis tanpa membebani performa.",
+    focus3Title: "Backend & Integrasi API",
+    focus3Desc: "Arsitektur server andal, autentikasi aman, dan pengelolaan database yang efisien.",
+    focus4Title: "Optimasi & Kecepatan",
+    focus4Desc: "Loading instan, aset teroptimasi, dan performa tinggi untuk kenyamanan pengguna.",
+
+    // Section 03: Experience
+    expEyebrow: "Pengalaman Kerja & Magang",
+    expTitle1: "Wilmar Bisnis Indonesia.",
+    expTitle2: "4 Bulan. 4 Aplikasi.",
+    expDesc: "Magang Full-Stack Web Developer di Politeknik Wilmar Bisnis Indonesia (WBI). Merancang dan membangun 4 aplikasi web untuk operasional dan sivitas akademika:",
+    exp1Tag: "01 — WILMAR BUKU",
+    exp1Title: "Wilmar Buku — Sistem Donasi Buku",
+    exp1Desc: "Platform donasi buku terpusat dengan autentikasi Google OAuth, sinkronisasi inventaris live via WebSockets, dan rekap otomatis (aktif di donasi-buku.wbi.ac.id).",
+    exp2Tag: "02 — GENLABS",
+    exp2Title: "GenLabs — Sistem Manajemen Laboratorium",
+    exp2Desc: "Aplikasi pengelolaan operasional laboratorium digital untuk penjadwalan alat lab, pencatatan log eksperimen, dan administrasi riset kampus.",
+    exp3Tag: "03 — GROW A GARDEN",
+    exp3Title: "Grow a Garden — Monitoring Kebun Kampus",
+    exp3Desc: "Aplikasi pencatatan kebun dan hidroponik kampus dengan jadwal perawatan berkala, pemantauan kondisi tanaman, dan estimasi masa panen.",
+    exp4Tag: "04 — INVENTARIS",
+    exp4Title: "Inventaris — Pengelolaan Aset & Logistik",
+    exp4Desc: "Sistem inventaris internal untuk sirkulasi barang, pencatatan riwayat peminjaman aset, dan verifikasi administratif staf operasional.",
+
+    // Section 04: Activity
+    activityEyebrow: "Disiplin & Etos Kerja",
+    activityTitle1: "Konsisten Berkarya.",
     activityTitle2: "Setiap Hari.",
-    activityDesc: "Riwayat kontribusi dan aktivitas koding harian yang terhubung langsung dengan GitHub.",
-    liveSync: "Sinkronisasi Langsung",
-    velocityMatrix: "Matriks Aktivitas 365 Hari",
+    activityDesc: "Bukti komitmen belajar dan koding harian yang tersinkronisasi langsung dari repositori GitHub publik saya.",
+    liveSync: "Live Sync",
+    velocityMatrix: "Catatan Aktivitas 365 Hari",
     dayMon: "Sen",
     dayWed: "Rab",
     dayFri: "Jum",
-    monthJan: "Jan",
-    monthFeb: "Feb",
-    monthMar: "Mar",
-    monthApr: "Apr",
-    monthMay: "Mei",
-    monthJun: "Jun",
-    monthJul: "Jul",
-    monthAug: "Agu",
-    monthSep: "Sep",
-    monthOct: "Okt",
-    monthNov: "Nov",
-    monthDec: "Des",
     less: "Sedikit",
     more: "Banyak",
-    projectsEyebrow: "Proyek & Karya Pilihan",
-    projectsTitle1: "Karya &",
-    projectsTitle2: "Proyek.",
+
+    // Section 04: Projects
+    projectsEyebrow: "Karya & Proyek Terpilih",
+    projectsTitle1: "Karya",
+    projectsTitle2: "Pilihan.",
+    exploreAllProjects: "Semua Karya (18 Proyek)",
     sliderHint: "Tekan tombol [←] [→] untuk melihat karya",
-    projBkjTag: "Korporat · Logistik Maritim",
-    projBkjStatus: "bkjgrup.com",
-    projBkjTitle: "BKJ Group Indonesia — Portal Logistik",
-    projBkjDesc: "Portal korporat dan operasional maritim & logistik terpadu untuk PT Berkah Kapal Jaya (BKJ Group) dengan CMS dinamis dan sistem lokalisasi multi-bahasa.",
-    proj1Tag: "Aplikasi Mobile · Geolokasi",
-    proj1Status: "Proyek Rilis",
-    proj1Title: "FOODIFY — Food Delivery App",
-    proj1Desc: "Aplikasi mobile pesan-antar makanan khusus Kota Medan dengan peta interaktif OpenStreetMap, deteksi GPS otomatis, dan simulasi pelacakan kurir real-time.",
-    proj2Tag: "Fullstack · Aplikasi Web",
-    proj2Status: "Proyek Rilis",
-    proj2Title: "Wilmar Buku — Sistem Donasi",
-    proj2Desc: "Platform donasi buku perpustakaan terpusat dengan TALL stack, Google OAuth 2.0, laporan PDF otomatis, dan WebSockets real-time via Laravel Reverb.",
-    proj3Tag: "Aplikasi Web",
-    proj3Status: "Proyek Rilis",
-    proj3Title: "CINTA — Portal Konseling Sekolah",
-    proj3Desc: "Aplikasi pelaporan anonim dan konseling sekolah untuk memfasilitasi komunikasi siswa dan guru BK dengan standar privasi tinggi dan manajemen laporan terstruktur.",
-    proj4Tag: "Platform Web",
-    proj4Status: "Proyek Rilis",
-    proj4Title: "Grow a Garden — Manajemen Kebun",
-    proj4Desc: "Platform digital manajemen kebun rumahan dan hidroponik dengan pemetaan tanaman cerdas, pantauan kelembaban tanah, dan kalender pertumbuhan otomatis.",
-    reposHeader: "Repositori GitHub (@Apisikma123)",
-    reposSync: "Tersinkronisasi via GitHub API",
-    syncingRepos: "Menyinkronkan repositori…",
-    exploreAllProjects: "Semua Karya (17)",
-    btnReadReadme: "Overview Singkat",
-    visualPreview: "Pratinjau Arsitektur Visual",
-    pricingEyebrow: "Kalkulator Biaya Website",
-    pricingTitle1: "Estimasi Biaya",
-    pricingTitle2: "Website Interaktif.",
-    pricingBio: "Pilih kebutuhan website Anda secara interaktif dan dapatkan estimasi harga instan yang siap dikonsultasikan via WhatsApp.",
-    studioEyebrow: "Harga & Layanan Web",
-    studioTitle1: "Estimasi Transparan &",
-    studioTitle2: "Layanan Pembuatan Web.",
-    studioDesc: "Layanan pembuatan website profesional dengan paket jelas dan harga transparan — mulai dari landing page konversi tinggi hingga sistem web app custom.",
-    studioCard1Desc: "Halaman promosi cepat untuk iklan campaign, lead generation, dan direct WhatsApp conversion.",
-    studioCard2Desc: "Website profil bisnis resmi untuk UMKM & corporate, multi-halaman dengan SEO Google ready.",
-    studioCard3Desc: "Fullstack web application, SaaS, dashboard admin, dan sistem informasi dengan API terintegrasi.",
-    studioCTATitle: "8 Paket Website + Kalkulator Biaya Interaktif",
-    studioCTADesc: "Hitung estimasi biaya transparan, pilih fitur custom, dan kirim brief langsung via WhatsApp. Mulai Rp499K.",
-    studioCTABtn: "Buka Kalkulator Harga",
+    projBkjTag: "Portal Perusahaan · Logistik Maritim",
+    projBkjStatus: "Sistem Korporat (Arsip)",
+    projBkjTitle: "BKJ Group Indonesia — Portal Logistik Perusahaan",
+    projBkjDesc: "Membangun portal web resmi untuk perusahaan logistik pelayaran, dilengkapi pengelolaan konten dinamis, profil anak usaha, dan dukungan dua bahasa (proyek arsip).",
+    projPratamaTag: "Platform Web · Layanan Jasa UMKM",
+    projPratamaStatus: "Aktif di pratama-tehnik.com",
+    projPratamaTitle: "Pratama Tehnik Service — Portal Servis Dispenser",
+    projPratamaDesc: "Membangun portal layanan servis dispenser panggilan se-Jakarta dengan pemesanan cepat via WhatsApp, kalkulator diagnosa kerusakan, dan optimasi SEO lokal Schema.org.",
+    proj1Tag: "Aplikasi Mobile · Pesan Antar Makanan",
+    proj1Status: "Aplikasi Produksi",
+    proj1Title: "FOODIFY — Aplikasi Pesan Antar Makanan",
+    proj1Desc: "Mengembangkan aplikasi mobile pemesanan makanan dengan peta rute GPS langsung, pemantauan status pesanan, dan navigasi menu yang mudah.",
+    proj2Tag: "Aplikasi Web · Donasi Buku Komunitas",
+    proj2Status: "Aktif di donasi-buku.wbi.ac.id",
+    proj2Title: "Wilmar Buku — Sistem Donasi Buku",
+    proj2Desc: "Membangun platform donasi buku terpusat yang aktif di donasi-buku.wbi.ac.id dengan login Google, pembaruan data donasi real-time via WebSockets, dan unduh laporan otomatis.",
+    proj3Tag: "Platform Web · Bimbingan Konseling Sekolah",
+    proj3Status: "Aplikasi Produksi",
+    proj3Title: "CINTA — Aplikasi Konseling Siswa",
+    proj3Desc: "Menciptakan portal pengaduan dan konseling aman bagi siswa dengan jaminan privasi penuh serta alur pencatatan kasus yang rapi bagi guru BK.",
+    proj4Tag: "Aplikasi Web · Manajemen Kebun Rumahan",
+    proj4Status: "Aplikasi Produksi",
+    proj4Title: "Grow a Garden — Aplikasi Pengelola Kebun",
+    proj4Desc: "Merancang aplikasi pencatatan kebun rumah dan hidroponik dengan jadwal penyiraman, pemantauan tanaman, dan panduan panen berkala.",
+
+    // Section 05: Contact
     contactEyebrow: "Kontak & Diskusi",
-    contactTitle1: "Mari Kolaborasi &",
-    contactTitle2: "Berkarya Bersama.",
-    contactBio: "Terbuka untuk pekerjaan full-time, proyek freelance, atau diskusi ide baru. Mari bicarakan proyek Anda.",
-    btnStartConv: "Kirim Pesan",
-    scrollFooter: "Scroll untuk Detail & Footer [07]",
-    footerEyebrow: "Footer & Kontak",
-    footerColStack: "Teknologi",
-    footerColDesign: "Desain & Kredit",
-    footerColInspiration: "INSPIRASI DESAIN",
-    creditScfo: "scfo.de ↗",
-    footerColModel: "MODEL 3D TESSERACT",
-    creditModel: "Dark Tesseract (Sketchfab) ↗",
-    footerColTypography: "TIPOGRAFI",
-    footerColAccent: "AKSEN WARNA",
-    footerEmailLabel: "EMAIL UTAMA",
-    footerPhoneLabel: "WHATSAPP / TELEPON",
-    footerLatencyLabel: "ESTIMASI RESPON",
-    footerLatencyVal: "< 12 Jam SLA",
-    footerRole: `Frontend Developer & Software Engineer © ${new Date().getFullYear()}`,
-    footerDesc: "Membangun aplikasi web modern yang cepat, responsif, dan mudah digunakan.",
-    footerColDirect: "Kontak Langsung",
-    footerColSocial: "Jaringan & Sosial",
-    footerColNav: "Navigasi Cepat",
-    footerAvailable: "TERSEDIA // PROYEK PILIHAN",
+    contactTitle1: "Mari Membangun Sesuatu",
+    contactTitle2: "Yang Bermanfaat Bersama",
+    contactBio: "Saya terbuka untuk peluang kerja full-time, proyek kontrak, maupun kerja sama teknis. Silakan hubungi saya langsung melalui email atau WhatsApp.",
+    btnStartConv: "Kirim Email Langsung",
+    scrollFooter: "Scroll untuk info detail & tautan",
+
+    // Section 06: Footer
+    footerEyebrow: "Ringkasan & Kontak",
+    footerAvailable: "Terbuka untuk Peran Full-time & Kontrak",
     footerLocation: "Medan, Indonesia (UTC+7 / WIB)",
+    footerColDirect: "Kontak Langsung",
+    footerEmailLabel: "EMAIL UTAMA",
+    footerPhoneLabel: "WHATSAPP",
+    footerLatencyLabel: "WAKTU RESPON",
+    footerLatencyVal: "Dalam beberapa jam",
+    footerColStack: "Teknologi Utama",
     footerRights: "Hak Cipta Dilindungi.",
-    footerBuiltWith: "Dibangun dengan Three.js, GSAP & Teknologi Web Modern.",
-    backToTop: "Kembali ke Atas",
-    waUrl: getProtectedWhatsAppUrl("Halo Aga, saya tertarik untuk diskusi proyek."),
+    footerBuiltWith: "Dibangun dengan Vite, CSS Murni, Tailwind v4, dan standar web modern. 100% 2D pada mobile.",
+    waUrl: getProtectedWhatsAppUrl("Halo Aga, saya melihat portofolio Anda dan tertarik untuk mendiskusikan peluang kerja sama."),
   },
 };
 
-// ─── Cookie Persistence Engine ───
+// ═══════════════════════════════════════════════════════════
+// 2. COOKIE & STORAGE HELPERS
+// ═══════════════════════════════════════════════════════════
 export const getCookie = (name) => {
   if (typeof document === "undefined") return null;
-  const match = document.cookie.match(new RegExp("(^|;)\\s*" + name + "=([^;]*)"));
-  return match ? decodeURIComponent(match[2]) : null;
+  const match = document.cookie.match(new RegExp(`(^|;\\s*)(${name})=([^;]*)`));
+  return match ? decodeURIComponent(match[3]) : null;
 };
 
 export const setCookie = (name, value, days = 365) => {
   if (typeof document === "undefined") return;
-  const d = new Date();
-  d.setTime(d.getTime() + days * 86400000);
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/;SameSite=Lax`;
 };
 
-export let currentLang = getCookie("aga_lang") || (typeof localStorage !== "undefined" ? localStorage.getItem("aga_portfolio_lang") : null) || "en";
+export let currentLang = getCookie("aga_lang") || (typeof localStorage !== "undefined" && localStorage.getItem("aga_portfolio_lang")) || "en";
 export const currentTheme = "dark";
 
-// ─── Theme Mode Architecture (Dark Obsidian Fixed) ───
 export const setTheme = () => {
-  document.documentElement.setAttribute("data-theme", "dark");
-  try {
-    localStorage.setItem("aga_portfolio_theme", "dark");
-  } catch (e) {}
-  setCookie("aga_theme", "dark", 365);
+  if (typeof document !== "undefined") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
 };
 window.setTheme = setTheme;
 window.toggleTheme = () => {};
 
-// ─── Animated Bilingual Transition Engine (GSAP Morph) ───
 export const setLanguage = (lang, animate = true) => {
   if (!TRANSLATIONS[lang]) return;
-  const dict = TRANSLATIONS[lang];
   currentLang = lang;
-  try {
-    localStorage.setItem("aga_portfolio_lang", lang);
-  } catch (e) {}
   setCookie("aga_lang", lang, 365);
+  if (typeof localStorage !== "undefined") {
+    localStorage.setItem("aga_portfolio_lang", lang);
+  }
   document.documentElement.setAttribute("lang", lang);
 
-  // Update Buttons Active State with micro-animation
-  const btnEn = document.getElementById("btn-lang-en");
-  const btnId = document.getElementById("btn-lang-id");
-  if (btnEn && btnId) {
-    if (lang === "en") {
-      btnEn.classList.add("active");
-      btnId.classList.remove("active");
+  const dict = TRANSLATIONS[lang];
+
+  // Update active states on language buttons
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    const isTarget = btn.id === `btn-lang-${lang}` || btn.getAttribute("data-lang") === lang;
+    if (isTarget) {
+      btn.classList.add("active", "text-white", "font-bold");
+      btn.classList.remove("text-zinc-400");
     } else {
-      btnId.classList.add("active");
-      btnEn.classList.remove("active");
+      btn.classList.remove("active", "text-white", "font-bold");
+      btn.classList.add("text-zinc-400");
     }
-  }
-
-  // Dynamic WhatsApp Message Sync based on language
-  const contactWaBtn = document.getElementById("contact-whatsapp-btn");
-  const footerWaLink = document.getElementById("footer-whatsapp-link");
-  if (contactWaBtn && dict.waUrl) {
-    contactWaBtn.href = dict.waUrl;
-  }
-  if (footerWaLink && dict.waUrl) {
-    footerWaLink.href = dict.waUrl;
-  }
-
-  // Animated holographic text morph sequence
-  const i18nElements = document.querySelectorAll("[data-i18n]");
-
-  if (!animate) {
-    i18nElements.forEach((el) => {
-      const key = el.getAttribute("data-i18n");
-      if (dict[key]) {
-        el.textContent = dict[key];
-      }
-    });
-    if (window.renderPricingOnLangChange) {
-      window.renderPricingOnLangChange(lang);
-    }
-    return;
-  }
-
-  // Smooth micro-fade for language switch
-  i18nElements.forEach((el) => {
-    el.style.transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
-    el.style.opacity = "0";
-    el.style.transform = "translateY(-3px)";
   });
 
-  setTimeout(() => {
-    i18nElements.forEach((el) => {
-      const key = el.getAttribute("data-i18n");
-      if (dict[key]) {
-        el.textContent = dict[key];
-      }
-      el.style.transform = "translateY(3px)";
-    });
-    if (window.renderPricingOnLangChange) {
-      window.renderPricingOnLangChange(lang);
+  // Apply translations to all DOM elements with data-i18n
+  const translatableElements = document.querySelectorAll("[data-i18n]");
+  translatableElements.forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key] && el.textContent !== dict[key]) {
+      el.textContent = dict[key];
     }
-    requestAnimationFrame(() => {
-      i18nElements.forEach((el) => {
-        el.style.transition = "opacity 0.22s ease-out, transform 0.22s ease-out";
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
-      });
-      setTimeout(() => {
-        i18nElements.forEach((el) => {
-          el.style.removeProperty("transition");
-          el.style.removeProperty("transform");
-        });
-      }, 250);
-    });
-  }, 150);
+  });
+
+  // Update contact WhatsApp URL
+  const waBtn = document.getElementById("contact-whatsapp-btn");
+  if (waBtn && dict.waUrl) {
+    waBtn.onclick = (e) => {
+      e.preventDefault();
+      window.open(dict.waUrl, "_blank", "noopener,noreferrer");
+    };
+  }
 };
 window.setLanguage = setLanguage;
 
-window.switchView = async (viewName, param, updateHash = true) => {
-  const projectDetailEl = document.getElementById("project-detail-view");
-  if (viewName === "project") {
-    if (window.openProjectDetail && window.openProjectDetail !== openProjectDetail) {
-      return window.openProjectDetail(param);
-    }
-    if (!projectDetailEl) {
-      window.location.href = "/project.html?id=" + encodeURIComponent(param || "foodify");
-      return;
-    }
-  }
-  if (viewName === "all-projects") {
-    window.location.href = "/projects.html";
-    return;
-  }
-  if (viewName === "portfolio") {
-    if (projectDetailEl) {
-      projectDetailEl.classList.add("hidden");
-      projectDetailEl.style.display = "none";
-      document.body.style.overflow = "auto";
-      window.currentSPAView = "portfolio";
-    }
-  }
-};
-
-export const openProjectDetail = (projectId) => {
-  if (window.__openProjectDetailImpl) {
-    return window.__openProjectDetailImpl(projectId);
-  }
-  const projectDetailEl = document.getElementById("project-detail-view");
-  if (!projectDetailEl) {
-    window.location.href = "/project.html?id=" + encodeURIComponent(projectId || "foodify");
-  }
-};
-window.openProjectDetail = openProjectDetail;
-
 // ═══════════════════════════════════════════════════════════
-// 2. LOCKED FULL-PAGE AUTO-SNAP ENGINE & NAVIGATION CONTROLS
+// 3. NAVIGATION & SCROLL SYSTEM
 // ═══════════════════════════════════════════════════════════
 let isAnimating = false;
-let lastScrollTime = 0;
-const WHEEL_COOLDOWN = 800;
-export const scrollToSection = (index, immediate = false) => {
-  if (window.currentSPAView && window.currentSPAView !== "portfolio") {
-    if (window.switchView) window.switchView("portfolio", index);
-    return;
-  }
-  const safeIndex = Math.max(0, Math.min(index, SECTION_IDS.length - 1));
-  if (safeIndex === currentSectionIndex && !immediate) return;
 
+export const scrollToSection = (index, immediate = false) => {
+  const safeIndex = Math.max(0, Math.min(index, SECTION_IDS.length - 1));
   currentSectionIndex = safeIndex;
+
   const targetEl = document.getElementById(SECTION_IDS[safeIndex]);
   if (!targetEl) return;
 
-  isAnimating = true;
-  lastScrollTime = Date.now();
   updateActiveSidebar(safeIndex);
 
   const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -481,19 +377,18 @@ export const scrollToSection = (index, immediate = false) => {
 
   if (immediate) {
     window.scrollTo(0, targetY);
-    isAnimating = false;
     return;
   }
 
+  isAnimating = true;
   window.scrollTo({
     top: targetY,
-    behavior: "smooth"
+    behavior: "smooth",
   });
 
   setTimeout(() => {
     isAnimating = false;
-    lastScrollTime = Date.now();
-  }, 500);
+  }, 450);
 };
 window.scrollToSection = scrollToSection;
 window.getCurrentSectionIndex = () => currentSectionIndex;
@@ -518,134 +413,62 @@ export const updateActiveSidebar = (index) => {
       item.classList.remove("active");
     }
   });
+
+  const navLinks = document.querySelectorAll("header nav a");
+  navLinks.forEach((link, idx) => {
+    if (idx === index) {
+      link.classList.add("text-[#DC143C]", "font-semibold");
+      link.classList.remove("text-zinc-400");
+    } else {
+      link.classList.remove("text-[#DC143C]", "font-semibold");
+      link.classList.add("text-zinc-400");
+    }
+  });
 };
 
-// ─── Reusable High-Performance Drag-To-Scroll Engine (Desktop Mouse & Touch) ───
 export const enableDragToScroll = (track) => {
   if (!track || track._dragInitialized) return;
   track._dragInitialized = true;
 
   let isDown = false;
   let startX = 0;
-  let startY = 0;
   let scrollLeft = 0;
-  let hasDragged = false;
-  let velX = 0;
-  let lastX = 0;
-  let lastTime = 0;
-  let rafMomentum = null;
 
-  track.style.cursor = "grab";
-  track.style.setProperty("-webkit-user-select", "none");
-  track.style.setProperty("user-select", "none");
-
-  // Prevent browser native image/link ghost drag
   track.addEventListener("dragstart", (e) => {
     e.preventDefault();
     return false;
   });
 
-  const onPointerDown = (e) => {
-    // Desktop mouse only — mobile touch devices use native 120Hz momentum scrolling without gesture conflict
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-    if (e.target && e.target.closest("button, input, textarea, select")) return;
-
-    if (rafMomentum) {
-      cancelAnimationFrame(rafMomentum);
-      rafMomentum = null;
-    }
-
+  track.addEventListener("mousedown", (e) => {
+    if (e.target && e.target.closest("button, a, input")) return;
     isDown = true;
-    hasDragged = false;
-    startX = e.clientX;
-    startY = e.clientY;
-    lastX = e.clientX;
-    lastTime = performance.now();
+    startX = e.pageX - track.offsetLeft;
     scrollLeft = track.scrollLeft;
-    velX = 0;
+  });
 
-    window.addEventListener("pointermove", onPointerMove, { passive: false });
-    window.addEventListener("pointerup", onPointerUp, { once: true });
-    window.addEventListener("pointercancel", onPointerUp, { once: true });
-  };
-
-  const onPointerMove = (e) => {
-    if (!isDown) return;
-
-    const currentX = e.clientX;
-    const diffX = currentX - startX;
-    const diffY = Math.abs(e.clientY - startY);
-
-    if (Math.abs(diffX) > 4 || diffY > 4) {
-      hasDragged = true;
-    }
-
-    if (hasDragged) {
-      e.preventDefault();
-      track.scrollLeft = scrollLeft - diffX;
-
-      const now = performance.now();
-      const dt = Math.max(1, now - lastTime);
-      velX = (currentX - lastX) / dt;
-      lastX = currentX;
-      lastTime = now;
-    }
-  };
-
-  const onPointerUp = () => {
-    if (!isDown) return;
+  track.addEventListener("mouseleave", () => {
     isDown = false;
-    window.removeEventListener("pointermove", onPointerMove);
+  });
 
-    track.style.cursor = "grab";
+  track.addEventListener("mouseup", () => {
+    isDown = false;
+  });
 
-    // Inertia release if dragged with speed
-    if (hasDragged && Math.abs(velX) > 0.15) {
-      let momentumVel = velX * 16;
-      const momentumLoop = () => {
-        if (Math.abs(momentumVel) < 0.5) {
-          track.style.removeProperty("scroll-behavior");
-          track.style.removeProperty("scroll-snap-type");
-          rafMomentum = null;
-          return;
-        }
-        track.scrollLeft -= momentumVel;
-        momentumVel *= 0.88;
-        rafMomentum = requestAnimationFrame(momentumLoop);
-      };
-      rafMomentum = requestAnimationFrame(momentumLoop);
-    } else {
-      track.style.removeProperty("scroll-behavior");
-      track.style.removeProperty("scroll-snap-type");
-    }
-
-    setTimeout(() => {
-      hasDragged = false;
-    }, 120);
-  };
-
-  track.addEventListener("pointerdown", onPointerDown);
-
-  // Suppress link click / modal open when user was dragging
-  track.addEventListener(
-    "click",
-    (e) => {
-      if (hasDragged) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    },
-    true
-  );
+  track.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    track.scrollLeft = scrollLeft - walk;
+  });
 };
 window.enableDragToScroll = enableDragToScroll;
 
 export const initNavigationAndKeyboard = () => {
-  const sideNavItems = document.querySelectorAll(".side-nav-item");
-
-  // Clickable sidebar numeric navigation
-  sideNavItems.forEach((item) => {
-    item.addEventListener("click", () => {
+  // Click on side nav items
+  document.querySelectorAll(".side-nav-item").forEach((item) => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
       const idx = parseInt(item.getAttribute("data-index"), 10);
       if (!isNaN(idx)) {
         scrollToSection(idx);
@@ -653,19 +476,22 @@ export const initNavigationAndKeyboard = () => {
     });
   });
 
-  // Native IntersectionObserver for active section tracking (0 forced reflows)
+  // IntersectionObserver for tracking current visible section
   if (typeof IntersectionObserver !== "undefined") {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && (!window.currentSPAView || window.currentSPAView === "portfolio") && !isAnimating) {
-          const index = SECTION_IDS.indexOf(entry.target.id);
-          if (index !== -1) {
-            currentSectionIndex = index;
-            updateActiveSidebar(index);
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isAnimating) {
+            const index = SECTION_IDS.indexOf(entry.target.id);
+            if (index !== -1) {
+              currentSectionIndex = index;
+              updateActiveSidebar(index);
+            }
           }
-        }
-      });
-    }, { rootMargin: "-30% 0px -30% 0px" });
+        });
+      },
+      { rootMargin: "-30% 0px -30% 0px" }
+    );
 
     SECTION_IDS.forEach((id) => {
       const el = document.getElementById(id);
@@ -673,52 +499,33 @@ export const initNavigationAndKeyboard = () => {
     });
   }
 
-  // ─── 0. Universal Drag-To-Scroll Engine for Horizontal Tracks ───
-  const initHorizontalDragScroll = () => {
-    const tracks = document.querySelectorAll(
-      "#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto"
-    );
-    tracks.forEach((track) => enableDragToScroll(track));
-  };
-  initHorizontalDragScroll();
+  // Enable drag scroll on horizontal elements
+  const horizontalTracks = document.querySelectorAll("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
+  horizontalTracks.forEach((track) => enableDragToScroll(track));
 
-  // ─── 1. Locked Mouse Wheel & Trackpad Snap (Strict Scene-by-Scene Cooldown) ───
+  // ─── 1. Desktop Lock Scroller (Mouse Wheel Snap Section-by-Section) ───
+  let lastScrollTime = 0;
+  const WHEEL_COOLDOWN = 600;
+
   window.addEventListener(
     "wheel",
     (e) => {
+      // STRICTLY DESKTOP ONLY (>= 1024px) — mobile gets 100% fluid native scrolling!
+      if (window.innerWidth < 1024) return;
       if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
 
       const target = e.target;
-      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, #pricing-cards-track, .overflow-x-auto");
-      if (isHorizontalContainer) {
-        // Trackpad horizontal swipe
-        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-          return;
-        }
-
-        // Vertical mouse wheel over horizontal scroll container: convert to horizontal track scrolling
-        const maxScrollLeft = isHorizontalContainer.scrollWidth - isHorizontalContainer.clientWidth;
-        if (maxScrollLeft > 5) {
-          const atStart = isHorizontalContainer.scrollLeft <= 4;
-          const atEnd = isHorizontalContainer.scrollLeft >= maxScrollLeft - 4;
-
-          if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
-            e.preventDefault();
-            isHorizontalContainer.style.setProperty("scroll-behavior", "auto", "important");
-            isHorizontalContainer.scrollLeft += e.deltaY * 1.25;
-            clearTimeout(isHorizontalContainer._wheelTimer);
-            isHorizontalContainer._wheelTimer = setTimeout(() => {
-              isHorizontalContainer.style.removeProperty("scroll-behavior");
-            }, 100);
-            return;
-          }
-        }
+      // Allow native horizontal scroll on code matrix / carousel / horizontal tracks
+      const isHorizontalContainer = target && target.closest("#activity-heatmap-scroll, #projects-carousel-track, .overflow-x-auto");
+      if (isHorizontalContainer && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        return;
       }
 
+      // Allow native vertical scrolling inside open modals or full-page detail views
       const isModal = target && target.closest("#modal-container, .modal-scroll, #project-detail-view, #all-projects-view");
       if (isModal) return;
 
-      // STRICT LOCK: Suppress free scrolling in portfolio view
+      // STRICT LOCK ON DESKTOP: Suppress loose free scrolling and snap scene-by-scene
       e.preventDefault();
 
       if (isAnimating) return;
@@ -728,14 +535,16 @@ export const initNavigationAndKeyboard = () => {
         return;
       }
 
-      if (Math.abs(e.deltaY) < 18) return;
+      if (Math.abs(e.deltaY) < 16) return;
 
       if (e.deltaY > 0) {
         if (currentSectionIndex < SECTION_IDS.length - 1) {
+          lastScrollTime = now;
           scrollToSection(currentSectionIndex + 1);
         }
       } else {
         if (currentSectionIndex > 0) {
+          lastScrollTime = now;
           scrollToSection(currentSectionIndex - 1);
         }
       }
@@ -743,434 +552,86 @@ export const initNavigationAndKeyboard = () => {
     { passive: false }
   );
 
-  // ─── 2. Mobile Touch: Native fluid 120Hz momentum scrolling without gesture hijacking ───
-  // Active section tracking is handled seamlessly by IntersectionObserver (lines 658-674)
-
-  // Keyboard Navigation (Fast & Spammable W / S / ArrowUp / ArrowDown / PageUp / PageDown / Space / K)
+  // ─── 2. Keyboard Navigation (W / S / ArrowUp / ArrowDown / PageUp / PageDown / Home / End) ───
   let lastKeyTime = 0;
-  const KEY_COOLDOWN = 140;
+  const KEY_COOLDOWN = 160;
 
   window.addEventListener("keydown", (e) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+    if (window.currentSPAView && window.currentSPAView !== "portfolio") return;
 
-    if (!window.currentSPAView || window.currentSPAView === "portfolio") {
-      const now = Date.now();
+    const now = Date.now();
 
-      if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown") {
-        e.preventDefault();
-        if (now - lastKeyTime < KEY_COOLDOWN) return;
-        if (currentSectionIndex < SECTION_IDS.length - 1) {
-          lastKeyTime = now;
-          scrollToSection(currentSectionIndex + 1);
-        }
-      } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp") {
-        e.preventDefault();
-        if (now - lastKeyTime < KEY_COOLDOWN) return;
-        if (currentSectionIndex > 0) {
-          lastKeyTime = now;
-          scrollToSection(currentSectionIndex - 1);
-        }
-      } else if (e.key === "Home") {
-        e.preventDefault();
+    if (e.key === "ArrowDown" || e.key.toLowerCase() === "s" || e.key === "PageDown") {
+      e.preventDefault();
+      if (now - lastKeyTime < KEY_COOLDOWN) return;
+      if (currentSectionIndex < SECTION_IDS.length - 1) {
         lastKeyTime = now;
-        scrollToSection(0);
-      } else if (e.key === "End") {
-        e.preventDefault();
+        scrollToSection(currentSectionIndex + 1);
+      }
+    } else if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === "PageUp") {
+      e.preventDefault();
+      if (now - lastKeyTime < KEY_COOLDOWN) return;
+      if (currentSectionIndex > 0) {
         lastKeyTime = now;
-        scrollToSection(SECTION_IDS.length - 1);
-      } else if (e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        lastKeyTime = now;
-        scrollToSection(4); // 05 Pricing
-      } else if (currentSectionIndex === 3) {
-        if (e.key === "ArrowLeft" && window.slideProjectsCarousel) {
-          window.slideProjectsCarousel(-1);
-        } else if (e.key === "ArrowRight" && window.slideProjectsCarousel) {
-          window.slideProjectsCarousel(1);
-        }
+        scrollToSection(currentSectionIndex - 1);
+      }
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      lastKeyTime = now;
+      scrollToSection(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      lastKeyTime = now;
+      scrollToSection(SECTION_IDS.length - 1);
+    } else if (currentSectionIndex === 3) {
+      if (e.key === "ArrowLeft" && window.slideProjectsCarousel) {
+        window.slideProjectsCarousel(-1);
+      } else if (e.key === "ArrowRight" && window.slideProjectsCarousel) {
+        window.slideProjectsCarousel(1);
       }
     }
   });
 };
 
 // ═══════════════════════════════════════════════════════════
-// CLIENT-FRIENDLY LUXURY PRELOADER TIMELINE (Aerospace Blast-Off)
+// 4. INSTANT PRELOADER DISMISSAL (Zero Artificial Latency)
 // ═══════════════════════════════════════════════════════════
 export const initPreloaderTimeline = () => {
   const preloaderEl = document.getElementById("web-preloader");
-  if (!preloaderEl) {
-    document.body.style.overflow = "auto";
-    return;
-  }
-
-  // Inverted: if NOT a real user (no is-real-user class), skip preloader entirely
-  const isRealUser = document.documentElement.classList.contains("is-real-user");
-
-  if (!isRealUser) {
+  if (preloaderEl) {
     preloaderEl.style.display = "none";
     preloaderEl.remove();
-    document.body.style.overflow = "auto";
-    return;
   }
-
-  const barEl = document.getElementById("preloader-bar");
-  const percentEl = document.getElementById("preloader-percent");
-  const statusEl = document.getElementById("preloader-status");
-  const rocketCenter = document.getElementById("preloader-rocket-center");
-  const flameNozzle = document.getElementById("apple-rocket-flame") || rocketCenter;
-  const textGroup = document.getElementById("preloader-text-group");
-
-  const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
-  const PRELOADER_STAGES = isEn ? [
-    { pct: 35, text: "Preparing visual experience & shaders..." },
-    { pct: 70, text: "Loading projects & pipeline data..." },
-    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
-    { pct: 100, text: "Ignition ready! Launching experience..." }
-  ] : [
-    { pct: 35, text: "Menyiapkan visual & shader 3D..." },
-    { pct: 70, text: "Memuat karya & pipeline proyek..." },
-    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
-    { pct: 100, text: "Siap meluncur! Membuka halaman..." }
-  ];
-
-  let launchTriggered = false;
-
-  const triggerLaunch = () => {
-    if (launchTriggered) return;
-    launchTriggered = true;
-
-    try {
-      window.dispatchEvent(new CustomEvent("start3D"));
-    } catch (e) {}
-
-    preloaderEl.style.pointerEvents = "none";
-    preloaderEl.classList.add("preloader-launching");
-
-    // Allow smoke contrail to linger and softly fade out over the hero before unmounting
-    setTimeout(() => {
-      preloaderEl.style.display = "none";
-      preloaderEl.remove();
-      document.body.style.overflow = "auto";
-    }, 1600);
-  };
-
-  let lastDisplayedPct = -1;
-  const updateDisplay = (pct, text) => {
-    const clamped = Math.min(100, Math.max(0, pct));
-    const roundPct = Math.floor(clamped);
-    const progress = clamped / 100;
-
-    if (barEl) {
-      barEl.style.transform = `scaleX(${progress}) translateZ(0)`;
-    }
-    if (percentEl && roundPct !== lastDisplayedPct) {
-      lastDisplayedPct = roundPct;
-      percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
-    }
-    if (statusEl && text && statusEl.textContent !== text) {
-      statusEl.textContent = text;
-    }
-  };
-
-  // ═══════════════════════════════════════════════════════════
-  // DYNAMIC SYNCHRONIZED PRELOADER PROGRESS ENGINE (Zero Stutter, 120fps Monotonic)
-  // ═══════════════════════════════════════════════════════════
-  let targetPct = 0;
-  let visualPct = 0;
-  let lastProgressTime = performance.now();
-  let currentStageText = PRELOADER_STAGES[0].text;
-  let isReadyForLaunch = false;
-
-  // Real-time progress synchronization with 3D scene & dynamic data loaders
-  window.__setPreloaderProgress = (val) => {
-    const num = Number(val);
-    if (!isNaN(num) && num > targetPct) {
-      targetPct = Math.min(100, num);
-    }
-  };
-
-  const startProgressTime = performance.now();
-
-  const animStep = (now) => {
-    if (launchTriggered) return;
-
-    const delta = Math.min(48, Math.max(1, now - lastProgressTime));
-    lastProgressTime = now;
-
-    const elapsed = now - startProgressTime;
-
-    // 1. Smooth baseline target cruise (glides towards 88% over ~1500ms)
-    const baseProgress = Math.min(0.88, Math.pow(elapsed / 1600, 0.92) * 0.88);
-    const basePct = baseProgress * 100;
-    if (basePct > targetPct && targetPct < 88) {
-      targetPct = basePct;
-    }
-
-    // 2. When 3D signals ready, glide target smoothly to 100%
-    if (window.__is3DReady && targetPct < 100) {
-      targetPct = 100;
-    }
-
-    // 3. Butter-smooth monotonic progression:
-    // Guarantees visualPct moves forward steadily, never skipping or stuttering
-    const diff = targetPct - visualPct;
-    if (diff > 0) {
-      // At 60fps (delta ≈ 16.6ms), max step is ~0.9%, ensuring sequential number ticks (01, 02, 03... 100)
-      const step = Math.min(diff * 0.08 + 0.30, delta * 0.055);
-      visualPct = Math.min(targetPct, visualPct + step);
-    }
-
-    // Dynamic stage status text
-    if (visualPct >= 94) currentStageText = PRELOADER_STAGES[3].text;
-    else if (visualPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
-    else if (visualPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
-    else currentStageText = PRELOADER_STAGES[0].text;
-
-    updateDisplay(visualPct, currentStageText);
-
-    // 4. Trigger liftoff ONLY when visual reaches 99.5% AND 3D is verified ready (or failsafe timeout)
-    const is3DVerified = Boolean(window.__is3DReady);
-    const isTimedOut = (now - startProgressTime) > 3800;
-
-    if (visualPct >= 99.5 && (is3DVerified || isTimedOut)) {
-      updateDisplay(100, PRELOADER_STAGES[3].text);
-      if (!isReadyForLaunch) {
-        isReadyForLaunch = true;
-        // Brief 120ms ignition pause: allows plasma thrusters to flare before liftoff
-        setTimeout(triggerLaunch, 120);
-      }
-    } else {
-      requestAnimationFrame(animStep);
-    }
-  };
-
-  requestAnimationFrame(animStep);
-
-  // Safety Failsafe: if device or network is slow, advance target to 100% gracefully
-  setTimeout(() => {
-    if (targetPct < 100) {
-      targetPct = 100;
-    }
-  }, 3200);
-
-  // Hard Failsafe: Always dismiss preloader after 4200ms max
-  setTimeout(() => {
-    if (!launchTriggered) triggerLaunch();
-  }, 4200);
+  document.body.style.overflow = "auto";
+  document.documentElement.classList.add("styles-ready");
+  try {
+    window.dispatchEvent(new CustomEvent("start3D"));
+  } catch (e) {}
 };
 
 // ═══════════════════════════════════════════════════════════
-// FLUID PAGE NAVIGATION TRANSITION ENGINE
+// 5. MASTER CRITICAL INITIALIZATION
 // ═══════════════════════════════════════════════════════════
-export const initPageTransitionLinks = () => {
-  document.addEventListener("click", (e) => {
-    const link = e.target.closest("a");
-    if (!link) return;
-
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("javascript:") || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("https://wa.me") || link.target === "_blank") {
-      return;
-    }
-
-    const isInternalPage = href.includes("pricing.html") || href.includes("projects.html") || href.includes("project.html");
-
-    if (isInternalPage) {
-      e.preventDefault();
-      const targetEls = document.querySelectorAll("#portfolio-view, header, #side-nav, footer");
-      targetEls.forEach((el) => {
-        el.style.transition = "opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)";
-        el.style.opacity = "0";
-        el.style.transform = "translateY(-16px) scale(0.99)";
-      });
-      setTimeout(() => {
-        window.location.href = href;
-      }, 240);
-    }
-  });
-};
-
-// ═══════════════════════════════════════════════════════════
-// GLOBAL VELVETY 3D TILT ENGINE (ZERO CLIPPING + ZERO EDGE JITTER)
-// ═══════════════════════════════════════════════════════════
-export const initGlobalCardTilt = () => {
-  if (typeof window === "undefined") return;
-
-  const CARD_SELECTOR = `
-    [data-tilt],
-    .carousel-card,
-    .pricing-carousel-card,
-    #activity-standalone-card,
-    .activity-standalone-card,
-    .spatial-card,
-    .glass-card,
-    .project-card,
-    .pricing-card,
-    #pricing-cards-track > a,
-    #projects-carousel-track > div,
-    #contact a.btn-crimson,
-    #contact a.btn-glass
-  `;
-
-  let activeCard = null;
-  let cachedRect = null;
-  let targetRotX = 0;
-  let targetRotY = 0;
-  let currentRotX = 0;
-  let currentRotY = 0;
-  let rafId = null;
-
-  const maxTilt = 6.5; // Controlled, elegant, unclipped tilt angle
-
-  const updateTiltPhysics = () => {
-    if (!activeCard) {
-      rafId = null;
-      return;
-    }
-
-    currentRotX += (targetRotX - currentRotX) * 0.12;
-    currentRotY += (targetRotY - currentRotY) * 0.12;
-
-    activeCard.style.setProperty(
-      "transform",
-      `perspective(800px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`,
-      "important"
-    );
-
-    const diff = Math.abs(targetRotX - currentRotX) + Math.abs(targetRotY - currentRotY);
-
-    if (activeCard && (Math.abs(targetRotX) > 0.05 || Math.abs(targetRotY) > 0.05 || diff > 0.01)) {
-      rafId = requestAnimationFrame(updateTiltPhysics);
-    } else if (activeCard) {
-      activeCard.style.setProperty(
-        "transition",
-        "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-        "important"
-      );
-      activeCard.style.setProperty(
-        "transform",
-        "perspective(800px) rotateX(0deg) rotateY(0deg)",
-        "important"
-      );
-      const cardToReset = activeCard;
-      setTimeout(() => {
-        if (activeCard !== cardToReset) {
-          cardToReset.style.removeProperty("transition");
-          cardToReset.style.removeProperty("transform");
-          cardToReset.style.removeProperty("will-change");
-        }
-      }, 500);
-      activeCard = null;
-      cachedRect = null;
-      rafId = null;
-    }
-  };
-
-  const handlePointer = (e) => {
-    if (e.pointerType === "touch") return;
-
-    // 1. Hysteresis check: keep current activeCard locked if pointer is within a generous buffer zone around it (completely eliminates edge flicker)
-    if (activeCard && cachedRect) {
-      const isWithinHysteresis = (
-        e.clientX >= cachedRect.left - 20 &&
-        e.clientX <= cachedRect.right + 20 &&
-        e.clientY >= cachedRect.top - 20 &&
-        e.clientY <= cachedRect.bottom + 20
-      );
-
-      if (isWithinHysteresis) {
-        const normX = Math.max(-1, Math.min(1, ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1));
-        const normY = Math.max(-1, Math.min(1, ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1));
-
-        targetRotX = -normY * maxTilt;
-        targetRotY = normX * maxTilt;
-
-        if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
-        return;
-      }
-    }
-
-    // 2. Look for new card
-    const card = e.target && e.target.closest ? e.target.closest(CARD_SELECTOR) : null;
-
-    if (card && (!card.closest("article") && card.id !== "detail-view-article" && !card.closest("#side-nav") && !card.closest("nav"))) {
-      if (activeCard !== card) {
-        if (activeCard) {
-          activeCard.style.setProperty("transition", "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)", "important");
-          activeCard.style.setProperty("transform", "perspective(800px) rotateX(0deg) rotateY(0deg)", "important");
-        }
-        activeCard = card;
-        activeCard.style.setProperty("transition", "none", "important");
-        activeCard.style.setProperty("will-change", "transform", "important");
-        activeCard.style.setProperty("transform-style", "preserve-3d", "important");
-        cachedRect = activeCard.getBoundingClientRect();
-        currentRotX = 0;
-        currentRotY = 0;
-      }
-
-      if (!cachedRect) cachedRect = activeCard.getBoundingClientRect();
-      if (cachedRect.width === 0 || cachedRect.height === 0) return;
-
-      const normX = Math.max(-1, Math.min(1, ((e.clientX - cachedRect.left) / cachedRect.width) * 2 - 1));
-      const normY = Math.max(-1, Math.min(1, ((e.clientY - cachedRect.top) / cachedRect.height) * 2 - 1));
-
-      targetRotX = -normY * maxTilt;
-      targetRotY = normX * maxTilt;
-
-      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
-    } else if (activeCard) {
-      targetRotX = 0;
-      targetRotY = 0;
-      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
-    }
-  };
-
-  window.addEventListener("pointermove", handlePointer, { passive: true });
-
-  window.addEventListener("pointerleave", () => {
-    if (activeCard) {
-      targetRotX = 0;
-      targetRotY = 0;
-      if (!rafId) rafId = requestAnimationFrame(updateTiltPhysics);
-    }
-  }, { passive: true });
-};
-window.initGlobalCardTilt = initGlobalCardTilt;
-
-// ─── Initial Execution for Critical Shell ───
-document.documentElement.setAttribute("data-theme", currentTheme);
-document.documentElement.setAttribute("lang", currentLang);
-
 export const initCritical = () => {
   const currentYear = new Date().getFullYear();
-  document.querySelectorAll('#footer-year, .footer-dynamic-year').forEach((el) => {
+  document.querySelectorAll("#footer-year, .footer-dynamic-year").forEach((el) => {
     el.textContent = currentYear;
   });
-  setTheme(currentTheme, false);
 
-  // Navigation runs immediately
+  setTheme();
+  initPreloaderTimeline();
   initNavigationAndKeyboard();
 
-  // Card tilt is non-blocking — initialize on first pointer interaction
-  const startTilt = () => {
-    initGlobalCardTilt();
-    window.removeEventListener("pointermove", startTilt);
-    window.removeEventListener("pointerdown", startTilt);
-  };
-  window.addEventListener("pointermove", startTilt, { once: true, passive: true });
-  window.addEventListener("pointerdown", startTilt, { once: true, passive: true });
-
-  // Language init (only parse DOM if user preferred non-English language)
   if (currentLang !== "en") {
     setLanguage(currentLang, false);
   }
-  initPreloaderTimeline();
-  initPageTransitionLinks();
 };
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    requestAnimationFrame(initCritical);
-  });
-} else {
-  requestAnimationFrame(initCritical);
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCritical, { once: true });
+  } else {
+    initCritical();
+  }
 }

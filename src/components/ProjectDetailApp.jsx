@@ -197,7 +197,7 @@ export default function ProjectDetailApp() {
   return (
     <div className="relative min-h-screen flex flex-col justify-between text-zinc-100 selection:bg-[#DC143C]/40">
       
-      {/* 1. TOP FLOATING NAVIGATION BAR (Matches Homepage & Pricing) */}
+      {/* 1. TOP FLOATING NAVIGATION BAR (Matches Homepage) */}
       <header className="fixed top-0 inset-x-0 z-40 pt-4 sm:pt-6 px-4 sm:px-6 md:px-12 flex justify-between items-center pointer-events-none">
         <a
           href="/#start"
@@ -213,7 +213,6 @@ export default function ProjectDetailApp() {
           <a href="/#about" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">About</a>
           <a href="/#activity" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Activity</a>
           <a href="/projects.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-[#DC143C] font-semibold transition-colors">Projects</a>
-          <a href="/pricing.html" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Studio</a>
           <a href="/#contact" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Contact</a>
           <a href="/#footer" className="eyebrow text-[0.62rem] lg:text-[0.68rem] text-zinc-300 hover:text-white transition-colors">Footer</a>
         </nav>
@@ -282,22 +281,15 @@ export default function ProjectDetailApp() {
             </a>
           </li>
           <li>
-            <a href="/pricing.html" className="side-nav-item group flex items-center text-left py-1">
-              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
-              <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
-              <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Studio</span>
-            </a>
-          </li>
-          <li>
             <a href="/#contact" className="side-nav-item group flex items-center text-left py-1">
-              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">05</span>
               <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
               <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Contact</span>
             </a>
           </li>
           <li>
             <a href="/#footer" className="side-nav-item group flex items-center text-left py-1">
-              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">07</span>
+              <span className="side-nav-num font-mono text-[0.72rem] text-zinc-500 group-hover:text-zinc-300 mr-2 tabular-nums">06</span>
               <span className="side-nav-line mr-3 h-px w-4 bg-white/20 group-hover:bg-white/50"></span>
               <span className="side-nav-label text-[0.78rem] font-light tracking-wide text-zinc-500 group-hover:text-zinc-200 transition-colors duration-300">Footer</span>
             </a>
@@ -351,8 +343,23 @@ export default function ProjectDetailApp() {
                     <rect x="14" y="14" width="7" height="7"></rect>
                     <rect x="3" y="14" width="7" height="7"></rect>
                   </svg>
-                  <span>{lang === 'en' ? 'All Works (17)' : 'Semua Karya (17)'}</span>
+                  <span>{lang === 'en' ? 'All Works (18)' : 'Semua Karya (18)'}</span>
                 </a>
+
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold cursor-pointer transition-all shadow-sm leading-none touch-manipulation active:scale-95 group"
+                  >
+                    <span>Live Demo</span>
+                    <svg className="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                )}
 
                 {project.html_url && (
                   <a
@@ -379,6 +386,7 @@ export default function ProjectDetailApp() {
                 "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
                 "grow-a-garden": "/projects/grow-a-garden.webp",
                 bkj: "/projects/bkj.webp",
+                "pratama-tehnik": "/projects/pratama-tehnik.webp",
               };
               const normId = (project.id || '').toLowerCase();
               const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (project.previewImage && KNOWN_PROJECT_IMAGES[project.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
@@ -508,6 +516,17 @@ export default function ProjectDetailApp() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2 font-semibold shadow-sm"
+                    >
+                      <span className="material-symbols-outlined text-sm">open_in_new</span>
+                      <span>Live Website</span>
+                    </a>
+                  )}
                   <a
                     href={project.html_url}
                     target="_blank"
@@ -650,8 +669,8 @@ export default function ProjectDetailApp() {
             <a href="/projects.html" className="text-[#DC143C] hover:text-white transition-colors">
               {dict.allProjects}
             </a>
-            <a href="/pricing.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              Estimasi Harga ↗
+            <a href="/#contact" className="hover:text-white transition-colors">
+              Contact
             </a>
             <a href="https://github.com/Apisikma123" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               GitHub ↗

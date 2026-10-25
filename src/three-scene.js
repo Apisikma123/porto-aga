@@ -19,6 +19,10 @@ const yieldToMain = () => {
 };
 
 export const initThreeEngine = async () => {
+  if (typeof window !== "undefined") {
+    const isMobileDevice = window.innerWidth < 1024;
+    if (isMobileDevice) return;
+  }
   const canvas = document.getElementById("bg") || document.getElementById("webgl-canvas");
   if (!canvas) return;
 
@@ -99,18 +103,15 @@ export const initThreeEngine = async () => {
   // ═══════════════════════════════════════════════════════════
   // ─── OBJECT 1: MASTER 4D TESSERACT (Hero Artifact) ───
   // ═══════════════════════════════════════════════════════════
-  const isPricingPage = typeof window !== "undefined" && window.location.pathname.includes("pricing");
   const isProjectPage = typeof window !== "undefined" && (window.location.pathname.includes("project") || (typeof document !== "undefined" && document.querySelector(".project-detail-body")));
   const tesseractGroup = new THREE.Group();
   tesseractGroup.position.set(
-    isPricingPage ? (isMobile ? 0 : 3.2) : (isProjectPage ? (isMobile ? 0 : 2.2) : (isMobile ? 0 : 2.0)),
-    isPricingPage ? (isMobile ? 1.5 : -0.2) : (isProjectPage ? (isMobile ? 1.8 : 0.8) : (isMobile ? 1.1 : 0)),
-    isPricingPage ? (isMobile ? -1.6 : -1.4) : (isProjectPage ? (isMobile ? -1.8 : -1.0) : (isMobile ? -0.8 : 0.1))
+    isProjectPage ? 2.6 : 2.7,
+    isProjectPage ? 0.8 : 0,
+    isProjectPage ? -1.0 : 0.1
   );
-  if (isPricingPage) {
-    tesseractGroup.scale.set(0.65, 0.65, 0.65);
-  } else if (isProjectPage) {
-    tesseractGroup.scale.set(isMobile ? 0.32 : 0.68, isMobile ? 0.32 : 0.68, isMobile ? 0.32 : 0.68);
+  if (isProjectPage) {
+    tesseractGroup.scale.set(0.68, 0.68, 0.68);
   }
   scene.add(tesseractGroup);
 
@@ -452,7 +453,7 @@ export const initThreeEngine = async () => {
         const totalPts = srcPos.count;
 
         // Smooth sampling mapped purely to #DC143C Primary Color
-        const stride = isMobile ? 10 : 6;
+        const stride = isMobile ? 8 : 6;
         const count = Math.floor(totalPts / stride);
         const newPos = new Float32Array(count * 3);
         const newCol = new Float32Array(count * 3);
@@ -731,10 +732,12 @@ export const initThreeEngine = async () => {
     shardGroup.add(solid);
     shardGroup.add(wire);
 
-    const spreadX = (Math.random() - 0.5) * (isMobile ? 12 : 24);
-    const spreadY = (Math.random() - 0.5) * (isMobile ? 14 : 20);
-    const spreadZ = -14 + Math.random() * 18;
-    const s = 0.5 + Math.random() * 0.9;
+    // Deep background ambient geometric dust — kept off reading axes
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const spreadX = side * (5.5 + Math.random() * 7.5);
+    const spreadY = (Math.random() - 0.5) * (isMobile ? 10 : 16);
+    const spreadZ = -18 - Math.random() * 10;
+    const s = 0.16 + Math.random() * 0.22;
     shardGroup.position.set(spreadX, spreadY, spreadZ);
     shardGroup.scale.set(s, s, s);
 
@@ -954,8 +957,8 @@ export const initThreeEngine = async () => {
 
   if (galaxiesUniverseGroup) {
     scrollTl
-      .to(galaxiesUniverseGroup.position, { z: "+=2.0", y: "-=0.6", ease: "power1.inOut", duration: 6 }, 0)
-      .to(galaxiesUniverseGroup.rotation, { z: "+=0.25", y: "+=0.18", ease: "power1.inOut", duration: 6 }, 0);
+      .to(galaxiesUniverseGroup.position, { z: "+=2.4", y: "-=0.7", ease: "power1.inOut", duration: 6 }, 0)
+      .to(galaxiesUniverseGroup.rotation, { z: "+=0.30", y: "+=0.22", ease: "power1.inOut", duration: 6 }, 0);
   }
 
   // ─── Phase 1: Section 1 (Start) -> Section 2 (About) [0 to 1] ───
@@ -988,12 +991,12 @@ export const initThreeEngine = async () => {
     )
     .to(
       polyhedronGroup.position,
-      { x: isMobile ? 1.2 : 2.6, y: 1.1, z: -0.6, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? -1.2 : -2.8, y: 1.1, z: -1.2, ease: "power2.inOut", duration: 1 },
       0
     )
     .to(
       gyroRingsGroup.position,
-      { x: isMobile ? 1.0 : 2.2, y: -1.2, z: -0.8, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? -1.0 : -2.4, y: -1.2, z: -1.4, ease: "power2.inOut", duration: 1 },
       0
     )
     .to(
@@ -1002,159 +1005,159 @@ export const initThreeEngine = async () => {
       0
     );
 
-  // ─── Phase 2: Section 2 (About) -> Section 3 (Activity) [1 to 2] ───
+  // ─── Phase 2: Section 2 (About) -> Section 3 (Experience) [1 to 2] ───
+  // Smooth Orbital Transition to Right Flank (framing the Experience card on the left)
+  scrollTl
+    .to(
+      tesseractGroup.position,
+      { x: isMobile ? 0 : 2.2, y: isMobile ? 1.3 : 0.1, z: isMobile ? -0.8 : 0.1, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      tesseractGroup.rotation,
+      { x: Math.PI * 2.1, y: Math.PI * 2.8, z: Math.PI * 0.65, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      tesseractGroup.scale,
+      { x: isMobile ? 0.32 : 0.68, y: isMobile ? 0.32 : 0.68, z: isMobile ? 0.32 : 0.68, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      camera.position,
+      { x: isMobile ? 0 : 0.8, y: isMobile ? 0 : -0.1, z: isMobile ? 6.2 : 5.8, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      cameraTarget,
+      { x: isMobile ? 0 : 0.4, y: 0, z: 0, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      polyhedronGroup.position,
+      { x: isMobile ? 1.2 : 2.8, y: -1.2, z: -1.4, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      gyroRingsGroup.position,
+      { x: isMobile ? 1.0 : 2.4, y: 1.2, z: -1.5, ease: "power2.inOut", duration: 1 },
+      1
+    )
+    .to(
+      crimsonPointAccent.position,
+      { x: 1.8, y: 2.0, z: 3.2, ease: "power2.inOut", duration: 1 },
+      1
+    );
+
+  // ─── Phase 3: Section 3 (Experience) -> Section 4 (Activity) [2 to 3] ───
   // Sweeping Crane Arc over to the Right Flank (Centering Halo behind Contribution Matrix)
   scrollTl
     .to(
       tesseractGroup.position,
       { x: isMobile ? 0 : 2.0, y: isMobile ? 1.4 : -0.15, z: isMobile ? -0.8 : -0.4, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       tesseractGroup.rotation,
       { x: Math.PI * 2.6, y: Math.PI * 3.2, z: Math.PI * 0.8, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       tesseractGroup.scale,
       { x: isMobile ? 0.30 : 0.68, y: isMobile ? 0.30 : 0.68, z: isMobile ? 0.30 : 0.68, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       camera.position,
       { x: isMobile ? 0 : 1.2, y: isMobile ? 0 : -0.2, z: isMobile ? 6.2 : 5.8, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       cameraTarget,
       { x: isMobile ? 0 : 0.35, y: 0, z: 0, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       polyhedronGroup.position,
       { x: isMobile ? -1.2 : -2.6, y: 1.3, z: -0.9, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       gyroRingsGroup.position,
       { x: 0, y: 0.2, z: -1.8, ease: "power2.inOut", duration: 1 },
-      1
+      2
     )
     .to(
       crimsonPointAccent.position,
       { x: 2.2, y: -0.5, z: 3.0, ease: "power2.inOut", duration: 1 },
-      1
+      2
     );
 
-  // ─── Phase 3: Section 3 (Activity) -> Section 4 (Projects) [2 to 3] ───
+  // ─── Phase 4: Section 4 (Activity) -> Section 5 (Projects) [3 to 4] ───
   // Cinematic Elevation & Prominent Stature above the Showcase Grid
   scrollTl
     .to(
       tesseractGroup.position,
       { x: 0, y: isMobile ? 3.5 : 2.2, z: isMobile ? -2.2 : -0.8, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       tesseractGroup.rotation,
       { x: Math.PI * 3.6, y: Math.PI * 4.2, z: Math.PI * 1.2, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       tesseractGroup.scale,
       { x: isMobile ? 0.18 : 0.68, y: isMobile ? 0.18 : 0.68, z: isMobile ? 0.18 : 0.68, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       camera.position,
       { x: 0, y: isMobile ? 1.5 : 1.8, z: isMobile ? 6.4 : 6.2, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       cameraTarget,
       { x: 0, y: 1.0, z: 0, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       polyhedronGroup.position,
       { x: isMobile ? 0 : 3.0, y: isMobile ? 6.0 : 2.4, z: isMobile ? -6.0 : -1.2, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       polyhedronGroup.scale,
       { x: isMobile ? 0.001 : 1, y: isMobile ? 0.001 : 1, z: isMobile ? 0.001 : 1, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       gyroRingsGroup.position,
       { x: isMobile ? 0 : -3.0, y: isMobile ? 6.0 : 2.4, z: isMobile ? -6.0 : -1.2, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       gyroRingsGroup.scale,
       { x: isMobile ? 0.001 : 1, y: isMobile ? 0.001 : 1, z: isMobile ? 0.001 : 1, ease: "power2.inOut", duration: 1 },
-      2
+      3
     )
     .to(
       crimsonPointAccent.position,
       { x: 0, y: 3.0, z: 2.5, ease: "power2.inOut", duration: 1 },
-      2
-    );
-
-  // ─── Phase 4: Section 4 (Projects) -> Section 5 (Pricing) [3 to 4] ───
-  // Subtle elevated ambient framing for pricing configurator cards
-  scrollTl
-    .to(
-      tesseractGroup.position,
-      { x: isMobile ? 0 : 2.2, y: isMobile ? 2.3 : 0.4, z: isMobile ? -2.2 : -0.6, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      tesseractGroup.rotation,
-      { x: Math.PI * 4.4, y: Math.PI * 5.0, z: Math.PI * 1.5, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      tesseractGroup.scale,
-      { x: isMobile ? 0.22 : 0.65, y: isMobile ? 0.22 : 0.65, z: isMobile ? 0.22 : 0.65, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      camera.position,
-      { x: isMobile ? 0 : 0.8, y: 0, z: isMobile ? 6.2 : 5.8, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      cameraTarget,
-      { x: isMobile ? 0 : 0.2, y: 0, z: 0, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      polyhedronGroup.position,
-      { x: isMobile ? -1.0 : -2.6, y: 0.8, z: -1.0, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      gyroRingsGroup.position,
-      { x: isMobile ? 1.0 : 2.6, y: -0.6, z: -1.0, ease: "power2.inOut", duration: 1 },
-      3
-    )
-    .to(
-      crimsonPointAccent.position,
-      { x: 1.8, y: 0.5, z: 2.8, ease: "power2.inOut", duration: 1 },
       3
     );
 
-  // ─── Phase 5: Section 5 (Pricing) -> Section 6 (Contact) [4 to 5] ───
+  // ─── Phase 5: Section 5 (Projects) -> Section 6 (Contact) [4 to 5] ───
   // Spatial Plunge & Low-Angle Dolly In (Core light framing the Contact Call to Action)
   scrollTl
     .to(
       tesseractGroup.position,
-      { x: 0, y: isMobile ? 1.0 : -0.1, z: isMobile ? -0.4 : 0.4, ease: "power2.inOut", duration: 1 },
+      { x: isMobile ? 0 : 0, y: isMobile ? 1.0 : -0.1, z: isMobile ? -0.4 : 0.4, ease: "power2.inOut", duration: 1 },
       4
     )
     .to(
       tesseractGroup.rotation,
-      { x: Math.PI * 5.4, y: Math.PI * 6.2, z: Math.PI * 1.9, ease: "power2.inOut", duration: 1 },
+      { x: Math.PI * 4.8, y: Math.PI * 5.6, z: Math.PI * 1.7, ease: "power2.inOut", duration: 1 },
       4
     )
     .to(
@@ -1189,7 +1192,7 @@ export const initThreeEngine = async () => {
     );
 
   // ─── Phase 6: Section 6 (Contact) -> Section 7 (Footer/Colophon) [5 to 6] ───
-  // Panoramic Elevation
+  // Panoramic Elevation settling into the dedicated Colophon architecture
   scrollTl
     .to(
       tesseractGroup.position,
@@ -1198,7 +1201,7 @@ export const initThreeEngine = async () => {
     )
     .to(
       tesseractGroup.rotation,
-      { x: Math.PI * 6.6, y: Math.PI * 7.4, z: Math.PI * 2.4, ease: "power2.inOut", duration: 1 },
+      { x: Math.PI * 6.0, y: Math.PI * 6.8, z: Math.PI * 2.2, ease: "power2.inOut", duration: 1 },
       5
     )
     .to(
@@ -1232,7 +1235,8 @@ export const initThreeEngine = async () => {
     tesseractGroup.visible = true;
     polyhedronGroup.visible = true;
     gyroRingsGroup.visible = true;
-    particles.visible = true;
+    cosmicShardsGroup.visible = true;
+    if (starField) starField.visible = true;
     if (galaxiesUniverseGroup) galaxiesUniverseGroup.visible = true;
 
     if (viewName === "project") {

@@ -19,22 +19,6 @@
     </image:image>
   </url>
 
-  <!-- Jasa Pembuatan Website Murah & Kalkulator Online (Top Priority) -->
-  <url>
-    <loc>https://porto-aga.vercel.app/pricing.html</loc>
-    <lastmod>2026-08-25T17:35:00+07:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="id" href="https://porto-aga.vercel.app/pricing.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://porto-aga.vercel.app/pricing.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://porto-aga.vercel.app/pricing.html"/>
-    <image:image>
-      <image:loc>https://porto-aga.vercel.app/preview-hero.jpg</image:loc>
-      <image:title>Jasa Pembuatan Website Murah &amp; Cepat Mulai Rp499Rb Langsung Jadi — Aga Putra Web Studio</image:title>
-      <image:caption>Kalkulator Biaya Pembuatan Website Online Transparan oleh Muhammad Aga Putra</image:caption>
-    </image:image>
-  </url>
-
   <!-- All Projects & Open Source Repositories -->
   <url>
     <loc>https://porto-aga.vercel.app/projects.html</loc>
@@ -43,77 +27,6 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Hub: Jasa Pembuatan Website -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-website.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Landing Page -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-landing-page.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Company Profile -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-company-profile.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Portfolio -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-portfolio.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Toko Online -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-toko-online.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Website Booking -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-website-booking.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Website Absensi -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-website-absensi.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Web App -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-web-app.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Service: Jasa Pembuatan Custom Web App -->
-  <url>
-    <loc>https://porto-aga.vercel.app/jasa-pembuatan-web-app-custom.html</loc>
-    <lastmod>2026-08-24T15:30:00+07:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
 
   <!-- Project Detail Case Studies -->
   <url>

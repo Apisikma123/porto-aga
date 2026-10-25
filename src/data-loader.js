@@ -1,10 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
-   data-loader.js — Dynamic Projects, GitHub Sync, Heatmap & Pricing Configurator
+   data-loader.js — Dynamic Projects, GitHub Sync, Heatmap & Projects Showcase
    Muhammad Aga Putra | Frontend Software Engineer & System Architect
    ═══════════════════════════════════════════════════════════ */
 
 let _gsap = typeof window !== "undefined" ? window.gsap : null;
 export const getGsap = async () => {
+  if (typeof window !== "undefined") {
+    const isMobile = window.innerWidth < 1024 || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isMobile || prefersReduced) return null;
+  }
   if (_gsap) return _gsap;
   if (typeof window !== "undefined" && window.gsap) return (_gsap = window.gsap);
   try {
@@ -29,6 +34,10 @@ const gsap = {
   to: (...args) => {
     if (_gsap) return _gsap.to(...args);
     getGsap().then((g) => { if (g) g.to(...args); });
+  },
+  killTweensOf: (...args) => {
+    if (_gsap && typeof _gsap.killTweensOf === "function") return _gsap.killTweensOf(...args);
+    getGsap().then((g) => { if (g && typeof g.killTweensOf === "function") g.killTweensOf(...args); });
   }
 };
 
@@ -97,7 +106,7 @@ export let projectsData = [];
 // HORIZONTAL PROJECTS CAROUSEL CONTROLLER (Section 04)
 // ═══════════════════════════════════════════════════════════
 let currentProjectSlide = 0;
-const TOTAL_PROJECT_SLIDES = 5;
+const TOTAL_PROJECT_SLIDES = 6;
 
 export const FEATURED_PROJECTS = [
   {
@@ -107,16 +116,35 @@ export const FEATURED_PROJECTS = [
     imgAlt: "BKJ Group Indonesia — Logistics Portal",
     imgWidth: 640,
     imgHeight: 340,
-    isFeaturedBadge: true,
+    isFeaturedBadge: false,
     tagI18n: "projBkjTag",
-    tagFallback: "Corporate · Maritime Logistics",
+    tagFallback: "Enterprise · Maritime Logistics",
     statusI18n: "projBkjStatus",
-    statusFallback: "bkjgrup.com",
+    statusFallback: "Archived System",
     titleI18n: "projBkjTitle",
     titleFallback: "BKJ Group Indonesia — Logistics Portal",
     descI18n: "projBkjDesc",
-    descFallback: "Integrated enterprise maritime logistics and corporate platform built for PT Berkah Kapal Jaya with full CMS, subsidiary routing, and bilingual localization.",
+    descFallback: "Integrated enterprise maritime logistics and corporate platform built for PT Berkah Kapal Jaya with full CMS, subsidiary routing, and bilingual localization (archived).",
     tags: ["Laravel 13", "Tailwind v4", "Alpine.js", "MySQL"],
+    isPhoneMockup: false,
+  },
+  {
+    id: "pratama-tehnik",
+    repoUrl: "https://github.com/Apisikma123/landing-page",
+    imgSrc: "/projects/pratama-tehnik.webp",
+    imgAlt: "Pratama Tehnik Service — Repair Booking Portal",
+    imgWidth: 1024,
+    imgHeight: 508,
+    isFeaturedBadge: true,
+    tagI18n: "projPratamaTag",
+    tagFallback: "Production Web · UMKM Service Portal",
+    statusI18n: "projPratamaStatus",
+    statusFallback: "pratama-tehnik.com",
+    titleI18n: "projPratamaTitle",
+    titleFallback: "Pratama Tehnik Service — Repair Booking Portal",
+    descI18n: "projPratamaDesc",
+    descFallback: "Engineered a high-converting service booking portal for an on-demand appliance repair business in Jakarta, featuring direct WhatsApp dispatch, fault diagnosis calculator, and local SEO schema.",
+    tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "SEO Schema"],
     isPhoneMockup: false,
   },
   {
@@ -145,15 +173,15 @@ export const FEATURED_PROJECTS = [
     imgAlt: "Wilmar Buku — Library Donation Platform",
     imgWidth: 640,
     imgHeight: 340,
-    isFeaturedBadge: false,
+    isFeaturedBadge: true,
     tagI18n: "proj2Tag",
     tagFallback: "Fullstack · Donation Engine",
     statusI18n: "proj2Status",
-    statusFallback: "Production",
+    statusFallback: "donasi-buku.wbi.ac.id",
     titleI18n: "proj2Title",
     titleFallback: "Wilmar Buku — Donation System",
     descI18n: "proj2Desc",
-    descFallback: "Centralized library donation platform built with TALL stack, Google OAuth 2.0, automated PDF reporting, and real-time WebSockets via Laravel Reverb.",
+    descFallback: "Centralized library donation platform live at donasi-buku.wbi.ac.id built with TALL stack, Google OAuth 2.0, automated PDF reporting, and real-time WebSockets via Laravel Reverb.",
     tags: ["Laravel 13", "Tailwind CSS", "Alpine.js", "Reverb WebSockets"],
     isPhoneMockup: false,
   },
@@ -199,9 +227,13 @@ export const FEATURED_PROJECTS = [
 
 export const createFeaturedProjectCardElement = (item, idx) => {
   const card = document.createElement("div");
-  card.className = "carousel-card glass-card spatial-card w-full flex flex-col justify-between rounded-2xl border border-white/10 bg-zinc-950/85 overflow-hidden select-none cursor-default";
+  card.className = "carousel-card glass-card spatial-card w-full flex flex-col justify-between rounded-2xl border border-white/10 bg-zinc-950/85 overflow-hidden select-none cursor-pointer group hover:border-[#DC143C]/40 transition-colors";
   card.dataset.tilt = "true";
   card.dataset.slideIndex = idx;
+  card.onclick = (e) => {
+    if (e.target.closest("a, button")) return;
+    window.location.href = `/project.html?id=${encodeURIComponent(item.id)}`;
+  };
 
   let mediaHtml = "";
   if (item.isPhoneMockup) {
@@ -284,6 +316,22 @@ export const renderFeaturedProjectsCarousel = () => {
   });
   track.appendChild(fragment);
 
+  const dotsContainer = document.getElementById("carousel-dots-container");
+  if (dotsContainer) {
+    dotsContainer.innerHTML = "";
+    FEATURED_PROJECTS.forEach((item, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "p-2 -m-1 inline-flex items-center justify-center cursor-pointer";
+      btn.setAttribute("aria-label", `Slide ${idx + 1}: ${item.titleFallback}`);
+      btn.onclick = () => window.goToProjectSlide(idx);
+      const span = document.createElement("span");
+      span.className = `carousel-dot block w-6 h-1 rounded-full transition-all ${idx === currentProjectSlide ? "active bg-[#DC143C] opacity-100" : "bg-white/20 opacity-40 hover:opacity-75"}`;
+      btn.appendChild(span);
+      dotsContainer.appendChild(btn);
+    });
+  }
+
   updateCarouselUI(currentProjectSlide);
 };
 window.renderFeaturedProjectsCarousel = renderFeaturedProjectsCarousel;
@@ -319,8 +367,19 @@ export const updateCarouselUI = (index, animate = false, explicitDirection = nul
   const prevCard = cards[prevIndex];
   const nextCard = cards[currentProjectSlide];
 
-  if (animate && prevCard && nextCard && prevCard !== nextCard && gsap && !isProjectAnimating) {
+  if (animate && prevCard && nextCard && prevCard !== nextCard && gsap) {
+    gsap.killTweensOf(cards);
     isProjectAnimating = true;
+
+    cards.forEach((c) => {
+      if (c !== prevCard && c !== nextCard) {
+        c.classList.remove("is-active", "is-animating");
+        c.classList.add("is-inactive");
+        c.setAttribute("inert", "");
+        c.setAttribute("aria-hidden", "true");
+        gsap.set(c, { clearProps: "transform,scale,opacity" });
+      }
+    });
 
     prevCard.classList.remove("is-active", "is-inactive");
     prevCard.classList.add("is-animating");
@@ -427,146 +486,6 @@ export const initProjectsCarousel = () => {
       if (Math.abs(diff) > 40) {
         window.slideProjectsCarousel(diff > 0 ? 1 : -1);
       }
-    },
-    { passive: true }
-  );
-};
-
-// ═══════════════════════════════════════════════════════════
-// PRICING MARKETING CAROUSEL CONTROLLER (Section 05)
-// ═══════════════════════════════════════════════════════════
-let currentPricingSlide = 0;
-let isPricingAnimating = false;
-
-export const updatePricingCarouselUI = (index, animate = false, explicitDirection = null) => {
-  const track = document.getElementById("pricing-cards-track");
-  const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
-  const total = cards.length || 3;
-  const isMobile = window.innerWidth < 768;
-  const targetIndex = Math.max(0, Math.min(total - 1, index));
-
-  const prevIndex = currentPricingSlide;
-  const dir = explicitDirection !== null ? explicitDirection : targetIndex >= prevIndex ? 1 : -1;
-  currentPricingSlide = targetIndex;
-
-  const counterEl = document.getElementById("pricing-carousel-counter");
-  if (counterEl) {
-    counterEl.textContent = `${currentPricingSlide + 1} / ${total}`;
-  }
-
-  const dots = document.querySelectorAll("#pricing-carousel-dots .pricing-dot");
-  dots.forEach((dot, idx) => {
-    if (idx === currentPricingSlide) {
-      dot.classList.add("active", "bg-[#DC143C]", "opacity-100");
-      dot.classList.remove("bg-white/20", "opacity-40");
-    } else {
-      dot.classList.remove("active", "bg-[#DC143C]", "opacity-100");
-      dot.classList.add("bg-white/20", "opacity-40");
-    }
-  });
-
-  if (isMobile) {
-    const prevCard = cards[prevIndex];
-    const nextCard = cards[currentPricingSlide];
-
-    if (animate && prevCard && nextCard && prevCard !== nextCard && gsap && !isPricingAnimating) {
-      isPricingAnimating = true;
-
-      prevCard.classList.remove("hidden");
-      prevCard.classList.add("flex");
-      nextCard.classList.remove("hidden");
-      nextCard.classList.add("flex");
-      nextCard.removeAttribute("inert");
-      nextCard.setAttribute("aria-hidden", "false");
-
-      gsap.fromTo(
-        prevCard,
-        { opacity: 1, x: 0, scale: 1 },
-        {
-          opacity: 0,
-          x: -45 * dir,
-          scale: 0.95,
-          duration: 0.32,
-          ease: "power2.inOut",
-          onComplete: () => {
-            prevCard.classList.remove("flex");
-            prevCard.classList.add("hidden");
-            prevCard.setAttribute("aria-hidden", "true");
-            prevCard.setAttribute("inert", "");
-            gsap.set(prevCard, { clearProps: "transform,scale,opacity" });
-          },
-        }
-      );
-
-      gsap.fromTo(
-        nextCard,
-        { opacity: 0, x: 45 * dir, scale: 0.95 },
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          duration: 0.38,
-          ease: "power3.out",
-          onComplete: () => {
-            gsap.set(nextCard, { clearProps: "transform,scale,opacity" });
-            isPricingAnimating = false;
-          },
-        }
-      );
-    } else {
-      cards.forEach((card, idx) => {
-        const isActive = idx === currentPricingSlide;
-        if (isActive) {
-          card.classList.remove("hidden");
-          card.classList.add("flex");
-          card.removeAttribute("inert");
-          card.setAttribute("aria-hidden", "false");
-          if (gsap) gsap.set(card, { clearProps: "transform,scale,opacity" });
-        } else {
-          card.classList.remove("flex");
-          card.classList.add("hidden");
-          card.setAttribute("inert", "");
-          card.setAttribute("aria-hidden", "true");
-        }
-      });
-    }
-  } else {
-    cards.forEach((card) => {
-      card.classList.remove("hidden");
-      card.classList.add("flex", "md:flex");
-      card.removeAttribute("inert");
-      card.setAttribute("aria-hidden", "false");
-      if (gsap) gsap.set(card, { clearProps: "transform,scale,opacity" });
-    });
-  }
-};
-
-window.slidePricingCarousel = (direction) => {
-  const track = document.getElementById("pricing-cards-track");
-  const cards = track ? track.querySelectorAll(".pricing-carousel-card") : [];
-  const total = cards.length || 3;
-  let nextSlide = currentPricingSlide + direction;
-  if (nextSlide >= total) nextSlide = 0;
-  if (nextSlide < 0) nextSlide = total - 1;
-  window.goToPricingSlide(nextSlide, true, direction);
-};
-
-window.goToPricingSlide = (index, animate = true, direction = null) => {
-  updatePricingCarouselUI(index, animate, direction);
-};
-
-export const initPricingMarketingCarousel = () => {
-  const track = document.getElementById("pricing-cards-track");
-  if (!track) return;
-
-  updatePricingCarouselUI(0);
-
-  let resizeTimer;
-  window.addEventListener(
-    "resize",
-    () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => updatePricingCarouselUI(currentPricingSlide), 100);
     },
     { passive: true }
   );
@@ -1351,980 +1270,6 @@ window.copyCurrentProjectClone = () => {
   }
 };
 
-// ═══════════════════════════════════════════════════════════
-// 9. CENTRALIZED WEBSITE PRICING CONFIGURATOR ENGINE
-// ═══════════════════════════════════════════════════════════
-const PRICING_WA_NUMBER = getProtectedWhatsAppNumber();
-
-export const PRICING_CONFIG = {
-  websiteTypes: [
-    {
-      id: "landing-page",
-      icon: "rocket_launch",
-      nameId: "Landing Page",
-      nameEn: "Landing Page",
-      basePrice: 699000,
-      descId: "Promosi produk, jasa, campaign, iklan, event",
-      descEn: "Product promotion, services, campaigns, ads, events",
-      includedId: "1 halaman, responsive, CTA, WhatsApp, form sederhana, basic SEO",
-      includedEn: "1 page, responsive, CTA, WhatsApp, simple form, basic SEO",
-      hasPages: true,
-      addonCategories: ["general"],
-    },
-    {
-      id: "portfolio",
-      icon: "palette",
-      nameId: "Portfolio",
-      nameEn: "Portfolio",
-      basePrice: 799000,
-      descId: "Freelancer, developer, designer, fotografer, personal brand",
-      descEn: "Freelancer, developer, designer, photographer, personal brand",
-      includedId: "Home, About, Portfolio, Contact, responsive, WhatsApp/contact CTA",
-      includedEn: "Home, About, Portfolio, Contact, responsive, WhatsApp/contact CTA",
-      hasPages: true,
-      addonCategories: ["general", "business"],
-    },
-    {
-      id: "company-profile",
-      icon: "domain",
-      nameId: "Company Profile",
-      nameEn: "Company Profile",
-      basePrice: 1290000,
-      descId: "UMKM, perusahaan, jasa, organisasi, bisnis lokal",
-      descEn: "SMEs, companies, services, organizations, local businesses",
-      includedId: "Home, About, Services, Gallery/Portfolio, Contact, WhatsApp, Google Maps, responsive",
-      includedEn: "Home, About, Services, Gallery/Portfolio, Contact, WhatsApp, Google Maps, responsive",
-      hasPages: true,
-      addonCategories: ["general", "business"],
-    },
-    {
-      id: "blog-news",
-      icon: "article",
-      nameId: "Blog / News",
-      nameEn: "Blog / News",
-      basePrice: 1790000,
-      descId: "Blog, portal berita, media, content publishing",
-      descEn: "Blog, news portal, media, content publishing",
-      includedId: "Homepage, article listing, article detail, category, search, responsive, basic admin/CMS",
-      includedEn: "Homepage, article listing, article detail, category, search, responsive, basic admin/CMS",
-      hasPages: true,
-      addonCategories: ["general", "business"],
-    },
-    {
-      id: "booking",
-      icon: "calendar_month",
-      nameId: "Booking / Reservasi",
-      nameEn: "Booking / Reservation",
-      basePrice: 3490000,
-      descId: "Salon, barbershop, rental, konsultasi, jasa, event",
-      descEn: "Salon, barbershop, rental, consultation, services, events",
-      includedId: "Booking form, date/time selection, booking data, admin management dasar, confirmation flow",
-      includedEn: "Booking form, date/time selection, booking data, basic admin management, confirmation flow",
-      hasPages: false,
-      addonCategories: ["general", "business", "booking"],
-    },
-    {
-      id: "online-store",
-      icon: "storefront",
-      nameId: "Online Store",
-      nameEn: "Online Store",
-      basePrice: 3990000,
-      descId: "Toko online, e-commerce, katalog produk",
-      descEn: "Online shop, e-commerce, product catalog",
-      includedId: "Product catalog, category, product detail, cart, checkout, order management dasar, admin product management",
-      includedEn: "Product catalog, category, product detail, cart, checkout, basic order management, admin product management",
-      hasPages: false,
-      addonCategories: ["general", "business", "ecommerce"],
-    },
-    {
-      id: "attendance",
-      icon: "fingerprint",
-      nameId: "Attendance / Absensi",
-      nameEn: "Attendance System",
-      basePrice: 4490000,
-      descId: "Sistem absensi, pencatatan kehadiran, laporan",
-      descEn: "Attendance system, attendance tracking, reports",
-      includedId: "Login, data karyawan, check-in/check-out, riwayat absensi, admin dashboard dasar, laporan kehadiran",
-      includedEn: "Login, employee data, check-in/check-out, attendance history, basic admin dashboard, attendance report",
-      hasPages: false,
-      addonCategories: ["general", "attendance"],
-    },
-    {
-      id: "information-system",
-      icon: "database",
-      nameId: "Information System",
-      nameEn: "Information System",
-      basePrice: 5990000,
-      descId: "Sistem internal, dashboard, management system, data management",
-      descEn: "Internal system, dashboard, management system, data management",
-      includedId: "Authentication, dashboard, CRUD dasar, search/filter dasar, user management dasar",
-      includedEn: "Authentication, dashboard, basic CRUD, basic search/filter, basic user management",
-      hasPages: false,
-      addonCategories: ["general", "business"],
-    },
-    {
-      id: "membership",
-      icon: "group",
-      nameId: "Membership / Portal",
-      nameEn: "Membership / Portal",
-      basePrice: 6990000,
-      descId: "Portal member, membership, komunitas, akses terbatas",
-      descEn: "Member portal, membership, community, restricted access",
-      includedId: "Registration, login, member profile, protected pages, basic member dashboard, admin management",
-      includedEn: "Registration, login, member profile, protected pages, basic member dashboard, admin management",
-      hasPages: false,
-      addonCategories: ["general", "business"],
-    },
-    {
-      id: "custom-web-app",
-      icon: "code",
-      nameId: "Custom Web App",
-      nameEn: "Custom Web App",
-      basePrice: 7990000,
-      maxPrice: 29990000,
-      descId: "Kebutuhan khusus yang tidak cocok dengan kategori standar",
-      descEn: "Custom needs that don't fit standard categories",
-      includedId: "Disesuaikan dengan kebutuhan proyek",
-      includedEn: "Tailored to project requirements",
-      hasPages: false,
-      isCustom: true,
-      addonCategories: ["general"],
-    },
-  ],
-  pageOptions: {
-    "landing-page": [{ labelId: "1 halaman — termasuk", labelEn: "1 page — included", price: 0 }],
-    "portfolio": [
-      { labelId: "3–5 halaman — termasuk", labelEn: "3–5 pages — included", price: 0 },
-      { labelId: "6–8 halaman", labelEn: "6–8 pages", price: 300000 },
-    ],
-    "company-profile": [
-      { labelId: "3–5 halaman — termasuk", labelEn: "3–5 pages — included", price: 0 },
-      { labelId: "6–8 halaman", labelEn: "6–8 pages", price: 350000 },
-      { labelId: "9–12 halaman", labelEn: "9–12 pages", price: 750000 },
-    ],
-    "blog-news": [
-      { labelId: "5–8 halaman/struktur — termasuk", labelEn: "5–8 pages/structure — included", price: 0 },
-      { labelId: "Custom structure", labelEn: "Custom structure", price: 500000 },
-    ],
-  },
-  designLevels: [
-    {
-      id: "clean",
-      nameId: "Clean / Standard",
-      nameEn: "Clean / Standard",
-      price: 0,
-      descId: "Clean modern UI, existing design system, responsive, basic interaction, simple animation",
-      descEn: "Clean modern UI, existing design system, responsive, basic interaction, simple animation",
-      icon: "design_services",
-    },
-    {
-      id: "custom-modern",
-      nameId: "Custom Modern",
-      nameEn: "Custom Modern",
-      price: 350000,
-      descId: "Custom visual direction, custom section layout, enhanced interaction, more distinctive design, custom hero section",
-      descEn: "Custom visual direction, custom section layout, enhanced interaction, more distinctive design, custom hero section",
-      icon: "brush",
-    },
-    {
-      id: "premium-custom",
-      nameId: "Premium Custom",
-      nameEn: "Premium Custom",
-      price: 750000,
-      descId: "Custom visual direction, advanced section composition, advanced interaction, custom animation, more detailed UI/UX treatment",
-      descEn: "Custom visual direction, advanced section composition, advanced interaction, custom animation, more detailed UI/UX treatment",
-      icon: "auto_awesome",
-    },
-  ],
-  addons: {
-    general: [
-      { id: "extra-page", nameId: "Extra Page", nameEn: "Extra Page", price: 150000, perUnit: "/page" },
-      { id: "whatsapp-cta", nameId: "WhatsApp CTA / Integration", nameEn: "WhatsApp CTA / Integration", price: 150000 },
-      { id: "google-maps", nameId: "Google Maps", nameEn: "Google Maps", price: 100000 },
-      { id: "contact-form", nameId: "Contact Form", nameEn: "Contact Form", price: 150000 },
-      { id: "basic-seo", nameId: "Basic SEO", nameEn: "Basic SEO", price: 250000 },
-      { id: "google-analytics", nameId: "Google Analytics", nameEn: "Google Analytics", price: 200000 },
-      { id: "search-console", nameId: "Search Console Setup", nameEn: "Search Console Setup", price: 200000 },
-      { id: "image-optimization", nameId: "Image Optimization / WebP", nameEn: "Image Optimization / WebP", price: 200000 },
-      { id: "copywriting", nameId: "Copywriting", nameEn: "Copywriting", price: 150000, perUnit: "/page" },
-      { id: "extra-revision", nameId: "Revisi Tambahan", nameEn: "Additional Revision", price: 100000, perUnit: "/round" },
-    ],
-    business: [
-      { id: "blog-addon", nameId: "Blog / News", nameEn: "Blog / News", price: 400000 },
-      { id: "testimonial", nameId: "Testimonial", nameEn: "Testimonial", price: 150000 },
-      { id: "faq", nameId: "FAQ", nameEn: "FAQ", price: 100000 },
-      { id: "portfolio-case", nameId: "Portfolio / Case Study", nameEn: "Portfolio / Case Study", price: 250000 },
-      { id: "simple-cms", nameId: "Simple CMS", nameEn: "Simple CMS", price: 500000 },
-      { id: "admin-dashboard", nameId: "Admin Dashboard", nameEn: "Admin Dashboard", price: 1500000, isStarting: true },
-    ],
-    ecommerce: [
-      { id: "payment-gateway", nameId: "Payment Gateway", nameEn: "Payment Gateway", price: 1000000, isStarting: true, noteId: "Biaya transaksi pihak ketiga tidak termasuk", noteEn: "Third-party fees NOT included" },
-      { id: "shipping-api", nameId: "Shipping API", nameEn: "Shipping API", price: 750000, isStarting: true, noteId: "Biaya API pihak ketiga tidak termasuk", noteEn: "Third-party API fees NOT included" },
-      { id: "product-import", nameId: "Product Import", nameEn: "Product Import", price: 250000, perUnit: "/batch" },
-      { id: "product-variant", nameId: "Product Variant", nameEn: "Product Variant", price: 500000, isStarting: true },
-      { id: "voucher-discount", nameId: "Voucher / Discount", nameEn: "Voucher / Discount", price: 300000 },
-      { id: "customer-account", nameId: "Customer Account", nameEn: "Customer Account", price: 500000 },
-      { id: "adv-order-mgmt", nameId: "Advanced Order Management", nameEn: "Advanced Order Management", price: 750000, isStarting: true },
-    ],
-    booking: [
-      { id: "calendar-mgmt", nameId: "Calendar Management", nameEn: "Calendar Management", price: 500000 },
-      { id: "wa-booking-notif", nameId: "WhatsApp Booking Notification", nameEn: "WhatsApp Booking Notification", price: 500000 },
-      { id: "booking-payment", nameId: "Payment for Booking", nameEn: "Payment for Booking", price: 750000, isStarting: true },
-      { id: "multi-staff", nameId: "Multiple Staff", nameEn: "Multiple Staff", price: 750000 },
-      { id: "schedule-mgmt", nameId: "Schedule Management", nameEn: "Schedule Management", price: 750000 },
-    ],
-    attendance: [
-      { id: "qr-attendance", nameId: "QR Code Attendance", nameEn: "QR Code Attendance", price: 750000 },
-      { id: "gps-validation", nameId: "GPS / Location Validation", nameEn: "GPS / Location Validation", price: 1000000 },
-      { id: "shift-mgmt", nameId: "Shift Management", nameEn: "Shift Management", price: 750000 },
-      { id: "leave-mgmt", nameId: "Cuti / Izin Management", nameEn: "Leave / Permission Management", price: 750000 },
-      { id: "multi-role", nameId: "Multi-role Access", nameEn: "Multi-role Access", price: 500000 },
-      { id: "excel-export", nameId: "Excel Export", nameEn: "Excel Export", price: 250000 },
-      { id: "pdf-report", nameId: "PDF Report", nameEn: "PDF Report", price: 300000 },
-      { id: "adv-attend-dash", nameId: "Advanced Attendance Dashboard", nameEn: "Advanced Attendance Dashboard", price: 750000 },
-    ],
-  },
-  customOptions: {
-    projectTypes: [
-      { id: "business-system", labelId: "Business System", labelEn: "Business System" },
-      { id: "dashboard", labelId: "Dashboard", labelEn: "Dashboard" },
-      { id: "internal-system", labelId: "Internal System", labelEn: "Internal System" },
-      { id: "saas", labelId: "SaaS", labelEn: "SaaS" },
-      { id: "marketplace", labelId: "Marketplace", labelEn: "Marketplace" },
-      { id: "crm", labelId: "CRM", labelEn: "CRM" },
-      { id: "inventory", labelId: "Inventory", labelEn: "Inventory" },
-      { id: "other", labelId: "Lainnya", labelEn: "Other" },
-    ],
-    authOptions: [
-      { id: "none", labelId: "Tidak Ada", labelEn: "None" },
-      { id: "basic-login", labelId: "Basic Login", labelEn: "Basic Login" },
-      { id: "multi-role", labelId: "Multi-role", labelEn: "Multi-role" },
-      { id: "adv-role", labelId: "Advanced Role & Permission", labelEn: "Advanced Role & Permission" },
-    ],
-    dataOptions: [
-      { id: "crud", labelId: "CRUD", labelEn: "CRUD" },
-      { id: "search", labelId: "Search", labelEn: "Search" },
-      { id: "filter", labelId: "Filter", labelEn: "Filter" },
-      { id: "import", labelId: "Import", labelEn: "Import" },
-      { id: "export", labelId: "Export", labelEn: "Export" },
-      { id: "reporting", labelId: "Reporting", labelEn: "Reporting" },
-    ],
-    integrations: [
-      { id: "int-whatsapp", labelId: "WhatsApp", labelEn: "WhatsApp" },
-      { id: "int-payment", labelId: "Payment", labelEn: "Payment" },
-      { id: "int-maps", labelId: "Google Maps", labelEn: "Google Maps" },
-      { id: "int-external-api", labelId: "External API", labelEn: "External API" },
-      { id: "int-email", labelId: "Email", labelEn: "Email" },
-      { id: "int-other", labelId: "Lainnya", labelEn: "Other" },
-    ],
-    scaleOptions: [
-      { id: "small", labelId: "Kecil (1–50 user)", labelEn: "Small (1–50 users)" },
-      { id: "medium", labelId: "Menengah (50–500 user)", labelEn: "Medium (50–500 users)" },
-      { id: "large", labelId: "Besar (500+ user)", labelEn: "Large (500+ users)" },
-    ],
-  },
-  businessTypes: [
-    { id: "kuliner", labelId: "Kuliner", labelEn: "Culinary" },
-    { id: "fashion", labelId: "Fashion", labelEn: "Fashion" },
-    { id: "jasa", labelId: "Jasa", labelEn: "Services" },
-    { id: "pendidikan", labelId: "Pendidikan", labelEn: "Education" },
-    { id: "properti", labelId: "Properti", labelEn: "Property" },
-    { id: "kesehatan", labelId: "Kesehatan", labelEn: "Healthcare" },
-    { id: "teknologi", labelId: "Teknologi", labelEn: "Technology" },
-    { id: "lainnya", labelId: "Lainnya", labelEn: "Other" },
-  ],
-  projectGoals: [
-    { id: "introduce", labelId: "Memperkenalkan bisnis", labelEn: "Introduce my business" },
-    { id: "customers", labelId: "Mendapatkan pelanggan", labelEn: "Get customers" },
-    { id: "sell", labelId: "Menjual produk", labelEn: "Sell products" },
-    { id: "booking", labelId: "Menerima booking", labelEn: "Accept bookings" },
-    { id: "internal", labelId: "Sistem internal", labelEn: "Internal system" },
-    { id: "portfolio", labelId: "Portfolio", labelEn: "Portfolio" },
-    { id: "other", labelId: "Lainnya", labelEn: "Other" },
-  ],
-};
-
-export const pricingState = {
-  step: 1,
-  websiteType: "landing-page",
-  pageOption: 0,
-  designLevel: "clean",
-  selectedAddons: new Set(),
-  clientName: "",
-  businessType: null,
-  projectGoal: null,
-  clientNotes: "",
-  customProjectType: null,
-  customAuth: null,
-  customData: new Set(),
-  customIntegrations: new Set(),
-  customScale: null,
-};
-
-export const formatPricingRp = (amount) => {
-  if (amount >= 1000000) {
-    const jt = amount / 1000000;
-    const formatted = jt % 1 === 0 ? jt.toFixed(0) : jt.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
-    return `Rp${formatted}JT`;
-  }
-  return `Rp${amount.toLocaleString("id-ID")}`;
-};
-
-export const formatPricingRpFull = (amount) => `Rp${amount.toLocaleString("id-ID")}`;
-
-export const calculatePricingTotal = () => {
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  if (!wt) return { min: 0, max: 0, breakdown: [], isRange: false, isCustom: false };
-
-  let total = wt.basePrice;
-  const breakdown = [{ label: currentLang === "en" ? "Base price" : "Harga dasar", value: wt.basePrice, name: currentLang === "en" ? wt.nameEn : wt.nameId }];
-
-  if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
-    const po = PRICING_CONFIG.pageOptions[wt.id][pricingState.pageOption];
-    if (po && po.price > 0) {
-      total += po.price;
-      breakdown.push({ label: currentLang === "en" ? "Pages" : "Halaman", value: po.price, name: currentLang === "en" ? po.labelEn : po.labelId });
-    }
-  }
-
-  const dl = PRICING_CONFIG.designLevels.find((d) => d.id === pricingState.designLevel);
-  if (dl && dl.price > 0) {
-    total += dl.price;
-    breakdown.push({ label: currentLang === "en" ? "Design" : "Desain", value: dl.price, name: currentLang === "en" ? dl.nameEn : dl.nameId });
-  }
-
-  let addonsTotal = 0;
-  let hasStarting = false;
-  const addonNames = [];
-
-  pricingState.selectedAddons.forEach((aid) => {
-    for (const cat of Object.values(PRICING_CONFIG.addons)) {
-      const a = cat.find((x) => x.id === aid);
-      if (a) {
-        addonsTotal += a.price;
-        addonNames.push(currentLang === "en" ? a.nameEn : a.nameId);
-        if (a.isStarting) hasStarting = true;
-        break;
-      }
-    }
-  });
-
-  if (addonsTotal > 0) {
-    total += addonsTotal;
-    breakdown.push({ label: currentLang === "en" ? "Add-ons" : "Fitur tambahan", value: addonsTotal, names: addonNames });
-  }
-
-  let min = total;
-  let max = total;
-  if (wt.isCustom) {
-    max = Math.max(total * 1.5, wt.maxPrice || total * 2);
-  } else if (hasStarting) {
-    max = Math.round(total * 1.3);
-  }
-
-  return { min, max, breakdown, isRange: min !== max, isCustom: !!wt.isCustom };
-};
-
-export const renderPricingTypeCards = () => {
-  const grid = document.getElementById("pricing-type-grid");
-  if (!grid) return;
-  grid.innerHTML = "";
-
-  PRICING_CONFIG.websiteTypes.forEach((wt) => {
-    const isSelected = pricingState.websiteType === wt.id;
-    const priceDisplay = wt.isCustom
-      ? `${currentLang === "en" ? "Starting" : "Mulai"} ${formatPricingRp(wt.basePrice)}`
-      : formatPricingRpFull(wt.basePrice);
-
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = `pricing-type-card ${isSelected ? "selected" : ""}`;
-    card.onclick = () => {
-      pricingState.websiteType = wt.id;
-      pricingState.pageOption = 0;
-      pricingState.selectedAddons = new Set();
-      renderPricingTypeCards();
-      updatePricingUI();
-      const nextBtn = document.getElementById("pricing-btn-next-1");
-      if (nextBtn) nextBtn.disabled = false;
-    };
-
-    card.innerHTML = `
-      <div class="flex items-start gap-3">
-        <div class="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${isSelected ? "bg-[#DC143C]/20 text-[#DC143C]" : "bg-white/5 text-zinc-400"}">
-          <span class="material-symbols-outlined text-lg">${wt.icon}</span>
-        </div>
-        <div class="flex-1 min-w-0 text-left">
-          <div class="flex items-center justify-between gap-2 mb-0.5">
-            <h4 class="text-sm font-semibold ${isSelected ? "text-white" : "text-zinc-200"} truncate">${currentLang === "en" ? wt.nameEn : wt.nameId}</h4>
-            <span class="font-mono text-[0.65rem] font-semibold shrink-0 ${isSelected ? "text-[#DC143C]" : "text-zinc-400"}">${priceDisplay}</span>
-          </div>
-          <p class="text-xs ${isSelected ? "text-zinc-300" : "text-zinc-400"} leading-relaxed">${currentLang === "en" ? wt.descEn : wt.descId}</p>
-        </div>
-      </div>
-      ${isSelected ? `
-      <div class="mt-3 pt-3 border-t border-white/5">
-        <p class="text-[0.65rem] text-zinc-500 uppercase tracking-wider font-mono mb-1">${currentLang === "en" ? "Included" : "Termasuk"}</p>
-        <p class="text-xs text-zinc-300 leading-relaxed">${currentLang === "en" ? wt.includedEn : wt.includedId}</p>
-      </div>` : ""}
-    `;
-    grid.appendChild(card);
-  });
-};
-
-export const renderPricingPageOptions = () => {
-  const sec = document.getElementById("pricing-page-count-section");
-  const con = document.getElementById("pricing-page-options");
-  if (!sec || !con) return;
-
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  if (!wt || !wt.hasPages || !PRICING_CONFIG.pageOptions[wt.id]) {
-    sec.classList.add("hidden");
-    return;
-  }
-
-  sec.classList.remove("hidden");
-  con.innerHTML = "";
-
-  PRICING_CONFIG.pageOptions[wt.id].forEach((opt, idx) => {
-    const isSelected = pricingState.pageOption === idx;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = `pricing-option-card ${isSelected ? "selected" : ""}`;
-    btn.onclick = () => {
-      pricingState.pageOption = idx;
-      renderPricingPageOptions();
-      updatePricingUI();
-    };
-    btn.innerHTML = `
-      <div class="flex items-center justify-between">
-        <span class="text-xs ${isSelected ? "text-white font-medium" : "text-zinc-300"}">${currentLang === "en" ? opt.labelEn : opt.labelId}</span>
-        <span class="font-mono text-[0.65rem] ${isSelected ? "text-[#DC143C] font-semibold" : "text-zinc-500"}">${opt.price === 0 ? (currentLang === "en" ? "Included" : "Termasuk") : `+${formatPricingRpFull(opt.price)}`}</span>
-      </div>
-    `;
-    con.appendChild(btn);
-  });
-};
-
-export const renderPricingAddons = () => {
-  const con = document.getElementById("pricing-addon-chips");
-  const cSec = document.getElementById("pricing-custom-app-section");
-  if (!con) return;
-
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  con.innerHTML = "";
-  if (!wt) return;
-
-  if (cSec) {
-    if (wt.isCustom) {
-      cSec.classList.remove("hidden");
-      renderPricingCustomOptions();
-    } else {
-      cSec.classList.add("hidden");
-    }
-  }
-
-  const cats = wt.addonCategories || ["general"];
-  const catNames = {
-    general: currentLang === "en" ? "General" : "Umum",
-    business: currentLang === "en" ? "Business" : "Bisnis",
-    ecommerce: "E-Commerce",
-    booking: "Booking",
-    attendance: currentLang === "en" ? "Attendance" : "Absensi",
-  };
-
-  cats.forEach((cat) => {
-    const addons = PRICING_CONFIG.addons[cat];
-    if (!addons || !addons.length) return;
-
-    const label = document.createElement("div");
-    label.className = "w-full mt-4 first:mt-0 mb-1.5";
-    label.innerHTML = `<span class="font-mono text-[0.58rem] text-zinc-500 uppercase tracking-wider">${catNames[cat] || cat}</span>`;
-    con.appendChild(label);
-
-    const row = document.createElement("div");
-    row.className = "w-full flex flex-wrap gap-2 mb-1";
-
-    addons.forEach((addon) => {
-      const isSelected = pricingState.selectedAddons.has(addon.id);
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = `pricing-addon-chip ${isSelected ? "selected" : ""}`;
-      chip.onclick = () => {
-        if (isSelected) {
-          pricingState.selectedAddons.delete(addon.id);
-        } else {
-          pricingState.selectedAddons.add(addon.id);
-        }
-        renderPricingAddons();
-        updatePricingUI();
-      };
-      const priceText = addon.isStarting
-        ? `${currentLang === "en" ? "Starting" : "Mulai"} ${formatPricingRpFull(addon.price)}`
-        : `${formatPricingRpFull(addon.price)}${addon.perUnit || ""}`;
-
-      chip.innerHTML = `
-        <span class="material-symbols-outlined text-xs ${isSelected ? "text-[#DC143C]" : "text-zinc-500"}">${isSelected ? "check_circle" : "add_circle_outline"}</span>
-        <span class="text-[0.7rem] ${isSelected ? "text-white" : "text-zinc-300"}">${currentLang === "en" ? addon.nameEn : addon.nameId}</span>
-        <span class="font-mono text-[0.6rem] ${isSelected ? "text-[#DC143C]" : "text-zinc-500"}">${priceText}</span>
-      `;
-      row.appendChild(chip);
-    });
-
-    con.appendChild(row);
-  });
-};
-
-export const renderPricingCustomOptions = () => {
-  const renderGroup = (cid, opts, sel, onClick, isMulti) => {
-    const c = document.getElementById(cid);
-    if (!c) return;
-    c.innerHTML = "";
-    opts.forEach((o) => {
-      const s = isMulti ? sel.has(o.id) : sel === o.id;
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = `pricing-addon-chip ${s ? "selected" : ""}`;
-      chip.onclick = () => onClick(o.id);
-      chip.innerHTML = `
-        <span class="material-symbols-outlined text-xs ${s ? "text-[#DC143C]" : "text-zinc-500"}">${s ? "check_circle" : "radio_button_unchecked"}</span>
-        <span class="text-[0.7rem] ${s ? "text-white" : "text-zinc-300"}">${currentLang === "en" ? o.labelEn : o.labelId}</span>
-      `;
-      c.appendChild(chip);
-    });
-  };
-
-  renderGroup("pricing-custom-project-types", PRICING_CONFIG.customOptions.projectTypes, pricingState.customProjectType, (id) => {
-    pricingState.customProjectType = pricingState.customProjectType === id ? null : id;
-    renderPricingCustomOptions();
-  }, false);
-
-  renderGroup("pricing-custom-auth-options", PRICING_CONFIG.customOptions.authOptions, pricingState.customAuth, (id) => {
-    pricingState.customAuth = pricingState.customAuth === id ? null : id;
-    renderPricingCustomOptions();
-  }, false);
-
-  renderGroup("pricing-custom-data-options", PRICING_CONFIG.customOptions.dataOptions, pricingState.customData, (id) => {
-    if (pricingState.customData.has(id)) pricingState.customData.delete(id);
-    else pricingState.customData.add(id);
-    renderPricingCustomOptions();
-  }, true);
-
-  renderGroup("pricing-custom-integrations", PRICING_CONFIG.customOptions.integrations, pricingState.customIntegrations, (id) => {
-    if (pricingState.customIntegrations.has(id)) pricingState.customIntegrations.delete(id);
-    else pricingState.customIntegrations.add(id);
-    renderPricingCustomOptions();
-  }, true);
-
-  renderGroup("pricing-custom-scale-options", PRICING_CONFIG.customOptions.scaleOptions, pricingState.customScale, (id) => {
-    pricingState.customScale = pricingState.customScale === id ? null : id;
-    renderPricingCustomOptions();
-  }, false);
-};
-
-export const renderPricingDesignCards = () => {
-  const grid = document.getElementById("pricing-design-grid");
-  if (!grid) return;
-  grid.innerHTML = "";
-
-  PRICING_CONFIG.designLevels.forEach((dl) => {
-    const isSelected = pricingState.designLevel === dl.id;
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = `pricing-option-card ${isSelected ? "selected" : ""}`;
-    card.onclick = () => {
-      pricingState.designLevel = dl.id;
-      renderPricingDesignCards();
-      updatePricingUI();
-    };
-    card.innerHTML = `
-      <div class="flex items-start gap-3">
-        <div class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${isSelected ? "bg-[#DC143C]/20 text-[#DC143C]" : "bg-white/5 text-zinc-400"}">
-          <span class="material-symbols-outlined text-base">${dl.icon}</span>
-        </div>
-        <div class="flex-1 min-w-0 text-left">
-          <div class="flex items-center justify-between gap-2 mb-0.5">
-            <h4 class="text-sm font-semibold ${isSelected ? "text-white" : "text-zinc-200"}">${currentLang === "en" ? dl.nameEn : dl.nameId}</h4>
-            <span class="font-mono text-[0.65rem] font-semibold shrink-0 ${isSelected ? "text-[#DC143C]" : "text-zinc-500"}">${dl.price === 0 ? (currentLang === "en" ? "Included" : "Termasuk") : `+${formatPricingRpFull(dl.price)}`}</span>
-          </div>
-          <p class="text-[0.65rem] ${isSelected ? "text-zinc-300" : "text-zinc-500"} leading-relaxed">${currentLang === "en" ? dl.descEn : dl.descId}</p>
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-};
-
-export const renderPricingBusinessTypes = () => {
-  const c = document.getElementById("pricing-business-types");
-  if (!c) return;
-  c.innerHTML = "";
-  PRICING_CONFIG.businessTypes.forEach((b) => {
-    const s = pricingState.businessType === b.id;
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = `pricing-addon-chip ${s ? "selected" : ""}`;
-    chip.onclick = () => {
-      pricingState.businessType = pricingState.businessType === b.id ? null : b.id;
-      renderPricingBusinessTypes();
-    };
-    chip.innerHTML = `<span class="text-[0.7rem] ${s ? "text-white" : "text-zinc-300"}">${currentLang === "en" ? b.labelEn : b.labelId}</span>`;
-    c.appendChild(chip);
-  });
-};
-
-export const renderPricingProjectGoals = () => {
-  const c = document.getElementById("pricing-project-goals");
-  if (!c) return;
-  c.innerHTML = "";
-  PRICING_CONFIG.projectGoals.forEach((g) => {
-    const s = pricingState.projectGoal === g.id;
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = `pricing-addon-chip ${s ? "selected" : ""}`;
-    chip.onclick = () => {
-      pricingState.projectGoal = pricingState.projectGoal === g.id ? null : g.id;
-      renderPricingProjectGoals();
-    };
-    chip.innerHTML = `<span class="text-[0.7rem] ${s ? "text-white" : "text-zinc-300"}">${currentLang === "en" ? g.labelEn : g.labelId}</span>`;
-    c.appendChild(chip);
-  });
-};
-
-export const renderPricingSummary = () => {
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  if (!wt) return;
-
-  const price = calculatePricingTotal();
-  const d = document.getElementById("pricing-summary-details");
-  if (!d) return;
-
-  let h = "";
-  h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">${currentLang === "en" ? "Website type" : "Jenis website"}</span><span class="text-xs text-white font-medium">${currentLang === "en" ? wt.nameEn : wt.nameId}</span></div>`;
-
-  if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
-    const po = PRICING_CONFIG.pageOptions[wt.id][pricingState.pageOption];
-    if (po) {
-      h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">${currentLang === "en" ? "Pages" : "Halaman"}</span><span class="text-xs text-white">${currentLang === "en" ? po.labelEn : po.labelId}</span></div>`;
-    }
-  }
-
-  const dl = PRICING_CONFIG.designLevels.find((x) => x.id === pricingState.designLevel);
-  if (dl) {
-    h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">${currentLang === "en" ? "Design" : "Desain"}</span><span class="text-xs text-white">${currentLang === "en" ? dl.nameEn : dl.nameId}</span></div>`;
-  }
-
-  if (pricingState.selectedAddons.size > 0) {
-    const names = [];
-    pricingState.selectedAddons.forEach((aid) => {
-      for (const cat of Object.values(PRICING_CONFIG.addons)) {
-        const a = cat.find((x) => x.id === aid);
-        if (a) {
-          names.push(currentLang === "en" ? a.nameEn : a.nameId);
-          break;
-        }
-      }
-    });
-    h += `<div class="py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400 block mb-1.5">${currentLang === "en" ? "Add-ons" : "Fitur tambahan"}</span><div class="flex flex-wrap gap-1.5">${names.map((n) => `<span class="text-[0.65rem] text-zinc-300 bg-white/5 rounded px-2 py-0.5">${n}</span>`).join("")}</div></div>`;
-  }
-
-  if (pricingState.businessType) {
-    const b = PRICING_CONFIG.businessTypes.find((x) => x.id === pricingState.businessType);
-    if (b) {
-      h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">${currentLang === "en" ? "Business type" : "Jenis bisnis"}</span><span class="text-xs text-white">${currentLang === "en" ? b.labelEn : b.labelId}</span></div>`;
-    }
-  }
-
-  if (pricingState.projectGoal) {
-    const g = PRICING_CONFIG.projectGoals.find((x) => x.id === pricingState.projectGoal);
-    if (g) {
-      h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">${currentLang === "en" ? "Goal" : "Tujuan"}</span><span class="text-xs text-white">${currentLang === "en" ? g.labelEn : g.labelId}</span></div>`;
-    }
-  }
-
-  if (wt.isCustom) {
-    if (pricingState.customProjectType) {
-      const p = PRICING_CONFIG.customOptions.projectTypes.find((x) => x.id === pricingState.customProjectType);
-      if (p) h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">Project Type</span><span class="text-xs text-white">${currentLang === "en" ? p.labelEn : p.labelId}</span></div>`;
-    }
-    if (pricingState.customAuth) {
-      const a = PRICING_CONFIG.customOptions.authOptions.find((x) => x.id === pricingState.customAuth);
-      if (a) h += `<div class="flex items-center justify-between py-2.5 border-b border-white/5"><span class="text-xs text-zinc-400">Auth</span><span class="text-xs text-white">${currentLang === "en" ? a.labelEn : a.labelId}</span></div>`;
-    }
-  }
-
-  d.innerHTML = h;
-  const pe = document.getElementById("pricing-summary-price");
-  if (pe) {
-    pe.textContent = price.isRange || price.isCustom
-      ? `${formatPricingRp(price.min)} – ${formatPricingRp(price.max)}`
-      : formatPricingRp(price.min);
-  }
-};
-
-export const updatePricingUI = () => {
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  const sd = document.getElementById("pricing-sidebar-details");
-  const sp = document.getElementById("pricing-sidebar-price-section");
-  const spr = document.getElementById("pricing-sidebar-price");
-  const sc = document.getElementById("pricing-sidebar-cta");
-
-  if (!wt) {
-    if (sd) sd.innerHTML = `<p class="text-xs text-zinc-500">${currentLang === "en" ? "Select a website type to begin." : "Pilih jenis website untuk memulai."}</p>`;
-    if (sp) sp.classList.add("hidden");
-    if (sc) sc.classList.add("hidden");
-    return;
-  }
-
-  const price = calculatePricingTotal();
-  const pt = price.isRange || price.isCustom
-    ? `${formatPricingRp(price.min)} – ${formatPricingRp(price.max)}`
-    : formatPricingRp(price.min);
-
-  let h = `<div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-sm text-[#DC143C]">${wt.icon}</span><span class="text-xs text-white font-semibold">${currentLang === "en" ? wt.nameEn : wt.nameId}</span></div>`;
-
-  if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
-    const po = PRICING_CONFIG.pageOptions[wt.id][pricingState.pageOption];
-    if (po) h += `<p class="text-xs text-zinc-400 mb-1">${currentLang === "en" ? po.labelEn : po.labelId}</p>`;
-  }
-
-  const dl = PRICING_CONFIG.designLevels.find((d) => d.id === pricingState.designLevel);
-  if (dl) h += `<p class="text-xs text-zinc-400 mb-2">${currentLang === "en" ? dl.nameEn : dl.nameId}</p>`;
-
-  if (pricingState.selectedAddons.size > 0) {
-    h += `<div class="flex flex-wrap gap-1 mt-2">`;
-    pricingState.selectedAddons.forEach((aid) => {
-      for (const cat of Object.values(PRICING_CONFIG.addons)) {
-        const a = cat.find((x) => x.id === aid);
-        if (a) {
-          h += `<span class="text-[0.6rem] text-zinc-400 bg-white/5 rounded px-1.5 py-0.5">${currentLang === "en" ? a.nameEn : a.nameId}</span>`;
-          break;
-        }
-      }
-    });
-    h += `</div>`;
-  }
-
-  if (sd) sd.innerHTML = h;
-  if (spr) spr.textContent = pt;
-  if (sp) sp.classList.remove("hidden");
-  if (sc) sc.classList.remove("hidden");
-
-  const topLivePrice = document.getElementById("pricing-top-live-price");
-  const topLiveName = document.getElementById("pricing-top-live-name");
-  if (topLivePrice) topLivePrice.textContent = pt;
-  if (topLiveName) topLiveName.textContent = currentLang === "en" ? wt.nameEn : wt.nameId;
-
-  const mobPrice = document.getElementById("pricing-mobile-bar-price");
-  const mobName = document.getElementById("pricing-mobile-bar-name");
-  if (mobPrice) mobPrice.textContent = pt;
-  if (mobName) mobName.textContent = currentLang === "en" ? wt.nameEn : wt.nameId;
-};
-
-export const generatePricingWhatsAppMessage = () => {
-  const wt = PRICING_CONFIG.websiteTypes.find((w) => w.id === pricingState.websiteType);
-  if (!wt) return "";
-
-  const price = calculatePricingTotal();
-  const pt = price.isRange || price.isCustom
-    ? `${formatPricingRp(price.min)} – ${formatPricingRp(price.max)}`
-    : formatPricingRp(price.min);
-
-  pricingState.clientName = document.getElementById("pricing-client-name")?.value?.trim() || "";
-  pricingState.clientNotes = document.getElementById("pricing-client-notes")?.value?.trim() || "";
-
-  let m = "";
-  m += pricingState.clientName
-    ? `Halo, saya ${pricingState.clientName}. Saya tertarik membuat website.\n\n`
-    : `Halo, saya tertarik membuat website.\n\n`;
-
-  m += `═══ DETAIL KEBUTUHAN ═══\n\n`;
-  m += `Jenis website:\n${currentLang === "en" ? wt.nameEn : wt.nameId}\n\n`;
-
-  if (wt.hasPages && PRICING_CONFIG.pageOptions[wt.id]) {
-    const po = PRICING_CONFIG.pageOptions[wt.id][pricingState.pageOption];
-    if (po) m += `Jumlah halaman:\n${currentLang === "en" ? po.labelEn : po.labelId}\n\n`;
-  }
-
-  const dl = PRICING_CONFIG.designLevels.find((d) => d.id === pricingState.designLevel);
-  if (dl) m += `Desain:\n${currentLang === "en" ? dl.nameEn : dl.nameId}\n\n`;
-
-  if (pricingState.selectedAddons.size > 0) {
-    m += `Fitur tambahan:\n`;
-    pricingState.selectedAddons.forEach((aid) => {
-      for (const cat of Object.values(PRICING_CONFIG.addons)) {
-        const a = cat.find((x) => x.id === aid);
-        if (a) {
-          m += `• ${currentLang === "en" ? a.nameEn : a.nameId}\n`;
-          break;
-        }
-      }
-    });
-    m += "\n";
-  }
-
-  if (wt.isCustom) {
-    if (pricingState.customProjectType) {
-      const p = PRICING_CONFIG.customOptions.projectTypes.find((x) => x.id === pricingState.customProjectType);
-      if (p) m += `Jenis proyek: ${currentLang === "en" ? p.labelEn : p.labelId}\n`;
-    }
-    if (pricingState.customAuth) {
-      const a = PRICING_CONFIG.customOptions.authOptions.find((x) => x.id === pricingState.customAuth);
-      if (a) m += `Authentication: ${currentLang === "en" ? a.labelEn : a.labelId}\n`;
-    }
-    if (pricingState.customData.size > 0) {
-      const items = [];
-      pricingState.customData.forEach((id) => {
-        const o = PRICING_CONFIG.customOptions.dataOptions.find((x) => x.id === id);
-        if (o) items.push(currentLang === "en" ? o.labelEn : o.labelId);
-      });
-      m += `Data Management: ${items.join(", ")}\n`;
-    }
-    if (pricingState.customIntegrations.size > 0) {
-      const items = [];
-      pricingState.customIntegrations.forEach((id) => {
-        const o = PRICING_CONFIG.customOptions.integrations.find((x) => x.id === id);
-        if (o) items.push(currentLang === "en" ? o.labelEn : o.labelId);
-      });
-      m += `Integrasi: ${items.join(", ")}\n`;
-    }
-    if (pricingState.customScale) {
-      const s = PRICING_CONFIG.customOptions.scaleOptions.find((x) => x.id === pricingState.customScale);
-      if (s) m += `Skala: ${currentLang === "en" ? s.labelEn : s.labelId}\n`;
-    }
-    m += "\n";
-  }
-
-  if (pricingState.businessType) {
-    const b = PRICING_CONFIG.businessTypes.find((x) => x.id === pricingState.businessType);
-    if (b) m += `Jenis bisnis:\n${currentLang === "en" ? b.labelEn : b.labelId}\n\n`;
-  }
-
-  if (pricingState.projectGoal) {
-    const g = PRICING_CONFIG.projectGoals.find((x) => x.id === pricingState.projectGoal);
-    if (g) m += `Tujuan:\n${currentLang === "en" ? g.labelEn : g.labelId}\n\n`;
-  }
-
-  m += `Estimasi awal:\n${pt}\n\n`;
-  if (pricingState.clientNotes) m += `Catatan:\n${pricingState.clientNotes}\n\n`;
-
-  m += `Saya ingin konsultasi lebih lanjut mengenai kebutuhan dan scope website tersebut.\n\nTerima kasih.`;
-  return m;
-};
-
-window.openPricingConfigurator = (type) => {
-  if (type) {
-    pricingState.websiteType = type;
-    document.querySelectorAll(".pricing-type-card").forEach((c) => {
-      if (c.getAttribute("data-type") === type) {
-        c.classList.add("selected");
-      } else {
-        c.classList.remove("selected");
-      }
-    });
-    window.goToPricingStep(2);
-  } else {
-    window.goToPricingStep(1);
-  }
-
-  const configuratorBox = document.getElementById("pricing-configurator-box");
-  if (configuratorBox) {
-    configuratorBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    gsap.fromTo(
-      configuratorBox,
-      { opacity: 0.7, scale: 0.98, y: 15 },
-      { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "power3.out" }
-    );
-  }
-};
-
-window.goToPricingStep = (step) => {
-  if (step > 1 && !pricingState.websiteType) return;
-  if (step < 1) step = 1;
-  if (step > 6) step = 6;
-
-  for (let i = 1; i <= 6; i++) {
-    const s = document.getElementById(`pricing-step-${i}`);
-    if (s) s.classList.add("hidden");
-  }
-
-  const targetStep = document.getElementById(`pricing-step-${step}`);
-  if (targetStep) targetStep.classList.remove("hidden");
-  pricingState.step = step;
-
-  if (step === 2) {
-    renderPricingPageOptions();
-    renderPricingAddons();
-  } else if (step === 3) {
-    renderPricingDesignCards();
-  } else if (step === 4) {
-    renderPricingBusinessTypes();
-    renderPricingProjectGoals();
-  } else if (step === 5) {
-    renderPricingSummary();
-  } else if (step === 6) {
-    const m = generatePricingWhatsAppMessage();
-    const prev = document.getElementById("pricing-wa-preview");
-    if (prev) prev.textContent = m;
-    const btn = document.getElementById("pricing-wa-send-btn");
-    if (btn) btn.href = `https://wa.me/${PRICING_WA_NUMBER}?text=${encodeURIComponent(m)}`;
-  }
-
-  const pBar = document.getElementById("pricing-progress-bar");
-  if (pBar) pBar.style.width = `${(step / 6) * 100}%`;
-
-  const pLabel = document.getElementById("pricing-progress-label");
-  if (pLabel) pLabel.textContent = `${step} / 6`;
-
-  const stepNamesEn = ["Type", "Features", "Design", "Details", "Estimate", "WhatsApp"];
-  const stepNamesId = ["Jenis", "Fitur", "Desain", "Detail", "Estimasi", "WhatsApp"];
-  const pName = document.getElementById("pricing-progress-step-name");
-  if (pName) pName.textContent = currentLang === "en" ? stepNamesEn[step - 1] : stepNamesId[step - 1];
-
-  for (let i = 1; i <= 6; i++) {
-    const el = document.getElementById(`pricing-step-indicator-${i}`);
-    if (el) {
-      if (i === step) {
-        el.className = "py-1.5 px-2 rounded-lg border border-[#DC143C]/60 bg-[#DC143C]/20 text-[#DC143C] font-bold text-center transition-all cursor-pointer truncate";
-      } else if (i < step) {
-        el.className = "py-1.5 px-2 rounded-lg border border-white/10 bg-white/[0.04] text-zinc-200 text-center transition-all hover:text-white cursor-pointer truncate";
-      } else {
-        el.className = "py-1.5 px-2 rounded-lg border border-white/5 bg-white/[0.01] text-zinc-500 text-center transition-all hover:text-zinc-300 cursor-pointer truncate";
-      }
-    }
-  }
-
-  updatePricingUI();
-};
-
-window.sendPricingWhatsApp = () => {
-  const m = generatePricingWhatsAppMessage();
-  window.open(`https://wa.me/${PRICING_WA_NUMBER}?text=${encodeURIComponent(m)}`, "_blank", "noopener,noreferrer");
-};
-
-export const initPricingConfigurator = () => {
-  renderPricingTypeCards();
-  window.goToPricingStep(1);
-  updatePricingUI();
-};
-
-window.renderPricingOnLangChange = (lang) => {
-  renderPricingTypeCards();
-  if (pricingState.step === 2) {
-    renderPricingPageOptions();
-    renderPricingAddons();
-  } else if (pricingState.step === 3) {
-    renderPricingDesignCards();
-  } else if (pricingState.step === 4) {
-    renderPricingBusinessTypes();
-    renderPricingProjectGoals();
-  } else if (pricingState.step === 5) {
-    renderPricingSummary();
-  }
-  window.goToPricingStep(pricingState.step);
-  updatePricingUI();
-};
-
 window.switchView = switchView;
 window.__switchViewImpl = switchView;
 
@@ -2335,10 +1280,6 @@ export const initData = async () => {
   renderFeaturedProjectsCarousel();
   await yieldToMain();
   initProjectsCarousel();
-  await yieldToMain();
-  initPricingMarketingCarousel();
-  await yieldToMain();
-  initPricingConfigurator();
   await yieldToMain();
   initActivityHeatmap();
 
