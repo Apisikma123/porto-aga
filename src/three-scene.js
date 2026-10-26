@@ -55,8 +55,8 @@ export const initThreeEngine = async () => {
     depth: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // Full Retina/OLED HD pixel ratio (up to 2.0 on desktop, 1.5 on mobile to eliminate touch scroll lag)
-  renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2.0));
+  // Crisp Retina/OLED HD pixel ratio capped at 1.5 for locked 60FPS fluid scroll
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
   // Color Space & ACES Tone Mapping (Boosted Exposure for Radiant 3D Visuals)
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -947,11 +947,15 @@ export const initThreeEngine = async () => {
   // ═══════════════════════════════════════════════════════════
   const mainTrigger = (typeof document !== "undefined" && (document.querySelector("main") || document.getElementById("root") || document.body)) || "body";
   const scrollTl = gsap.timeline({
+    id: "three-camera-scroll",
     scrollTrigger: {
+      id: "three-camera-scroll-trigger",
       trigger: mainTrigger,
       start: "top top",
       end: "bottom bottom",
-      scrub: isMobile ? 0.35 : 1.2,
+      scrub: isMobile ? 0.3 : 0.45,
+      fastScrollEnd: true,
+      preventOverlaps: true,
     },
   });
 
@@ -1352,8 +1356,7 @@ export const initThreeEngine = async () => {
     camera.aspect = newW / newH;
     camera.updateProjectionMatrix();
     renderer.setSize(newW, newH);
-    const isMobileNow = newW < 1024;
-    renderer.setPixelRatio(isMobileNow ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2.0));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   };
   window.addEventListener("resize", onResize, { passive: true });
 

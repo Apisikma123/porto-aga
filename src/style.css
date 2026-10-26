@@ -205,11 +205,19 @@
     color: #d4d4d8;
   }
 
-  /* Spatial 3D Text Container in Sync with Camera */
+  /* Spatial 3D Text Container in Sync with Camera (GPU Isolated) */
   .spatial-text-3d {
     perspective: 1200px;
     transform-style: preserve-3d;
-    will-change: transform;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    contain: layout style;
+  }
+
+  [data-reveal] {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
   }
 
   /* Floating Activity Card Animation */

@@ -1,7 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
-   animations.js — Bidirectional Scroll-Driven Kinetic Engine
+   animations.js — Ultra-Diverse High-Performance Kinetic Engine
    Muhammad Aga Putra | Frontend Software Engineer & System Architect
-   Stack: GSAP + ScrollTrigger (Zero Slop / Bidirectional Scrub)
+   Aesthetic: Luxury Editorial Dark Mode / Multi-Vector Kinetic Life
+   Variance: 9.5 | Motion Intensity: 8.5 | Density: 4
+   Directions: Samping (Kiri/Kanan), Atas, Bawah, Diagonal, Bilateral
+   Architecture: Zero-Jank GPU Compositor Execution (Tanpa Sunat)
    ═══════════════════════════════════════════════════════════ */
 
 import { gsap } from "gsap";
@@ -9,11 +12,30 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Synchronize ticker to prevent frame drop cascading during fast scroll
+gsap.ticker.lagSmoothing(1000, 16);
+
+const SECTION_TRIGGER_IDS = [
+  "trigger-hero",
+  "trigger-about",
+  "trigger-experience",
+  "trigger-activity",
+  "trigger-projects",
+  "trigger-contact",
+  "trigger-footer",
+];
+
 // ═══════════════════════════════════════════════════════════
-// 1. BIDIRECTIONAL SCROLL-LINKED KINETIC SYSTEM
+// 1. MASTER MULTI-VECTOR KINETIC SYSTEM (Tanpa Sunat / 100% Kaya)
 // ═══════════════════════════════════════════════════════════
 export const initScrollRevealAnimations = () => {
   if (typeof window === "undefined") return;
+
+  // Clean up previous triggers cleanly without affecting Three.js camera
+  SECTION_TRIGGER_IDS.forEach((id) => {
+    const existing = ScrollTrigger.getById(id);
+    if (existing) existing.kill(true);
+  });
 
   const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (prefersReduced) {
@@ -24,287 +46,456 @@ export const initScrollRevealAnimations = () => {
   }
 
   const isMobile = window.innerWidth < 1024 || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
-  const scrubValue = isMobile ? 0.35 : 1.25;
+  const d = isMobile ? 0.45 : 1.0;
+  const easeKinetic = "power3.out";
+  const easeSpring = "back.out(1.5)";
+  const dur = isMobile ? 0.48 : 0.68;
 
-  // ─── SECTION 01: HERO (#start) — Horizon Departure Scrub ───
-  const startSec = document.getElementById("start");
-  if (startSec) {
-    const startTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: startSec,
-        start: "top top",
-        end: "bottom top",
-        scrub: scrubValue,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    const eyebrow = startSec.querySelector(".eyebrow");
-    const titleL1 = startSec.querySelector(".display-title span:first-child");
-    const titleL2 = startSec.querySelector(".display-title span:last-child");
-    const bio = startSec.querySelector(".body-copy");
-    const actions = startSec.querySelector(".hero-actions");
-    const hint = startSec.querySelector(".scroll-hint");
-
-    if (eyebrow) startTl.to(eyebrow, { y: -16, opacity: 0.15, ease: "power1.inOut" }, 0);
-    if (titleL1) startTl.to(titleL1, { x: isMobile ? -10 : -28, opacity: 0.25, ease: "power1.inOut" }, 0);
-    if (titleL2) startTl.to(titleL2, { x: isMobile ? 10 : 28, opacity: 0.25, ease: "power1.inOut" }, 0);
-    if (bio) startTl.to(bio, { y: 14, opacity: 0.15, ease: "power1.inOut" }, 0);
-    if (actions) startTl.to(actions, { y: 16, scale: 0.96, opacity: 0.15, ease: "power1.inOut" }, 0);
-    if (hint) startTl.to(hint, { y: -18, opacity: 0, ease: "power1.in" }, 0);
-  }
-
-  // Helper: Create 3-stage bidirectional timeline (Entry -> Rest Hold -> Exit)
-  const createBidirectionalSection = (sectionId, buildAnimation) => {
+  // Helper: Create a GPU-accelerated triggered reveal with fastScrollEnd & overlap prevention
+  const createTriggeredSection = (sectionId, triggerId, buildTimeline) => {
     const sec = document.getElementById(sectionId);
     if (!sec) return;
 
     const tl = gsap.timeline({
+      id: triggerId,
       scrollTrigger: {
+        id: triggerId,
         trigger: sec,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: scrubValue,
+        start: "top 76%",
+        end: "bottom 18%",
+        toggleActions: "play reverse play reverse",
+        fastScrollEnd: true,
+        preventOverlaps: true,
         invalidateOnRefresh: true,
       },
     });
 
-    buildAnimation(tl, sec, isMobile);
+    buildTimeline(tl, sec);
   };
 
-  // ─── SECTION 02: ABOUT (#about) — Counter-Orbit from Right Flank ───
-  createBidirectionalSection("about", (tl, sec, mobile) => {
-    const eyebrow = sec.querySelector(".mb-2, .eyebrow, [data-i18n='aboutEyebrow']");
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 01: HERO (#start) — 4-Directional Spatial Deconstruction
+  // ═══════════════════════════════════════════════════════════
+  const startSec = document.getElementById("start");
+  if (startSec) {
+    const eyebrow = startSec.querySelector(".eyebrow, [data-i18n='heroEyebrow']")?.closest("div");
+    const titleL1 = startSec.querySelector(".display-title span:first-child");
+    const titleL2 = startSec.querySelector(".display-title span:last-child");
+    const role = startSec.querySelector("[data-i18n='heroRole']");
+    const bio = startSec.querySelector(".body-copy");
+    const btnCrimson = startSec.querySelector(".btn-crimson");
+    const btnGlass = startSec.querySelector(".btn-glass");
+    const hint = startSec.querySelector("[data-i18n='scrollHint']")?.closest(".flex");
+
+    const heroTl = gsap.timeline({ delay: 0.08 });
+
+    // Eyebrow drops from ATAS
+    if (eyebrow) {
+      heroTl.fromTo(eyebrow, { y: -32 * d, opacity: 0 }, { y: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0);
+    }
+    // Title Line 1 sweeps from KIRI with angular tilt
+    if (titleL1) {
+      heroTl.fromTo(titleL1, { x: -55 * d, y: -10 * d, rotateZ: isMobile ? 0 : -2, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.06, ease: easeKinetic, force3D: true }, 0.04);
+    }
+    // Title Line 2 sweeps from KANAN with counter-tilt
+    if (titleL2) {
+      heroTl.fromTo(titleL2, { x: 55 * d, y: 10 * d, rotateZ: isMobile ? 0 : 2, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.06, ease: easeKinetic, force3D: true }, 0.08);
+    }
+    // Role tag sweeps from KIRI
+    if (role) {
+      heroTl.fromTo(role, { x: -35 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.12);
+    }
+    // Bio blooms from BAWAH
+    if (bio) {
+      heroTl.fromTo(bio, { y: 35 * d, opacity: 0, scale: 0.98 }, { y: 0, opacity: 1, scale: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.15);
+    }
+    // CTAs dash from opposite flanks and snap together
+    if (btnCrimson) {
+      heroTl.fromTo(btnCrimson, { x: -45 * d, scale: 0.9, opacity: 0 }, { x: 0, scale: 1, opacity: 1, duration: dur, ease: easeSpring, force3D: true }, 0.2);
+    }
+    if (btnGlass) {
+      heroTl.fromTo(btnGlass, { x: 45 * d, scale: 0.9, opacity: 0 }, { x: 0, scale: 1, opacity: 1, duration: dur, ease: easeSpring, force3D: true }, 0.24);
+    }
+    // Scroll hint rises from BAWAH
+    if (hint) {
+      heroTl.fromTo(hint, { y: 24 * d, opacity: 0 }, { y: 0, opacity: 1, duration: dur - 0.1, ease: easeKinetic, force3D: true }, 0.3);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 02: ABOUT (#about) — Cross-Quadrant Convergence
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("about", "trigger-about", (tl, sec) => {
+    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='aboutEyebrow']")?.closest("div");
     const titleL1 = sec.querySelector(".display-title span:first-child");
     const titleL2 = sec.querySelector(".display-title span:last-child");
     const desc = sec.querySelector(".body-copy");
     const items = sec.querySelectorAll("[role='listitem']");
 
-    const travelX = mobile ? 18 : 34;
-
-    // Stage 1: Enter from right to resting (0% -> 40%)
+    // Eyebrow from ATAS
     if (eyebrow) {
-      tl.fromTo(eyebrow, { x: travelX * 0.8, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.35 }, 0.05);
+      tl.fromTo(eyebrow, { y: -34 * d, x: 16 * d, opacity: 0 }, { y: 0, x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.02);
     }
+    // Title L1 from KIRI with slight slant
     if (titleL1) {
-      tl.fromTo(titleL1, { x: travelX, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.08);
+      tl.fromTo(titleL1, { x: -55 * d, y: -12 * d, rotateZ: isMobile ? 0 : -1.8, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.05);
     }
+    // Title L2 from KANAN with counter-slant
     if (titleL2) {
-      tl.fromTo(titleL2, { x: travelX * 1.25, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.4 }, 0.12);
+      tl.fromTo(titleL2, { x: 60 * d, y: 12 * d, rotateZ: isMobile ? 0 : 1.8, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.08);
     }
+    // Desc from BAWAH
     if (desc) {
-      tl.fromTo(desc, { y: 14, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.14);
+      tl.fromTo(desc, { y: 32 * d, opacity: 0 }, { y: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.12);
     }
+
+    // 4 Capabilities emerging from 4 DISTINCT COMPASS POINTS:
+    // Item 0: KIRI | Item 1: KANAN | Item 2: BAWAH-KIRI | Item 3: BAWAH-KANAN
+    const trajectories = [
+      { x: -55 * d, y: -10 * d, rot: -1.2 },
+      { x: 55 * d, y: -10 * d, rot: 1.2 },
+      { x: -40 * d, y: 30 * d, rot: -1.0 },
+      { x: 40 * d, y: 30 * d, rot: 1.0 },
+    ];
+
     if (items.length) {
       items.forEach((item, i) => {
+        const tr = trajectories[i % trajectories.length];
+        const tag = item.querySelector("span.font-mono");
+        const body = item.querySelector("div");
+
         tl.fromTo(
           item,
-          { x: travelX * (0.8 + i * 0.1), opacity: 0 },
-          { x: 0, opacity: 1, ease: "power2.out", duration: 0.35 },
-          0.12 + i * 0.05
+          { x: tr.x, y: tr.y, rotateZ: isMobile ? 0 : tr.rot, opacity: 0 },
+          { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true },
+          0.13 + i * 0.06
         );
-      });
-    }
 
-    // Stage 2: Hold resting (40% -> 65%) — fully readable, stable
-    tl.to({}, { duration: 0.25 }, 0.4);
-
-    // Stage 3: Exit drift as section scrolls out (65% -> 100%)
-    if (eyebrow) tl.to(eyebrow, { x: travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.65);
-    if (titleL1) tl.to(titleL1, { x: travelX * 0.8, opacity: 0.2, ease: "power1.in" }, 0.67);
-    if (titleL2) tl.to(titleL2, { x: travelX, opacity: 0.2, ease: "power1.in" }, 0.7);
-    if (desc) tl.to(desc, { y: -14, opacity: 0.2, ease: "power1.in" }, 0.68);
-    if (items.length) {
-      items.forEach((item, i) => {
-        tl.to(item, { x: travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.68 + i * 0.04);
+        // Monospace index marker pops in with spring
+        if (tag && !isMobile) {
+          tl.fromTo(tag, { scale: 0.88, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: easeSpring, force3D: true }, 0.16 + i * 0.06);
+        }
+        if (body && !isMobile) {
+          tl.fromTo(body, { y: 10 * d, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.18 + i * 0.06);
+        }
       });
     }
   });
 
-  // ─── SECTION 03: EXPERIENCE (#experience) — Left Flank Cascade ───
-  createBidirectionalSection("experience", (tl, sec, mobile) => {
-    const eyebrow = sec.querySelector(".mb-1, .eyebrow, [data-i18n='expEyebrow']");
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 03: EXPERIENCE (#experience) — 4-Corner Diagonal Cascade
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("experience", "trigger-experience", (tl, sec) => {
+    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='expEyebrow']")?.closest("div");
     const titleL1 = sec.querySelector(".display-title span:first-child");
     const titleL2 = sec.querySelector(".display-title span:last-child");
     const desc = sec.querySelector(".body-copy");
     const items = sec.querySelectorAll("[role='listitem']");
 
-    const travelX = mobile ? -18 : -34;
-
-    // Stage 1: Enter from left to resting (0% -> 40%)
+    // Eyebrow sweeps from KIRI
     if (eyebrow) {
-      tl.fromTo(eyebrow, { x: travelX * 0.8, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.35 }, 0.05);
+      tl.fromTo(eyebrow, { x: -48 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.02);
     }
+    // Title L1 plunges from ATAS
     if (titleL1) {
-      tl.fromTo(titleL1, { x: travelX, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.08);
+      tl.fromTo(titleL1, { y: -38 * d, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.05);
     }
+    // Title L2 rises from BAWAH
     if (titleL2) {
-      tl.fromTo(titleL2, { x: travelX * 1.25, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.4 }, 0.12);
+      tl.fromTo(titleL2, { y: 38 * d, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.08);
     }
+    // Desc enters from KANAN
     if (desc) {
-      tl.fromTo(desc, { y: 14, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.14);
+      tl.fromTo(desc, { x: 45 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.12);
     }
+
+    // 4 Project milestones swooping from 4 DIAGONAL CORNERS:
+    // 0: ATAS-KIRI | 1: BAWAH-KIRI | 2: ATAS-KANAN | 3: BAWAH-KANAN
+    const expTraj = [
+      { x: -50 * d, y: -24 * d, rot: -1.2 },
+      { x: -50 * d, y: 26 * d, rot: 1.2 },
+      { x: 50 * d, y: -24 * d, rot: 1.2 },
+      { x: 50 * d, y: 26 * d, rot: -1.2 },
+    ];
+
     if (items.length) {
       items.forEach((item, i) => {
+        const tr = expTraj[i % expTraj.length];
+        const tag = item.querySelector("span.font-mono");
+        const content = item.querySelector("div");
+
         tl.fromTo(
           item,
-          { x: travelX * (0.8 + i * 0.1), opacity: 0 },
-          { x: 0, opacity: 1, ease: "power2.out", duration: 0.35 },
-          0.12 + i * 0.05
+          { x: tr.x, y: tr.y, rotateZ: isMobile ? 0 : tr.rot, opacity: 0 },
+          { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true },
+          0.13 + i * 0.06
         );
-      });
-    }
 
-    // Stage 2: Hold resting (40% -> 65%)
-    tl.to({}, { duration: 0.25 }, 0.4);
-
-    // Stage 3: Exit drift (65% -> 100%)
-    if (eyebrow) tl.to(eyebrow, { x: travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.65);
-    if (titleL1) tl.to(titleL1, { x: travelX * 0.8, opacity: 0.2, ease: "power1.in" }, 0.67);
-    if (titleL2) tl.to(titleL2, { x: travelX, opacity: 0.2, ease: "power1.in" }, 0.7);
-    if (desc) tl.to(desc, { y: -14, opacity: 0.2, ease: "power1.in" }, 0.68);
-    if (items.length) {
-      items.forEach((item, i) => {
-        tl.to(item, { x: travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.68 + i * 0.04);
+        if (tag && !isMobile) {
+          tl.fromTo(tag, { x: -18 * d, opacity: 0 }, { x: 0, opacity: 1, duration: 0.32, ease: easeSpring, force3D: true }, 0.16 + i * 0.06);
+        }
+        if (content && !isMobile) {
+          tl.fromTo(content, { y: 12 * d, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.18 + i * 0.06);
+        }
       });
     }
   });
 
-  // ─── SECTION 04: ACTIVITY (#activity) — Centered Matrix Elevation ───
-  createBidirectionalSection("activity", (tl, sec) => {
-    const header = sec.querySelector("header");
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 04: ACTIVITY (#activity) — 3D Telemetry Liftoff
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("activity", "trigger-activity", (tl, sec) => {
+    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='activityEyebrow']")?.closest("div");
+    const title = sec.querySelector(".display-title");
+    const desc = sec.querySelector(".body-copy");
     const card = sec.querySelector(".activity-standalone-card");
+    const cardHeaderLeft = card?.querySelector(".border-b > div:first-child");
+    const cardHeaderRight = card?.querySelector(".border-b > div:last-child");
+    const heatmapScroll = sec.querySelector("#activity-heatmap-scroll");
+    const cardFooterLeft = card?.querySelector(".border-t > div:first-child");
+    const cardFooterRight = card?.querySelector(".border-t > div:last-child");
 
-    // Stage 1: Lift from below to resting (0% -> 40%)
-    if (header) {
-      tl.fromTo(header, { y: -22, opacity: 0, scale: 0.98 }, { y: 0, opacity: 1, scale: 1, ease: "power2.out", duration: 0.38 }, 0.06);
+    // Header eyebrow from ATAS
+    if (eyebrow) {
+      tl.fromTo(eyebrow, { y: -32 * d, opacity: 0 }, { y: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.02);
     }
+    // Header title from BAWAH
+    if (title) {
+      tl.fromTo(title, { y: 36 * d, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.05);
+    }
+    // Subtitle from KIRI
+    if (desc) {
+      tl.fromTo(desc, { x: -36 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.08);
+    }
+    // Activity Card rises with dramatic 3D depth elevation (GPU-composited)
     if (card) {
-      tl.fromTo(card, { y: 36, opacity: 0, scale: 0.97 }, { y: 0, opacity: 1, scale: 1, ease: "power2.out", duration: 0.42 }, 0.1);
+      tl.fromTo(
+        card,
+        {
+          y: 52 * d,
+          scale: isMobile ? 0.96 : 0.91,
+          rotateX: isMobile ? 0 : 5,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          scale: 1,
+          rotateX: 0,
+          opacity: 1,
+          duration: dur + 0.12,
+          ease: easeKinetic,
+          force3D: true,
+        },
+        0.11
+      );
     }
 
-    // Trigger heatmap render once initialized
+    // Telemetry components inside card activate modularly:
+    if (cardHeaderLeft && !isMobile) {
+      tl.fromTo(cardHeaderLeft, { x: -25 * d, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.18);
+    }
+    if (cardHeaderRight && !isMobile) {
+      tl.fromTo(cardHeaderRight, { x: 25 * d, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: easeSpring, force3D: true }, 0.2);
+    }
+    if (heatmapScroll) {
+      tl.fromTo(heatmapScroll, { scale: isMobile ? 1 : 0.97, opacity: 0.3 }, { scale: 1, opacity: 1, duration: 0.4, ease: easeKinetic, force3D: true }, 0.22);
+    }
+    if (cardFooterLeft && !isMobile) {
+      tl.fromTo(cardFooterLeft, { x: -25 * d, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.24);
+    }
+    if (cardFooterRight && !isMobile) {
+      tl.fromTo(cardFooterRight, { x: 25 * d, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.24);
+    }
+
     if (window.renderActivityHeatmap) {
       try { window.renderActivityHeatmap(); } catch (e) {}
     }
-
-    // Stage 2: Hold resting (40% -> 65%)
-    tl.to({}, { duration: 0.25 }, 0.4);
-
-    // Stage 3: Exit lift (65% -> 100%)
-    if (header) tl.to(header, { y: -18, opacity: 0.2, ease: "power1.in" }, 0.66);
-    if (card) tl.to(card, { y: -24, scale: 0.98, opacity: 0.2, ease: "power1.in" }, 0.68);
   });
 
-  // ─── SECTION 05: PROJECTS (#projects) — Showcase Stage Convergence ───
-  createBidirectionalSection("projects", (tl, sec) => {
-    const headerLeft = sec.querySelector("header > div:first-child");
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 05: PROJECTS (#projects) — Aperture Stage Reveal & Dot Blossom
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("projects", "trigger-projects", (tl, sec) => {
+    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='projectsEyebrow']")?.closest("div");
+    const title = sec.querySelector(".display-title");
     const headerRight = sec.querySelector("header > div:last-child");
     const sliderFrame = sec.querySelector("#projects-slider-frame");
-    const dotsAndHint = sec.querySelector("#carousel-dots-container, .slider-controls");
+    const dots = sec.querySelectorAll(".carousel-dot");
+    const sliderHint = sec.querySelector("[data-i18n='sliderHint']")?.closest("div");
 
-    // Stage 1: Horizontal slide to center (0% -> 40%)
-    if (headerLeft) {
-      tl.fromTo(headerLeft, { x: -26, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.06);
+    // Eyebrow from KIRI
+    if (eyebrow) {
+      tl.fromTo(eyebrow, { x: -45 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.02);
     }
+    // Title from BAWAH with tilt
+    if (title) {
+      tl.fromTo(title, { y: 36 * d, rotateZ: isMobile ? 0 : -1.5, opacity: 0 }, { y: 0, rotateZ: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.05);
+    }
+    // Slider Controls from KANAN
     if (headerRight) {
-      tl.fromTo(headerRight, { x: 26, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.06);
+      tl.fromTo(headerRight, { x: 50 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.07);
     }
+    // Projects Slider Frame rises from deep bottom with stage aperture expansion
     if (sliderFrame) {
-      tl.fromTo(sliderFrame, { y: 32, scale: 0.97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, ease: "power2.out", duration: 0.42 }, 0.12);
+      tl.fromTo(
+        sliderFrame,
+        {
+          y: 46 * d,
+          scale: isMobile ? 0.96 : 0.91,
+          rotateZ: isMobile ? 0 : 0.8,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          scale: 1,
+          rotateZ: 0,
+          opacity: 1,
+          duration: dur + 0.1,
+          ease: easeKinetic,
+          force3D: true,
+        },
+        0.11
+      );
     }
-    if (dotsAndHint) {
-      tl.fromTo(dotsAndHint, { y: 14, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.35 }, 0.18);
+    // Dots blossom sequentially with dynamic spring bounce
+    if (dots.length) {
+      dots.forEach((dot, idx) => {
+        const offsetDirection = (idx - 2) * 10 * d;
+        tl.fromTo(
+          dot,
+          { x: offsetDirection, y: 16 * d, scale: 0.2, opacity: 0 },
+          { x: 0, y: 0, scale: 1, opacity: dot.classList.contains("active") ? 1 : 0.4, duration: 0.38, ease: "back.out(2)", force3D: true },
+          0.16 + idx * 0.035
+        );
+      });
     }
-
-    // Stage 2: Hold resting (40% -> 65%)
-    tl.to({}, { duration: 0.25 }, 0.4);
-
-    // Stage 3: Exit drift (65% -> 100%)
-    if (headerLeft) tl.to(headerLeft, { x: -16, opacity: 0.2, ease: "power1.in" }, 0.66);
-    if (headerRight) tl.to(headerRight, { x: 16, opacity: 0.2, ease: "power1.in" }, 0.66);
-    if (sliderFrame) tl.to(sliderFrame, { y: -20, scale: 0.98, opacity: 0.2, ease: "power1.in" }, 0.68);
+    // Slider hint from BAWAH
+    if (sliderHint && !isMobile) {
+      tl.fromTo(sliderHint, { y: 18 * d, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.24);
+    }
   });
 
-  // ─── SECTION 06: CONTACT (#contact) — Focal Convergence ───
-  createBidirectionalSection("contact", (tl, sec, mobile) => {
-    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='contactEyebrow']");
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 06: CONTACT (#contact) — Bilateral Magnetic Collision
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("contact", "trigger-contact", (tl, sec) => {
+    const eyebrow = sec.querySelector(".eyebrow, [data-i18n='contactEyebrow']")?.closest("div");
     const titleL1 = sec.querySelector(".display-title span:first-child");
     const titleL2 = sec.querySelector(".display-title span:last-child");
     const bio = sec.querySelector(".body-copy");
     const btnCrimson = sec.querySelector(".btn-crimson");
     const btnGlass = sec.querySelector(".btn-glass");
+    const footerHint = sec.querySelector("[data-i18n='scrollFooter']")?.closest("div");
 
-    const travelX = mobile ? 12 : 26;
-
-    // Stage 1: Inward focal convergence (0% -> 40%)
+    // Eyebrow drops from ATAS
     if (eyebrow) {
-      tl.fromTo(eyebrow, { y: -16, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.35 }, 0.05);
+      tl.fromTo(eyebrow, { y: -30 * d, opacity: 0 }, { y: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.02);
     }
+    // Title L1 sweeps from ATAS-KIRI
     if (titleL1) {
-      tl.fromTo(titleL1, { x: -travelX, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.08);
+      tl.fromTo(titleL1, { x: -55 * d, y: -20 * d, rotateZ: isMobile ? 0 : -2, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.05);
     }
+    // Title L2 sweeps from BAWAH-KANAN
     if (titleL2) {
-      tl.fromTo(titleL2, { x: travelX, opacity: 0 }, { x: 0, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.1);
+      tl.fromTo(titleL2, { x: 55 * d, y: 20 * d, rotateZ: isMobile ? 0 : 2, opacity: 0 }, { x: 0, y: 0, rotateZ: 0, opacity: 1, duration: dur + 0.04, ease: easeKinetic, force3D: true }, 0.08);
     }
+    // Bio copy rises from BAWAH
     if (bio) {
-      tl.fromTo(bio, { y: 14, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.36 }, 0.14);
+      tl.fromTo(bio, { y: 26 * d, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.12);
     }
+    // Bilateral magnetic collision: Crimson from KIRI-JAUH, Glass from KANAN-JAUH
     if (btnCrimson) {
-      tl.fromTo(btnCrimson, { x: mobile ? 0 : -16, y: 18, scale: 0.97, opacity: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.16);
+      tl.fromTo(
+        btnCrimson,
+        { x: isMobile ? 0 : -68 * d, y: isMobile ? 22 * d : 8 * d, rotateZ: isMobile ? 0 : -2, scale: 0.9, opacity: 0 },
+        { x: 0, y: 0, rotateZ: 0, scale: 1, opacity: 1, duration: dur + 0.08, ease: easeSpring, force3D: true },
+        0.16
+      );
     }
     if (btnGlass) {
-      tl.fromTo(btnGlass, { x: mobile ? 0 : 16, y: 18, scale: 0.97, opacity: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, ease: "power2.out", duration: 0.38 }, 0.18);
+      tl.fromTo(
+        btnGlass,
+        { x: isMobile ? 0 : 68 * d, y: isMobile ? 22 * d : -8 * d, rotateZ: isMobile ? 0 : 2, scale: 0.9, opacity: 0 },
+        { x: 0, y: 0, rotateZ: 0, scale: 1, opacity: 1, duration: dur + 0.08, ease: easeSpring, force3D: true },
+        0.18
+      );
     }
-
-    // Stage 2: Hold resting (40% -> 65%)
-    tl.to({}, { duration: 0.25 }, 0.4);
-
-    // Stage 3: Exit drift (65% -> 100%)
-    if (eyebrow) tl.to(eyebrow, { y: -14, opacity: 0.2, ease: "power1.in" }, 0.66);
-    if (titleL1) tl.to(titleL1, { x: -travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.68);
-    if (titleL2) tl.to(titleL2, { x: travelX * 0.6, opacity: 0.2, ease: "power1.in" }, 0.68);
-    if (bio) tl.to(bio, { y: -12, opacity: 0.2, ease: "power1.in" }, 0.7);
+    if (footerHint && !isMobile) {
+      tl.fromTo(footerHint, { y: 22 * d, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.24);
+    }
   });
 
-  // ─── SECTION 07: FOOTER (#footer) — Architectural Anchor ───
-  const footerSec = document.getElementById("footer");
-  if (footerSec) {
-    const footerTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: footerSec,
-        start: "top 95%",
-        end: "bottom bottom",
-        scrub: scrubValue,
-        invalidateOnRefresh: true,
-      },
-    });
+  // ═══════════════════════════════════════════════════════════
+  // SECTION 07: FOOTER (#footer) — 4-Way Compass Ledger Unfold
+  // ═══════════════════════════════════════════════════════════
+  createTriggeredSection("footer", "trigger-footer", (tl, sec) => {
+    const masthead = sec.querySelector(".display-title");
+    const borders = sec.querySelectorAll(".border-b");
+    const statusPill = sec.querySelector(".border-b .rounded-lg");
+    const locationTag = sec.querySelector("[data-i18n='footerLocation']")?.closest("span");
+    const cols = sec.querySelectorAll(".grid > div");
+    const bottomRow = sec.querySelector(".section-content > .pt-4, footer, [data-i18n='footerCopyright']");
 
-    const masthead = footerSec.querySelector(".display-title");
-    const borderTop = footerSec.querySelector(".border-b");
-    const cols = footerSec.querySelectorAll(".grid > div");
-
-    if (borderTop) {
-      footerTl.fromTo(borderTop, { scaleX: 0.7, opacity: 0.2, transformOrigin: "left center" }, { scaleX: 1, opacity: 1, duration: 0.4, ease: "power2.out" }, 0.05);
-    }
-    if (masthead) {
-      footerTl.fromTo(masthead, { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 0.08);
-    }
-    if (cols.length) {
-      cols.forEach((col, i) => {
-        footerTl.fromTo(col, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power2.out" }, 0.12 + i * 0.06);
+    // Horizontal laser line wipe
+    if (borders.length) {
+      borders.forEach((b, idx) => {
+        tl.fromTo(
+          b,
+          { scaleX: 0, opacity: 0.2, transformOrigin: idx % 2 === 0 ? "left center" : "right center" },
+          { scaleX: 1, opacity: 1, duration: dur + 0.05, ease: easeKinetic, force3D: true },
+          0.02 + idx * 0.06
+        );
       });
     }
-  }
 
-  // Refresh ScrollTrigger once DOM layout stabilizes
+    // Masthead sweeping from KIRI with typographical presence
+    if (masthead) {
+      tl.fromTo(masthead, { x: -65 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur + 0.08, ease: easeKinetic, force3D: true }, 0.05);
+    }
+    // Status pill from ATAS
+    if (statusPill) {
+      tl.fromTo(statusPill, { y: -24 * d, x: 15 * d, opacity: 0 }, { y: 0, x: 0, opacity: 1, duration: dur, ease: easeSpring, force3D: true }, 0.08);
+    }
+    // Location tag from KANAN
+    if (locationTag) {
+      tl.fromTo(locationTag, { x: 38 * d, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true }, 0.1);
+    }
+
+    // 4 Columns entering from 4 DISTINCT COMPASS POINTS:
+    // Col 0: KIRI | Col 1: ATAS | Col 2: BAWAH | Col 3: KANAN
+    const colTraj = [
+      { x: -45 * d, y: 12 * d },
+      { x: -10 * d, y: -35 * d },
+      { x: 10 * d, y: 35 * d },
+      { x: 45 * d, y: 12 * d },
+    ];
+
+    if (cols.length) {
+      cols.forEach((col, i) => {
+        const ct = colTraj[i % colTraj.length];
+        tl.fromTo(
+          col,
+          { x: ct.x, y: ct.y, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: dur, ease: easeKinetic, force3D: true },
+          0.13 + i * 0.06
+        );
+      });
+    }
+
+    // Bottom copyright note from BAWAH
+    if (bottomRow) {
+      tl.fromTo(bottomRow, { y: 20 * d, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: easeKinetic, force3D: true }, 0.3);
+    }
+  });
+
+  // Refresh ScrollTrigger once layout is set
   requestAnimationFrame(() => {
     ScrollTrigger.refresh();
   });
 };
 
 // ═══════════════════════════════════════════════════════════
-// 2. VELVETY SMOOTH 60FPS 3D TILT ENGINE DELEGATION (Desktop Only)
+// 2. 60FPS 3D TILT ENGINE DELEGATION (Desktop Only)
 // ═══════════════════════════════════════════════════════════
 export const initCardTilt = () => {
   if (typeof window !== "undefined" && window.initGlobalCardTilt) {
