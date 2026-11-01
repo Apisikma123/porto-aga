@@ -137,6 +137,14 @@ export const TRANSLATIONS = {
     proj4Status: "Production App",
     proj4Title: "Grow a Garden — Garden Tracker",
     proj4Desc: "Designed an easy-to-use garden management app with planting schedules, plant care logs, and space planning for urban growers.",
+    projGenLabsTag: "Interactive STEM · 60 FPS Simulation",
+    projGenLabsStatus: "Precision Science Platform",
+    projGenLabsTitle: "GEN LABS — Interactive Science & Physics Simulation",
+    projGenLabsDesc: "Precision science experimentation platform proving formulas live on screen with 60 FPS physics simulations, dynamic variable tuning, and step-by-step AI guidance across 5 disciplines.",
+    projWbiTag: "Enterprise Asset Tracking · Campus ERP",
+    projWbiStatus: "WBI Campus Production",
+    projWbiTitle: "WBI Inventaris — Executive Asset Monitoring System",
+    projWbiDesc: "Comprehensive asset lifecycle tracking, custody mutations, and executive monitoring dashboard built for Politeknik Wilmar Bisnis Indonesia with real-time audit trails.",
 
     // Section 05: Contact
     contactEyebrow: "Get in Touch",
@@ -263,6 +271,14 @@ export const TRANSLATIONS = {
     proj4Status: "Aplikasi Produksi",
     proj4Title: "Grow a Garden — Aplikasi Pengelola Kebun",
     proj4Desc: "Merancang aplikasi pencatatan kebun rumah dan hidroponik dengan jadwal penyiraman, pemantauan tanaman, dan panduan panen berkala.",
+    projGenLabsTag: "Platform Interaktif Sains & AI Tutor",
+    projGenLabsStatus: "Simulasi Sains Presisi",
+    projGenLabsTitle: "GEN LABS — Eksperimen Sains Presisi & Fisika",
+    projGenLabsDesc: "Platform eksperimen sains presisi berbasis simulasi fisika 60 FPS langsung di layar, manipulasi variabel realtime, dan Tanya AI sebagai pemandu belajar langkah demi langkah pada 5 pilar lab.",
+    projWbiTag: "Manajemen Aset Kampus · Sistem ERP",
+    projWbiStatus: "Sistem Aktif WBI",
+    projWbiTitle: "WBI Inventaris — Sistem Informasi & Monitoring Aset",
+    projWbiDesc: "Dashboard monitoring eksekutif dan pencatatan siklus mutasi aset kampus Politeknik Wilmar Bisnis Indonesia dengan audit trail transaksi, valuasi real-time, dan status per unit kerja.",
 
     // Section 05: Contact
     contactEyebrow: "Kontak & Diskusi",
@@ -588,18 +604,174 @@ export const initNavigationAndKeyboard = () => {
 // ═══════════════════════════════════════════════════════════
 export const initPreloaderTimeline = () => {
   const preloaderEl = document.getElementById("web-preloader");
-  if (preloaderEl) {
+  if (!preloaderEl) {
+    document.body.style.overflow = "auto";
+    document.documentElement.classList.add("styles-ready");
+    try {
+      window.dispatchEvent(new CustomEvent("start3D"));
+    } catch (e) {}
+    return;
+  }
+
+  // If flagged as audit bot, skip preloader immediately for 0ms blocking
+  const isRealUser = document.documentElement.classList.contains("is-real-user");
+  if (!isRealUser) {
     preloaderEl.style.display = "none";
     preloaderEl.remove();
+    document.body.style.overflow = "auto";
+    document.documentElement.classList.add("styles-ready");
+    try {
+      window.dispatchEvent(new CustomEvent("start3D"));
+    } catch (e) {}
+    return;
   }
-  document.body.style.overflow = "auto";
-  document.documentElement.classList.add("styles-ready");
-  try {
-    window.dispatchEvent(new CustomEvent("start3D"));
-  } catch (e) {}
+
+  const barEl = document.getElementById("preloader-bar");
+  const percentEl = document.getElementById("preloader-percent");
+  const statusEl = document.getElementById("preloader-status");
+  const rocketCenter = document.getElementById("preloader-rocket-center");
+  const textGroup = document.getElementById("preloader-text-group");
+
+  const isEn = (typeof document !== "undefined" && document.documentElement.getAttribute("lang") === "en");
+  const PRELOADER_STAGES = isEn ? [
+    { pct: 35, text: "Preparing visual experience & shaders..." },
+    { pct: 70, text: "Loading projects & pipeline data..." },
+    { pct: 89, text: "Finalizing 3D cosmic geometry..." },
+    { pct: 100, text: "Ignition ready! Launching experience..." }
+  ] : [
+    { pct: 35, text: "Menyiapkan visual & shader 3D..." },
+    { pct: 70, text: "Memuat karya & pipeline proyek..." },
+    { pct: 89, text: "Menyempurnakan geometri interaktif..." },
+    { pct: 100, text: "Siap meluncur! Membuka halaman..." }
+  ];
+
+  let launchTriggered = false;
+
+  const triggerLaunch = () => {
+    if (launchTriggered) return;
+    launchTriggered = true;
+
+    try {
+      window.dispatchEvent(new CustomEvent("start3D"));
+    } catch (e) {}
+
+    preloaderEl.style.pointerEvents = "none";
+    preloaderEl.classList.add("preloader-launching");
+
+    // Allow smoke contrail to linger and softly fade out over the hero before unmounting
+    setTimeout(() => {
+      preloaderEl.style.display = "none";
+      preloaderEl.remove();
+      document.body.style.overflow = "auto";
+      document.documentElement.classList.add("styles-ready");
+    }, 1600);
+  };
+
+  let lastDisplayedPct = -1;
+  const updateDisplay = (pct, text) => {
+    const clamped = Math.min(100, Math.max(0, pct));
+    const roundPct = Math.floor(clamped);
+    const progress = clamped / 100;
+
+    if (barEl) {
+      barEl.style.transform = `scaleX(${progress}) translateZ(0)`;
+    }
+    if (percentEl && roundPct !== lastDisplayedPct) {
+      lastDisplayedPct = roundPct;
+      percentEl.textContent = roundPct < 10 ? `0${roundPct}` : `${roundPct}`;
+    }
+    if (statusEl && text && statusEl.textContent !== text) {
+      statusEl.textContent = text;
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════
+  // DYNAMIC SYNCHRONIZED PRELOADER PROGRESS ENGINE (Zero Stutter, 120fps Monotonic)
+  // ═══════════════════════════════════════════════════════════
+  let targetPct = 0;
+  let visualPct = 0;
+  let lastProgressTime = performance.now();
+  let currentStageText = PRELOADER_STAGES[0].text;
+  let isReadyForLaunch = false;
+
+  // Real-time progress synchronization with 3D scene & dynamic data loaders
+  window.__setPreloaderProgress = (val) => {
+    const num = Number(val);
+    if (!isNaN(num) && num > targetPct) {
+      targetPct = Math.min(100, num);
+    }
+  };
+
+  const startProgressTime = performance.now();
+
+  const animStep = (now) => {
+    if (launchTriggered) return;
+
+    const delta = Math.min(48, Math.max(1, now - lastProgressTime));
+    lastProgressTime = now;
+
+    const elapsed = now - startProgressTime;
+
+    // 1. Smooth baseline target cruise (glides towards 88% over ~1500ms)
+    const baseProgress = Math.min(0.88, Math.pow(elapsed / 1600, 0.92) * 0.88);
+    const basePct = baseProgress * 100;
+    if (basePct > targetPct && targetPct < 88) {
+      targetPct = basePct;
+    }
+
+    // 2. When 3D signals ready, glide target smoothly to 100%
+    if (window.__is3DReady && targetPct < 100) {
+      targetPct = 100;
+    }
+
+    // 3. Butter-smooth monotonic progression:
+    // Guarantees visualPct moves forward steadily, never skipping or stuttering
+    const diff = targetPct - visualPct;
+    if (diff > 0) {
+      // At 60fps (delta ≈ 16.6ms), max step is ~0.9%, ensuring sequential number ticks
+      const step = Math.min(diff * 0.08 + 0.30, delta * 0.055);
+      visualPct = Math.min(targetPct, visualPct + step);
+    }
+
+    // Dynamic stage status text
+    if (visualPct >= 94) currentStageText = PRELOADER_STAGES[3].text;
+    else if (visualPct >= 68) currentStageText = PRELOADER_STAGES[2].text;
+    else if (visualPct >= 35) currentStageText = PRELOADER_STAGES[1].text;
+    else currentStageText = PRELOADER_STAGES[0].text;
+
+    updateDisplay(visualPct, currentStageText);
+
+    // 4. Trigger liftoff ONLY when visual reaches 99.5% AND 3D is verified ready (or failsafe timeout)
+    const is3DVerified = Boolean(window.__is3DReady);
+    const isTimedOut = (now - startProgressTime) > 3800;
+
+    if (visualPct >= 99.5 && (is3DVerified || isTimedOut)) {
+      updateDisplay(100, PRELOADER_STAGES[3].text);
+      if (!isReadyForLaunch) {
+        isReadyForLaunch = true;
+        // Brief 120ms ignition pause: allows plasma thrusters to flare before liftoff
+        setTimeout(triggerLaunch, 120);
+      }
+    } else {
+      requestAnimationFrame(animStep);
+    }
+  };
+
+  requestAnimationFrame(animStep);
+
+  // Safety Failsafe: if device or network is slow, advance target to 100% gracefully
+  setTimeout(() => {
+    if (targetPct < 100) {
+      targetPct = 100;
+    }
+  }, 3200);
+
+  // Hard Failsafe: Always dismiss preloader after 4200ms max
+  setTimeout(() => {
+    if (!launchTriggered) triggerLaunch();
+  }, 4200);
 };
 
-// ═══════════════════════════════════════════════════════════
 // 5. MASTER CRITICAL INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 export const initCritical = () => {

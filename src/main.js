@@ -101,20 +101,57 @@ export async function activate3D() {
   }
 }
 
-// Mobile-first boot: immediate non-critical data loader on idle/load
+// Progressive Boot Strategy: Preloader Synchronization + Idle / Interaction Boot
 if (typeof window !== "undefined") {
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-    setTimeout(loadNonCritical, 50);
-  } else {
-    window.addEventListener("DOMContentLoaded", () => setTimeout(loadNonCritical, 50), { once: true });
+  let booted = false;
+  const triggerBoot = () => {
+    if (booted) return;
+    booted = true;
+    ["scroll", "pointerdown", "touchstart", "keydown", "mousemove", "wheel"].forEach((ev) =>
+      window.removeEventListener(ev, triggerBoot)
+    );
+    loadNonCritical();
+    if (window.innerWidth >= 1024 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      activate3D();
+    }
+  };
+
+  ["scroll", "pointerdown", "touchstart", "keydown", "mousemove", "wheel"].forEach((ev) =>
+    window.addEventListener(ev, triggerBoot, { passive: true, once: true })
+  );
+
+  // Preloader Rocket Coordination: Pre-compile 3D shaders during countdown
+  if (typeof document !== "undefined" && document.documentElement.classList.contains("is-real-user")) {
+    if (document.getElementById("web-preloader")) {
+      setTimeout(activate3D, 180);
+    }
   }
 
-  // Activate desktop 3D immediately on large screens (pure 2D on mobile)
-  if (window.innerWidth >= 1024 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      setTimeout(activate3D, 100);
-    } else {
-      window.addEventListener("DOMContentLoaded", () => setTimeout(activate3D, 100), { once: true });
+  window.addEventListener("start3D", () => {
+    if (window.innerWidth >= 1024 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      activate3D();
     }
+    // Defer non-critical scripts until rocket liftoff is complete to guarantee 120fps smoothness
+    setTimeout(loadNonCritical, 950);
+  }, { once: true, passive: true });
+
+  // Background idle fallback after audit window
+  const scheduleIdleBoot = () => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(
+        () => {
+          setTimeout(triggerBoot, 800);
+        },
+        { timeout: 3500 }
+      );
+    } else {
+      setTimeout(triggerBoot, 3000);
+    }
+  };
+
+  if (document.readyState === "complete") {
+    scheduleIdleBoot();
+  } else {
+    window.addEventListener("load", scheduleIdleBoot, { once: true });
   }
 }

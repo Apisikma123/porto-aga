@@ -106,26 +106,45 @@ export let projectsData = [];
 // HORIZONTAL PROJECTS CAROUSEL CONTROLLER (Section 04)
 // ═══════════════════════════════════════════════════════════
 let currentProjectSlide = 0;
-const TOTAL_PROJECT_SLIDES = 6;
+const TOTAL_PROJECT_SLIDES = 8;
 
 export const FEATURED_PROJECTS = [
   {
-    id: "bkj",
-    repoUrl: "https://github.com/Apisikma123/bkj",
-    imgSrc: "/projects/bkj.webp",
-    imgAlt: "BKJ Group Indonesia — Logistics Portal",
-    imgWidth: 640,
-    imgHeight: 340,
-    isFeaturedBadge: false,
-    tagI18n: "projBkjTag",
-    tagFallback: "Enterprise · Maritime Logistics",
-    statusI18n: "projBkjStatus",
-    statusFallback: "Archived System",
-    titleI18n: "projBkjTitle",
-    titleFallback: "BKJ Group Indonesia — Logistics Portal",
-    descI18n: "projBkjDesc",
-    descFallback: "Integrated enterprise maritime logistics and corporate platform built for PT Berkah Kapal Jaya with full CMS, subsidiary routing, and bilingual localization (archived).",
-    tags: ["Laravel 13", "Tailwind v4", "Alpine.js", "MySQL"],
+    id: "gen-labs",
+    repoUrl: "https://github.com/Apisikma123/gen-labs",
+    imgSrc: "/projects/gen-labs.webp",
+    imgAlt: "GEN LABS — Interactive Science & Physics Simulation",
+    imgWidth: 1024,
+    imgHeight: 504,
+    isFeaturedBadge: true,
+    tagI18n: "projGenLabsTag",
+    tagFallback: "Interactive STEM · 60 FPS Simulation",
+    statusI18n: "projGenLabsStatus",
+    statusFallback: "Precision Science Platform",
+    titleI18n: "projGenLabsTitle",
+    titleFallback: "GEN LABS — Interactive Science & Physics Simulation",
+    descI18n: "projGenLabsDesc",
+    descFallback: "Precision science experimentation platform proving formulas live on screen with 60 FPS physics simulations, dynamic variable tuning, and step-by-step AI guidance across 5 disciplines.",
+    tags: ["Next.js", "Three.js / WebGL", "60 FPS Physics", "AI Tutor", "Tailwind CSS"],
+    isPhoneMockup: false,
+  },
+  {
+    id: "inventaris-wilmar",
+    repoUrl: "https://github.com/Apisikma123/inventaris-wilmar",
+    imgSrc: "/projects/inventaris-wilmar.webp",
+    imgAlt: "WBI Inventaris — Executive Asset Monitoring System",
+    imgWidth: 1024,
+    imgHeight: 489,
+    isFeaturedBadge: true,
+    tagI18n: "projWbiTag",
+    tagFallback: "Enterprise Asset Tracking · Campus ERP",
+    statusI18n: "projWbiStatus",
+    statusFallback: "WBI Campus Production",
+    titleI18n: "projWbiTitle",
+    titleFallback: "WBI Inventaris — Executive Asset Monitoring System",
+    descI18n: "projWbiDesc",
+    descFallback: "Comprehensive asset lifecycle tracking, custody mutations, and executive monitoring dashboard built for Politeknik Wilmar Bisnis Indonesia with real-time audit trails.",
+    tags: ["PHP / Laravel", "Asset Tracking", "Executive Dashboard", "MySQL", "Audit Trail"],
     isPhoneMockup: false,
   },
   {
@@ -145,6 +164,25 @@ export const FEATURED_PROJECTS = [
     descI18n: "projPratamaDesc",
     descFallback: "Engineered a high-converting service booking portal for an on-demand appliance repair business in Jakarta, featuring direct WhatsApp dispatch, fault diagnosis calculator, and local SEO schema.",
     tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "SEO Schema"],
+    isPhoneMockup: false,
+  },
+  {
+    id: "bkj",
+    repoUrl: "https://github.com/Apisikma123/bkj",
+    imgSrc: "/projects/bkj.webp",
+    imgAlt: "BKJ Group Indonesia — Logistics Portal",
+    imgWidth: 640,
+    imgHeight: 340,
+    isFeaturedBadge: false,
+    tagI18n: "projBkjTag",
+    tagFallback: "Enterprise · Maritime Logistics",
+    statusI18n: "projBkjStatus",
+    statusFallback: "Archived System",
+    titleI18n: "projBkjTitle",
+    titleFallback: "BKJ Group Indonesia — Logistics Portal",
+    descI18n: "projBkjDesc",
+    descFallback: "Integrated enterprise maritime logistics and corporate platform built for PT Berkah Kapal Jaya with full CMS, subsidiary routing, and bilingual localization (archived).",
+    tags: ["Laravel 13", "Tailwind v4", "Alpine.js", "MySQL"],
     isPhoneMockup: false,
   },
   {
@@ -916,13 +954,16 @@ export const openProjectDetail = async (projectId) => {
 
   const normId = (proj.id || "").toLowerCase();
   const KNOWN_PROJECT_IMAGES = {
+    "gen-labs": "/projects/gen-labs.webp",
+    "inventaris-wilmar": "/projects/inventaris-wilmar.webp",
+    "pratama-tehnik": "/projects/pratama-tehnik.webp",
     foodify: "/projects/foodify.webp",
     wilmarbuku: "/projects/wilmarbuku.webp",
     "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
     "grow-a-garden": "/projects/grow-a-garden.webp",
     bkj: "/projects/bkj.webp",
   };
-  const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (proj.previewImage && KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+  const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (proj.previewImage && (KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || proj.previewImage));
 
   const isMobile = normId === "foodify" || proj.category === "Mobile" || proj.categoryTag === "Mobile" || (proj.tags && proj.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)));
   const bannerContainer = document.getElementById("detail-view-banner-container");
@@ -1145,6 +1186,9 @@ window.renderAllViewProjects = () => {
   }
 
   const KNOWN_PROJECT_IMAGES = {
+    "gen-labs": "/projects/gen-labs.webp",
+    "inventaris-wilmar": "/projects/inventaris-wilmar.webp",
+    "pratama-tehnik": "/projects/pratama-tehnik.webp",
     foodify: "/projects/foodify.webp",
     wilmarbuku: "/projects/wilmarbuku.webp",
     "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
@@ -1157,7 +1201,7 @@ window.renderAllViewProjects = () => {
     card.className = "project-catalog-card rounded-2xl border border-white/10 bg-zinc-950/80 backdrop-blur-xl overflow-hidden transition-all flex flex-col justify-between group hover:border-[#DC143C]/40 hover:-translate-y-1 duration-300";
     
     const normId = p.id.toLowerCase();
-    const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+    const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && (KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || p.previewImage));
     
     let topPreviewHtml = "";
     if (normId === "foodify") {

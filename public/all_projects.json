@@ -1,5 +1,30 @@
 [
   {
+    "id": "gen-labs",
+    "name": "gen-labs",
+    "displayName": "GEN LABS — Interactive Science & Physics Simulation",
+    "category": "Interactive Web & Simulation",
+    "categoryTag": "Web",
+    "featured": true,
+    "previewImage": "/projects/gen-labs.webp",
+    "tags": [
+      "Next.js",
+      "React",
+      "Three.js / WebGL",
+      "60 FPS Physics Engine",
+      "AI Tutor",
+      "Tailwind CSS"
+    ],
+    "description": "Platform eksperimen sains presisi berbasis simulasi fisika 60 FPS langsung di layar, manipulasi variabel realtime, dan Tanya AI sebagai pemandu belajar langkah demi langkah pada 5 pilar lab.",
+    "descriptionEn": "Precision science experimentation platform proving formulas live on screen with 60 FPS physics simulations, dynamic variable tuning, and step-by-step AI guidance across 5 disciplines.",
+    "language": "TypeScript",
+    "html_url": "https://github.com/Apisikma123/gen-labs",
+    "stargazers_count": 0,
+    "updated_at": "2026-10-28T06:00:00Z",
+    "hasReadme": true,
+    "readme": "# 🧪 GEN LABS — Interactive Precision Science & Physics Simulation Platform\n\n<div align=\"center\">\n\n[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)\n[![WebGL](https://img.shields.io/badge/WebGL-60_FPS_Physics-blueviolet?style=for-the-badge&logo=webgl&logoColor=white)](https://threejs.org)\n[![AI Tutor](https://img.shields.io/badge/AI_Tutor-Tanya_AI-emerald?style=for-the-badge)](https://github.com/Apisikma123)\n\n<br/>\n\n**GEN LABS** adalah platform laboratorium sains interaktif revolusioner yang membuktikan rumus sains secara langsung di layar melalui simulasi fisika 60 FPS real-time, manipulasi variabel seketika, dan bimbingan interaktif **Tanya AI**.\n\n</div>\n\n---\n\n## 🌟 Mengapa GEN LABS?\n\nPembelajaran sains konvensional sering kali abstrak dan terbatas pada buku teks. GEN LABS mengubah teori menjadi eksperimen visual yang nyata:\n- **Eksperimen Langsung di Layar**: Siswa dan mahasiswa dapat mengubah angka variabel dan melihat hasil kalkulasi fisika seketika.\n- **60 FPS Hardware-Accelerated Physics**: Animasi dan kalkulasi lintasan partikel, gaya gerak, dan kurva fungsi yang mulus tanpa lag.\n- **Tanya AI (Interactive Step-by-Step AI Guide)**: Mentor cerdas terintegrasi yang menjelaskan alasan di balik setiap fenomena fisis secara terstruktur.\n\n---\n\n## 🔬 5 Pilar Lab Terpadu\n\n1. **Fisika (Physics Lab)**: Simulasi kinematika, dinamika Newton ($a = F/m$), gravitasi, dan mekanika gelombang.\n2. **Matematika (Math Lab)**: Visualisasi fungsi kuadrat ($y = ax^2 + bx + c$), trigonometri interaktif, dan kalkulus diferensial visual.\n3. **Ekonomi (Econ Lab)**: Simulasi kurva penawaran & permintaan kuantitatif ($Q_d = Q_s \\to P^*$).\n4. **Informatika (Computer Science Lab)**: Kompleksitas algoritma visual ($O(n \\log n)$), struktur data graf, dan arsitektur gerbang logika.\n5. **Kimia (Chemistry Lab)**: Simulasi ikatan molekul, stoikiometri reaksi, dan kesetimbangan kimia.\n\n---\n\n## 💻 Tech Stack\n\n- **Frontend & App Framework**: Next.js / React 19, TypeScript\n- **Graphics & Simulation**: Three.js, Canvas API 60 FPS, GSAP\n- **Styling**: Tailwind CSS v4 (Dark Sci-Fi & Emerald Theme)\n- **AI Engine**: Streaming LLM integration untuk Tanya AI\n\n---\n\n## 👨‍💻 Author & Repository\n- **Author:** Muhammad Aga Putra ([@Apisikma123](https://github.com/Apisikma123))\n- **Repository:** [Apisikma123/gen-labs](https://github.com/Apisikma123/gen-labs)"
+  },
+  {
     "id": "bkj",
     "name": "bkj",
     "displayName": "BKJ Group Indonesia — Logistics & Corporate Portal",
@@ -174,26 +199,27 @@
   {
     "id": "inventaris-wilmar",
     "name": "inventaris-wilmar",
-    "displayName": "Sistem Inventaris Sarana Wilmar",
-    "category": "Fullstack Web",
+    "displayName": "WBI Inventaris — Executive Asset Monitoring & Campus System",
+    "category": "Fullstack Web & Enterprise",
     "categoryTag": "Fullstack",
-    "featured": false,
+    "featured": true,
     "previewImage": "/projects/inventaris-wilmar.webp",
     "tags": [
       "PHP / Laravel",
-      "Inventory Management",
-      "Asset Tracking",
-      "MySQL",
-      "Audit Trail"
+      "Asset Management",
+      "Executive Dashboard",
+      "Mutation Tracking",
+      "Audit Trail",
+      "MySQL"
     ],
-    "description": "Sistem pencatatan dan pelacakan aset sarana dan prasarana inventaris perusahaan.",
-    "descriptionEn": "Corporate asset tracking and facility inventory management database system with automated depreciation and maintenance scheduling.",
-    "language": "Code",
+    "description": "Dashboard monitoring eksekutif dan pencatatan siklus mutasi aset kampus Politeknik Wilmar Bisnis Indonesia dengan audit trail transaksi, valuasi real-time, dan status per unit kerja.",
+    "descriptionEn": "Executive monitoring dashboard and comprehensive campus asset lifecycle tracking built for Politeknik Wilmar Bisnis Indonesia with transaction audit trails and real-time valuation.",
+    "language": "PHP",
     "html_url": "https://github.com/Apisikma123/inventaris-wilmar",
     "stargazers_count": 0,
-    "updated_at": "2026-07-28T08:28:07Z",
+    "updated_at": "2026-10-28T06:00:00Z",
     "hasReadme": true,
-    "readme": "# 📦 Sistem Inventaris Sarana & Aset Perusahaan (Wilmar)\n\n<div align=\"center\">\n\n[![Laravel](https://img.shields.io/badge/Laravel-Enterprise-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)\n[![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)\n[![Asset Tracking](https://img.shields.io/badge/Audit-Asset_Management-blue?style=for-the-badge)](https://github.com/Apisikma123)\n\n<br/>\n\n**Sistem Inventaris Sarana Wilmar** adalah aplikasi manajemen aset fisik, peralatan kantor, dan prasarana operasional terpadu yang dirancang untuk memastikan transparansi stok, riwayat peminjaman, jadwal pemeliharaan, dan audit aset berkala.\n\n</div>\n\n---\n\n## 🌟 Problem & Architecture\n\nPengelolaan aset perusahaan skala besar sering menghadapi masalah kehilangan barang, duplikasi pencatatan, dan ketidakjelasan penanggung jawab peralatan. Sistem ini mengimplementasikan:\n- **Unique Asset Tagging (Kode Unik & QR Generator)** untuk identifikasi cepat setiap unit aset.\n- **Audit Trail & Custody History**: Mencatat perpindahan unit dari gudang ke divisi tertentu secara akurat.\n- **Kondisi Aset Real-time**: Klasifikasi status (*Baik, Perlu Perbaikan, Rusak Total, Dihapus dari Buku*).\n\n---\n\n## 🛠️ Fitur Utama\n\n- **📋 Master Data Sarana**: Pencatatan merk, serial number, tanggal pengadaan, nilai perolehan, dan lokasi penempatan.\n- **🔄 Alur Peminjaman & Pengembalian**: Formulir digital checkout peminjaman dengan persetujuan kepala divisi.\n- **🛠️ Jadwal Maintenance & Servis**: Notifikasi berkala untuk servis mesin dan kalibrasi alat.\n- **📊 Laporan Mutasi & Stock Opname**: Ekspor laporan aset bulanan dalam format Excel dan PDF siap cetak.\n\n---\n\n## 💻 Teknologi yang Digunakan\n\n- **Framework**: Laravel MVC (PHP 8.2+)\n- **Database**: MySQL dengan relasi data terindeks (InnoDB)\n- **Frontend**: Bootstrap 5 / Tailwind CSS + DataTables.js\n- **Export**: Maatwebsite Excel & DomPDF\n\n---\n\n## 🚀 Instalasi Lokal\n\n```bash\ngit clone https://github.com/Apisikma123/inventaris-wilmar.git\ncd inventaris-wilmar\ncomposer install\ncp .env.example .env\nphp artisan key:generate\nphp artisan migrate --seed\nphp artisan serve\n```\n\n## 👨‍💻 Author & License\n- **Author:** Muhammad Aga Putra ([@Apisikma123](https://github.com/Apisikma123))\n- **License:** MIT License"
+    "readme": "# 🏢 WBI Inventaris — Sistem Monitoring & Manajemen Aset Kampus (Wilmar Business Indonesia)\n\n<div align=\"center\">\n\n[![Laravel](https://img.shields.io/badge/Laravel-Enterprise-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)\n[![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)\n[![Campus ERP](https://img.shields.io/badge/Politeknik_WBI-Enterprise_ERP-0d4a36?style=for-the-badge)](https://github.com/Apisikma123)\n\n<br/>\n\n**WBI Inventaris** adalah platform monitoring menyeluruh pergerakan aset, audit trail transaksi, serta pengelolaan master data kampus untuk **Politeknik Wilmar Bisnis Indonesia (WBI)**.\n\n</div>\n\n---\n\n## 🌟 Problem & Architecture\n\nPengelolaan aset kampus dan fasilitas pendidikan tinggi membutuhkan visibilitas real-time antara gudang sentral dan departemen pengguna. Sistem ini menyediakan:\n- **Ringkasan Eksekutif & Monitoring Sistem**: Indikator instan untuk Total Aset Terdata, Aset Operasional aktif, persediaan Gudang Inventaris cadangan, serta status Siklus Mutasi Aset (Menunggu Approval & Siap Eksekusi).\n- **Analisis & Visualisasi Realtime**: Chart distribusi status aset (Operasional vs Gudang vs Perbaikan) serta matriks kondisi fisik.\n- **Valuasi Aset per Unit Kerja (IDR)**: Akumulasi nilai perolehan barang per departemen (Gudang Inventaris, Bagian Keuangan, Heavy Equipment, dsb).\n- **Audit Trail & SOP Kampus**: Panduan alur sistem terintegrasi dan registrasi aset terstandarisasi.\n\n---\n\n## 🛠️ Fitur Utama\n\n- **📊 Executive KPI Cards**: Visualisasi total aset, rasio utilisasi operasional, stok cadangan gudang, dan pipeline approval mutasi aset.\n- **🔄 Siklus Mutasi Dua Arah**: Alur permintaan mutasi antar departemen kampus dengan tanda tangan approval berjenjang.\n- **🏷️ Registrasi & Klasifikasi Cepat**: Pendataan sarana baru lengkap dengan kode unik inventaris kampus.\n- **📈 Valuasi Keuangan Terpadu**: Kalkulasi otomatis depresiasi dan total nilai buku aset dalam mata uang Rupiah (IDR).\n\n---\n\n## 💻 Teknologi yang Digunakan\n\n- **Backend**: Laravel MVC (PHP 8.2+)\n- **Database**: MySQL dengan relasi data terindeks (InnoDB)\n- **Frontend**: Tailwind CSS / Bootstrap 5 + ApexCharts / Chart.js\n- **Export & Reporting**: DomPDF & Maatwebsite Excel\n\n---\n\n## 👨‍💻 Author & License\n- **Author:** Muhammad Aga Putra ([@Apisikma123](https://github.com/Apisikma123))\n- **License:** MIT License"
   },
   {
     "id": "my-wo-planner",

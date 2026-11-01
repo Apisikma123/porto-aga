@@ -381,6 +381,8 @@ export default function ProjectDetailApp() {
             {/* Visual Preview Banner (iPhone Mockup if Mobile with known image, wide landscape if web with known image, or macOS Terminal Window if placeholder/empty) */}
             {(() => {
               const KNOWN_PROJECT_IMAGES = {
+                "gen-labs": "/projects/gen-labs.webp",
+                "inventaris-wilmar": "/projects/inventaris-wilmar.webp",
                 foodify: "/projects/foodify.webp",
                 wilmarbuku: "/projects/wilmarbuku.webp",
                 "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
@@ -389,7 +391,7 @@ export default function ProjectDetailApp() {
                 "pratama-tehnik": "/projects/pratama-tehnik.webp",
               };
               const normId = (project.id || '').toLowerCase();
-              const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (project.previewImage && KNOWN_PROJECT_IMAGES[project.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+              const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (project.previewImage && (KNOWN_PROJECT_IMAGES[project.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || project.previewImage));
 
               if (normId === 'foodify' || (hasKnownImg && (project.category === 'Mobile' || project.categoryTag === 'Mobile' || (project.tags && project.tags.some(t => /flutter|mobile|android|ios|dart/i.test(t)))))) {
                 return (

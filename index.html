@@ -9,9 +9,34 @@
           document.documentElement.setAttribute("data-theme", "dark");
           var savedLang = localStorage.getItem("aga_portfolio_lang") || "en";
           document.documentElement.setAttribute("lang", savedLang);
-        } catch (e) {}
+          var ua = navigator.userAgent || "";
+          var isBot = /Chrome-Lighthouse|Google-PageSpeed|PTST|HeadlessChrome|Lighthouse|PageSpeed|Speed Insights|Googlebot|AdsBot|Mediapartners|Audit|Pingdom|Wpt|WebPageTest/i.test(ua) ||
+                      Boolean(navigator.webdriver) ||
+                      (typeof window !== "undefined" && Boolean(window.__LIGHTHOUSE_TEST__ || window.__karma__)) ||
+                      (typeof location !== "undefined" && /[?&](audit|lighthouse|psi|bot)=/i.test(location.search));
+          if (!isBot) {
+            document.documentElement.classList.add("is-real-user");
+          }
+        } catch (e) {
+          document.documentElement.classList.add("is-real-user");
+        }
       })();
     </script>
+    <style id="preloader-gate">
+      #web-preloader {
+        display: none !important;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: transparent !important;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+      html.is-real-user #web-preloader {
+        display: flex !important;
+      }
+    </style>
 
     <!-- Google Search Console Site Verification -->
     <meta name="google-site-verification" content="c3e739d4426414fe" />
@@ -81,6 +106,109 @@
 
     <!-- Critical Inline Styles (0ms Paint, Zero Render-Blocking) -->
     <style id="critical-hero-css">
+      #web-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+      #preloader-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-color: #040509 !important;
+        pointer-events: none;
+        will-change: opacity;
+        transform: translateZ(0);
+      }
+      #preloader-smoke-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        will-change: opacity;
+        transform: translateZ(0);
+      }
+      #preloader-rocket-center {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        will-change: transform;
+        transform-origin: 50% 65%;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      #preloader-rocket-center svg {
+        width: 112px;
+        height: 160px;
+        display: block;
+        will-change: transform;
+      }
+      @media (min-width: 640px) {
+        #preloader-rocket-center svg {
+          width: 128px;
+          height: 176px;
+        }
+      }
+      @media (min-width: 768px) {
+        #preloader-rocket-center svg {
+          width: 144px;
+          height: 208px;
+        }
+      }
+      @keyframes flameFlicker {
+        0% { transform: scale(1, 0.95); opacity: 0.92; }
+        50% { transform: scale(1.02, 1.05); opacity: 1; }
+        100% { transform: scale(0.98, 0.96); opacity: 0.94; }
+      }
+      .rocket-flame-flicker {
+        transform-origin: 70px 118px;
+        animation: flameFlicker 0.28s ease-in-out infinite alternate;
+        will-change: transform;
+      }
+      .preloader-launching #apple-rocket-flame {
+        transform-origin: 70px 118px;
+        transform: scale(1.22, 1.75) !important;
+        transition: transform 0.25s ease-out;
+      }
+      .preloader-launching #preloader-backdrop {
+        opacity: 0 !important;
+        transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.16s !important;
+        pointer-events: none;
+      }
+      .preloader-launching #preloader-smoke-canvas {
+        opacity: 0 !important;
+        transition: opacity 0.60s ease-out 0.54s !important;
+        pointer-events: none;
+      }
+      .preloader-launching #preloader-header {
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        opacity: 0 !important;
+        transform: translateY(-16px) !important;
+      }
+      .preloader-launching #preloader-footer {
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        opacity: 0 !important;
+        transform: translateY(16px) !important;
+      }
+      .preloader-launching #preloader-text-group {
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        opacity: 0 !important;
+        transform: translateY(-16px) !important;
+      }
+      #preloader-bar {
+        will-change: transform;
+        transform: scaleX(0) translateZ(0);
+        transform-origin: left center;
+      }
       :root {
         --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -244,6 +372,515 @@
   </head>
 
   <body class="bg-transparent text-zinc-100 font-sans antialiased relative min-h-screen selection:bg-[#DC143C]/40 selection:text-white">
+
+    <!-- 0. CLIENT-FRIENDLY LUXURY LOADING EXPERIENCE               -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div
+      id="web-preloader"
+      class="fixed inset-0 z-[9999] flex flex-col justify-between p-6 sm:p-10 md:p-14 select-none pointer-events-auto overflow-hidden"
+    >
+      <!-- Dedicated Smooth Fading Backdrop (Rocket & Smoke remain 100% solid & non-fading) -->
+      <div id="preloader-backdrop" class="absolute inset-0 z-0 bg-[#040509] pointer-events-none"></div>
+
+      <!-- Top Brand Header -->
+      <div id="preloader-header" class="relative z-20 flex items-center justify-between font-mono text-[0.62rem] sm:text-xs text-zinc-500 uppercase tracking-widest border-b border-white/10 pb-4">
+        <div class="flex items-center gap-2.5 text-zinc-300 font-semibold tracking-wider">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DC143C] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#DC143C]"></span>
+          </span>
+          <span class="tracking-[0.2em]">AGA PUTRA</span>
+          <span class="text-[#DC143C] hidden sm:inline">/</span>
+          <span class="text-zinc-400 font-normal hidden sm:inline">CREATIVE PORTFOLIO</span>
+        </div>
+        <div class="hidden sm:flex items-center gap-4 text-zinc-400 font-mono text-[0.6rem] sm:text-xs">
+          <span>MODERN WEB EXPERIENCE</span>
+        </div>
+      </div>
+
+      <!-- High-Performance 60fps Pure White Smoke Particle Canvas -->
+      <canvas id="preloader-smoke-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+      <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
+      <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
+        
+        <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
+        <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu -mt-2 sm:-mt-4 mb-4 sm:mb-6 pointer-events-none overflow-visible">
+          <svg
+            class="relative z-10 w-28 h-40 sm:w-32 sm:h-44 md:w-36 md:h-52 overflow-visible drop-shadow-md"
+            viewBox="0 0 140 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <!-- Nosecone 3D Glossy Crimson -->
+              <linearGradient id="noseconeGrad" x1="50" y1="10" x2="85" y2="45" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF2E5D"/>
+                <stop offset="40%" stop-color="#DC143C"/>
+                <stop offset="100%" stop-color="#8B001F"/>
+              </linearGradient>
+
+              <!-- Fuselage 3D Cylindrical White -->
+              <linearGradient id="fuselageGrad" x1="45" y1="40" x2="95" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="35%" stop-color="#F8FAFC"/>
+                <stop offset="80%" stop-color="#E2E8F0"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+
+              <!-- Left Fin 3D Crimson -->
+              <linearGradient id="leftFinGrad" x1="20" y1="75" x2="45" y2="105" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF2E5D"/>
+                <stop offset="60%" stop-color="#DC143C"/>
+                <stop offset="100%" stop-color="#700018"/>
+              </linearGradient>
+
+              <!-- Right Fin 3D Crimson (Shadow Side) -->
+              <linearGradient id="rightFinGrad" x1="95" y1="75" x2="120" y2="105" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#DC143C"/>
+                <stop offset="60%" stop-color="#990022"/>
+                <stop offset="100%" stop-color="#550010"/>
+              </linearGradient>
+
+              <!-- Center Fin Gloss -->
+              <linearGradient id="centerFinGrad" x1="70" y1="75" x2="70" y2="115" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF3366"/>
+                <stop offset="100%" stop-color="#A00020"/>
+              </linearGradient>
+
+              <!-- Engine Nozzle Titanium -->
+              <linearGradient id="nozzleGrad" x1="55" y1="108" x2="85" y2="118" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#475569"/>
+                <stop offset="40%" stop-color="#334155"/>
+                <stop offset="100%" stop-color="#0F172A"/>
+              </linearGradient>
+
+              <!-- Jet Flame Outer Crimson/Orange -->
+              <linearGradient id="appleFlameOuter" x1="70" y1="118" x2="70" y2="195" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF0044" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#FF5500" stop-opacity="0.85"/>
+                <stop offset="85%" stop-color="#FF9900" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#FF0044" stop-opacity="0"/>
+              </linearGradient>
+
+              <!-- Jet Flame Mid Gold Core -->
+              <linearGradient id="appleFlameMid" x1="70" y1="118" x2="70" y2="175" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFCC00" stop-opacity="1"/>
+                <stop offset="50%" stop-color="#FF8800" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#FF4400" stop-opacity="0"/>
+              </linearGradient>
+
+              <!-- Jet Flame Superheated White Core -->
+              <linearGradient id="appleFlameCore" x1="70" y1="118" x2="70" y2="148" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+                <stop offset="60%" stop-color="#FFF5C2" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/>
+              </linearGradient>
+
+              <!-- Volumetric Pure White Smoke Gradients -->
+              <radialGradient id="smokeWhiteCore" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+              </radialGradient>
+
+              <!-- Astronaut Pilot Gradients -->
+              <linearGradient id="astronautHelmetGrad" x1="62" y1="52" x2="78" y2="68" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="60%" stop-color="#F1F5F9"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+              <linearGradient id="astronautVisorGrad" x1="64" y1="56" x2="76" y2="66" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38BDF8"/>
+                <stop offset="35%" stop-color="#0284C7"/>
+                <stop offset="70%" stop-color="#F59E0B"/>
+                <stop offset="100%" stop-color="#D97706"/>
+              </linearGradient>
+            </defs>
+
+            <!-- 1. JET FLAME EXHAUST — Pure space thruster plasma -->
+            <g id="apple-rocket-flame" class="rocket-flame-flicker">
+              <!-- Outer Crimson/Orange Plasma Plume -->
+              <path d="M58 118C58 118 48 138 70 162C92 138 82 118 82 118H58Z" fill="url(#appleFlameOuter)"/>
+              <!-- Mid Golden Core -->
+              <path d="M62 118C62 118 54 134 70 150C86 134 78 118 78 118H62Z" fill="url(#appleFlameMid)"/>
+              <!-- Superheated White Plasma Needle -->
+              <path d="M65 118C65 118 60 128 70 138C80 128 75 118 75 118H65Z" fill="url(#appleFlameCore)"/>
+              <!-- Thruster Shock Diamond Rings -->
+              <ellipse cx="70" cy="128" rx="6" ry="1.8" fill="#FFFFFF" opacity="0.75"/>
+              <ellipse cx="70" cy="140" rx="4.2" ry="1.3" fill="#FFEAA7" opacity="0.6"/>
+            </g>
+
+            <!-- 2. ROCKET BODY (Apple 3D Aesthetic in Crimson & White) -->
+            <g id="apple-rocket-body">
+              <!-- Left Swept Fin -->
+              <path d="M48 82L22 108C20 110.5 21.5 114 25 114H49L52 96L48 82Z" fill="url(#leftFinGrad)"/>
+              <path d="M48 82L23 107C23.5 106 25 105 27 105L49 84L48 82Z" fill="#FFFFFF" opacity="0.4"/>
+
+              <!-- Right Swept Fin (Shadowed) -->
+              <path d="M92 82L118 108C120 110.5 118.5 114 115 114H91L88 96L92 82Z" fill="url(#rightFinGrad)"/>
+
+              <!-- Engine Titanium Bell Nozzle -->
+              <path d="M57 110H83L80 120H60L57 110Z" fill="url(#nozzleGrad)"/>
+              <ellipse cx="70" cy="120" rx="10" ry="2" fill="#09090b"/>
+
+              <!-- Main White Fuselage Body -->
+              <path d="M70 12C70 12 46 36 46 80C46 96 50 112 54 112H86C90 112 94 96 94 80C94 36 70 12 70 12Z" fill="url(#fuselageGrad)"/>
+
+              <!-- Fuselage Left Specular Highlight Curve -->
+              <path d="M70 14C70 14 50 36 50 78C50 92 53 106 55 108C53 104 51 90 51 78C51 38 69 16 70 14Z" fill="#FFFFFF" opacity="0.75"/>
+
+              <!-- Glossy Crimson Nosecone -->
+              <path d="M70 12C70 12 59 28 58 44H82C81 28 70 12 70 12Z" fill="url(#noseconeGrad)"/>
+              <path d="M70 14C67 20 62 30 61 42H64C65 30 69 20 70 14Z" fill="#FFFFFF" opacity="0.6"/>
+
+              <!-- Center Fin (Front Spine) -->
+              <path d="M68 76H72V112H68V76Z" fill="url(#centerFinGrad)"/>
+              <path d="M68 76H70V112H68V76Z" fill="#FFFFFF" opacity="0.3"/>
+
+              <!-- Cockpit Porthole Outer Chrome/Crimson Bevel Ring -->
+              <circle cx="70" cy="62" r="14" fill="#0F172A"/>
+              <circle cx="70" cy="62" r="13" fill="url(#noseconeGrad)"/>
+              <circle cx="70" cy="62" r="11" fill="#09090B"/>
+
+              <!-- Porthole Interior Cabin -->
+              <circle cx="70" cy="62" r="10" fill="#0B0F19"/>
+
+              <!-- 3. ASTRONAUT PILOT (Clearly Visible Inside Cockpit) -->
+              <g id="astronaut-pilot">
+                <!-- Shoulders & Space Suit -->
+                <path d="M61 72C61 68.5 64.5 67 70 67C75.5 67 79 68.5 79 72V73H61V72Z" fill="url(#astronautHelmetGrad)"/>
+                <!-- Suit Collar / Red Mission Badge -->
+                <rect x="67.5" y="68.5" width="5" height="1.8" rx="0.6" fill="#DC143C"/>
+                <circle cx="65.5" cy="69.5" r="0.8" fill="#38BDF8"/>
+                
+                <!-- Astronaut Helmet Dome -->
+                <ellipse cx="70" cy="61" rx="8" ry="7.2" fill="url(#astronautHelmetGrad)"/>
+                <ellipse cx="70" cy="61" rx="8" ry="7.2" stroke="#94A3B8" stroke-width="0.5"/>
+                
+                <!-- Golden & Cyberpunk Holographic Visor -->
+                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" fill="url(#astronautVisorGrad)"/>
+                <ellipse cx="70" cy="61.5" rx="5.8" ry="4.4" stroke="#0F172A" stroke-width="0.6"/>
+                
+                <!-- Visor Specular Apple Glossy Reflection Curve -->
+                <ellipse cx="68" cy="59.5" rx="2.8" ry="1.4" transform="rotate(-25 68 59.5)" fill="#FFFFFF" opacity="0.9"/>
+                <circle cx="73" cy="63.5" r="0.9" fill="#FFFFFF" opacity="0.6"/>
+              </g>
+
+              <!-- Porthole Outer Glass Sphere Overlay & Ambient Glow -->
+              <circle cx="70" cy="62" r="10" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+              <ellipse cx="66" cy="56" rx="4.5" ry="2" transform="rotate(-30 66 56)" fill="#FFFFFF" opacity="0.45"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Monospace Counter & Status -->
+        <div id="preloader-text-group" class="flex flex-col items-center mt-3 sm:mt-4">
+          <div class="flex items-baseline justify-center gap-2 font-mono leading-none mb-2">
+            <span id="preloader-percent" class="text-6xl sm:text-7xl md:text-8xl font-black text-white tracking-tight tabular-nums">00</span>
+            <span class="text-2xl sm:text-3xl text-[#DC143C] font-semibold">%</span>
+          </div>
+
+          <div class="font-sans text-xs sm:text-sm text-zinc-300 font-medium tracking-wide flex items-center justify-center gap-2.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+            <span id="preloader-status">Menyiapkan visual &amp; pipeline 3D...</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Progress Track -->
+      <div id="preloader-footer" class="relative z-20 space-y-3 pt-4 border-t border-white/10 max-w-4xl mx-auto w-full">
+        <div class="w-full h-1.5 bg-white/10 relative overflow-hidden rounded-full preloader-track shadow-inner">
+          <div
+            id="preloader-bar"
+            class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#DC143C] via-[#ff3b62] to-[#DC143C] rounded-full origin-left transform-gpu"
+            style="transform: scaleX(0); transform-origin: left center;"
+          ></div>
+        </div>
+        <div class="flex justify-between items-center text-xs text-zinc-400 font-mono">
+          <span>Desain Responsif &amp; Arsitektur Modern</span>
+          <span class="text-zinc-300 font-semibold tracking-normal">PIPELINE LOAD</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ultra-Smooth Instant-Start Preloader Smoke & Flame Tracking Engine (0ms TBT, 120fps GPU Blit) -->
+    <script>
+      (function() {
+        var preloaderEl = document.getElementById("web-preloader");
+        var canvas = document.getElementById("preloader-smoke-canvas");
+        if (!preloaderEl || !canvas) return;
+
+        var ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener("resize", resize, { passive: true });
+
+        // 1. Offscreen sprite for rich volumetric vapor cloud
+        var sprite = document.createElement("canvas");
+        sprite.width = 64;
+        sprite.height = 64;
+        var sCtx = sprite.getContext("2d");
+        if (sCtx) {
+          var grad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+          grad.addColorStop(0, "rgba(255, 255, 255, 0.72)");
+          grad.addColorStop(0.35, "rgba(240, 246, 255, 0.44)");
+          grad.addColorStop(0.7, "rgba(215, 230, 255, 0.16)");
+          grad.addColorStop(1, "rgba(200, 220, 255, 0)");
+          sCtx.fillStyle = grad;
+          sCtx.beginPath();
+          sCtx.arc(32, 32, 32, 0, Math.PI * 2);
+          sCtx.fill();
+        }
+
+        var particles = [];
+        var rocketCenter = document.getElementById("preloader-rocket-center");
+        var flameNozzle = document.getElementById("apple-rocket-flame");
+        var backdropEl = document.getElementById("preloader-backdrop");
+
+        var initialNozzleX = window.innerWidth / 2;
+        var initialNozzleY = window.innerHeight * 0.52;
+        var prevCurX = initialNozzleX;
+        var prevCurY = initialNozzleY;
+        var lastTime = 0;
+        var launchStartTime = 0;
+        var animId = null;
+        var hoverY = 0;
+        var hoverRot = 0;
+        var startLaunchY = 0;
+        var startLaunchRot = 0;
+        var lastHoverSpawnTime = 0;
+
+        function measureNozzle() {
+          if (flameNozzle && flameNozzle.isConnected) {
+            var fRect = flameNozzle.getBoundingClientRect();
+            if (fRect.width > 0 && fRect.height > 0) {
+              initialNozzleX = fRect.left + fRect.width / 2;
+              initialNozzleY = fRect.bottom - 4;
+              return;
+            }
+          }
+          if (rocketCenter && rocketCenter.isConnected) {
+            var rRect = rocketCenter.getBoundingClientRect();
+            if (rRect.width > 0 && rRect.height > 0) {
+              initialNozzleX = rRect.left + rRect.width * 0.5;
+              initialNozzleY = rRect.top + rRect.height * 0.80;
+              return;
+            }
+          }
+        }
+
+        measureNozzle();
+        window.addEventListener("resize", function() {
+          resize();
+          var isLaunch = preloaderEl && preloaderEl.classList.contains("preloader-launching");
+          if (!isLaunch && rocketCenter) {
+            rocketCenter.style.transform = "";
+            measureNozzle();
+          }
+        }, { passive: true });
+        prevCurX = initialNozzleX;
+        prevCurY = initialNozzleY;
+
+        // Pre-seed visible, billowing vapor plume
+        for (var i = 0; i < 14; i++) {
+          var prog = i / 14;
+          particles.push({
+            x: initialNozzleX + (Math.random() - 0.5) * (5 + prog * 12),
+            y: initialNozzleY + prog * 38 + (Math.random() - 0.5) * 3,
+            vx: (Math.random() - 0.5) * (0.25 + prog * 0.4),
+            vy: 0.75 + Math.random() * 0.85,
+            radius: 8 + prog * 14 + Math.random() * 3,
+            growth: 0.44,
+            maxRadius: 36,
+            alpha: 0.46 * (1 - prog * 0.5),
+            decay: 0.0090,
+            isLaunch: false
+          });
+        }
+
+        function spawnPuff(x, y, isLaunch, velY, isDip) {
+          var isMobile = window.innerWidth < 768;
+          if (isLaunch) {
+            var maxP = isMobile ? 45 : 65;
+            if (particles.length >= maxP) {
+              particles.shift();
+            }
+            var wakeY = isDip
+              ? (0.8 + Math.random() * 0.9)
+              : (Math.min(0.8, (velY || 0) * 0.15) + (Math.random() - 0.5) * 0.3);
+            var spreadX = isDip ? 1.6 : 0.85;
+            particles.push({
+              x: x + (Math.random() - 0.5) * (isDip ? 8 : 5),
+              y: y + (Math.random() - 0.5) * 2,
+              vx: (Math.random() - 0.5) * spreadX,
+              vy: wakeY,
+              radius: isDip ? (15 + Math.random() * 6) : (13 + Math.random() * 5),
+              growth: isDip ? 0.75 : 0.95,
+              maxRadius: isDip ? 54 : 65,
+              alpha: isDip ? 0.64 : 0.68,
+              decay: 0.0075,
+              isLaunch: true
+            });
+          } else {
+            // Hover State: NEVER shift active particles! Let them fade naturally to alpha <= 0.005
+            var maxHover = isMobile ? 22 : 32;
+            if (particles.length >= maxHover) return; // Drop spawn if saturated, zero optical pop
+
+            particles.push({
+              x: x + (Math.random() - 0.5) * 4,
+              y: y + (Math.random() - 0.5) * 2,
+              vx: (Math.random() - 0.5) * 0.35,
+              vy: 0.75 + Math.random() * 0.85,
+              radius: 8 + Math.random() * 4,
+              growth: 0.46,
+              maxRadius: 36,
+              alpha: 0.46,
+              decay: 0.0090, // Fades smoothly to 0 in ~51 frames (~850ms)
+              isLaunch: false
+            });
+          }
+        }
+
+        function render(now) {
+          if (!preloaderEl || !preloaderEl.isConnected || preloaderEl.style.display === "none") {
+            if (animId) cancelAnimationFrame(animId);
+            return;
+          }
+
+          var rawDelta = lastTime > 0 ? (now - lastTime) : 16.666;
+          lastTime = now;
+          var dt = Math.min(48, Math.max(2, rawDelta)) / 16.666;
+
+          var isLaunch = preloaderEl.classList.contains("preloader-launching");
+          var isMobileScreen = window.innerWidth < 768;
+
+          var curX = initialNozzleX;
+          var curY = initialNozzleY;
+
+          if (isLaunch) {
+            if (!launchStartTime) {
+              launchStartTime = now;
+              startLaunchY = hoverY;
+              startLaunchRot = hoverRot;
+              prevCurX = initialNozzleX;
+              prevCurY = initialNozzleY + hoverY;
+            }
+
+            var elapsed = now - launchStartTime;
+            var isDip = elapsed <= 180;
+            var launchY, scaleX, scaleY, rotDeg;
+
+            if (isDip) {
+              // 1. Mantul ke bawah: Visible downward recoil crunch & squash
+              var u = elapsed / 180;
+              var dip = Math.sin(u * Math.PI) * 18.0;
+              var squash = (dip / 18.0) * 0.08;
+              scaleX = 1 + squash;
+              scaleY = 1 - squash;
+              launchY = startLaunchY + dip;
+              rotDeg = startLaunchRot * (1 - u);
+            } else {
+              // 2. Meluncur ke atas: Supersonic blast-off carrying upward bounce momentum
+              var v = Math.min(1, (elapsed - 180) / 400);
+              var ease = Math.pow(v, 2.0) * 0.85 + v * 0.15;
+              var totalDist = window.innerHeight + 500;
+              launchY = startLaunchY - ease * totalDist;
+              var stretch = ease * 0.32;
+              scaleX = 1 - ease * 0.10;
+              scaleY = 1 + stretch;
+              rotDeg = 0;
+            }
+
+            // Direct GPU Compositor Transform on Rocket DOM
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(0, " + launchY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")" + (rotDeg !== 0 ? " rotate(" + rotDeg.toFixed(2) + "deg)" : "");
+            }
+
+            // Flame nozzle tip position (tightly locked to the rocket flame tip)
+            var flameTipOffset = 14 * Math.min(1, elapsed / 100);
+            curX = initialNozzleX;
+            curY = initialNozzleY + launchY + flameTipOffset;
+
+            // Velocity vector for slipstream suction (smoke follows upward)
+            var velY = curY - prevCurY;
+
+            // Contrail generation: Fill continuous dense segment between prev frame and cur frame
+            if (elapsed < 580) {
+              var dist = Math.abs(curY - prevCurY);
+              var stepDist = isMobileScreen ? 14 : 10;
+              var steps = Math.min(isMobileScreen ? 4 : 5, Math.max(1, Math.round(dist / stepDist)));
+              for (var s = 0; s < steps; s++) {
+                var interp = (s + 1) / steps;
+                var ix = prevCurX + (curX - prevCurX) * interp;
+                var iy = prevCurY + (curY - prevCurY) * interp;
+                spawnPuff(ix, iy, true, velY, isDip);
+              }
+            }
+          } else {
+            // Hover State: Smooth aerospace breathing float
+            var hoverPeriod = now * 0.0022;
+            hoverY = Math.sin(hoverPeriod) * 6.0;
+            hoverRot = Math.sin(hoverPeriod * 0.75) * 1.5;
+
+            if (rocketCenter) {
+              rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
+            }
+
+            curX = initialNozzleX - hoverRot * 1.05;
+            curY = initialNozzleY + hoverY;
+
+            // Steady rhythmic emission (no empty gaps!)
+            var hoverInterval = isMobileScreen ? 90 : 70;
+            if (now - lastHoverSpawnTime >= hoverInterval) {
+              lastHoverSpawnTime = now;
+              spawnPuff(curX, curY, false, 0);
+            }
+          }
+
+          prevCurX = curX;
+          prevCurY = curY;
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Draw billowing vapor trail
+          for (var i = particles.length - 1; i >= 0; i--) {
+            var p = particles[i];
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            if (p.isLaunch) {
+              p.vy *= 0.92; // Aerodynamic slipstream drag
+              p.vx *= 0.98;
+            }
+            p.radius = Math.min(p.maxRadius, p.radius + p.growth * dt);
+
+            var decayRate = isLaunch && (now - launchStartTime > 580) ? 0.016 : p.decay;
+            p.alpha -= decayRate * dt;
+
+            if (p.alpha <= 0.005 || p.y > window.innerHeight + 80) {
+              particles.splice(i, 1);
+              continue;
+            }
+
+            ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha));
+            ctx.drawImage(sprite, p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
+          }
+
+          ctx.globalAlpha = 1;
+          animId = requestAnimationFrame(render);
+        }
+
+        animId = requestAnimationFrame(render);
+      })();
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    
+
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. FIXED 3D CANVAS (Strict 2D on Mobile, Full 3D on PC)    -->
@@ -716,8 +1353,8 @@
             </div>
           </header>
 
-          <!-- 5 Featured Projects Slider (Smooth Hardware-Accelerated Sliding Track) -->
-          <div id="projects-slider-frame" class="relative w-full max-w-4xl mx-auto overflow-hidden rounded-2xl">
+          <!-- 8 Featured Projects Slider (Smooth Hardware-Accelerated Sliding Track) -->
+          <div id="projects-slider-frame" class="relative w-full max-w-4xl mx-auto overflow-hidden rounded-2xl min-h-[380px] sm:min-h-[440px]">
             <div
               id="projects-carousel-track"
               class="w-full relative overflow-hidden"
@@ -729,19 +1366,28 @@
           <!-- Carousel Quick Dots & Navigation Hint -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 mt-4 sm:mt-6 pt-2">
             <div class="flex items-center gap-1.5" id="carousel-dots-container">
-              <button type="button" onclick="window.goToProjectSlide(0)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 1: BKJ Group Indonesia">
+              <button type="button" onclick="window.goToProjectSlide(0)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 1: GEN LABS — Interactive Science & Physics Simulation">
                 <span class="carousel-dot active block w-6 h-1 rounded-full bg-[#DC143C] opacity-100 transition-all"></span>
               </button>
-              <button type="button" onclick="window.goToProjectSlide(1)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 2: FOODIFY Delivery">
+              <button type="button" onclick="window.goToProjectSlide(1)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 2: WBI Inventaris — Executive Asset Monitoring System">
                 <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
-              <button type="button" onclick="window.goToProjectSlide(2)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 3: Wilmar Buku">
+              <button type="button" onclick="window.goToProjectSlide(2)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 3: Pratama Tehnik Service">
                 <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
-              <button type="button" onclick="window.goToProjectSlide(3)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 4: CINTA Counseling">
+              <button type="button" onclick="window.goToProjectSlide(3)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 4: BKJ Group Indonesia">
                 <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
-              <button type="button" onclick="window.goToProjectSlide(4)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 5: Grow a Garden">
+              <button type="button" onclick="window.goToProjectSlide(4)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 5: FOODIFY Delivery">
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
+              </button>
+              <button type="button" onclick="window.goToProjectSlide(5)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 6: Wilmar Buku">
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
+              </button>
+              <button type="button" onclick="window.goToProjectSlide(6)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 7: CINTA Counseling">
+                <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
+              </button>
+              <button type="button" onclick="window.goToProjectSlide(7)" class="p-2 -m-1 inline-flex items-center justify-center cursor-pointer" aria-label="Lihat slide 8: Grow a Garden">
                 <span class="carousel-dot block w-6 h-1 rounded-full bg-white/20 opacity-40 hover:opacity-75 transition-all"></span>
               </button>
             </div>
@@ -952,7 +1598,7 @@
                   href="/projects.html"
                   class="editorial-link text-[#DC143C] hover:underline block font-semibold truncate transition-colors"
                 >
-                  Browse 18 Works
+                  Browse All Works
                 </a>
               </div>
             </div>

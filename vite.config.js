@@ -7,8 +7,8 @@ function nonBlockingCss() {
     enforce: 'post',
     transformIndexHtml(html) {
       return html.replace(
-        /<link rel="stylesheet" crossorigin href="(\/assets\/style-[^"]+\.css)">/g,
-        '<link rel="preload" as="style" href="$1"><link rel="stylesheet" crossorigin href="$1" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" crossorigin href="$1"></noscript>'
+        /<link rel="stylesheet"([^>]*?)href="([^"]+\.css)"([^>]*)>/g,
+        '<link rel="preload" as="style" href="$2"><link rel="stylesheet"$1href="$2"$3 media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet"$1href="$2"$3></noscript>'
       );
     },
   };

@@ -416,6 +416,8 @@
         const dict = I18N[currentLang];
 
         const KNOWN_PROJECT_IMAGES = {
+          "gen-labs": "/projects/gen-labs.webp",
+          "inventaris-wilmar": "/projects/inventaris-wilmar.webp",
           foodify: "/projects/foodify.webp",
           wilmarbuku: "/projects/wilmarbuku.webp",
           "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
@@ -430,7 +432,7 @@
           
           const desc = currentLang === 'en' && p.descriptionEn ? p.descriptionEn : p.description;
           const normId = (p.id || '').toLowerCase();
-          const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()]);
+          const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (p.previewImage && (KNOWN_PROJECT_IMAGES[p.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || p.previewImage));
 
           let bannerHtml = '';
           if (normId === 'foodify') {
