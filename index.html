@@ -643,7 +643,7 @@
         var backdropEl = document.getElementById("preloader-backdrop");
 
         var initialNozzleX = window.innerWidth / 2;
-        var initialNozzleY = window.innerHeight * 0.52;
+        var initialNozzleY = window.innerHeight * 0.42;
         var prevCurX = initialNozzleX;
         var prevCurY = initialNozzleY;
         var lastTime = 0;
@@ -654,54 +654,51 @@
         var startLaunchY = 0;
         var startLaunchRot = 0;
         var lastHoverSpawnTime = 0;
+        var hasSeededPlume = false;
 
-        function measureNozzle() {
+        function getLiveFlameTip() {
           if (flameNozzle && flameNozzle.isConnected) {
             var fRect = flameNozzle.getBoundingClientRect();
             if (fRect.width > 0 && fRect.height > 0) {
-              initialNozzleX = fRect.left + fRect.width / 2;
-              initialNozzleY = fRect.bottom - 4;
-              return;
+              return {
+                x: fRect.left + fRect.width * 0.5,
+                y: fRect.bottom - 4
+              };
+            }
+          }
+          var svgEl = rocketCenter ? rocketCenter.querySelector("svg") : null;
+          if (svgEl && svgEl.isConnected) {
+            var sRect = svgEl.getBoundingClientRect();
+            if (sRect.width > 0 && sRect.height > 0) {
+              return {
+                x: sRect.left + sRect.width * 0.5,
+                y: sRect.top + sRect.height * 0.81 - 4
+              };
             }
           }
           if (rocketCenter && rocketCenter.isConnected) {
             var rRect = rocketCenter.getBoundingClientRect();
             if (rRect.width > 0 && rRect.height > 0) {
-              initialNozzleX = rRect.left + rRect.width * 0.5;
-              initialNozzleY = rRect.top + rRect.height * 0.80;
-              return;
+              return {
+                x: rRect.left + rRect.width * 0.5,
+                y: rRect.top + rRect.height * 0.81 - 4
+              };
             }
           }
+          return null;
         }
 
-        measureNozzle();
         window.addEventListener("resize", function() {
           resize();
           var isLaunch = preloaderEl && preloaderEl.classList.contains("preloader-launching");
           if (!isLaunch && rocketCenter) {
-            rocketCenter.style.transform = "";
-            measureNozzle();
+            var tip = getLiveFlameTip();
+            if (tip) {
+              initialNozzleX = tip.x;
+              initialNozzleY = tip.y;
+            }
           }
         }, { passive: true });
-        prevCurX = initialNozzleX;
-        prevCurY = initialNozzleY;
-
-        // Pre-seed visible, billowing vapor plume
-        for (var i = 0; i < 14; i++) {
-          var prog = i / 14;
-          particles.push({
-            x: initialNozzleX + (Math.random() - 0.5) * (5 + prog * 12),
-            y: initialNozzleY + prog * 38 + (Math.random() - 0.5) * 3,
-            vx: (Math.random() - 0.5) * (0.25 + prog * 0.4),
-            vy: 0.75 + Math.random() * 0.85,
-            radius: 8 + prog * 14 + Math.random() * 3,
-            growth: 0.44,
-            maxRadius: 36,
-            alpha: 0.46 * (1 - prog * 0.5),
-            decay: 0.0090,
-            isLaunch: false
-          });
-        }
 
         function spawnPuff(x, y, isLaunch, velY, isDip) {
           var isMobile = window.innerWidth < 768;
@@ -727,9 +724,9 @@
               isLaunch: true
             });
           } else {
-            // Hover State: NEVER shift active particles! Let them fade naturally to alpha <= 0.005
+            // Hover State: Smooth continuous smoke puff locked directly to flame nozzle
             var maxHover = isMobile ? 22 : 32;
-            if (particles.length >= maxHover) return; // Drop spawn if saturated, zero optical pop
+            if (particles.length >= maxHover) return;
 
             particles.push({
               x: x + (Math.random() - 0.5) * 4,
@@ -740,7 +737,7 @@
               growth: 0.46,
               maxRadius: 36,
               alpha: 0.46,
-              decay: 0.0090, // Fades smoothly to 0 in ~51 frames (~850ms)
+              decay: 0.0090,
               isLaunch: false
             });
           }
@@ -801,10 +798,15 @@
               rocketCenter.style.transform = "translate3d(0, " + launchY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")" + (rotDeg !== 0 ? " rotate(" + rotDeg.toFixed(2) + "deg)" : "");
             }
 
-            // Flame nozzle tip position (tightly locked to the rocket flame tip)
-            var flameTipOffset = 14 * Math.min(1, elapsed / 100);
-            curX = initialNozzleX;
-            curY = initialNozzleY + launchY + flameTipOffset;
+            var liveTip = getLiveFlameTip();
+            if (liveTip) {
+              curX = liveTip.x;
+              curY = liveTip.y;
+            } else {
+              var flameTipOffset = 14 * Math.min(1, elapsed / 100);
+              curX = initialNozzleX;
+              curY = initialNozzleY + launchY + flameTipOffset;
+            }
 
             // Velocity vector for slipstream suction (smoke follows upward)
             var velY = curY - prevCurY;
@@ -831,8 +833,36 @@
               rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
             }
 
-            curX = initialNozzleX - hoverRot * 1.05;
-            curY = initialNozzleY + hoverY;
+            var liveTip = getLiveFlameTip();
+            if (liveTip) {
+              curX = liveTip.x;
+              curY = liveTip.y;
+              initialNozzleX = liveTip.x;
+              initialNozzleY = liveTip.y - hoverY;
+
+              // Seed initial plume precisely from the real flame tip on frame 1
+              if (!hasSeededPlume) {
+                hasSeededPlume = true;
+                for (var pIdx = 0; pIdx < 14; pIdx++) {
+                  var pProg = pIdx / 14;
+                  particles.push({
+                    x: curX + (Math.random() - 0.5) * (5 + pProg * 12),
+                    y: curY + pProg * 38 + (Math.random() - 0.5) * 3,
+                    vx: (Math.random() - 0.5) * (0.25 + pProg * 0.4),
+                    vy: 0.75 + Math.random() * 0.85,
+                    radius: 8 + pProg * 14 + Math.random() * 3,
+                    growth: 0.44,
+                    maxRadius: 36,
+                    alpha: 0.46 * (1 - pProg * 0.5),
+                    decay: 0.0090,
+                    isLaunch: false
+                  });
+                }
+              }
+            } else {
+              curX = initialNozzleX - hoverRot * 1.05;
+              curY = initialNozzleY + hoverY;
+            }
 
             // Steady rhythmic emission (no empty gaps!)
             var hoverInterval = isMobileScreen ? 90 : 70;
@@ -872,6 +902,7 @@
 
           ctx.globalAlpha = 1;
           animId = requestAnimationFrame(render);
+        }
         }
 
         animId = requestAnimationFrame(render);
