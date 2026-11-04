@@ -134,6 +134,18 @@
         will-change: opacity;
         transform: translateZ(0);
       }
+      #preloader-center-content {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        max-width: 36rem;
+        position: relative;
+        z-index: 20;
+      }
       #preloader-rocket-center {
         position: relative;
         z-index: 10;
@@ -402,7 +414,7 @@
       <canvas id="preloader-smoke-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
 
       <!-- Center Hero Rocket & Progress Display (Grand Aerospace Centerpiece) -->
-      <div class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
+      <div id="preloader-center-content" class="my-auto flex flex-col items-center justify-center text-center w-full max-w-xl mx-auto py-4 relative z-20">
         
         <!-- Grand Aerospace iOS 3D Crimson Rocket Centerpiece -->
         <div id="preloader-rocket-center" class="relative z-20 flex flex-col items-center justify-center transform-gpu -mt-2 sm:-mt-4 mb-4 sm:mb-6 pointer-events-none overflow-visible">
@@ -654,49 +666,49 @@
         var startLaunchY = 0;
         var startLaunchRot = 0;
         var lastHoverSpawnTime = 0;
+        var isMeasured = false;
         var hasSeededPlume = false;
 
-        function getLiveFlameTip() {
+        function measureNozzle() {
           if (flameNozzle && flameNozzle.isConnected) {
             var fRect = flameNozzle.getBoundingClientRect();
             if (fRect.width > 0 && fRect.height > 0) {
-              return {
-                x: fRect.left + fRect.width * 0.5,
-                y: fRect.bottom - 4
-              };
+              initialNozzleX = fRect.left + fRect.width * 0.5;
+              initialNozzleY = fRect.bottom - 4;
+              return true;
             }
           }
           var svgEl = rocketCenter ? rocketCenter.querySelector("svg") : null;
           if (svgEl && svgEl.isConnected) {
             var sRect = svgEl.getBoundingClientRect();
             if (sRect.width > 0 && sRect.height > 0) {
-              return {
-                x: sRect.left + sRect.width * 0.5,
-                y: sRect.top + sRect.height * 0.81 - 4
-              };
+              initialNozzleX = sRect.left + sRect.width * 0.5;
+              initialNozzleY = sRect.top + sRect.height * 0.81 - 4;
+              return true;
             }
           }
           if (rocketCenter && rocketCenter.isConnected) {
             var rRect = rocketCenter.getBoundingClientRect();
             if (rRect.width > 0 && rRect.height > 0) {
-              return {
-                x: rRect.left + rRect.width * 0.5,
-                y: rRect.top + rRect.height * 0.81 - 4
-              };
+              initialNozzleX = rRect.left + rRect.width * 0.5;
+              initialNozzleY = rRect.top + rRect.height * 0.81 - 4;
+              return true;
             }
           }
-          return null;
+          return false;
         }
+
+        // Initial measurement
+        measureNozzle();
 
         window.addEventListener("resize", function() {
           resize();
           var isLaunch = preloaderEl && preloaderEl.classList.contains("preloader-launching");
           if (!isLaunch && rocketCenter) {
-            var tip = getLiveFlameTip();
-            if (tip) {
-              initialNozzleX = tip.x;
-              initialNozzleY = tip.y;
-            }
+            rocketCenter.style.transform = "";
+            measureNozzle();
+            prevCurX = initialNozzleX;
+            prevCurY = initialNozzleY;
           }
         }, { passive: true });
 
@@ -756,6 +768,15 @@
           var isLaunch = preloaderEl.classList.contains("preloader-launching");
           var isMobileScreen = window.innerWidth < 768;
 
+          // Settle measurement on early frames once DOM layout is 100% computed
+          if (!isMeasured && !isLaunch) {
+            if (measureNozzle()) {
+              isMeasured = true;
+              prevCurX = initialNozzleX;
+              prevCurY = initialNozzleY;
+            }
+          }
+
           var curX = initialNozzleX;
           var curY = initialNozzleY;
 
@@ -793,20 +814,15 @@
               rotDeg = 0;
             }
 
-            // Direct GPU Compositor Transform on Rocket DOM
+            // Direct GPU Compositor Transform on Rocket DOM (ZERO layout reflow)
             if (rocketCenter) {
               rocketCenter.style.transform = "translate3d(0, " + launchY.toFixed(2) + "px, 0) scale(" + scaleX.toFixed(3) + ", " + scaleY.toFixed(3) + ")" + (rotDeg !== 0 ? " rotate(" + rotDeg.toFixed(2) + "deg)" : "");
             }
 
-            var liveTip = getLiveFlameTip();
-            if (liveTip) {
-              curX = liveTip.x;
-              curY = liveTip.y;
-            } else {
-              var flameTipOffset = 14 * Math.min(1, elapsed / 100);
-              curX = initialNozzleX;
-              curY = initialNozzleY + launchY + flameTipOffset;
-            }
+            // Pure float arithmetic for nozzle position (ZERO DOM READS)
+            var flameTipOffset = 14 * Math.min(1, elapsed / 100);
+            curX = initialNozzleX;
+            curY = initialNozzleY + launchY + flameTipOffset;
 
             // Velocity vector for slipstream suction (smoke follows upward)
             var velY = curY - prevCurY;
@@ -824,7 +840,7 @@
               }
             }
           } else {
-            // Hover State: Smooth aerospace breathing float
+            // Hover State: Smooth aerospace breathing float (ZERO DOM READS, 100% PURE MATH)
             var hoverPeriod = now * 0.0022;
             hoverY = Math.sin(hoverPeriod) * 6.0;
             hoverRot = Math.sin(hoverPeriod * 0.75) * 1.5;
@@ -833,35 +849,27 @@
               rocketCenter.style.transform = "translate3d(0, " + hoverY.toFixed(2) + "px, 0) rotate(" + hoverRot.toFixed(2) + "deg)";
             }
 
-            var liveTip = getLiveFlameTip();
-            if (liveTip) {
-              curX = liveTip.x;
-              curY = liveTip.y;
-              initialNozzleX = liveTip.x;
-              initialNozzleY = liveTip.y - hoverY;
+            curX = initialNozzleX - hoverRot * 1.05;
+            curY = initialNozzleY + hoverY;
 
-              // Seed initial plume precisely from the real flame tip on frame 1
-              if (!hasSeededPlume) {
-                hasSeededPlume = true;
-                for (var pIdx = 0; pIdx < 14; pIdx++) {
-                  var pProg = pIdx / 14;
-                  particles.push({
-                    x: curX + (Math.random() - 0.5) * (5 + pProg * 12),
-                    y: curY + pProg * 38 + (Math.random() - 0.5) * 3,
-                    vx: (Math.random() - 0.5) * (0.25 + pProg * 0.4),
-                    vy: 0.75 + Math.random() * 0.85,
-                    radius: 8 + pProg * 14 + Math.random() * 3,
-                    growth: 0.44,
-                    maxRadius: 36,
-                    alpha: 0.46 * (1 - pProg * 0.5),
-                    decay: 0.0090,
-                    isLaunch: false
-                  });
-                }
+            // Seed initial plume precisely from measured flame tip on first ready frame
+            if (isMeasured && !hasSeededPlume) {
+              hasSeededPlume = true;
+              for (var pIdx = 0; pIdx < 14; pIdx++) {
+                var pProg = pIdx / 14;
+                particles.push({
+                  x: curX + (Math.random() - 0.5) * (5 + pProg * 12),
+                  y: curY + pProg * 38 + (Math.random() - 0.5) * 3,
+                  vx: (Math.random() - 0.5) * (0.25 + pProg * 0.4),
+                  vy: 0.75 + Math.random() * 0.85,
+                  radius: 8 + pProg * 14 + Math.random() * 3,
+                  growth: 0.44,
+                  maxRadius: 36,
+                  alpha: 0.46 * (1 - pProg * 0.5),
+                  decay: 0.0090,
+                  isLaunch: false
+                });
               }
-            } else {
-              curX = initialNozzleX - hoverRot * 1.05;
-              curY = initialNozzleY + hoverY;
             }
 
             // Steady rhythmic emission (no empty gaps!)
