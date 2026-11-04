@@ -97,12 +97,19 @@
     <meta name="twitter:image" content="https://porto-aga.vercel.app/preview-hero.jpg" />
     <meta name="twitter:creator" content="@Apisikma123" />
 
-    <!-- Font DNS Preconnect & Non-Blocking Async Loading -->
+    <!-- ── 1. Local High-Priority Font Preload (Guaranteed HP / Mobile & Desktop Consistency) ── -->
+    <link rel="preload" href="/fonts/poppins-v24-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-v24-latin-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-v24-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-v24-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- ── 2. Self-Hosted Font Stylesheet (0ms External Latency, font-display: swap) ── -->
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+
+    <!-- ── 3. Google Fonts CDN Fallback (display=swap with full weight coverage) ── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@300;400;500;600;700;800&display=optional" /></noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" />
 
     <!-- Critical Inline Styles (0ms Paint, Zero Render-Blocking) -->
     <style id="critical-hero-css">
@@ -237,6 +244,36 @@
         --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         --color-crimson: #DC143C;
       }
+      /* ── Critical Inlined Font Faces for Instant 0ms Paint ── */
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/poppins-v24-latin-400.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/poppins-v24-latin-600.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/poppins-v24-latin-700.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url('/fonts/jetbrains-mono-v24-latin.woff2') format('woff2');
+      }
+
       html {
         background-color: #040509;
         background-image: 
@@ -247,8 +284,11 @@
         font-family: var(--font-sans);
         margin: 0;
         padding: 0;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       body {
         background-color: transparent !important;
