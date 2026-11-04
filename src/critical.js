@@ -446,6 +446,59 @@ window.goToNextSection = () => {
   }
 };
 
+// ─── MOBILE NAVIGATION CONTROLLER (Anti-Slop Luxury Aerospace Drawer) ───
+let isMobileNavOpen = false;
+
+export const openMobileNav = () => {
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const toggle = document.getElementById("mobile-nav-toggle");
+  if (!drawer) return;
+  isMobileNavOpen = true;
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  if (toggle) {
+    toggle.classList.add("is-active");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+  document.body.style.overflow = "hidden";
+};
+
+export const closeMobileNav = () => {
+  const drawer = document.getElementById("mobile-nav-drawer");
+  const toggle = document.getElementById("mobile-nav-toggle");
+  if (!drawer) return;
+  isMobileNavOpen = false;
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  if (toggle) {
+    toggle.classList.remove("is-active");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  document.body.style.overflow = "";
+};
+
+export const toggleMobileNav = () => {
+  if (isMobileNavOpen) {
+    closeMobileNav();
+  } else {
+    openMobileNav();
+  }
+};
+
+export const handleMobileNavClick = (index) => {
+  closeMobileNav();
+  if (typeof scrollToSection === "function") {
+    setTimeout(() => {
+      scrollToSection(index);
+    }, 120);
+  }
+};
+
+window.openMobileNav = openMobileNav;
+window.closeMobileNav = closeMobileNav;
+window.toggleMobileNav = toggleMobileNav;
+window.handleMobileNavClick = handleMobileNavClick;
+
 export const updateActiveSidebar = (index) => {
   const sideNavItems = document.querySelectorAll(".side-nav-item");
   sideNavItems.forEach((item) => {
@@ -457,14 +510,35 @@ export const updateActiveSidebar = (index) => {
     }
   });
 
-  const navLinks = document.querySelectorAll("header nav a");
+  const navLinks = document.querySelectorAll("header nav a, header nav button");
   navLinks.forEach((link, idx) => {
     if (idx === index) {
       link.classList.add("text-[#DC143C]", "font-semibold");
-      link.classList.remove("text-zinc-400");
+      link.classList.remove("text-zinc-300", "text-zinc-400");
     } else {
       link.classList.remove("text-[#DC143C]", "font-semibold");
-      link.classList.add("text-zinc-400");
+      link.classList.add("text-zinc-300");
+    }
+  });
+
+  const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+  mobileNavLinks.forEach((link) => {
+    const linkIndex = parseInt(link.getAttribute("data-index"), 10);
+    const indicator = link.querySelector(".mobile-nav-indicator");
+    if (linkIndex === index) {
+      link.classList.add("is-active", "text-white", "bg-white/[0.06]", "border-[#DC143C]/40");
+      link.classList.remove("text-zinc-400", "border-transparent");
+      if (indicator) {
+        indicator.classList.remove("opacity-0", "scale-0");
+        indicator.classList.add("opacity-100", "scale-100");
+      }
+    } else {
+      link.classList.remove("is-active", "text-white", "bg-white/[0.06]", "border-[#DC143C]/40");
+      link.classList.add("text-zinc-400", "border-transparent");
+      if (indicator) {
+        indicator.classList.add("opacity-0", "scale-0");
+        indicator.classList.remove("opacity-100", "scale-100");
+      }
     }
   });
 };
@@ -518,6 +592,18 @@ export const initNavigationAndKeyboard = () => {
       }
     });
   });
+
+  // Close mobile drawer on Escape key or Desktop resize
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isMobileNavOpen) {
+      closeMobileNav();
+    }
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768 && isMobileNavOpen) {
+      closeMobileNav();
+    }
+  }, { passive: true });
 
   // IntersectionObserver for tracking current visible section
   if (typeof IntersectionObserver !== "undefined") {

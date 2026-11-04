@@ -322,6 +322,57 @@
       .spatial-card:hover {
         border-color: rgba(255, 255, 255, 0.18);
       }
+
+      /* ── Mobile Hamburger & Luxury Aerospace Drawer (taste-design-v2) ── */
+      #mobile-nav-toggle .top-line,
+      #mobile-nav-toggle .mid-line,
+      #mobile-nav-toggle .bottom-line {
+        transform-origin: center;
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.2s ease,
+                    background-color 0.2s ease;
+      }
+      #mobile-nav-toggle.is-active .top-line {
+        transform: translateY(5px) rotate(45deg);
+        background-color: #ffffff;
+      }
+      #mobile-nav-toggle.is-active .mid-line {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      #mobile-nav-toggle.is-active .bottom-line {
+        transform: translateY(-6px) rotate(-45deg);
+        background-color: #DC143C;
+      }
+      #mobile-nav-drawer {
+        transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+      }
+      #mobile-nav-drawer.is-open {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+      }
+      #mobile-nav-drawer #mobile-nav-panel {
+        transform: translateY(-16px);
+        transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+      }
+      #mobile-nav-drawer.is-open #mobile-nav-panel {
+        transform: translateY(0) !important;
+      }
+      .mobile-nav-link {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mobile-nav-link.is-active {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(220, 20, 60, 0.4);
+        color: #ffffff;
+      }
+      .mobile-nav-link.is-active .mobile-nav-indicator {
+        opacity: 1 !important;
+        transform: scale(1) !important;
+      }
     </style>
 
     <!-- Favicon & App Icons -->
@@ -934,13 +985,28 @@
         <button type="button" onclick="window.scrollToSection(6)" class="eyebrow text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer" data-i18n="navFooter">Footer</button>
       </nav>
 
-      <!-- Right Actions: Language Switcher + Contact CTA -->
+      <!-- Right Actions: Language Switcher + Mobile Hamburger Toggle + Contact CTA -->
       <div class="pointer-events-auto flex items-center gap-2 sm:gap-2.5">
         <!-- Bilingual Toggle (EN | ID) -->
         <div class="flex items-center gap-0.5 rounded-lg border border-white/12 bg-zinc-950/70 backdrop-blur-xl p-1 shadow-lg font-mono text-xs">
           <button type="button" id="btn-lang-en" class="lang-btn active px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors" onclick="window.setLanguage('en')">EN</button>
           <button type="button" id="btn-lang-id" class="lang-btn px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors text-zinc-400" onclick="window.setLanguage('id')">ID</button>
         </div>
+
+        <!-- Mobile Hamburger Menu Button (Visible on Mobile/Tablet < md) -->
+        <button
+          type="button"
+          id="mobile-nav-toggle"
+          onclick="window.toggleMobileNav()"
+          class="md:hidden relative flex flex-col items-center justify-center w-9 h-9 rounded-lg border border-white/12 bg-zinc-950/80 backdrop-blur-xl text-zinc-300 hover:text-white hover:border-white/25 active:scale-95 transition-all duration-200 cursor-pointer p-2 z-50"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-nav-drawer"
+        >
+          <span class="top-line block h-[1.5px] w-4 bg-zinc-200 rounded-full mb-1"></span>
+          <span class="mid-line block h-[1.5px] w-3 bg-[#DC143C] rounded-full mb-1 self-start ml-0.5"></span>
+          <span class="bottom-line block h-[1.5px] w-4 bg-zinc-200 rounded-full"></span>
+        </button>
 
         <button
           type="button"
@@ -952,6 +1018,168 @@
         </button>
       </div>
     </header>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- MOBILE NAVIGATION DRAWER OVERLAY (Responsive < md)           -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div
+      id="mobile-nav-drawer"
+      class="fixed inset-0 z-50 md:hidden pointer-events-none opacity-0 transition-opacity duration-300 ease-out"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mobile Navigation Menu"
+    >
+      <!-- Backdrop Blur overlay -->
+      <div
+        class="mobile-nav-backdrop absolute inset-0 bg-[#040509]/85 backdrop-blur-2xl transition-opacity duration-300"
+        onclick="window.closeMobileNav()"
+      ></div>
+
+      <!-- Drawer Container / Slide Panel -->
+      <div
+        id="mobile-nav-panel"
+        class="relative z-10 w-full max-h-[100dvh] h-full flex flex-col justify-between overflow-y-auto px-5 pt-20 pb-8 transition-transform duration-300 ease-out -translate-y-4"
+      >
+        <!-- Top System Header inside Drawer -->
+        <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+            <span class="font-mono text-[0.68rem] tracking-widest text-zinc-400 uppercase">SYSTEM // NAV.DRAWER</span>
+          </div>
+          <div class="flex items-center gap-1.5 font-mono text-[0.65rem] text-zinc-400">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>ONLINE</span>
+          </div>
+        </div>
+
+        <!-- Main Navigation Links (Numbered List) -->
+        <nav class="my-auto py-5 flex flex-col gap-1.5">
+          <!-- 01 START -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(0)"
+            data-index="0"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">01</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navStart">Start</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">001 // HOME</span>
+          </button>
+
+          <!-- 02 ABOUT -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(1)"
+            data-index="1"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">02</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navAbout">About</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">002 // BIO</span>
+          </button>
+
+          <!-- 03 EXPERIENCE -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(2)"
+            data-index="2"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">03</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navExperience">Experience</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">003 // CAREER</span>
+          </button>
+
+          <!-- 04 ACTIVITY -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(3)"
+            data-index="3"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">04</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navActivity">Activity</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">004 // GITHUB</span>
+          </button>
+
+          <!-- 05 PROJECTS -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(4)"
+            data-index="4"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">05</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navProjects">Projects</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">005 // WORKS</span>
+          </button>
+
+          <!-- 06 CONTACT -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(5)"
+            data-index="5"
+            class="mobile-nav-link group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-white/10 hover:bg-white/[0.04] transition-all duration-200 text-left"
+          >
+            <div class="flex items-center gap-3">
+              <span class="mobile-nav-indicator w-1.5 h-1.5 rounded-full bg-[#DC143C] opacity-0 scale-0 transition-all duration-200"></span>
+              <span class="font-mono text-xs text-zinc-400 group-hover:text-zinc-300 tabular-nums">06</span>
+              <span class="text-sm font-medium tracking-wide text-zinc-200 group-hover:text-white transition-colors" data-i18n="navContact">Contact</span>
+            </div>
+            <span class="font-mono text-[0.62rem] text-zinc-500 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all">006 // INITIATE</span>
+          </button>
+        </nav>
+
+        <!-- Drawer Footer Actions -->
+        <div class="pt-3.5 border-t border-white/10 space-y-2.5">
+          <!-- Quick link to projects.html -->
+          <a
+            href="/projects.html"
+            class="flex items-center justify-between px-3.5 py-2 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] text-xs font-mono text-zinc-300 hover:text-white transition-colors"
+          >
+            <span class="flex items-center gap-2">
+              <span class="text-[#DC143C]">◆</span>
+              <span>All Projects & Gallery</span>
+            </span>
+            <span class="text-zinc-400">↗</span>
+          </a>
+
+          <!-- Direct Contact CTA -->
+          <button
+            type="button"
+            onclick="window.handleMobileNavClick(5)"
+            class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#DC143C] to-[#B22222] hover:brightness-110 active:scale-[0.98] text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-[#DC143C]/20 cursor-pointer"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span data-i18n="ctaInitiate">Let's Talk</span>
+          </button>
+
+          <!-- Signature & Status -->
+          <div class="flex items-center justify-between text-[0.62rem] font-mono text-zinc-500 px-1 pt-0.5">
+            <span>AGA PUTRA // 2026</span>
+            <span>JAKARTA / UTC+7</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 3. CLICKABLE VERTICAL NUMERIC SIDEBAR (6 Sections)         -->
