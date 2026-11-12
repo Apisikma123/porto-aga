@@ -693,8 +693,7 @@
             <span class="text-2xl sm:text-3xl text-[#DC143C] font-semibold">%</span>
           </div>
 
-          <div class="font-sans text-xs sm:text-sm text-zinc-300 font-medium tracking-wide flex items-center justify-center gap-2.5">
-            <span class="inline-block w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
+          <div class="font-mono text-xs sm:text-sm text-zinc-300 font-medium tracking-wider flex items-center justify-center">
             <span id="preloader-status">Menyiapkan visual &amp; pipeline 3D...</span>
           </div>
         </div>
@@ -1082,15 +1081,9 @@
         class="relative z-10 w-full max-h-[100dvh] h-full flex flex-col justify-between overflow-y-auto px-5 pt-20 pb-8 transition-transform duration-300 ease-out -translate-y-4"
       >
         <!-- Top System Header inside Drawer -->
-        <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-            <span class="font-mono text-[0.68rem] tracking-widest text-zinc-400 uppercase">SYSTEM // NAV.DRAWER</span>
-          </div>
-          <div class="flex items-center gap-1.5 font-mono text-[0.65rem] text-zinc-400">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>ONLINE</span>
-          </div>
+        <div class="flex items-center justify-between pb-3.5 border-b border-white/10 font-mono text-[0.68rem] text-zinc-400">
+          <span class="tracking-widest uppercase">SYSTEM // NAV.DRAWER</span>
+          <span class="text-[0.65rem] tracking-wider text-zinc-500">READY</span>
         </div>
 
         <!-- Main Navigation Links (Numbered List) -->

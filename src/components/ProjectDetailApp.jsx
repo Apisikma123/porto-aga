@@ -300,9 +300,11 @@ export default function ProjectDetailApp() {
       {/* 3. MAIN PROJECT CASE STUDY CONTAINER */}
       <main className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 md:px-10 lg:pl-28 xl:pl-36 pt-24 sm:pt-28 pb-16">
         {loading ? (
-          <div className="py-32 flex flex-col items-center justify-center gap-4 text-center">
-            <div className="w-10 h-10 border-2 border-[#DC143C] border-t-transparent rounded-full animate-spin"></div>
-            <p className="font-mono text-xs text-zinc-400">{dict.loading}</p>
+          <div className="py-32 flex flex-col items-center justify-center gap-3 text-center">
+            <div className="w-28 h-[2px] bg-white/10 overflow-hidden relative">
+              <div className="absolute inset-y-0 w-1/2 bg-[#DC143C] animate-pulse"></div>
+            </div>
+            <p className="font-mono text-xs tracking-wider uppercase text-zinc-400">{dict.loading}</p>
           </div>
         ) : !project ? (
           <div className="py-32 text-center max-w-md mx-auto">
@@ -418,9 +420,8 @@ export default function ProjectDetailApp() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
                     <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
-                      <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-                        <span>{dict.preview || 'Visual Architecture Preview'}</span>
+                      <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 uppercase tracking-wider text-[0.62rem] text-zinc-300">
+                        {dict.preview || 'Visual Architecture Preview'}
                       </span>
                       <span className="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">{project.language || 'Code'}</span>
                     </div>
@@ -591,8 +592,8 @@ export default function ProjectDetailApp() {
 
                   <div className="space-y-1 pt-2 border-t border-white/5">
                     <span className="text-zinc-500 text-[0.62rem]">{dict.status}</span>
-                    <span className="text-zinc-300 flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#DC143C]"></span> {dict.public}
+                    <span className="text-zinc-300 block font-mono text-[0.72rem] tracking-wider uppercase">
+                      {dict.public}
                     </span>
                   </div>
 

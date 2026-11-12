@@ -992,9 +992,8 @@ export const openProjectDetail = async (projectId) => {
         />
         <div class="absolute inset-0 bg-gradient-to-t from-[#090a10] via-transparent to-transparent opacity-60 pointer-events-none"></div>
         <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none font-mono text-[0.65rem] text-zinc-300">
-          <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#DC143C] animate-pulse"></span>
-            <span>Visual Architecture Preview</span>
+          <span class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10 uppercase tracking-wider text-[0.62rem] text-zinc-300">
+            Visual Architecture Preview
           </span>
           <span id="detail-view-banner-badge" class="px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-white/10">${proj.language || 'Code'}</span>
         </div>
@@ -1246,7 +1245,7 @@ window.renderAllViewProjects = () => {
             <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
               <span class="text-zinc-500">$</span>
               <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
-              <span class="text-[#DC143C] text-xs font-bold animate-pulse">●</span>
+              <span class="text-[#DC143C] font-mono text-xs font-bold">_</span>
             </div>
             <div class="text-xs text-zinc-500 pl-2 flex items-center gap-2">
               <span class="text-zinc-600">stack:</span>
@@ -1256,9 +1255,8 @@ window.renderAllViewProjects = () => {
 
           <!-- Terminal Footer -->
           <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
-            <span class="flex items-center gap-1 text-emerald-400">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              <span class="tracking-wide">BUILD READY</span>
+            <span class="text-emerald-400 font-mono text-[0.65rem] tracking-wider uppercase">
+              BUILD READY
             </span>
             <span class="text-zinc-600 uppercase tracking-wider">${p.category || 'PROJECT'}</span>
           </div>

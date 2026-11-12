@@ -249,15 +249,9 @@
         class="relative z-10 w-full max-h-[100dvh] h-full flex flex-col justify-between overflow-y-auto px-5 pt-20 pb-8 transition-transform duration-300 ease-out -translate-y-4"
       >
         <!-- Top System Header inside Drawer -->
-        <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-[#DC143C] animate-pulse"></span>
-            <span class="font-mono text-[0.68rem] tracking-widest text-zinc-400 uppercase">SYSTEM // NAV.DRAWER</span>
-          </div>
-          <div class="flex items-center gap-1.5 font-mono text-[0.65rem] text-zinc-400">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>ONLINE</span>
-          </div>
+        <div class="flex items-center justify-between pb-3.5 border-b border-white/10 font-mono text-[0.68rem] text-zinc-400">
+          <span class="tracking-widest uppercase">SYSTEM // NAV.DRAWER</span>
+          <span class="text-[0.65rem] tracking-wider text-zinc-500">READY</span>
         </div>
 
         <!-- Main Navigation Links (Numbered List) -->
@@ -475,9 +469,11 @@
       </div>
 
       <!-- Loading State -->
-      <div id="loading-state" class="py-24 text-center">
-        <div class="inline-block w-8 h-8 border-2 border-[#DC143C] border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="font-mono text-xs text-zinc-400">Memuat database repositori…</p>
+      <div id="loading-state" class="py-24 flex flex-col items-center justify-center gap-3 text-center">
+        <div class="w-28 h-[2px] bg-white/10 overflow-hidden relative">
+          <div class="absolute inset-y-0 w-1/2 bg-[#DC143C] animate-pulse"></div>
+        </div>
+        <p class="font-mono text-xs tracking-wider uppercase text-zinc-400">Memuat database repositori…</p>
       </div>
 
       <!-- Empty State -->
@@ -710,7 +706,7 @@
                   <div class="text-zinc-300 font-medium flex items-center gap-1.5 pl-2 truncate">
                     <span class="text-zinc-500">$</span>
                     <span class="text-white font-semibold truncate">${p.displayName || p.id}</span>
-                    <span class="text-[#DC143C] text-xs font-bold animate-pulse">●</span>
+                    <span class="text-[#DC143C] font-mono text-xs font-bold">_</span>
                   </div>
                   <div class="text-xs text-zinc-500 pl-2 flex items-center gap-2">
                     <span class="text-zinc-600">stack:</span>
@@ -720,9 +716,8 @@
 
                 <!-- Terminal Footer -->
                 <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500">
-                  <span class="flex items-center gap-1 text-emerald-400">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    <span class="tracking-wide">BUILD READY</span>
+                  <span class="text-emerald-400 font-mono text-[0.65rem] tracking-wider uppercase">
+                    BUILD READY
                   </span>
                   <span class="text-zinc-600 uppercase tracking-wider">${p.category || 'PROJECT'}</span>
                 </div>
