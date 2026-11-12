@@ -286,21 +286,24 @@
   .carousel-card a,
   .carousel-card button,
   .spatial-card a,
-  .spatial-card button {
+  .spatial-card button,
+  .project-catalog-card a,
+  .project-catalog-card button {
     position: relative;
-    z-index: 40 !important;
+    z-index: 10 !important;
     pointer-events: auto !important;
     cursor: pointer !important;
-    transform: translateZ(25px);
+    transform: translateZ(20px);
   }
 
   .glass-card:hover,
   .tesseract-card:hover,
   .carousel-card:hover,
-  .repo-card:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+  .repo-card:hover,
+  .project-catalog-card:hover {
+    border-color: rgba(220, 20, 60, 0.35);
     background: rgba(18, 20, 28, 0.98);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.08);
   }
 
   @media (pointer: fine) {
@@ -309,8 +312,40 @@
     .carousel-card,
     .tesseract-card,
     .repo-card,
-    .activity-standalone-card {
+    .activity-standalone-card,
+    .project-catalog-card {
       will-change: transform;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    /* Restrained, non-AI-slop Specular Sheen (Apple-grade micro-glare) */
+    .spatial-card::before,
+    .glass-card::before,
+    .carousel-card::before,
+    .activity-standalone-card::before,
+    .project-catalog-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.05),
+        transparent 70%
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+
+    .spatial-card:hover::before,
+    .glass-card:hover::before,
+    .carousel-card:hover::before,
+    .activity-standalone-card:hover::before,
+    .project-catalog-card:hover::before {
+      opacity: 1;
     }
   }
 

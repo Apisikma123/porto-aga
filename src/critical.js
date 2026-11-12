@@ -8,6 +8,9 @@
 export const SECTION_IDS = ["start", "about", "experience", "activity", "projects", "contact", "footer"];
 export let currentSectionIndex = 0;
 
+import { initGlobalCardTilt } from "./tilt.js";
+export { initGlobalCardTilt };
+
 // ═══════════════════════════════════════════════════════════
 // BOT SHIELD & WHATSAPP OBFUSCATOR (Anti-Scraper Base64 Decoder)
 // ═══════════════════════════════════════════════════════════
@@ -869,6 +872,7 @@ export const initCritical = () => {
   setTheme();
   initPreloaderTimeline();
   initNavigationAndKeyboard();
+  initGlobalCardTilt();
 
   if (currentLang !== "en") {
     setLanguage(currentLang, false);

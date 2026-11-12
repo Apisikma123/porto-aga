@@ -9,6 +9,7 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { initGlobalCardTilt } from "./tilt.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -498,9 +499,7 @@ export const initScrollRevealAnimations = () => {
 // 2. 60FPS 3D TILT ENGINE DELEGATION (Desktop Only)
 // ═══════════════════════════════════════════════════════════
 export const initCardTilt = () => {
-  if (typeof window !== "undefined" && window.initGlobalCardTilt) {
-    window.initGlobalCardTilt();
-  }
+  initGlobalCardTilt();
 };
 window.initCardTilt = initCardTilt;
 

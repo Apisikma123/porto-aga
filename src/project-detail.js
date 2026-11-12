@@ -3,6 +3,16 @@ import ReactDOM from "react-dom/client";
 import "./style.css";
 import { initThreeEngine } from "./three-scene.js";
 import ProjectDetailApp from "./components/ProjectDetailApp.jsx";
+import { initGlobalCardTilt } from "./tilt.js";
+
+// Initialize Taste-Calibrated 3D Card Tilt Engine
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initGlobalCardTilt, { once: true });
+  } else {
+    initGlobalCardTilt();
+  }
+}
 
 const rootEl = document.getElementById("root");
 if (rootEl) {
