@@ -502,7 +502,7 @@ export const initThreeEngine = async () => {
         galaxy1 = new THREE.Points(geom, galaxyMat1);
         const scale = isMobile ? 0.09 : 0.13;
         galaxy1.scale.set(scale, scale, scale);
-        galaxy1.position.set(isMobile ? 0.5 : 3.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
+        galaxy1.position.set(isMobile ? 0.5 : 2.2, isMobile ? 0.2 : 0.2, isMobile ? -16.0 : -14.5);
         galaxy1.rotation.set(0.95, 0.40, -0.35);
         galaxiesUniverseGroup.add(galaxy1);
 
@@ -959,11 +959,8 @@ export const initThreeEngine = async () => {
     },
   });
 
-  if (galaxiesUniverseGroup) {
-    scrollTl
-      .to(galaxiesUniverseGroup.position, { z: "+=2.4", y: "-=0.7", ease: "power1.inOut", duration: 6 }, 0)
-      .to(galaxiesUniverseGroup.rotation, { z: "+=0.30", y: "+=0.22", ease: "power1.inOut", duration: 6 }, 0);
-  }
+  // Note: galaxiesUniverseGroup position/rotation is smoothly tracked in animate()
+  // to prevent GSAP/RAF conflict and anchor galaxy firmly in the background.
 
   // ─── Phase 1: Section 1 (Start) -> Section 2 (About) [0 to 1] ───
   // Dutch-Angle Orbital Sweep to Left Flank (giving stage for skill matrix on the right)
@@ -1455,9 +1452,10 @@ export const initThreeEngine = async () => {
       galaxy1.rotation.y += 0.0001;
     }
 
-    if (typeof galaxiesUniverseGroup !== "undefined") {
-      galaxiesUniverseGroup.position.x = mouseX * -0.25;
-      galaxiesUniverseGroup.position.y = -mouseY * -0.18;
+    if (typeof galaxiesUniverseGroup !== "undefined" && galaxy1) {
+      // Anchored celestial background: tracks camera position with 85% parallax so it never escapes viewport
+      galaxiesUniverseGroup.position.x = camera.position.x * 0.85 + (mouseX * -0.25);
+      galaxiesUniverseGroup.position.y = camera.position.y * 0.85 + (-mouseY * -0.18);
       galaxiesUniverseGroup.rotation.y = time * 0.0012 + scrollVelocity * 0.08;
     }
 
