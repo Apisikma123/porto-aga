@@ -106,7 +106,7 @@ export let projectsData = [];
 // HORIZONTAL PROJECTS CAROUSEL CONTROLLER (Section 04)
 // ═══════════════════════════════════════════════════════════
 let currentProjectSlide = 0;
-const TOTAL_PROJECT_SLIDES = 8;
+const TOTAL_PROJECT_SLIDES = 9;
 
 export const FEATURED_PROJECTS = [
   {
@@ -164,6 +164,27 @@ export const FEATURED_PROJECTS = [
     descI18n: "projPratamaDesc",
     descFallback: "Engineered a high-converting service booking portal for an on-demand appliance repair business in Jakarta, featuring direct WhatsApp dispatch, fault diagnosis calculator, and local SEO schema.",
     tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "SEO Schema"],
+    isPhoneMockup: false,
+  },
+  {
+    id: "waja-mulia-indah",
+    repoUrl: "",
+    liveUrl: "https://www.wajamedan.com/",
+    proofUrl: "https://www.wajamedan.com/humans.txt",
+    imgSrc: "/projects/waja-mulia-indah.webp",
+    imgAlt: "PT. Waja Mulia Indah — Industrial Metal Supplier & Maintenance",
+    imgWidth: 641,
+    imgHeight: 478,
+    isFeaturedBadge: true,
+    tagI18n: "projWmiTag",
+    tagFallback: "B2B Metal Supplier · Web Maintenance",
+    statusI18n: "projWmiStatus",
+    statusFallback: "Live at wajamedan.com",
+    titleI18n: "projWmiTitle",
+    titleFallback: "PT. Waja Mulia Indah — Web Maintenance Takeover",
+    descI18n: "projWmiDesc",
+    descFallback: "Maintained and overhauled the industrial web portal for a premier stainless steel distributor in Medan after previous agency handover, adding product catalog, media optimization, and verified server provenance.",
+    tags: ["Web Maintenance", "Product Catalog", "Client Handover", "B2B Supplier", "Asset Optimization"],
     isPhoneMockup: false,
   },
   {
