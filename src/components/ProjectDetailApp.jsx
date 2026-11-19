@@ -531,6 +531,18 @@ export default function ProjectDetailApp() {
                       <span>Live Website</span>
                     </a>
                   )}
+                  {project.proofUrl && (
+                    <a
+                      href={project.proofUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2 font-semibold"
+                      title="Verified via humans.txt server proof"
+                    >
+                      <span className="material-symbols-outlined text-sm">verified</span>
+                      <span>humans.txt Proof</span>
+                    </a>
+                  )}
                   {project.html_url ? (
                     <a
                       href={project.html_url}
