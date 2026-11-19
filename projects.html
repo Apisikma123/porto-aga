@@ -761,15 +761,31 @@
                 <svg class="w-3.5 h-3.5 shrink-0 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
 
-              <a
-                href="${p.html_url}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="w-9 h-9 shrink-0 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-400 hover:text-white transition-all inline-flex items-center justify-center touch-manipulation active:scale-95"
-                title="GitHub Repository"
-              >
-                <span class="material-symbols-outlined text-[1.1rem]">code</span>
-              </a>
+              ${p.html_url ? `
+                <a
+                  href="${p.html_url}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-9 h-9 shrink-0 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-400 hover:text-white transition-all inline-flex items-center justify-center touch-manipulation active:scale-95"
+                  title="GitHub Repository"
+                >
+                  <span class="material-symbols-outlined text-[1.1rem]">code</span>
+                </a>
+              ` : (p.liveUrl ? `
+                <a
+                  href="${p.liveUrl}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-9 h-9 shrink-0 rounded-xl bg-white/5 hover:bg-[#DC143C] border border-white/10 hover:border-transparent text-zinc-400 hover:text-white transition-all inline-flex items-center justify-center touch-manipulation active:scale-95"
+                  title="Live Website"
+                >
+                  <span class="material-symbols-outlined text-[1.1rem]">open_in_new</span>
+                </a>
+              ` : `
+                <span class="w-9 h-9 shrink-0 rounded-xl bg-white/[0.03] border border-white/10 text-zinc-600 inline-flex items-center justify-center" title="Private Client Source">
+                  <span class="material-symbols-outlined text-[1.1rem]">lock</span>
+                </span>
+              `)}
             </div>
           `;
 

@@ -948,7 +948,17 @@ export const openProjectDetail = async (projectId) => {
   if (langEl) langEl.textContent = proj.language || "Code";
   if (titleEl) titleEl.textContent = proj.displayName;
   if (descEl) descEl.textContent = currentLang === "en" && proj.descriptionEn ? proj.descriptionEn : proj.description;
-  if (githubLink) githubLink.href = proj.html_url;
+  if (githubLink) {
+    if (proj.html_url) {
+      githubLink.href = proj.html_url;
+      githubLink.style.display = "";
+    } else if (proj.liveUrl) {
+      githubLink.href = proj.liveUrl;
+      githubLink.style.display = "";
+    } else {
+      githubLink.style.display = "none";
+    }
+  }
   if (repoNameEl) repoNameEl.textContent = proj.id;
   if (sideLangEl) sideLangEl.textContent = (proj.tags || [proj.language]).slice(0, 3).join(", ");
 
@@ -962,6 +972,7 @@ export const openProjectDetail = async (projectId) => {
     "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
     "grow-a-garden": "/projects/grow-a-garden.webp",
     bkj: "/projects/bkj.webp",
+    "waja-mulia-indah": "/projects/waja-mulia-indah.webp",
   };
   const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (proj.previewImage && (KNOWN_PROJECT_IMAGES[proj.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || proj.previewImage));
 
@@ -1193,6 +1204,7 @@ window.renderAllViewProjects = () => {
     "cinta--website-konseling-sekola-": "/projects/cinta-counseling.webp",
     "grow-a-garden": "/projects/grow-a-garden.webp",
     bkj: "/projects/bkj.webp",
+    "waja-mulia-indah": "/projects/waja-mulia-indah.webp",
   };
 
   filtered.forEach((p) => {
@@ -1289,9 +1301,15 @@ window.renderAllViewProjects = () => {
           <span>${currentLang === "en" ? "Quick Overview" : "Overview Singkat"}</span>
           <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
-        <a href="${p.html_url}" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white p-1 hover:text-[#DC143C] transition-colors inline-flex items-center justify-center" title="Source Code">
-          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        </a>
+        ${p.html_url ? `
+          <a href="${p.html_url}" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white p-1 hover:text-[#DC143C] transition-colors inline-flex items-center justify-center" title="Source Code">
+            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </a>
+        ` : (p.liveUrl ? `
+          <a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white p-1 hover:text-[#DC143C] transition-colors inline-flex items-center justify-center" title="Live Website">
+            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        ` : '')}
       </div>
     `;
     grid.appendChild(card);

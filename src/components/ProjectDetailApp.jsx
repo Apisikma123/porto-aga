@@ -391,6 +391,7 @@ export default function ProjectDetailApp() {
                 "grow-a-garden": "/projects/grow-a-garden.webp",
                 bkj: "/projects/bkj.webp",
                 "pratama-tehnik": "/projects/pratama-tehnik.webp",
+                "waja-mulia-indah": "/projects/waja-mulia-indah.webp",
               };
               const normId = (project.id || '').toLowerCase();
               const hasKnownImg = KNOWN_PROJECT_IMAGES[normId] || (project.previewImage && (KNOWN_PROJECT_IMAGES[project.previewImage.replace('/projects/', '').replace('.png', '').replace('.webp', '').toLowerCase()] || project.previewImage));
@@ -530,16 +531,23 @@ export default function ProjectDetailApp() {
                       <span>Live Website</span>
                     </a>
                   )}
-                  <a
-                    href={project.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-lg border border-white/15 bg-white/[0.04] hover:border-[#DC143C]/60 hover:text-white px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-zinc-300 transition-all flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-sm">code</span>
-                    <span>{dict.sourceCode}</span>
-                    <span className="material-symbols-outlined text-xs">arrow_outward</span>
-                  </a>
+                  {project.html_url ? (
+                    <a
+                      href={project.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg border border-white/15 bg-white/[0.04] hover:border-[#DC143C]/60 hover:text-white px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-zinc-300 transition-all flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-sm">code</span>
+                      <span>{dict.sourceCode}</span>
+                      <span className="material-symbols-outlined text-xs">arrow_outward</span>
+                    </a>
+                  ) : (
+                    <div className="rounded-lg border border-white/10 bg-white/[0.02] text-zinc-400 px-4 py-2.5 font-mono text-xs uppercase tracking-wider flex items-center gap-2 select-none">
+                      <span className="material-symbols-outlined text-sm text-amber-400">lock</span>
+                      <span>Private / Client Repo</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -593,19 +601,26 @@ export default function ProjectDetailApp() {
                   <div className="space-y-1 pt-2 border-t border-white/5">
                     <span className="text-zinc-500 text-[0.62rem]">{dict.status}</span>
                     <span className="text-zinc-300 block font-mono text-[0.72rem] tracking-wider uppercase">
-                      {dict.public}
+                      {project.html_url ? dict.public : 'Client Proprietary (Private)'}
                     </span>
                   </div>
 
                   <div className="pt-3 border-t border-white/10">
-                    <button
-                      type="button"
-                      onClick={copyClone}
-                      className="w-full rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
-                    >
-                      <span className="truncate mr-2 font-mono">{copied ? 'Tersalin!' : `git clone ${project.html_url}.git`}</span>
-                      <span className="material-symbols-outlined text-xs text-zinc-400">content_copy</span>
-                    </button>
+                    {project.html_url ? (
+                      <button
+                        type="button"
+                        onClick={copyClone}
+                        className="w-full rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 py-2.5 px-3 flex items-center justify-between text-zinc-300 text-[0.68rem] transition-colors cursor-pointer"
+                      >
+                        <span className="truncate mr-2 font-mono">{copied ? 'Tersalin!' : `git clone ${project.html_url}.git`}</span>
+                        <span className="material-symbols-outlined text-xs text-zinc-400">content_copy</span>
+                      </button>
+                    ) : (
+                      <div className="w-full rounded-lg bg-white/[0.02] border border-white/10 py-2 px-3 flex items-center justify-between text-zinc-400 font-mono text-[0.68rem] select-none">
+                        <span className="truncate mr-2 text-zinc-400">Private Client Codebase</span>
+                        <span className="material-symbols-outlined text-xs text-amber-400">lock</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
